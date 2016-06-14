@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Sharing
  *
  * @ORM\Table(name="sharing", uniqueConstraints={@ORM\UniqueConstraint(name="id_UNIQUE", columns={"id"})}, indexes={@ORM\Index(name="sharing_user_idx", columns={"user_id"}), @ORM\Index(name="sharing_community_idx", columns={"community_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\SharingRepository")
  */
 class Sharing
 {

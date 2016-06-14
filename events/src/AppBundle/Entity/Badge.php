@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Badge
  *
  * @ORM\Table(name="badge", uniqueConstraints={@ORM\UniqueConstraint(name="id_UNIQUE", columns={"id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\BadgeRepository")
  */
 class Badge
 {

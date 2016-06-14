@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * CommunityAddress
  *
  * @ORM\Table(name="community_address", uniqueConstraints={@ORM\UniqueConstraint(name="id_UNIQUE", columns={"id"})}, indexes={@ORM\Index(name="community_address_community_idx", columns={"community_id"}), @ORM\Index(name="community_address_address_idx", columns={"address_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CommunityAddressRepository")
  */
 class CommunityAddress
 {

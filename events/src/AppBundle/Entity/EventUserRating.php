@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EventUserRating
  *
  * @ORM\Table(name="event_user_rating", uniqueConstraints={@ORM\UniqueConstraint(name="id_UNIQUE", columns={"id"})}, indexes={@ORM\Index(name="event_user_rating_user_idx", columns={"user_id"}), @ORM\Index(name="event_user_rating_event_idx", columns={"event_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\EventUserRatingRepository")
  */
 class EventUserRating
 {

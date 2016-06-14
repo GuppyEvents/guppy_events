@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EventSchedule
  *
  * @ORM\Table(name="event_schedule", uniqueConstraints={@ORM\UniqueConstraint(name="id_UNIQUE", columns={"id"})}, indexes={@ORM\Index(name="event_schedule_event_idx", columns={"event_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\EventScheduleRepository")
  */
 class EventSchedule
 {
