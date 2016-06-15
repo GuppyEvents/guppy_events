@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Admin Register</title>
+    </head>
+    <body>
+
+        This is the admin user register page
+
+        {{ form_start(form) }}
+        {{ form_row(form.username) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.password.first) }}
+        {{ form_row(form.password.second) }}
+
+        <button type="submit">Register!</button>
+        {{ form_end(form) }}
+
+    </body>
+</html>

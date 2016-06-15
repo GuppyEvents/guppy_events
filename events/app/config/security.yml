@@ -2,10 +2,16 @@
 # http://symfony.com/doc/current/book/security.html
 security:
 
+    encoders:
+        AppBundle\Entity\AdminUser:
+            algorithm: bcrypt
+
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory:
-            memory: ~
+        our_db_provider:
+            entity:
+                class: AppBundle:AdminUser
+                property: username
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
