@@ -2,3 +2,5 @@
 ## 		OSX
 #########################################
 .idea/*
+
+events/src/AppBundle/Entity/*.php~
