@@ -4,3 +4,55 @@
 .idea/*
 
 events/src/AppBundle/Entity/*.php~
+
+#########################################
+## 		SYMFONY
+#########################################
+# Cache and logs (Symfony2)
+events/app/cache/*
+events/app/logs/*
+!app/cache/.gitkeep
+!app/logs/.gitkeep
+
+# Email spool folder
+events/app/spool/*
+
+# Cache, session files and logs (Symfony3)
+events/var/cache/*
+events/var/logs/*
+events/var/sessions/*
+!var/cache/.gitkeep
+!var/logs/.gitkeep
+!var/sessions/.gitkeep
+
+# Parameters
+events/app/config/parameters.yml
+events/app/config/parameters.ini
+
+# Managed by Composer
+events/app/bootstrap.php.cache
+events/var/bootstrap.php.cache
+events/bin/*
+!bin/console
+!bin/symfony_requirements
+events/vendor/
+
+# Assets and user uploads
+events/web/bundles/
+events/web/uploads/
+
+# Assets managed by Bower
+events/web/assets/vendor/
+
+# PHPUnit
+events/app/phpunit.xml
+events/phpunit.xml
+
+# Build data
+events/build/
+
+# Composer PHAR
+events/composer.phar
+
+# Backup entities generated with doctrine:generate:entities command
+*/Entity/*~
