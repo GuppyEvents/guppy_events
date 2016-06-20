@@ -1,0 +1,84 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Community
+ *
+ * @ORM\Table(name="community", uniqueConstraints={@ORM\UniqueConstraint(name="id_UNIQUE", columns={"id"})}, indexes={@ORM\Index(name="community_university_idx", columns={"university_id"})})
+ * @ORM\Entity
+ */
+class Community
+{
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=45, nullable=false)
+     */
+    private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=250, nullable=true)
+     */
+    private $description;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="image_url", type="string", length=250, nullable=true)
+     */
+    private $imageUrl;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_approved", type="boolean", nullable=true)
+     */
+    private $isApproved;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="register_date", type="datetime", nullable=true)
+     */
+    private $registerDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="update_date", type="datetime", nullable=true)
+     */
+    private $updateDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="delete_date", type="datetime", nullable=true)
+     */
+    private $deleteDate;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \AppBundle\Entity\University
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\University")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="university_id", referencedColumnName="id")
+     * })
+     */
+    private $university;
+
+
+}

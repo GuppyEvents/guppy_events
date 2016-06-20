@@ -1,0 +1,66 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * CommunityAddress
+ *
+ * @ORM\Table(name="community_address", uniqueConstraints={@ORM\UniqueConstraint(name="id_UNIQUE", columns={"id"})}, indexes={@ORM\Index(name="community_address_community_idx", columns={"community_id"}), @ORM\Index(name="community_address_address_idx", columns={"address_id"})})
+ * @ORM\Entity
+ */
+class CommunityAddress
+{
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="postalcode", type="string", length=45, nullable=true)
+     */
+    private $postalcode;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="street", type="string", length=45, nullable=true)
+     */
+    private $street;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=150, nullable=true)
+     */
+    private $description;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \AppBundle\Entity\Community
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Community")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="community_id", referencedColumnName="id")
+     * })
+     */
+    private $community;
+
+    /**
+     * @var \AppBundle\Entity\Address
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Address")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="address_id", referencedColumnName="id")
+     * })
+     */
+    private $address;
+
+
+}
