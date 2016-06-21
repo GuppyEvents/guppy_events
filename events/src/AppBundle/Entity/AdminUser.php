@@ -6,10 +6,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * User
+ * AdminUser
  *
  * @ORM\Table(name="admin_user")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\AdminUserRepository")
  */
 class AdminUser implements UserInterface, \Serializable
 {
@@ -311,7 +311,7 @@ class AdminUser implements UserInterface, \Serializable
     public function getRoles()
     {
         // TODO: Implement getRoles() method.
-        return array(DEFAULT_ROLE);
+        return array($this::DEFAULT_ROLE);
     }
 
     /**

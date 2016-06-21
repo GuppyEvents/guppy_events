@@ -1,22 +1,64 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>Admin Register</title>
-    </head>
-    <body>
+<!doctype html>
+<html lang="en">
+<head>
 
-        This is the admin user register page
-        Test
+    <meta charset="utf-8">
+    <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Admin Register</title>
 
-        {{ form_start(form) }}
-        {{ form_row(form.username) }}
-        {{ form_row(form.email) }}
-        {{ form_row(form.password.first) }}
-        {{ form_row(form.password.second) }}
+    <meta name="description" content="University Event Portal">
+    <meta name="keywords" content="Events">
+    <meta name="author" content="Guppy">
 
-        <button type="submit">Register!</button>
-        {{ form_end(form) }}
+    {% stylesheets '@AppBundle/Resources/public/css/custom-animations.css' filter='cssrewrite' %}
+        <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+    {% endstylesheets %}
 
-    </body>
+    {% stylesheets '@AppBundle/Resources/public/css/style.css' filter='cssrewrite' %}
+        <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+    {% endstylesheets %}
+
+</head>
+
+<body>
+<header class="header header-black">
+    <div class="header-wrapper">
+        <div class="container">
+            <div class="col-sm-10 navigation-container">
+                <div id="navigation" class="navbar-collapse collapse">
+                    <ul class="navigation-list pull-left light-text">
+                        <li class="navigation-item"><a href="#login" class="navigation-link">Login</a></li>
+                        <li class="navigation-item"><a href="#register" class="navigation-link">Register</a></li>
+                    </ul>
+
+                    <a href="#" class="pull-right buy-btn">Buy Tickets</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="section align-center bg-cover overlay overlay-clr bg4 light-text">
+    <div class="container">
+        <h5 class="heading-alt">Admin Register</h5>
+
+            {{ form_start(form) }}
+                {{ form_row(form.username) }}
+                {{ form_row(form.email) }}
+                {{ form_row(form.password.first) }}
+                {{ form_row(form.password.second) }}
+                <button type="submit">Register!</button>
+
+                {#<a href="#" class="btn btn-lg btn-outline">Register</a>#}
+            {{ form_end(form) }}
+
+    </div>
+</section>
+
+    {% javascripts '@AppBundle/Resources/public/js/*' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+</body>
 </html>

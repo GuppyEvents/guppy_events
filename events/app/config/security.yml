@@ -21,12 +21,16 @@ security:
 
         main:
             anonymous: ~
-            # activate different ways to authenticate
-
-            # http_basic: ~
+            pattern:    ^/
             # http://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
+            http_basic: ~
+            provider: admin_db_provider
 
             form_login:
                 login_path: admin_homepage
                 check_path: login
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+
+            logout:
+                path:   /logout
+                target: /
