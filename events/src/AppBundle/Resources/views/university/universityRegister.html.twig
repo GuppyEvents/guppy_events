@@ -29,19 +29,21 @@
                         <!-- /.box-header -->
                         <div class="box-body">
 
-                            <form role="form">
+                            {{ form_start(form, {'attr': {'role': 'form'}}) }}
                                 <!-- text input -->
                                 <div class="form-group">
                                     <label>University Name</label>
-                                    <input type="text" class="form-control" placeholder="Enter ...">
+                                    {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder':'Enter University Name'}}) }}
                                 </div>
 
                                 <!-- text input -->
                                 <div class="form-group">
                                     <label>University Web Address</label>
-                                    <input type="text" class="form-control" placeholder="Enter ...">
+                                    {{ form_widget(form.link, {'attr': {'class': 'form-control', 'placeholder':'Enter University Web Address'}}) }}
                                 </div>
-                            </form>
+
+                                <button type="submit">Register!</button>
+                            {{ form_end(form) }}
 
                         </div>
                         <!-- /.box-body -->
