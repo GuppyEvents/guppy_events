@@ -16,6 +16,18 @@ class UniversityController extends Controller
 {
 
     /**
+     * @Route("/get", name="university_get")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function getAction(Request $request)
+    {
+        return $this->render(
+            'AppBundle:admin:university.html.twig'
+        );
+    }
+
+
+    /**
      * @Route("/post", name="university_post")
      * @Security("has_role('ROLE_USER')")
      */
@@ -38,7 +50,7 @@ class UniversityController extends Controller
         }
 
         return $this->render(
-            'AppBundle:admin:university.html.twig',
+            'AppBundle:university:universityRegister.html.twig',
             array('form' => $form->createView())
         );
     }

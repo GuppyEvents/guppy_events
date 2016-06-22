@@ -11,7 +11,7 @@
             </h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">Dashboard</li>
+                <li class="active">University</li>
             </ol>
         </section>
 
@@ -20,8 +20,54 @@
 
             <div class="row">
 
-            </div>
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title">University List</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="university_list" class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>City</th>
+                                    <th>University Name</th>
+                                    <th>Campus</th>
+                                    <th>Link</th>
+                                    <th>XXX</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>Ankara</td>
+                                    <td>Bilkent University</td>
+                                    <td>Main</td>
+                                    <td>www.bilkent.edu.tr</td>
+                                    <td>XXX</td>
+                                </tr>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th>City</th>
+                                    <th>University Name</th>
+                                    <th>Campus</th>
+                                    <th>Link</th>
+                                    <th>XXX</th>
+                                </tr>
+                                </tfoot>
+                            </table>
 
+                            <a href="{{ path('university_post') }}" class="btn btn-block btn-success btn-lg">Add University</a>
+
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.col-xs-12 -->
+
+            </div>
+            <!-- /.row -->
         </section>
         <!-- /.content -->
     </div>
