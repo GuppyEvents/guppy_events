@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * University
  *
- * @ORM\Table(name="university", uniqueConstraints={@ORM\UniqueConstraint(name="id_UNIQUE", columns={"id"})}, indexes={@ORM\Index(name="university_address_idx", columns={"adress_id"})})
+ * @ORM\Table(name="university", uniqueConstraints={@ORM\UniqueConstraint(name="id_UNIQUE", columns={"id"})})
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UniversityRepository")
  */
 class University
@@ -47,10 +47,10 @@ class University
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Address")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="adress_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="address_id", referencedColumnName="id")
      * })
      */
-    private $adress;
+    private $address;
 
 
 
@@ -134,25 +134,25 @@ class University
     }
 
     /**
-     * Set adress
+     * Set address
      *
-     * @param \AppBundle\Entity\Address $adress
+     * @param \AppBundle\Entity\Address $address
      * @return University
      */
-    public function setAdress(\AppBundle\Entity\Address $adress = null)
+    public function setAddress(\AppBundle\Entity\Address $address = null)
     {
-        $this->adress = $adress;
+        $this->address = $address;
 
         return $this;
     }
 
     /**
-     * Get adress
+     * Get address
      *
      * @return \AppBundle\Entity\Address 
      */
-    public function getAdress()
+    public function getAddress()
     {
-        return $this->adress;
+        return $this->address;
     }
 }

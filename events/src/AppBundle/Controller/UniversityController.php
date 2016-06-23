@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Address;
 use AppBundle\Entity\University;
 use AppBundle\Form\UniversityType;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,25 +34,41 @@ class UniversityController extends Controller
      */
     public function postAction(Request $request)
     {
-        // 1) build the form
-        $university = new University();
-        $form = $this->createForm(UniversityType::class, $university);
+//        // 1) build the form
+//        $university = new University();
+//        $form = $this->createForm(UniversityType::class, $university);
+//
+//        // 2) handle the submit (will only happen on POST)
+//        $form->handleRequest($request);
+//        if ($form->isSubmitted() && $form->isValid()) {
+//
+//            // 3) save the University!
+//            $em = $this->getDoctrine()->getManager();
+//            $em->persist($university);
+//            $em->flush();
+//
+//            return $this->redirectToRoute('admin_homepage');
+//        }
 
-        // 2) handle the submit (will only happen on POST)
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
 
-            // 3) save the University!
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($university);
-            $em->flush();
 
-            return $this->redirectToRoute('admin_homepage');
+        if($request->getMethod() == 'POST'){
+
+            // 1) University Repository should try to register university
+            $university = new University();
+            $university->setName( $request->get('university_name') );
+            $university->setLink( $request->get('university_web_address') );
+
+            $address = new Address();
+            $address->setCityId( $request->get('address_city_id') );
+            $address->setBoroughId( $request->get('address_borough_id') );
+
+            // 2) Redirect route to university list page
+            return $this->redirectToRoute('university_get');
         }
 
         return $this->render(
-            'AppBundle:university:universityRegister.html.twig',
-            array('form' => $form->createView())
+            'AppBundle:university:universityRegister.html.twig'
         );
     }
 

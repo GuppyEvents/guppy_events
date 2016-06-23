@@ -13,23 +13,32 @@ use Doctrine\ORM\Mapping as ORM;
 class Address
 {
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="country_id", type="string", length=45, nullable=true)
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Country")
+     * @ORM\JoinColumns({
+     *     @ORM\JoinColumn(name="country_id", referencedColumnName="id")
+     * })
      */
     private $countryId;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="city_id", type="string", length=45, nullable=true)
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\City")
+     * @ORM\JoinColumns({
+     *     @ORM\JoinColumn(name="city_id", referencedColumnName="id")
+     * })
      */
     private $cityId;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="borough_id", type="string", length=45, nullable=true)
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Borough")
+     * @ORM\JoinColumns({
+     *     @ORM\JoinColumn(name="borough_id", referencedColumnName="id")
+     * })
      */
     private $boroughId;
 
