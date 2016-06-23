@@ -45,7 +45,7 @@ class University
     /**
      * @var \AppBundle\Entity\Address
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Address")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Address" , cascade={"persist"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="address_id", referencedColumnName="id")
      * })

@@ -28,6 +28,16 @@ class Borough
      */
     private $name;
 
+    /**
+     * @var integer
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\City")
+     * @ORM\JoinColumns({
+     *     @ORM\JoinColumn(name="city_id", referencedColumnName="id", nullable=false)
+     * })
+     */
+    private $cityId;
+
 
     /**
      * Get id
@@ -60,5 +70,28 @@ class Borough
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set cityId
+     *
+     * @param string $cityId
+     * @return Borough
+     */
+    public function setCityId($cityId)
+    {
+        $this->cityId = $cityId;
+
+        return $this;
+    }
+
+    /**
+     * Get cityId
+     *
+     * @return City
+     */
+    public function getCityId()
+    {
+        return $this->cityId;
     }
 }

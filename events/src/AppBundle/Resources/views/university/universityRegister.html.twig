@@ -49,9 +49,9 @@
                                 <div class="form-group">
                                     <label>City</label>
                                     <select id="address_city_id" class="form-control" name="address_city_id">
-                                        <option value="6">Ankara</option>
-                                        <option value="34">İstanbul</option>
-                                        <option value="41">Kocaeli</option>
+                                        {% for city in cities %}
+                                            <option value="{{ city.id }}">{{ city.name }}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
 
@@ -83,8 +83,64 @@
 {% block javascriptcontent %}
     <script>
 
-        $('#address_city_id').on('change',function () {
-            console.log('Get borough list of choosen city');
+/***********************************************************************************************************************
+ *                                          GLOBAL VARIABLE
+ **********************************************************************************************************************/
+        var debugMode = true;
+
+
+/***********************************************************************************************************************
+ *                                          AJAX OPERATIONS
+ **********************************************************************************************************************/
+        function ajaxGetBoroughListByCity(cityId){
+
+            // -- 1 --
+            // open alert box to inform user
+
+            // -- 2 --
+            // ajax call
+            $.post("{{ path('university_borough_list') }}" , {
+                cid : cityId
+
+            }).always(function(){
+
+
+            }).done(function(data){
+
+                // -- 2.1 -- CONSOLE
+                if(debugMode)
+                    console.log(data);
+
+                // -- 2.2 -- sonuc düzenlenir
+                if(data.resultText == 'SUCCESS'){
+
+                    // -- 2.2.1 -- remove options
+                    $('#address_borough_id').children().remove();
+
+                    // -- 2.2.2 -- insert new options
+                    data.content.forEach(function(borough) {
+                        $('#address_borough_id').append($('<option>', {
+                            value: borough['borough_id'],
+                            text: borough['borough_name']
+                        }));
+                    });
+
+                }else if(data.resultText == 'SUCCESS_EMPTY'){
+                    alert('Warning -- ' + ' could not found any borough');
+                }else if(data.resultText == 'FAILURE_PERMISSION'){
+                    alert('Warning -- ' + ' you are not authorization for this operation');
+                }else{
+                    alert('Warning -- ' + ' error occured while getting borough list');
+                }
+            });
+        }
+
+
+/***********************************************************************************************************************
+ *                                          EVENTS
+ **********************************************************************************************************************/
+        $('#address_city_id').on('change',function (event) {
+            ajaxGetBoroughListByCity($(event.target).val());
         });
 
     </script>
