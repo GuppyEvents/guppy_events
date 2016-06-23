@@ -47,7 +47,7 @@ class AdminUser implements UserInterface, \Serializable
     private $email;
 
     /**
-     * @var string
+     * @var boolean
      *
      * @ORM\Column(name="is_active", type="boolean")
      */

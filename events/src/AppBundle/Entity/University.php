@@ -34,6 +34,13 @@ class University
     private $image;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_active", type="boolean")
+     */
+    private $isActive;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
@@ -52,6 +59,11 @@ class University
      */
     private $address;
 
+
+    public function __construct()
+    {
+        $this->isActive = false;
+    }
 
 
     /**
@@ -121,6 +133,23 @@ class University
     public function getImage()
     {
         return $this->image;
+    }
+
+    /**
+     * @param boolean $isActive
+     * @return University
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
     }
 
     /**
