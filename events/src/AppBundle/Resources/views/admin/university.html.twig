@@ -45,7 +45,13 @@
                                             <td>{{ university.university_name }} </td>
                                             <td>Main</td>
                                             <td><a href="{{ university.university_link }}" target="_blank">{{ university.university_link }}</a></td>
-                                            <td>{{ university.university_active }}</td>
+                                            <td>
+                                                {% if university.university_active %}
+                                                    Active
+                                                {% else %}
+                                                    Not Active
+                                                {% endif %}
+                                            </td>
                                         </tr>
                                     {% endfor %}
 

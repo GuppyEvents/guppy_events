@@ -1,0 +1,142 @@
+/* --- --- --- EVENT --- --- --- */
+.event-header{
+    overflow: hidden;
+    height: 49vw;
+    max-height: 640px;
+}
+
+.event-body{
+    max-width: 1080px;
+    margin-right: auto;
+    margin-right: auto;
+}
+
+.event-body .event-content-list{
+    margin-top: -65px;
+    position: relative;
+}
+
+.event-body .event-content-list .event-content-header{
+    padding: 0;
+    margin: 0;
+}
+
+.event-body .event-content-list .event-content-header .listing-panel{
+    border-style: solid;
+    border-color: #D2D6DF;
+    border-width: 0 0 1px 0;
+    background-color: #ffffff;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    box-sizing: border-box;
+}
+
+/* --- --- --- EVENT-CONTAINER --- --- --- */
+.guppy-event-container {
+    padding: 15px;
+}
+
+.guppy-event {
+    background-color: #ffffff;
+    box-shadow: 0 1px 0 0 rgba(0,0,0,.1);
+    display: block;
+}
+
+.guppy-event a{
+    text-decoration: none;
+}
+
+.guppy-event .guppy-event-header{
+    position: relative;
+}
+
+.guppy-event .guppy-event-body{
+    padding: 5px 15px;
+}
+
+.guppy-event .guppy-event-body .guppy-event-title {
+    white-space: normal;
+    overflow: hidden;
+    color: #282C35;
+    font-size: 15px;
+    line-height: 19px;
+    max-height: 38px;
+    font-weight: 600;
+    letter-spacing: 0;
+    padding: 0;
+    height: 38px;
+}
+
+.guppy-event .guppy-event-body .guppy-event-datetime {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    display: block;
+    color: #666A73;
+    font-size: 12px;
+    line-height: 18px;
+    height: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 5px 0 0;
+}
+
+.guppy-event .guppy-event-body .guppy-event-venue{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    color: #ADB0B6;
+    font-size: 12px;
+    line-height: 18px;
+    height: 18px;
+    padding: 5px 0 0;
+}
+
+.guppy-event .guppy-event-footer{
+    position: relative;
+    height: 40px;
+    line-height: 40px;
+    border-top: 1px solid #EFF2F5;
+    padding-left: 15px;
+    padding-right: 80px;
+}
+
+.guppy-event .guppy-event-footer .guppy-event-tags{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.guppy-event .guppy-event-footer .guppy-event-tags .guppy-event-format{
+    color: #666A73;
+    font-size: 12px;
+    margin-right: 10px;
+    text-transform: lowercase;
+    text-decoration: none;
+}
+
+.guppy-event .guppy-event-footer .guppy-event-actions{
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 0;
+    line-height: 38px;
+}
+
+.guppy-event .guppy-event-footer .guppy-event-actions a{
+    display: inline-block;
+    color: #ADB0B6;
+    font-size: 20px;
+    width: 40px;
+    height: 38px;
+    border-left: 1px solid #EFF2F5;
+    box-sizing: border-box;
+    text-align: center;
+    text-decoration: none;
+}
+
+.guppy-event .guppy-event-footer .guppy-event-actions i{
+    position: relative;
+    left: 1px;
+    line-height: 38px;
+}
