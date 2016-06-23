@@ -26,8 +26,21 @@ class UniversityController extends Controller
      */
     public function getAction(Request $request)
     {
+
+        $universityList = $this->getDoctrine()->getRepository('AppBundle:University')->findAll();
+
+        $universities = array();
+        for($i=0; $i<count($universityList);$i++){
+            $university['university_name'] = $universityList[$i]->getName();
+            $university['university_link'] = $universityList[$i]->getLink();
+            $university['university_active'] = $universityList[$i]->getIsActive();
+            $university['university_city'] = $this->getDoctrine()->getRepository('AppBundle:City')->find($universityList[$i]->getAddress()->getCityId())->getName();
+            array_push($universities,$university);
+        }
+
         return $this->render(
-            'AppBundle:admin:university.html.twig'
+            'AppBundle:admin:university.html.twig',
+            array('universities'=>$universities)
         );
     }
 

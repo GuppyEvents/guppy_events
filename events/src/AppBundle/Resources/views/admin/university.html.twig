@@ -38,13 +38,17 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Ankara</td>
-                                        <td>Bilkent University</td>
-                                        <td>Main</td>
-                                        <td>www.bilkent.edu.tr</td>
-                                        <td>true</td>
-                                    </tr>
+
+                                    {% for university in universities %}
+                                        <tr>
+                                            <td>{{ university.university_city }}</td>
+                                            <td>{{ university.university_name }} </td>
+                                            <td>Main</td>
+                                            <td><a href="{{ university.university_link }}" target="_blank">{{ university.university_link }}</a></td>
+                                            <td>{{ university.university_active }}</td>
+                                        </tr>
+                                    {% endfor %}
+
                                 </tbody>
                                 <tfoot>
                                     <tr>
