@@ -35,6 +35,7 @@
                                         <th>Campus</th>
                                         <th>Link</th>
                                         <th>Active</th>
+                                        <th>Operation</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -52,6 +53,19 @@
                                                     Not Active
                                                 {% endif %}
                                             </td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-info">Action</button>
+                                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                                                        <span class="caret"></span>
+                                                        <span class="sr-only">Toggle Dropdown</span>
+                                                    </button>
+                                                    <ul class="dropdown-menu" role="menu">
+                                                        <li><a href="{{ path('university_put', {'universityId': university.university_id}) }}">Edit</a></li>
+                                                        <li><a href="#">Delete</a></li>
+                                                    </ul>
+                                                </div>
+                                            </td>
                                         </tr>
                                     {% endfor %}
 
@@ -63,11 +77,10 @@
                                         <th>Campus</th>
                                         <th>Link</th>
                                         <th>Active</th>
+                                        <th>Operation</th>
                                     </tr>
                                 </tfoot>
                             </table>
-
-                            <a href="{{ path('university_post') }}" class="btn btn-block btn-success btn-lg">Add University</a>
 
                         </div>
                         <!-- /.box-body -->

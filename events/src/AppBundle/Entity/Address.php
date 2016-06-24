@@ -23,7 +23,7 @@ class Address
     private $countryId;
 
     /**
-     * @var integer
+     * @var City
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\City")
      * @ORM\JoinColumns({
@@ -99,7 +99,7 @@ class Address
     /**
      * Get cityId
      *
-     * @return string 
+     * @return City
      */
     public function getCityId()
     {

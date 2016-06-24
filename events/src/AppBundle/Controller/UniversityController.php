@@ -31,6 +31,7 @@ class UniversityController extends Controller
 
         $universities = array();
         for($i=0; $i<count($universityList);$i++){
+            $university['university_id'] = $universityList[$i]->getId();
             $university['university_name'] = $universityList[$i]->getName();
             $university['university_link'] = $universityList[$i]->getLink();
             $university['university_active'] = $universityList[$i]->getIsActive();
@@ -138,6 +139,55 @@ class UniversityController extends Controller
         return $this->render(
             'AppBundle:university:universityRegister.html.twig',
             array('cities' => $cities)
+        );
+    }
+
+
+    /**
+     * @Route("/put/{universityId}", name="university_put")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function putAction(Request $request, $universityId)
+    {
+
+        // 1) POST OPERATION
+        if($request->getMethod() == 'POST'){
+
+            try{
+                $em = $this->getDoctrine()->getManager();
+
+                // 1.1) University Repository should try to register university
+                $university = $em->getRepository('AppBundle:University')->find($universityId);
+
+                // 1.2) Check University exist
+                if (!$university) {
+                    throw $this->createNotFoundException(
+                        'No product found for id '.$universityId
+                    );
+                }
+
+                $university->setName( $request->get('university_name') );
+                $university->setLink( $request->get('university_web_address') );
+                $em->flush();
+
+            } catch (Exception $e){}
+
+            // Redirect route to university list page
+            return $this->redirectToRoute('university_get');
+        }
+
+        // 2) DEFAULT CASE
+        $university = $this->getDoctrine()->getRepository('AppBundle:University')->find($universityId);
+        $city = $university->getAddress()->getCityId();
+        $borough = $university->getAddress()->getBoroughId();
+
+        return $this->render(
+            'AppBundle:university:universityUpdate.html.twig',
+            array(
+                'university' => $university,
+                'city' => $city,
+                'borough' => $borough
+            )
         );
     }
 
