@@ -21,6 +21,23 @@ class CommunityController extends Controller
 {
 
     /**
+     * @Route("/list", name="community_list")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function listAction(Request $request)
+    {
+
+        $communityList = $this->getDoctrine()->getRepository('AppBundle:Community')->findAll();
+
+        return $this->render(
+            'AppBundle:community:communityList.html.twig',
+            array(
+                'communityList'=>$communityList
+            )
+        );
+    }
+
+    /**
      * @Route("/post", name="community_post")
      * @Security("has_role('ROLE_USER')")
      */
@@ -57,6 +74,50 @@ class CommunityController extends Controller
         return $this->render(
             'AppBundle:community:communityRegister.html.twig',
             array('universities'=>$universities)
+        );
+    }
+
+    /**
+     * @Route("/put/{communityId}", name="community_put")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function putAction(Request $request , $communityId)
+    {
+
+        // 1) POST OPERATION
+        if($request->getMethod() == 'POST' && false){
+
+//            try{
+//                $em = $this->getDoctrine()->getManager();
+//
+//                // 1.1) University Repository should try to register university
+//                $university = $em->getRepository('AppBundle:University')->find($communityId);
+//
+//                // 1.2) Check University exist
+//                if (!$university) {
+//                    throw $this->createNotFoundException(
+//                        'No product found for id '.$communityId
+//                    );
+//                }
+//
+//                $university->setName( $request->get('university_name') );
+//                $university->setLink( $request->get('university_web_address') );
+//                $em->flush();
+//
+//            } catch (Exception $e){}
+//
+//            // Redirect route to university list page
+//            return $this->redirectToRoute('university_get');
+        }
+
+        // 2) DEFAULT CASE
+        $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
+
+        return $this->render(
+            'AppBundle:community:communityUpdate.html.twig',
+            array(
+                'community' => $community,
+            )
         );
     }
 
