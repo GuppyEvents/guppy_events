@@ -81,6 +81,11 @@ class Community
     private $university;
 
 
+    public function __construct()
+    {
+        $this->isApproved = false;
+    }
+
 
     /**
      * Set name
