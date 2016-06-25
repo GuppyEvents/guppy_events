@@ -64,7 +64,7 @@ class CommunityController extends Controller
             } catch (Exception $e){}
 
             // Redirect route to university list page
-            return $this->redirectToRoute('university_get');
+            return $this->redirectToRoute('community_list');
         }
 
 
@@ -85,29 +85,31 @@ class CommunityController extends Controller
     {
 
         // 1) POST OPERATION
-        if($request->getMethod() == 'POST' && false){
+        if($request->getMethod() == 'POST'){
 
-//            try{
-//                $em = $this->getDoctrine()->getManager();
-//
-//                // 1.1) University Repository should try to register university
-//                $university = $em->getRepository('AppBundle:University')->find($communityId);
-//
-//                // 1.2) Check University exist
-//                if (!$university) {
-//                    throw $this->createNotFoundException(
-//                        'No product found for id '.$communityId
-//                    );
-//                }
-//
-//                $university->setName( $request->get('university_name') );
-//                $university->setLink( $request->get('university_web_address') );
-//                $em->flush();
-//
-//            } catch (Exception $e){}
-//
-//            // Redirect route to university list page
-//            return $this->redirectToRoute('university_get');
+            // 1.1) try to update community
+            try{
+                $em = $this->getDoctrine()->getManager();
+
+                // 1.1.1) University Repository should try to register university
+                $community = $em->getRepository('AppBundle:Community')->find($communityId);
+
+                // 1.1.2) Check University exist
+                if (!$community) {
+                    throw $this->createNotFoundException(
+                        'No product found for id '.$communityId
+                    );
+                }
+
+                // 1.1.3) Update
+                $community->setName( $request->get('community_name') );
+                $community->setDescription( $request->get('community_description') );
+                $em->flush();
+
+            } catch (Exception $e){}
+
+            // 1.2) Redirect route to university list page
+            return $this->redirectToRoute('community_list');
         }
 
         // 2) DEFAULT CASE

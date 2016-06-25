@@ -23,14 +23,14 @@
                     <!-- small box -->
                     <div class="small-box bg-aqua">
                         <div class="inner">
-                            <h3> ?? </h3>
+                            <h3> {{ university_count }} </h3>
 
                             <p>Total University</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-university"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        <a href="{{ path('university_get') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -38,14 +38,14 @@
                     <!-- small box -->
                     <div class="small-box bg-green">
                         <div class="inner">
-                            <h3> ?? </h3>
+                            <h3> {{ community_count }} </h3>
 
                             <p>Total Community</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-person-stalker"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        <a href="{{ path('community_list') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->

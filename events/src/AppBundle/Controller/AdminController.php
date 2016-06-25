@@ -19,7 +19,13 @@ class AdminController extends Controller
      */
     public function indexAction(Request $request)
     {
-        return $this->render('AppBundle:admin:index.html.twig');
+        $universityList = $this->getDoctrine()->getRepository('AppBundle:University')->findAll();
+        $communityList = $this->getDoctrine()->getRepository('AppBundle:Community')->findAll();
+
+        return $this->render('AppBundle:admin:index.html.twig', array(
+            'university_count'=>count($universityList),
+            'community_count'=>count($communityList)
+        ));
     }
     
 }
