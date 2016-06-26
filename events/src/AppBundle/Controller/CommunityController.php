@@ -123,6 +123,37 @@ class CommunityController extends Controller
         );
     }
 
+
+    /**
+     * @Route("/delete/{communityId}", name="community_delete")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function deleteAction($communityId)
+    {
+
+        // 1) POST OPERATION
+        // 1.1) try to delete community
+        try{
+            $em = $this->getDoctrine()->getManager();
+
+            $community = $em->getRepository('AppBundle:Community')->find($communityId);
+            if (!$community) {
+                throw $this->createNotFoundException(
+                    'No product found for id '.$communityId
+                );
+            }
+
+            $em->remove($community);
+            $em->flush();
+
+        } catch (Exception $e){}
+
+        // 1.2) Redirect route to community list page
+        return $this->redirectToRoute('community_list');
+
+    }
+
+
     /*******************************************************************************************************************
      *******************************************************************************************************************
                                                     UTIL FUNCTIONS

@@ -60,7 +60,7 @@
                                                 </button>
                                                 <ul class="dropdown-menu" role="menu">
                                                     <li><a href="{{ path('community_put', {'communityId': community.id}) }}">Edit</a></li>
-                                                    <li><a href="#">Delete</a></li>
+                                                    <li><a href="{{ path('community_delete' , {'communityId': community.id}) }}">Delete</a></li>
                                                 </ul>
                                             </div>
                                         </td>

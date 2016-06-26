@@ -191,4 +191,33 @@ class UniversityController extends Controller
         );
     }
 
+
+    /**
+     * @Route("/delete/{universityId}", name="university_delete")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function deleteAction($universityId)
+    {
+        // 1) POST OPERATION
+        // 1.1) try to delete university
+        try{
+            $em = $this->getDoctrine()->getManager();
+
+            $university = $em->getRepository('AppBundle:University')->find($universityId);
+            if (!$university) {
+                throw $this->createNotFoundException(
+                    'No product found for id '.$university
+                );
+            }
+
+            $em->remove($university);
+            $em->flush();
+
+        } catch (Exception $e){}
+
+        // 1.2) Redirect route to university list page
+        return $this->redirectToRoute('university_get');
+
+    }
+
 }
