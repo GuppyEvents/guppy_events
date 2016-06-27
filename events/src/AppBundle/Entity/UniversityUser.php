@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * UniversityUser
  *
- * @ORM\Table(name="university_user", uniqueConstraints={@ORM\UniqueConstraint(name="id_UNIQUE", columns={"id"})}, indexes={@ORM\Index(name="university_user_user_idx", columns={"user_id"}), @ORM\Index(name="university_user_university_idx", columns={"university_id"})})
+ * @ORM\Table(name="university_user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UniversityUserRepository")
  */
 class UniversityUser
@@ -67,15 +67,14 @@ class UniversityUser
     private $user;
 
     /**
-     * @var \AppBundle\Entity\University
+     * @var \AppBundle\Entity\UniversityMail
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\University")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\UniversityMail")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="university_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="university_mail_id", referencedColumnName="id")
      * })
      */
-    private $university;
-
+    private $universityMail;
 
 
     /**
@@ -227,25 +226,19 @@ class UniversityUser
     }
 
     /**
-     * Set university
-     *
-     * @param \AppBundle\Entity\University $university
-     * @return UniversityUser
+     * @return UniversityMail
      */
-    public function setUniversity(\AppBundle\Entity\University $university = null)
+    public function getUniversityMail()
     {
-        $this->university = $university;
-
-        return $this;
+        return $this->universityMail;
     }
 
     /**
-     * Get university
-     *
-     * @return \AppBundle\Entity\University 
+     * @param UniversityMail $universityMail
      */
-    public function getUniversity()
+    public function setUniversityMail($universityMail)
     {
-        return $this->university;
+        $this->universityMail = $universityMail;
     }
+
 }
