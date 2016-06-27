@@ -1,0 +1,82 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block content %}
+
+    <div class="content-wrapper">
+        <div class="container">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>
+                    Profile
+                    <small>Control panel</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                    <li class="active">Profile</li>
+                </ol>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+
+                <div class="col-md-12">
+
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#timeline" data-toggle="tab">Timeline</a></li>
+                            <li><a href="#clubs" data-toggle="tab">Clubs</a></li>
+                            <li><a href="#badges" data-toggle="tab">Badges</a></li>
+                            <li><a href="#settings" data-toggle="tab">Settings</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+
+                            <div class="active tab-pane" id="timeline">
+                                <!-- Post -->
+                                <div class="post clearfix">
+                                    <p>
+                                        Lorem ipsum represents a long-held tradition for designers,
+                                        typographers and the like. Some people hate it and argue for
+                                        its demise, but others ignore the hate as they create awesome
+                                        tools to help create filler text for everyone from bacon lovers
+                                        to Charlie Sheen fans.
+                                    </p>
+
+                                </div>
+                                <!-- /.post -->
+                            </div>
+                            <!-- /.tab-pane -->
+
+
+                            <div class="tab-pane" id="clubs">
+                                Timeline
+                            </div>
+                            <!-- /.tab-pane -->
+
+
+                            <div class="tab-pane" id="badges">
+                                Badges
+                            </div>
+                            <!-- /.tab-pane -->
+
+
+                            <div class="tab-pane" id="settings">
+                                Settings
+                            </div>
+                            <!-- /.tab-pane -->
+
+                        </div>
+                        <!-- /.tab-content -->
+                    </div>
+                    <!-- /.nav-tabs-custom -->
+
+                </div>
+                <!-- /.col-md-12 -->
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.container -->
+    </div>
+    <!-- /.content-wrapper -->
+
+{% endblock %}

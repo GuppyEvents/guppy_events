@@ -3,35 +3,55 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User
  *
- * @ORM\Table(name="user", uniqueConstraints={@ORM\UniqueConstraint(name="iduser_UNIQUE", columns={"id"}), @ORM\UniqueConstraint(name="username_UNIQUE", columns={"username"}), @ORM\UniqueConstraint(name="email_UNIQUE", columns={"email"})}, indexes={@ORM\Index(name="user_address_idx", columns={"address_id"})})
+ * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
-class User
+class User extends Base implements UserInterface, \Serializable
 {
+
+    const DEFAULT_ROLE = 'ROLE_ADMIN';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
     /**
      * @var string
      *
-     * @ORM\Column(name="username", type="string", length=45, nullable=false)
+     * @ORM\Column(name="username", type="string", length=45, nullable=false, unique=true)
      */
     private $username;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="password", type="string", length=45, nullable=false)
+     * @ORM\Column(name="password", type="string", length=64, nullable=false)
      */
     private $password;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=45, nullable=false)
+     * @ORM\Column(name="email", type="string", length=45, nullable=false, unique=true)
      */
     private $email;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_active", type="boolean")
+     */
+    private $isActive;
 
     /**
      * @var string
@@ -55,41 +75,11 @@ class User
     private $phone;
 
     /**
-     * @var boolean
+     * @var string
      *
-     * @ORM\Column(name="is_validate", type="boolean", nullable=true)
+     * @ORM\Column(name="role", type="string", length=45, nullable=false)
      */
-    private $isValidate;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="register_date", type="datetime", nullable=true)
-     */
-    private $registerDate;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="update_date", type="datetime", nullable=true)
-     */
-    private $updateDate;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="delete_date", type="datetime", nullable=true)
-     */
-    private $deleteDate;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
+    private $role;
 
     /**
      * @var \AppBundle\Entity\Address
@@ -102,6 +92,14 @@ class User
     private $address;
 
 
+    public function __construct()
+    {
+        $this->isActive = true;
+        $this->role = $this::DEFAULT_ROLE;
+
+        // may not be needed, see section on salt below
+        // $this->salt = md5(uniqid(null, true));
+    }
 
     /**
      * Set username
@@ -165,11 +163,28 @@ class User
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * @param string $isActive
+     * @return User
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
     }
 
     /**
@@ -242,95 +257,19 @@ class User
     }
 
     /**
-     * Set isValidate
-     *
-     * @param boolean $isValidate
-     * @return User
+     * @return string
      */
-    public function setIsValidate($isValidate)
+    public function getRole()
     {
-        $this->isValidate = $isValidate;
-
-        return $this;
+        return $this->role;
     }
 
     /**
-     * Get isValidate
-     *
-     * @return boolean 
+     * @param string $role
      */
-    public function getIsValidate()
+    public function setRole($role)
     {
-        return $this->isValidate;
-    }
-
-    /**
-     * Set registerDate
-     *
-     * @param \DateTime $registerDate
-     * @return User
-     */
-    public function setRegisterDate($registerDate)
-    {
-        $this->registerDate = $registerDate;
-
-        return $this;
-    }
-
-    /**
-     * Get registerDate
-     *
-     * @return \DateTime 
-     */
-    public function getRegisterDate()
-    {
-        return $this->registerDate;
-    }
-
-    /**
-     * Set updateDate
-     *
-     * @param \DateTime $updateDate
-     * @return User
-     */
-    public function setUpdateDate($updateDate)
-    {
-        $this->updateDate = $updateDate;
-
-        return $this;
-    }
-
-    /**
-     * Get updateDate
-     *
-     * @return \DateTime 
-     */
-    public function getUpdateDate()
-    {
-        return $this->updateDate;
-    }
-
-    /**
-     * Set deleteDate
-     *
-     * @param \DateTime $deleteDate
-     * @return User
-     */
-    public function setDeleteDate($deleteDate)
-    {
-        $this->deleteDate = $deleteDate;
-
-        return $this;
-    }
-
-    /**
-     * Get deleteDate
-     *
-     * @return \DateTime 
-     */
-    public function getDeleteDate()
-    {
-        return $this->deleteDate;
+        $this->role = $role;
     }
 
     /**
@@ -364,5 +303,96 @@ class User
     public function getAddress()
     {
         return $this->address;
+    }
+
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    //                                          Override UserInterface methods
+    // -----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * String representation of object
+     * @link http://php.net/manual/en/serializable.serialize.php
+     * @return string the string representation of the object or null
+     * @since 5.1.0
+     */
+    public function serialize()
+    {
+        // TODO: Implement serialize() method.
+        return serialize(array(
+            $this->id,
+            $this->username,
+            $this->password,
+            // see section on salt below
+            // $this->salt,
+        ));
+    }
+
+    /**
+     * Constructs the object
+     * @param string $serialized <p>
+     * The string representation of the object.
+     * </p>
+     * @return void
+     * @since 5.1.0
+     */
+    public function unserialize($serialized)
+    {
+        // TODO: Implement unserialize() method.
+        list (
+            $this->id,
+            $this->username,
+            $this->password,
+            // see section on salt below
+            // $this->salt
+            ) = unserialize($serialized);
+    }
+
+    /**
+     * Returns the roles granted to the user.
+     *
+     * <code>
+     * public function getRoles()
+     * {
+     *     return array('ROLE_USER');
+     * }
+     * </code>
+     *
+     * Alternatively, the roles might be stored on a ``roles`` property,
+     * and populated in any number of different ways when the user object
+     * is created.
+     *
+     * @return (Role|string)[] The user roles
+     */
+    public function getRoles()
+    {
+        // TODO: Implement getRoles() method.
+        return array($this->role);
+    }
+
+    /**
+     * Returns the salt that was originally used to encode the password.
+     *
+     * This can return null if the password was not encoded using a salt.
+     *
+     * @return string|null The salt
+     */
+    public function getSalt()
+    {
+        // TODO: Implement getSalt() method.
+        return null;
+    }
+
+    /**
+     * Removes sensitive data from the user.
+     *
+     * This is important if, at any given point, sensitive information like
+     * the plain-text password is stored on this object.
+     */
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
     }
 }

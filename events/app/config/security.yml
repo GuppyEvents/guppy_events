@@ -1,17 +1,15 @@
 # To get started with security, check out the documentation:
 # http://symfony.com/doc/current/book/security.html
 security:
-
     encoders:
-        AppBundle\Entity\AdminUser:
+        AppBundle\Entity\User:
             algorithm: bcrypt
 
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
-        admin_db_provider:
+        db_provider:
             entity:
-                class: AppBundle:AdminUser
-                # property: username
+                class: AppBundle:User
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -21,10 +19,10 @@ security:
 
         main:
             anonymous: ~
+            http_basic: ~
             pattern:    ^/
             # http://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
-            http_basic: ~
-            provider: admin_db_provider
+            provider: db_provider
 
             form_login:
                 login_path: admin_homepage
@@ -35,3 +33,7 @@ security:
             logout:
                 path:   /logout
                 target: /
+
+    role_hierarchy:
+        ROLE_ADMIN:      [ROLE_USER]
+        ROLE_SUPERADMIN: [ROLE_ADMIN]

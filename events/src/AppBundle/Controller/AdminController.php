@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route("/admin", name="admin")
- * @Security("has_role('ROLE_USER')")
+ * @Security("has_role('ROLE_ADMIN')")
  */
 class AdminController extends Controller
 {
