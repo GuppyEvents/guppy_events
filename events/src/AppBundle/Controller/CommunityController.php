@@ -30,8 +30,7 @@ class CommunityController extends Controller
         $communityList = $this->getDoctrine()->getRepository('AppBundle:Community')->findAll();
 
         return $this->render(
-            'AppBundle:community:communityList.html.twig',
-            array(
+            'AppBundle:community:communityList.html.twig', array(
                 'communityList'=>$communityList
             )
         );
@@ -72,8 +71,9 @@ class CommunityController extends Controller
         $universities = $this->getDoctrine()->getRepository('AppBundle:University')->findAll();
 
         return $this->render(
-            'AppBundle:community:communityRegister.html.twig',
-            array('universities'=>$universities)
+            'AppBundle:community:communityRegister.html.twig', array(
+                'universities'=>$universities
+            )
         );
     }
 
@@ -116,8 +116,7 @@ class CommunityController extends Controller
         $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
 
         return $this->render(
-            'AppBundle:community:communityUpdate.html.twig',
-            array(
+            'AppBundle:community:communityUpdate.html.twig', array(
                 'community' => $community,
             )
         );

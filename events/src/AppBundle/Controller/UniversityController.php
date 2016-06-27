@@ -40,8 +40,9 @@ class UniversityController extends Controller
         }
 
         return $this->render(
-            'AppBundle:admin:university.html.twig',
-            array('universities'=>$universities)
+            'AppBundle:admin:university.html.twig', array(
+                'universities'=>$universities
+            )
         );
     }
 
@@ -137,8 +138,9 @@ class UniversityController extends Controller
         $cities = $this->getDoctrine()->getRepository('AppBundle:City')->findAll();
 
         return $this->render(
-            'AppBundle:university:universityRegister.html.twig',
-            array('cities' => $cities)
+            'AppBundle:university:universityRegister.html.twig', array(
+                'cities' => $cities
+            )
         );
     }
 

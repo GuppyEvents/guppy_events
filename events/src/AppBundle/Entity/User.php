@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class User extends Base implements UserInterface, \Serializable
 {
 
-    const DEFAULT_ROLE = 'ROLE_ADMIN';
+    const DEFAULT_ROLE = 'ROLE_USER';
 
     /**
      * @var integer
