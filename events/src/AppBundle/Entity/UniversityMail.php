@@ -31,9 +31,9 @@ class UniversityMail
     /**
      * @var \AppBundle\Entity\University
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\University" , cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\University" )
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="university_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="university_id", referencedColumnName="id", nullable=false)
      * })
      */
     private $university;
