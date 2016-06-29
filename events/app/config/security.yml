@@ -29,7 +29,6 @@ security:
                 check_path: login
                 failure_path: login
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
-
             logout:
                 path:   /logout
                 target: /
@@ -37,3 +36,6 @@ security:
     role_hierarchy:
         ROLE_ADMIN:      [ROLE_USER]
         ROLE_SUPERADMIN: [ROLE_ADMIN]
+
+#    access_control:
+#        - { path: ^/admin, roles: ROLE_ADMIN }

@@ -43,55 +43,6 @@
 
             <div class="row">
 
-
-                <div class="col-md-12">
-                    <div class="box box-info">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">University Info</h3>
-                        </div>
-                        <!-- /.box-header -->
-                        <div class="box-body">
-
-                            {#{{ form_start(form, {'attr': {'role': 'form'}}) }}#}
-                            <form action="{{ path('university_put' , {'universityId': university.id}) }}" method="post">
-
-                                <!-- text input -->
-                                <div class="form-group">
-                                    <label>University Name</label>
-                                    <input type="text" class="form-control" name="university_name" placeholder="Enter University Name" value="{{ university.name }}">
-                                </div>
-
-                                <!-- text input -->
-                                <div class="form-group">
-                                    <label>University Web Address</label>
-                                    <input type="text" class="form-control" name="university_web_address" placeholder="Enter University Web Address" value="{{ university.link }}">
-                                </div>
-
-                                <div class="form-group">
-                                    <label>City</label>
-                                    <select id="address_city_id" class="form-control" name="address_city_id">
-                                        <option value="{{ city.id }}">{{ city.name }}</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Borough</label>
-                                    <select id="address_borough_id" class="form-control" name="address_borough_id">
-                                        <option value="{{ borough.id }}">{{ borough.name }}</option>
-                                    </select>
-                                </div>
-
-                                <button type="submit">Update !</button>
-                            </form>
-                            {#{{ form_end(form) }}#}
-
-                        </div>
-                        <!-- /.box-body -->
-                    </div>
-                    <!-- /.box -->
-                </div>
-                <!-- /.column -->
-
                 <div class="col-md-12">
                     <div class="box box-info">
                         <div class="box-header with-border">
@@ -99,6 +50,15 @@
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
+
+                            <div class="form-group">
+                                <label>Select</label>
+                                <select class="form-control">
+                                    {% for university in universities %}
+                                        <option>{{ university.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
 
                             <table id="university_mail_list" class="table table-bordered table-hover">
                                 <thead>
@@ -175,7 +135,7 @@
 
             // -- 2 -- ajax call
             $.post("{{ path('university_add_mailserver') }}" , {
-                uid : {{ university.id }},
+                uid : 'university.id',
                 mailServer : $('#university_add_mail_modal_mail').val()
 
             }).always(function(){
@@ -218,48 +178,12 @@
             });
         }
 
-        function ajaxRemoveUniversityMailServer(university_mail_id, tr_element){
-
-            // -- 1 --
-
-            // -- 2 -- ajax call
-                $.post("{{ path('university_remove_mailserver') }}" , {
-                    mid : university_mail_id
-
-                }).always(function(){
-
-                }).done(function(data){
-
-                    // -- 2.1 -- CONSOLE
-                    if(debugMode)
-                        console.log(data);
-
-                    // -- 2.2 -- sonuc düzenlenir
-                    if(data.resultText == 'SUCCESS'){
-
-                        // -- 2.2.1 -- remove mail from list
-                        tr_element.remove();
-
-                    }else if(data.resultText == 'SUCCESS_EMPTY'){
-                        alert('Warning -- ' + ' SUCCESS_EMPTY');
-                    }else if(data.resultText == 'FAILURE_PERMISSION'){
-                        alert('Warning -- ' + ' you are not authorization for this operation');
-                    }else{
-                        alert('Warning -- ' + ' error occured while inserting mail server name to university');
-                    }
-                });
-        }
-
 
 /***********************************************************************************************************************
  *                                          EVENTS
  **********************************************************************************************************************/
         $('#university_add_mail_modal_summit').on('click',function (event) {
             ajaxAddUniversityMailServer();
-        });
-
-        $(document).on('click', 'tr td .university_remove_mailserver' , function (event) {
-            ajaxRemoveUniversityMailServer($(event.target).attr('value'),$(event.target).parentsUntil('tr').last().parent());
         });
 
     </script>
