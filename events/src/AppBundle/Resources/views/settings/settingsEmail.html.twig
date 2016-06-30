@@ -1,5 +1,13 @@
 {% extends 'AppBundle::base.html.twig' %}
 
+{% block stylecontent %}
+    <style>
+        .fa-trash {
+            color: red;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
 
     <!-- Content Wrapper. Contains page content -->
@@ -56,6 +64,7 @@
                                                 <th>University</th>
                                                 <th>Status</th>
                                                 <th>Expire Date</th>
+                                                <th></th>
                                             </tr>
 
                                             {% for universityUser in universityUsers %}
@@ -70,6 +79,7 @@
                                                     {% endif %}
 
                                                     <td>{{ universityUser.updateDate|date_modify("+2 year")|date('d-m-Y') }}</td>
+                                                    <td><a href="{{ path('university_user_delete' , {'universityUserId': universityUser.id}) }}"><span class="fa fa-trash" > </span></a></td>
                                             {% endfor %}
 
                                         </table>
