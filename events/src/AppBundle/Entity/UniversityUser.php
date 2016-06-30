@@ -55,6 +55,10 @@ class UniversityUser extends Base
      */
     private $universityMail;
 
+    public function __construct()
+    {
+        $this->isValidated = false;
+    }
 
     /**
      * Set email

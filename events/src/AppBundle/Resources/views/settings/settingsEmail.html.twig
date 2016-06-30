@@ -50,7 +50,7 @@
                                 <div class="col-xs-12">
                                     <!-- /.box-header -->
                                     <div class="table-responsive no-padding">
-                                        <table class="table table-hover">
+                                        <table id="university_user_mail_list" class="table table-hover">
                                             <tr>
                                                 <th>Email</th>
                                                 <th>University</th>
@@ -58,38 +58,33 @@
                                                 <th>Expire Date</th>
                                             </tr>
 
+                                            {% for universityUser in universityUsers %}
+                                                <tr>
+                                                    <td>{{ universityUser.email }}</td>
+                                                    <td>{{ universityUser.universityMail.university.name }}</td>
 
+                                                    {% if universityUser.isValidated %}
+                                                        <td><span class="label label-success">Approved</span></td>
+                                                    {% else %}
+                                                        <td><span class='label label-warning'>Unverified</span></td>
+                                                    {% endif %}
 
-                                            <tr>
-                                                <td>kemalsami.karaca@ug.bilkent.edu.tr</td>
-                                                <td>Bilkent University</td>
-                                                <td><span class="label label-success">Approved</span></td>
-                                                <td>2016-09-10</td>
-                                            </tr>
-                                            {#<tr>#}
-                                                {#<td>219</td>#}
-                                                {#<td>Alexander Pierce</td>#}
-                                                {#<td>11-7-2014</td>#}
-                                                {#<td><span class="label label-warning">Pending</span></td>#}
-                                                {#<td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>#}
-                                            {#</tr>#}
-                                            {#<tr>#}
-                                                {#<td>657</td>#}
-                                                {#<td>Bob Doe</td>#}
-                                                {#<td>11-7-2014</td>#}
-                                                {#<td><span class="label label-primary">Approved</span></td>#}
-                                                {#<td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>#}
-                                            {#</tr>#}
-                                            {#<tr>#}
-                                                {#<td>175</td>#}
-                                                {#<td>Mike Doe</td>#}
-                                                {#<td>11-7-2014</td>#}
-                                                {#<td><span class="label label-danger">Denied</span></td>#}
-                                                {#<td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>#}
-                                            {#</tr>#}
+                                                    <td>{{ universityUser.updateDate|date_modify("+2 year")|date('d-m-Y') }}</td>
+                                            {% endfor %}
+
                                         </table>
                                     </div>
                                     <!-- /.box-body -->
+                                </div>
+
+                                <hr>
+                                <p><b>Add email address </b></p>
+                                <div class="input-group col-md-6">
+                                    <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                                    <input id="university_user_add_value" type="email" class="form-control" placeholder="Email">
+                                        <span class="input-group-btn">
+                                          <button id="university_user_add" type="button" class="btn btn-default btn-flat">Add</button>
+                                        </span>
                                 </div>
 
                             </div>
@@ -121,51 +116,42 @@
 /***********************************************************************************************************************
  *                                          AJAX OPERATIONS
  **********************************************************************************************************************/
-        function ajaxAddUniversityMailServer(){
+        function ajaxAddUniversityUserMail(){
 
             // -- 1 --
 
             // -- 2 -- ajax call
-            $.post("{{ path('university_add_mailserver') }}" , {
-                uid : 'university.id',
-                mailServer : $('#university_add_mail_modal_mail').val()
+            $.post("{{ path('settings_emails_add') }}" , {
+                usermail : $('#university_user_add_value').val()
 
             }).always(function(){
-                $('#university_add_mail_modal_mail').val('')
-                $('#university_add_mail_modal').modal('hide');
+
             }).done(function(data){
 
                 // -- 2.1 -- CONSOLE
                 if(debugMode)
                     console.log(data);
 
-                // -- 2.2 -- sonuc düzenlenir
+                // -- 2.2 -- result ui operation
                 if(data.resultText == 'SUCCESS'){
 
                     // -- 2.2.1 -- add mail to list
                     row =   "<tr>" +
-                                "<td value="+data.content['id']+">" + data.content['id'] + "</td>" +
-                                "<td value="+data.content['name']+">" + data.content['name'] + "</td>" +
-                                "<td><div class='btn-group'>" +
-                                    "<button type='button' class='btn btn-info'>Action</button>" +
-                                    "<button type='button' class='btn btn-info dropdown-toggle' data-toggle='dropdown'>" +
-                                    "<span class='caret'></span>" +
-                                    "<span class='sr-only'>Toggle Dropdown</span>" +
-                                    "</button>" +
-                                        "<ul class='dropdown-menu' role='menu'>" +
-                                            "<li><a class='university_remove_mailserver' value='"+ data.content['id']+ "' >Delete</a></li>" +
-                                        "</ul>" +
-                                    "</div>" +
-                                "</td>"
+                                "<td value="+data.content['mail']+">" + data.content['mail'] + "</td>" +
+                                "<td value="+data.content['university']+">" + data.content['university'] + "</td>" +
+                                "<td><span class='label label-warning'>Unverified</span></td>" +
+                                "<td> . . . </td>"
                             "</tr>";
-                    $("#university_mail_list").append(row);
+                    $("#university_user_mail_list").append(row);
 
                 }else if(data.resultText == 'SUCCESS_EMPTY'){
                     alert('Warning -- ' + ' SUCCESS_EMPTY');
                 }else if(data.resultText == 'FAILURE_PERMISSION'){
                     alert('Warning -- ' + ' you are not authorization for this operation');
+                }else if(data.resultText == 'FAILURE_REPORT'){
+                    alert('Warning -- ' + data.content);
                 }else{
-                    alert('Warning -- ' + ' error occured while inserting mail server name to university');
+                    alert('Warning -- ' + ' error occured while adding mail address ');
                 }
             });
         }
@@ -174,8 +160,8 @@
 /***********************************************************************************************************************
  *                                          EVENTS
  **********************************************************************************************************************/
-        $('#university_add_mail_modal_summit').on('click',function (event) {
-            ajaxAddUniversityMailServer();
+        $(document).on('click','#university_user_add',function (event) {
+            ajaxAddUniversityUserMail();
         });
 
     </script>

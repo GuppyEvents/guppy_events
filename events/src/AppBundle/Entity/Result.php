@@ -19,6 +19,7 @@ class Result
     public static $FAILURE_AUTH;
     public static $FAILURE_PARAM_MISMATCH;
     public static $FAILURE_EXCEPTION;
+    public static $FAILURE_REPORT;
     public static $FAILURE_PERMISSION;
 
     public $resultText;
@@ -66,6 +67,7 @@ class Result
         Result::$FAILURE_AUTH               = Result::$FAILURE_AUTH ? Result::$FAILURE_AUTH->setContent(null) : Result::constructor_default(ResultConst::ResultGuppy101Code , ResultConst::ResultGuppy101Status);
         Result::$FAILURE_PARAM_MISMATCH     = Result::$FAILURE_PARAM_MISMATCH ? Result::$FAILURE_PARAM_MISMATCH->setContent(null) : Result::constructor_default(ResultConst::ResultGuppy511Code , ResultConst::ResultGuppy511Status);
         Result::$FAILURE_EXCEPTION          = Result::$FAILURE_EXCEPTION ? Result::$FAILURE_EXCEPTION->setContent(null) : Result::constructor_default(ResultConst::ResultGuppy521Code , ResultConst::ResultGuppy521Status);
+        Result::$FAILURE_REPORT             = Result::$FAILURE_REPORT ? Result::$FAILURE_REPORT->setContent(null) : Result::constructor_default(ResultConst::ResultGuppy522Code , ResultConst::ResultGuppy522Status);
         Result::$FAILURE_PERMISSION         = Result::$FAILURE_PERMISSION ? Result::$FAILURE_PERMISSION->setContent(null) : Result::constructor_default(ResultConst::ResultGuppy531Code , ResultConst::ResultGuppy531Status);
     }
 
