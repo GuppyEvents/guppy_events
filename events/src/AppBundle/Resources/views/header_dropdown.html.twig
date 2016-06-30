@@ -66,6 +66,10 @@
                 <li class="user-body">
                     <div class="row">
 
+                        <div class="col-xs-4 text-center">
+                            <a href="{{ path('settings_emails') }}">Settings</a>
+                        </div>
+
                         {% if is_granted('ROLE_ADMIN') %}
                             <div class="col-xs-4 text-center">
                                 <a href="{{ path('admin_homepage') }}">Dashboard</a>

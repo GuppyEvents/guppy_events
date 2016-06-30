@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="university_user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UniversityUserRepository")
  */
-class UniversityUser
+class UniversityUser extends Base
 {
     /**
      * @var string
@@ -27,27 +27,6 @@ class UniversityUser
     private $isValidated;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="register_date", type="datetime", nullable=true)
-     */
-    private $registerDate;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="update_date", type="datetime", nullable=true)
-     */
-    private $updateDate;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="delete_date", type="datetime", nullable=true)
-     */
-    private $deleteDate;
-
-    /**
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
@@ -61,7 +40,7 @@ class UniversityUser
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      * })
      */
     private $user;
@@ -71,7 +50,7 @@ class UniversityUser
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\UniversityMail")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="university_mail_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="university_mail_id", referencedColumnName="id", nullable=false)
      * })
      */
     private $universityMail;
@@ -121,75 +100,6 @@ class UniversityUser
     public function getIsValidated()
     {
         return $this->isValidated;
-    }
-
-    /**
-     * Set registerDate
-     *
-     * @param \DateTime $registerDate
-     * @return UniversityUser
-     */
-    public function setRegisterDate($registerDate)
-    {
-        $this->registerDate = $registerDate;
-
-        return $this;
-    }
-
-    /**
-     * Get registerDate
-     *
-     * @return \DateTime 
-     */
-    public function getRegisterDate()
-    {
-        return $this->registerDate;
-    }
-
-    /**
-     * Set updateDate
-     *
-     * @param \DateTime $updateDate
-     * @return UniversityUser
-     */
-    public function setUpdateDate($updateDate)
-    {
-        $this->updateDate = $updateDate;
-
-        return $this;
-    }
-
-    /**
-     * Get updateDate
-     *
-     * @return \DateTime 
-     */
-    public function getUpdateDate()
-    {
-        return $this->updateDate;
-    }
-
-    /**
-     * Set deleteDate
-     *
-     * @param \DateTime $deleteDate
-     * @return UniversityUser
-     */
-    public function setDeleteDate($deleteDate)
-    {
-        $this->deleteDate = $deleteDate;
-
-        return $this;
-    }
-
-    /**
-     * Get deleteDate
-     *
-     * @return \DateTime 
-     */
-    public function getDeleteDate()
-    {
-        return $this->deleteDate;
     }
 
     /**
