@@ -1,0 +1,265 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+
+    {% stylesheets
+            'theme/assets/css/style.css' filter='cssrewrite' %}
+        <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+    {% endstylesheets %}
+
+    {% javascripts
+            'theme/assets/js/html5shiv.js'
+            'theme/assets/js/respond.min.js' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+{% endblock %}
+
+
+
+{% block body %}
+
+    <div class="preloader-mask">
+        <div class="preloader"></div>
+    </div>
+
+    <!-- HEADER -->
+    <!--
+    <section style="z-index: 9;">
+        <header class="header">
+            <div class="header-wrapper">
+                <div class="container">
+                    <div class="col-xs-12 visible-xs navigation-header">
+                        <a href="#" class="buy-btn">Sign In</a>
+                        <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigation8" aria-expanded="false" aria-controls="navigation3">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+
+                    <div class="col-xs-12 navigation-container">
+                        <div id="navigation8" class="navbar-collapse collapse">
+                            <a href="{{ path('login') }}" class="hidden-xs pull-right buy-btn">Go to Admin Page</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </section>
+-->
+    <!-- BODY -->
+    <section id="club_header">
+        <div class="container">
+            <img src="https://s-media-cache-ak0.pinimg.com/564x/4f/0e/b3/4f0eb37910ce31857575ca120b87d17a.jpg" alt="" class="img-responsive" style="padding-top: 10px; text-align: center;width: 100px;display: block;margin: 0 auto;">
+            <h3 style="text-align: center;">DAĞCILIK TOPLULUĞU</h3>
+            <p style="text-align: center;" class="text-alt">Çanakkale Onsekiz Mart Üniversitesi</span></p>
+            <br>
+            <br>
+
+            <div class="tabs-wrapper tabs-horizontal">
+                <div class="nav-wrapper"><span class="nav-current">
+						<h6 class="heading-alt"><span class="fa fa-code"></span> Genel Bilgi</h6>
+					</span><ul class="nav nav-tabs">
+                        <li class="active"><a href="#horizontal_tab1" data-toggle="tab">
+                                <h6 class="heading-alt"><span class="fa fa-code"></span> Genel Bilgi</h6>
+                            </a></li>
+                        <li><a href="#horizontal_tab2" data-toggle="tab">
+                                <h6 class="heading-alt"><span class="fa fa-rocket"></span> Üyeler</h6>
+                            </a></li>
+                        <li><a href="#horizontal_tab3" data-toggle="tab">
+                                <h6 class="heading-alt"><span class="fa fa-external-link"></span> Etkinlikler</h6>
+                            </a></li>
+                    </ul></div>
+
+                <div class="tab-content">
+                    <div id="horizontal_tab1" class="tab-pane fade active in">
+                        <div class="col-sm-5 img-column">
+                            <img src="https://media.licdn.com/mpr/mpr/AAEAAQAAAAAAAAd_AAAAJDQwMmFhNWM1LWQ1NTMtNGIyNS1hY2YwLTg2MDk2ZDM3NDMwYw.jpg" alt="" class="img-responsive">
+                        </div>
+                        <div class="col-sm-7 align-left">
+                            <h6>Topluluk Hakkında</h6>
+                            <p>Faucibus sed pretium. Ridiculus <strong>consectetuer</strong> et. In arcu enim sit in libero scelerisque mauris sed. Nullam eleifend in varius arcu vitae feugiat magna id ut morbi consectetuer. In vivamus arcu. Id ut dui. Sed massa in. Scelerisque suscipit quisque maecenas aliquet in. Wisi mi ipsum. Elit et mauris. Duis in magni praesent <a href="#">content</a> massa.</p>
+                            <p>Consectetuer amet wisi felis sem <strong>tincidunt</strong>. Ultricies blandit id euismod inceptos mauris pulvinar nec nullam quisque consequat nulla eleifend elementum vivamus aliquam placerat nec. Vehicula leo praesent vitae leo mauris ullamcorper lectus sed mollis id turpis dui cras suspendisse. Porta diam <a href="#">eleifend</a>. Praesent magnis sit. Enim ligula vel justo urna.</p>
+                            <ul>
+                                <li>Nisl cras vitae wisi odio amet.</li>
+                                <li>Lacus amet vestibulum belas</li>
+                                <li>Quis nunc curabitur assumenda</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div id="horizontal_tab2" class="tab-pane fade">
+                        <div class="col-sm-7 align-center">
+                                <div class="container">
+                                    <div class="col-sm-4">
+                                        <div class="speaker">
+                                            <div class="photo-wrapper rounded"><img src="http://vivaco.com/demo/ventcamp/assets/img/speakers/speaker1.jpg" alt="John Doe" class="img-responsive"></div>
+                                            <h3 class="name">ERIC BOLDY</h3>
+                                            <p class="text-alt"><small>Başkan</small></p>
+                                            <p class="about">  
+                                            <ul class="speaker-socials">
+                                                <li><a href="#"><span class="fa fa-facebook"></span></a></li>
+                                                <li><a href="#"><span class="fa fa-twitter"></span></a></li>
+                                                <li><a href="#"><span class="fa fa-google-plus"></span></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="speaker">
+                                            <div class="photo-wrapper rounded"><img src="http://vivaco.com/demo/ventcamp/assets/img/speakers/speaker2.jpg" alt="John Doe" class="img-responsive"></div>
+                                            <h3 class="name">JAMES ROCK</h3>
+                                            <p class="text-alt"><small>Başkan Yardımcısı</small></p>
+                                            <p class="about">  
+                                            <ul class="speaker-socials">
+                                                <li><a href="#"><span class="fa fa-facebook"></span></a></li>
+                                                <li><a href="#"><span class="fa fa-twitter"></span></a></li>
+                                                <li><a href="#"><span class="fa fa-google-plus"></span></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="speaker">
+                                            <div class="photo-wrapper rounded"><img src="http://vivaco.com/demo/ventcamp/assets/img/speakers/speaker3.jpg" alt="John Doe" class="img-responsive"></div>
+                                            <h3 class="name">ANDREA WARRAETY</h3>
+                                            <p class="text-alt"><small>Halkla İlişkiler</small></p>
+                                            <p class="about">  
+                                            <ul class="speaker-socials">
+                                                <li><a href="#"><span class="fa fa-facebook"></span></a></li>
+                                                <li><a href="#"><span class="fa fa-twitter"></span></a></li>
+                                                <li><a href="#"><span class="fa fa-google-plus"></span></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="speaker">
+                                            <div class="photo-wrapper rounded"><img src="http://vivaco.com/demo/ventcamp/assets/img/speakers/speaker4.jpg" alt="John Doe" class="img-responsive"></div>
+                                            <h3 class="name">MARTIN BRANSON</h3>
+                                            <p class="text-alt"><small>Etkinlik Sorumlusu</small></p>
+                                             
+                                            <ul class="speaker-socials">
+                                                <li><a href="#"><span class="fa fa-facebook"></span></a></li>
+                                                <li><a href="#"><span class="fa fa-twitter"></span></a></li>
+                                                <li><a href="#"><span class="fa fa-google-plus"></span></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="speaker">
+                                            <div class="photo-wrapper rounded"><img src="http://vivaco.com/demo/ventcamp/assets/img/speakers/speaker5.jpg" alt="John Doe" class="img-responsive"></div>
+                                            <h3 class="name">AMY WARNER</h3>
+                                            <p class="text-alt"><small>Sekreter</small></p>
+                                            <p class="about">  
+                                            <ul class="speaker-socials">
+                                                <li><a href="#"><span class="fa fa-facebook"></span></a></li>
+                                                <li><a href="#"><span class="fa fa-twitter"></span></a></li>
+                                                <li><a href="#"><span class="fa fa-google-plus"></span></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="speaker">
+                                            <div class="photo-wrapper rounded"><img src="http://vivaco.com/demo/ventcamp/assets/img/speakers/speaker6.jpg" alt="John Doe" class="img-responsive"></div>
+                                            <h3 class="name">ALEC KROSOVIC</h3>
+                                            <p class="text-alt"><small>Sayman</small></p>
+                                            <p class="about">  
+                                            <ul class="speaker-socials">
+                                                <li><a href="#"><span class="fa fa-facebook"></span></a></li>
+                                                <li><a href="#"><span class="fa fa-twitter"></span></a></li>
+                                                <li><a href="#"><span class="fa fa-google-plus"></span></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12 align-center">
+                                        <a href="elements/speakers.html" target="_blank" class="btn btn-outline-clr btn-md">TÜM ÜYELER</a>
+                                    </div>
+
+                                </div>
+
+                        </div>
+
+                        <div class="col-sm-5 img-column">
+
+                        </div>
+                    </div>
+
+                    <div id="horizontal_tab3" class="tab-pane fade">
+                        <div class="col-sm-12 align-left">
+                            <div class="col-sm-12">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 10%;">Tarih</th>
+                                        <th style="width: 70%;">Başlık</th>
+                                        <th style="width: 20%;">Mekan</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>12/04/2016</td>
+                                        <td><a href="">consectetur adipisicing elit. Consectetur, ex?</a></td>
+                                        <td>Rudis Bar</td>
+                                    </tr>
+                                    <tr>
+                                        <td>02/04/2016</td>
+                                        <td><a href="">consectetur adipisicing.</a></td>
+                                        <td>Merkez Kampüs</td>
+                                    </tr>
+                                    <tr>
+                                        <td>25/03/2016</td>
+                                        <td><a href="">Maiores maxime, aut velit.</a></td>
+                                        <td>Toolbar</td>
+                                    </tr>
+                                    <tr>
+                                        <td>22/03/2016</td>
+                                        <td><a href="">Lorem ipsum dolor.</a></td>
+                                        <td>Passage Pub</td>
+                                    </tr>
+                                    <tr>
+                                        <td>11/03/2016</td>
+                                        <td><a href="">sit amet, ex?</a></td>
+                                        <td>Eymir Gölü</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div style="padding-top: 200px;">
+
+    </div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+
+
+
+    {% javascripts
+            'plugins/jQuery/jQuery-2.2.0.min.js'
+            'theme/assets/js/bootstrap.min.js'
+            'theme/assets/js/jquery.validate.min.js'
+            'theme/assets/js/toastr.min.js'
+            'theme/assets/js/jquery.waypoints.min.js'
+            'theme/assets/js/jquery.appear.js'
+            'theme/assets/js/jquery.plugin.js'
+            'theme/assets/js/jquery.countTo.js'
+            'theme/assets/js/jquery.countdown.js'
+            'theme/assets/js/masonry.pkgd.min.js'
+            'theme/assets/js/modal-box.js'
+            'theme/assets/js/guppy.js' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+{% endblock %}

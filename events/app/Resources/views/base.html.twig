@@ -7,6 +7,32 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
+    <header class="header header-black fixed" style="min-height: 100px;">
+        <div class="header-wrapper">
+            <div class="container">
+                <div class="col-sm-2 col-xs-12 navigation-header">
+                    <a href="{{ path("homepage") }}" class="logo">
+                        <img src="" alt="Guppy" width="80" height="40" class="retina-hide">
+                        <img src="" alt="Guppy" width="80" height="40" class="retina-show">
+                    </a>
+                    <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigation" aria-expanded="false" aria-controls="navigation">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+
+                <div class="col-sm-10 col-xs-12 navigation-container">
+                    <div id="navigation" class="navbar-collapse collapse">
+                        <ul class="navigation-list pull-left light-text">
+                            <li class="navigation-item"><a href="{{ path("homepage") }}" class="navigation-link">Anasayfa</a></li>
+                            <li class="navigation-item"><a href="{{ path("homepage_club") }}" class="navigation-link">KULÜP</a></li>
+                            <li class="navigation-item"><a href="{{ path("homepage") }}" class="navigation-link">ETKİNLİK</a></li>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
     </body>
