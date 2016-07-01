@@ -40,7 +40,7 @@ class CommunityUser
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      * })
      */
     private $user;
@@ -50,7 +50,7 @@ class CommunityUser
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Community")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="community_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="community_id", referencedColumnName="id", nullable=false)
      * })
      */
     private $community;
