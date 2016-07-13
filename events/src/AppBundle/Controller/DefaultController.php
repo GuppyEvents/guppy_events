@@ -20,4 +20,19 @@ class DefaultController extends Controller
 //            'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),
 //        ));
     }
+
+    /**
+     * @Route("/club", name="homepage_club")
+     */
+    public function clubAction(Request $request)
+    {
+
+        return $this->render('default/club.html.twig');
+
+        // replace this example code with whatever you need
+//        return $this->render('default/index.html.twig', array(
+//            'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),
+//        ));
+    }
+
 }
