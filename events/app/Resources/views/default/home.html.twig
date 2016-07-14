@@ -24,7 +24,7 @@
     </div>
 
     <!-- HEADER -->
-    <!--
+<!--
     <section style="z-index: 9;">
         <header class="header">
             <div class="header-wrapper">
@@ -49,7 +49,7 @@
     </section>
 -->
     <!-- BODY -->
-    <section id="countdown" class="section align-center">
+    <section id="countdown" class="section align-center" style="display: none;">
 
         <!-- Countdown  -->
         <div class="row counters-wrapper countdown">
@@ -111,6 +111,7 @@
         <div class="container">
             <h5 class="heading-alt">Kayıtlı Kulüpler</h5>
             <br>
+
             <div class="col-sm-3">
                 <div class="speaker">
                     <div class="photo-wrapper rounded"><img src="https://s-media-cache-ak0.pinimg.com/564x/4f/0e/b3/4f0eb37910ce31857575ca120b87d17a.jpg" alt="John Doe" class="img-responsive"></div>
@@ -222,6 +223,26 @@
                     </ul>
                 </div>
             </div>
+
+            {% for community in communities %}
+                <div class="col-sm-3">
+                    <div class="speaker">
+                        <div class="photo-wrapper rounded">
+                            {% image 'upload/default-gallery1.jpg' %}
+                            <img src="{{ asset_url }}" alt="Community" class="img-responsive" />
+                            {% endimage %}
+                        </div>
+                        <h3 class="name"><a href="{{ path("homepage_club") }}">{{ community.name }}</a></h3>
+                        <p class="text-alt"><small>{{ community.university.name }}</small></p>
+                        <p class="about">{{ community.description }}</p>
+                        <ul class="speaker-socials">
+                            <li><a href="#"><span class="fa fa-facebook"></span></a></li>
+                            <li><a href="#"><span class="fa fa-twitter"></span></a></li>
+                            <li><a href="#"><span class="fa fa-google-plus"></span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            {% endfor %}
 
         </div>
     </section>

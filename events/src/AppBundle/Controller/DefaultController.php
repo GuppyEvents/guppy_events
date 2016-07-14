@@ -14,11 +14,12 @@ class DefaultController extends Controller
     public function indexAction(Request $request)
     {
 
-        return $this->render('default/home.html.twig');
-        
-//        return $this->render('default/index.html.twig', array(
-//            'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),
-//        ));
+        $communities = $this->getDoctrine()->getRepository('AppBundle:Community')->findAll();
+
+        return $this->render('default/home.html.twig' , array(
+            'communities' => $communities
+        ));
+
     }
 
     /**
@@ -26,13 +27,7 @@ class DefaultController extends Controller
      */
     public function clubAction(Request $request)
     {
-
         return $this->render('default/club.html.twig');
-
-        // replace this example code with whatever you need
-//        return $this->render('default/index.html.twig', array(
-//            'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),
-//        ));
     }
 
 }
