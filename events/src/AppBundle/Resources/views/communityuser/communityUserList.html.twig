@@ -6,12 +6,13 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                Community Users
-                <small>Control panel</small>
+                {{ community.university.name }}
+                <small>{{ community.name }}</small>
             </h1>
             <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="{{ path('community_list') }}"> Community</a></li>
+                <li><a href="{{ path('admin_homepage') }}"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li><a href="{{ path('university_get') }}"> University </a></li>
+                <li><a href="{{ path('community_list') }}"> Community </a></li>
                 <li class="active">Community Users</li>
             </ol>
         </section>
@@ -27,7 +28,7 @@
 
                         <!-- /.box-header -->
                         <div class="box-header with-border">
-                            <h3 class="box-title">Community Admin User List</h3>
+                            <h3 class="box-title">Admin User List</h3>
                         </div>
                         <!-- /.box-header -->
 
@@ -38,7 +39,10 @@
                                 <tr>
                                     <th>Username</th>
                                     <th>User email</th>
+                                    <th>User University email</th>
+                                    <th>Status</th>
                                     <th>User Role</th>
+                                    <th>Operation</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -47,7 +51,10 @@
                                     <tr>
                                         <td>{{ communityUser.user.username }}</td>
                                         <td>{{ communityUser.user.email }}</td>
+                                        <td> university mail address here </td>
+                                        <td><span class="label label-warning">Pending</span></td>
                                         <td>{{ communityUser.status }} </td>
+                                        <td> Operation List will be here ... </td>
                                     </tr>
                                 {% endfor %}
 
@@ -56,7 +63,10 @@
                                 <tr>
                                     <th>Username</th>
                                     <th>User email</th>
+                                    <th>User University email</th>
+                                    <th>Status</th>
                                     <th>User Role</th>
+                                    <th>Operation</th>
                                 </tr>
                                 </tfoot>
                             </table>
@@ -86,6 +96,9 @@
                         <div class="box-body">
 
                             <b><i> *** Topluluk yöneticisi ekleme işlemi yapım aşamasındadır... *** </i></b>
+
+                            <br>
+                            <b><i> Kulüplere yönetici olmak isteyen kişilerin listesi olacaktır </i></b>
 
                             {#<div class="form-group">#}
                                 {#<label>User add panel</label>#}
