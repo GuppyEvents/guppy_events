@@ -21,10 +21,12 @@ class AdminController extends Controller
     {
         $universityList = $this->getDoctrine()->getRepository('AppBundle:University')->findAll();
         $communityList = $this->getDoctrine()->getRepository('AppBundle:Community')->findAll();
+        $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findAll();
 
         return $this->render('AppBundle:admin:index.html.twig', array(
             'university_count'=>count($universityList),
-            'community_count'=>count($communityList)
+            'community_count'=>count($communityList),
+            'event_count'=>count($eventList)
         ));
     }
     
