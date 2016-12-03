@@ -25,56 +25,94 @@
                 <div class="col-md-12">
                     <div class="box box-info">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Event Register Page</h3>
+                            <h3 class="box-title">Event List Page</h3>
                         </div>
 
-                        <!-- /.box-header -->
+                        <!-- /.box-body -->
+                        <div class="box-body">
+                            <div class="box-body-filter">
+
+
+                                <form id="event_list" action="{{ path('event_list') }}" method="post">
+
+                                    <!-- universities -->
+                                    <div class="form-group">
+                                        <label>Choose University</label>
+                                        <select id="university_id" class="form-control" name="university_id">
+                                            {% for university in universityList %}
+                                                <option value="{{ university.id }}" {% if selectedUniversityId == university.id  %} selected {% endif %}>{{ university.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <!-- communities -->
+                                    <div class="form-group">
+                                        <label>Choose Community (University Club)</label>
+                                        <select id="community_id" class="form-control" name="community_id">
+                                            {% if communityList %}
+                                                <option value="" >All Communities</option>
+                                                {% for community in communityList %}
+                                                    <option value="{{ community.id }}" {% if selectedCommunityId == community.id  %} selected {% endif %}>{{ community.name }}</option>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </select>
+                                    </div>
+
+                                    <button type="submit">List Events</button>
+                                </form>
+                            </div>
+
+                        </div>
+                        <!-- /.box-body -->
+
+                        <!-- /.box-body -->
                         <div class="box-body">
                             <table id="university_list" class="table table-bordered table-hover">
                                 <thead>
                                 <tr>
-                                    <th>University</th>
                                     <th>Community Name</th>
+                                    <th>Event Title</th>
                                     <th>Active</th>
                                     <th>Operation</th>
                                 </tr>
                                 </thead>
                                 <tbody>
 
-                                {#{% for community in communityList %}#}
-                                    {#<tr>#}
-                                        {#<td>{{ community.university.name }}</td>#}
-                                        {#<td>{{ community.name }} </td>#}
-                                        {#<td>#}
+                                {% for event in eventList %}
+                                    <tr>
+                                        <td>{{ event.communityUser.community.name }}</td>
+                                        <td>{{ event.title }} </td>
+                                        <td>
                                             {#{% if community.isApproved %}#}
                                                 {#Approved#}
                                             {#{% else %}#}
                                                 {#Not Approved#}
                                             {#{% endif %}#}
-                                        {#</td>#}
-                                        {#<td>#}
-                                            {#<div class="btn-group">#}
-                                                {#<button type="button" class="btn btn-info">Action</button>#}
-                                                {#<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">#}
-                                                    {#<span class="caret"></span>#}
-                                                    {#<span class="sr-only">Toggle Dropdown</span>#}
-                                                {#</button>#}
-                                                {#<ul class="dropdown-menu" role="menu">#}
-                                                    {#<li><a href="{{ path('community_put', {'communityId': community.id}) }}">Edit</a></li>#}
-                                                    {#<li><a href="{{ path('community_delete' , {'communityId': community.id}) }}">Delete</a></li>#}
-                                                    {#<li class="divider"></li>#}
-                                                    {#<li><a href="{{ path('community_user_list' , {'communityId': community.id}) }}">Assign Admin</a></li>#}
-                                                {#</ul>#}
-                                            {#</div>#}
-                                        {#</td>#}
-                                    {#</tr>#}
-                                {#{% endfor %}#}
+                                            Approved
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-info">Action</button>
+                                                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                                                    <span class="caret"></span>
+                                                    <span class="sr-only">Toggle Dropdown</span>
+                                                </button>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li><a href="{{ path('community_put', {'communityId': event.id }) }}">Edit</a></li>
+                                                    <li><a href="{{ path('community_delete' , {'communityId': event.id }) }}">Delete</a></li>
+                                                    <li class="divider"></li>
+                                                    <li><a href="{{ path('community_user_list' , {'communityId': event.id}) }}">Assign Admin</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
 
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <th>University</th>
                                     <th>Community Name</th>
+                                    <th>Event Title</th>
                                     <th>Active</th>
                                     <th>Operation</th>
                                 </tr>
@@ -110,15 +148,15 @@
 /***********************************************************************************************************************
  *                                          AJAX OPERATIONS
  **********************************************************************************************************************/
-        function ajaxGetBoroughListByCity(cityId){
+        function ajaxGetCommunityListByUniversityId(universityId){
 
             // -- 1 --
             // open alert box to inform user
 
             // -- 2 --
             // ajax call
-            $.post("{{ path('university_borough_list') }}" , {
-                cid : cityId
+            $.post("{{ path('university_community_list') }}" , {
+                uid : universityId
 
             }).always(function(){
 
@@ -133,22 +171,25 @@
                 if(data.resultText == 'SUCCESS'){
 
                     // -- 2.2.1 -- remove options
-                    $('#address_borough_id').children().remove();
+                    $('#community_id').children().remove();
+                    $('#community_id').append($('<option>', {
+                        text: 'All Communities'
+                    }));
 
                     // -- 2.2.2 -- insert new options
-                    data.content.forEach(function(borough) {
-                        $('#address_borough_id').append($('<option>', {
-                            value: borough['borough_id'],
-                            text: borough['borough_name']
+                    data.content.forEach(function(community) {
+                        $('#community_id').append($('<option>', {
+                            value: community['community_id'],
+                            text: community['community_name']
                         }));
                     });
 
                 }else if(data.resultText == 'SUCCESS_EMPTY'){
-                    alert('Warning -- ' + ' could not found any borough');
+                    alert('Warning -- ' + ' could not found any event');
                 }else if(data.resultText == 'FAILURE_PERMISSION'){
                     alert('Warning -- ' + ' you are not authorization for this operation');
                 }else{
-                    alert('Warning -- ' + ' error occured while getting borough list');
+                    alert('Warning -- ' + ' error occured while getting community list');
                 }
             });
         }
@@ -164,15 +205,19 @@
  *                                          EVENTS
  **********************************************************************************************************************/
 
-        $( "#community_submit" ).submit(function( event ) {
-
-
-            if(!checkCommunity()){
-                alert( "Form not valid" );
-                event.preventDefault();
-            }
-
+        $(document).on('change','#university_id',function () {
+            ajaxGetCommunityListByUniversityId($(this).val());
         });
+
+/***********************************************************************************************************************
+ *                                          DOCUMENT ON READY
+ **********************************************************************************************************************/
+
+        // -- get university community list on document ready
+        if($('#community_id').children().length==0){
+            ajaxGetCommunityListByUniversityId($( "#university_id option:selected" ).val());
+        }
+
 
     </script>
 {% endblock %}
