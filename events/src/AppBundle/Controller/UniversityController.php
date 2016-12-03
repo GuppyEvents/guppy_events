@@ -351,4 +351,49 @@ class UniversityController extends Controller
 
     }
 
+
+    /**
+     * @Route("/community-list", name="university_community_list")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function getCommunityListAction(Request $request)
+    {
+
+        // -- 1 -- Initialization
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+
+        // -- 2 -- Try to Get Borough List
+        try{
+
+            // -- 2.1 -- Get borough list
+            $university_id = $request->get('uid');
+            $communityList = $this->getDoctrine()
+                ->getRepository('AppBundle:Community')
+                ->findBy(array('university'=>$university_id));
+
+            $communityResponse = array();
+            for($i=0; $i<count($communityList);$i++){
+                $community['community_name'] = $communityList[$i]->getName();
+                $community['community_id'] = $communityList[$i]->getId();
+                array_push($communityResponse,$community);
+            }
+
+            // -- 2.1 -- Return Result
+            $response->setContent(json_encode(Result::$SUCCESS->setContent( $communityResponse )));
+            return $response;
+
+        }catch (\Exception $ex){
+            // content == "Unexpected Error"
+            $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent($ex)));
+            return $response;
+        }
+
+
+        // -- 3 -- Set & Return value
+        $response->setContent(json_encode(Result::$SUCCESS_EMPTY));
+        return $response;
+
+    }
+
 }
