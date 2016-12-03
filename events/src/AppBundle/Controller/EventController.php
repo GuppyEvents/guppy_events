@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\City;
 use AppBundle\Entity\Community;
+use AppBundle\Entity\CommunityUser;
 use AppBundle\Entity\Event;
 use AppBundle\Entity\Result;
 use AppBundle\Entity\Address;
@@ -49,16 +50,40 @@ class EventController extends Controller
 
             try{
 
-                // 1.1) University Repository should try to register university
-                $university = $em->getRepository('AppBundle:University')->find($request->get('university_id'));
+                // --1.1-- Event have to added by user
+                // --1.1.1-- Eğer kullanıcı admin ise izin ver
+                // --1.2-- Event may contains community
+                $user = $this->getUser();
+                $community = $em->getRepository('AppBundle:Community')->find($request->get('community_id'));
+                $communityUser = $em->getRepository('AppBundle:CommunityUser')->findBy(array('user'=>$user->getId() , 'community'=>$community->getId()));
+
+                // --2.1-- Eğer böyle bir topluluk kullanıcısı varsa
+                if(count($communityUser)>0){
+
+                    //die('community user size == ' . count($communityUser));
+                }else{
+                    $communityUser = new CommunityUser();
+                    $communityUser->setCommunity($community);
+                    $communityUser->setUser($user);
+                    $communityUser->setDate(new \DateTime());
+
+
+                    $em->persist($communityUser);
+                    $em->flush();
+                    //die('community user size == 0');
+                }
+                
+                $date = \DateTime::createFromFormat('m/d/Y', $request->get('event_date'));
 
                 $event = new Event();
-//                $community->setName( $request->get('community_name') );
-//                $community->setDescription( $request->get('community_description') );
-//                $community->setUniversity( $university );
+                $event->setTitle( $request->get('event_title') );
+                $event->setDescription( $request->get('event_description') );
+                $event->setStartDate( $date );
+                $event->setMaxParticipantNum( $request->get('event_participant_count') );
+                $event->setCommunityUser( $communityUser );
 
-//                $em->persist($event);
-//                $em->flush();
+                $em->persist($event);
+                $em->flush();
 
             } catch (Exception $e){}
 
