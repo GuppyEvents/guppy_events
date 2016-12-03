@@ -45,7 +45,7 @@
                                 <div class="form-group">
                                     <label>Choose Community (University Club)</label>
                                     <select id="community_id" class="form-control" name="community_id">
-                                        <option value="">club list</option>
+                                        <option value=""></option>
                                     </select>
                                 </div>
 
@@ -146,6 +146,9 @@
 /***********************************************************************************************************************
  *                                          EVENTS
  **********************************************************************************************************************/
+
+
+        ajaxGetCommunityListByUniversityId($( "#university_id option:selected" ).val());
 
         $( "#event_submit" ).submit(function( event ) {
             if(!checkCommunity()){
