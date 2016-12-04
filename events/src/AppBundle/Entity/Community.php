@@ -41,6 +41,13 @@ class Community extends Base
     private $isApproved;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="image_base64", type="text", nullable=true)
+     */
+    private $imageBase64;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
@@ -156,6 +163,22 @@ class Community extends Base
     public function getIsApproved()
     {
         return $this->isApproved;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImageBase64()
+    {
+        return $this->imageBase64;
+    }
+
+    /**
+     * @param string $imageBase64
+     */
+    public function setImageBase64($imageBase64)
+    {
+        $this->imageBase64 = $imageBase64;
     }
 
     /**

@@ -53,6 +53,14 @@
                                     <textarea class="form-control" rows="3" name="community_description" placeholder="Enter Community Description"></textarea>
                                 </div>
 
+                                <!-- community Image -->
+                                <div class="form-group">
+                                    <label>Community Image</label>
+                                    <input id="temp_img_loader" type='file'>
+                                    <img id="img_viewer" height="150">
+                                    <input type="text" class="form-control" id="community_image_base64" name="community_image_base64" style="display: none;">
+                                </div>
+
                                 <button type="submit">Register!</button>
                             </form>
 
@@ -134,6 +142,17 @@
             return true;
         }
 
+        function fileToBase64Converter() {
+            if (this.files && this.files[0]) {
+                var FR= new FileReader();
+                FR.onload = function(e) {
+                    $('#img_viewer').attr('src', e.target.result);
+                    $('#community_image_base64').val(e.target.result);
+                };
+                FR.readAsDataURL( this.files[0] );
+            }
+        }
+
 /***********************************************************************************************************************
  *                                          EVENTS
  **********************************************************************************************************************/
@@ -147,6 +166,13 @@
             }
 
         });
+
+/***********************************************************************************************************************
+ *                                          DOCUMENT ON READY
+ **********************************************************************************************************************/
+
+        // -- File to base64
+        document.getElementById("temp_img_loader").addEventListener("change", fileToBase64Converter, false);
 
     </script>
 {% endblock %}

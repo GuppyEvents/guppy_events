@@ -45,6 +45,14 @@
                                     <textarea class="form-control" rows="3" name="community_description" placeholder="Enter Community Description">{{ community.description }}</textarea>
                                 </div>
 
+                                <!-- community Image -->
+                                <div class="form-group">
+                                    <label>Community Image</label>
+                                    <input id="temp_img_loader" type='file'>
+                                    <img id="img_viewer" height="150" src="{{ community.imageBase64 }}">
+                                    <input type="text" class="form-control" id="community_image_base64" name="community_image_base64" style="display: none;" value="{{ community.imageBase64 }}">
+                                </div>
+
                                 <button type="submit">Update !</button>
                             </form>
                             {#{{ form_end(form) }}#}
@@ -73,6 +81,19 @@
  **********************************************************************************************************************/
         var debugMode = true;
 
+/***********************************************************************************************************************
+ *                                          UTIL FUNCTIONS
+ **********************************************************************************************************************/
+        function fileToBase64Converter() {
+            if (this.files && this.files[0]) {
+                var FR= new FileReader();
+                FR.onload = function(e) {
+                    $('#img_viewer').attr('src', e.target.result);
+                    $('#community_image_base64').val(e.target.result);
+                };
+                FR.readAsDataURL( this.files[0] );
+            }
+        }
 
 /***********************************************************************************************************************
  *                                          AJAX OPERATIONS
@@ -127,6 +148,14 @@
         $('#address_city_id').on('change',function (event) {
             ajaxGetBoroughListByCity($(event.target).val());
         });
+
+
+/***********************************************************************************************************************
+ *                                          DOCUMENT ON READY
+ **********************************************************************************************************************/
+        // -- File to base64
+        document.getElementById("temp_img_loader").addEventListener("change", fileToBase64Converter, false);
+
 
     </script>
 {% endblock %}

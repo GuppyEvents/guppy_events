@@ -55,6 +55,7 @@ class CommunityController extends Controller
                 $community = new Community();
                 $community->setName( $request->get('community_name') );
                 $community->setDescription( $request->get('community_description') );
+                $community->setImageBase64($request->get('community_image_base64'));
                 $community->setUniversity( $university );
 
                 $em->persist($community);
@@ -104,6 +105,9 @@ class CommunityController extends Controller
                 // 1.1.3) Update
                 $community->setName( $request->get('community_name') );
                 $community->setDescription( $request->get('community_description') );
+                $community->setImageBase64($request->get('community_image_base64'));
+                
+                $em->persist($community);
                 $em->flush();
 
             } catch (Exception $e){}
