@@ -98,10 +98,8 @@
                                                     <span class="sr-only">Toggle Dropdown</span>
                                                 </button>
                                                 <ul class="dropdown-menu" role="menu">
-                                                    <li><a href="{{ path('community_put', {'communityId': event.id }) }}">Edit</a></li>
-                                                    <li><a href="{{ path('community_delete' , {'communityId': event.id }) }}">Delete</a></li>
-                                                    <li class="divider"></li>
-                                                    <li><a href="{{ path('community_user_list' , {'communityId': event.id}) }}">Assign Admin</a></li>
+                                                    <li><a href="{{ path('event_post_to_id', {'eventId': event.id }) }}">Edit</a></li>
+                                                    <li><a href="{{ path('event_delete' , {'eventId': event.id }) }}">Delete</a></li>
                                                 </ul>
                                             </div>
                                         </td>

@@ -103,20 +103,20 @@ class EventController extends Controller
                 $community = $em->getRepository('AppBundle:Community')->find($request->get('community_id'));
                 $communityUser = $em->getRepository('AppBundle:CommunityUser')->findBy(array('user'=>$user->getId() , 'community'=>$community->getId()));
 
-                // --2.1-- Eğer böyle bir topluluk kullanıcısı varsa
+                // --2.1-- Eğer böyle bir topluluk kullanıcısı varsa o kullanıcı ile işlem yap
                 if(count($communityUser)>0){
 
-                    //die('community user size == ' . count($communityUser));
+                    $communityUser = $communityUser[0];
+
+                // --2.2-- Eğer böyle bir topluluk kullanıcısı yoksa kullanıcıyı kulüp ile ilişkilendir
                 }else{
                     $communityUser = new CommunityUser();
                     $communityUser->setCommunity($community);
                     $communityUser->setUser($user);
                     $communityUser->setDate(new \DateTime());
 
-
                     $em->persist($communityUser);
                     $em->flush();
-                    //die('community user size == 0');
                 }
                 
                 $date = \DateTime::createFromFormat('m/d/Y', $request->get('event_date'));
@@ -147,80 +147,81 @@ class EventController extends Controller
         );
     }
 
-//    /**
-//     * @Route("/put/{communityId}", name="community_put")
-//     * @Security("has_role('ROLE_USER')")
-//     */
-//    public function putAction(Request $request , $communityId)
-//    {
-//
-//        // 1) POST OPERATION
-//        if($request->getMethod() == 'POST'){
-//
-//            // 1.1) try to update community
-//            try{
-//                $em = $this->getDoctrine()->getManager();
-//
-//                // 1.1.1) University Repository should try to register university
-//                $community = $em->getRepository('AppBundle:Community')->find($communityId);
-//
-//                // 1.1.2) Check University exist
-//                if (!$community) {
-//                    throw $this->createNotFoundException(
-//                        'No product found for id '.$communityId
-//                    );
-//                }
-//
-//                // 1.1.3) Update
-//                $community->setName( $request->get('community_name') );
-//                $community->setDescription( $request->get('community_description') );
-//                $em->flush();
-//
-//            } catch (Exception $e){}
-//
-//            // 1.2) Redirect route to university list page
-//            return $this->redirectToRoute('community_list');
-//        }
-//
-//        // 2) DEFAULT CASE
-//        $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
-//
-//        return $this->render(
-//            'AppBundle:community:communityUpdate.html.twig', array(
-//                'community' => $community,
-//            )
-//        );
-//    }
+    /**
+     * @Route("/post/{eventId}", name="event_post_to_id")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function postToIdAction(Request $request , $eventId)
+    {
+
+        // 1) POST OPERATION
+        if($request->getMethod() == 'POST'){
+
+            // 1.1) try to update community
+            try{
+                $em = $this->getDoctrine()->getManager();
+                $event = $em->getRepository('AppBundle:Event')->find($eventId);
+                if (!$event) {
+                    throw $this->createNotFoundException(
+                        'No product found for id '.$event
+                    );
+                }else{
+                    $date = \DateTime::createFromFormat('m/d/Y', $request->get('event_date'));
+
+                    $event->setTitle( $request->get('event_title') );
+                    $event->setDescription( $request->get('event_description') );
+                    $event->setStartDate( $date );
+                    $event->setMaxParticipantNum( $request->get('event_participant_count') );
+
+                    $em->persist($event);
+                    $em->flush();
+                }
+
+            } catch (Exception $e){}
+
+            // 1.2) Redirect route to university list page
+            return $this->redirectToRoute('event_list');
+        }
+
+        // 2) DEFAULT CASE
+        $event = $this->getDoctrine()->getRepository('AppBundle:Event')->find($eventId);
+
+        return $this->render('AppBundle:event:eventUpdate.html.twig', array(
+                'event'=>$event
+            )
+        );
+    }
 
 
-//    /**
-//     * @Route("/delete/{communityId}", name="community_delete")
-//     * @Security("has_role('ROLE_USER')")
-//     */
-//    public function deleteAction($communityId)
-//    {
-//
-//        // 1) POST OPERATION
-//        // 1.1) try to delete community
-//        try{
-//            $em = $this->getDoctrine()->getManager();
-//
-//            $community = $em->getRepository('AppBundle:Community')->find($communityId);
-//            if (!$community) {
-//                throw $this->createNotFoundException(
-//                    'No product found for id '.$communityId
-//                );
-//            }
-//
-//            $em->remove($community);
-//            $em->flush();
-//
-//        } catch (Exception $e){}
-//
-//        // 1.2) Redirect route to community list page
-//        return $this->redirectToRoute('community_list');
-//
-//    }
+
+    /**
+     * @Route("/delete/{eventId}", name="event_delete")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function deleteAction($eventId)
+    {
+
+        // 1) POST OPERATION
+        // 1.1) try to delete community
+        try{
+            $em = $this->getDoctrine()->getManager();
+
+            $event = $em->getRepository('AppBundle:Event')->find($eventId);
+            if (!$event) {
+                throw $this->createNotFoundException(
+                    'No product found for id '.$event
+                );
+            }
+
+            $em->remove($event);
+            $em->flush();
+
+        } catch (Exception $e){}
+
+        // 1.2) Redirect route to community list page
+        return $this->redirectToRoute('event_list');
+
+    }
 
 
     /*******************************************************************************************************************

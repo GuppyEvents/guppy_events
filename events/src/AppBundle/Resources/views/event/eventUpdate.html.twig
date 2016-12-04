@@ -29,16 +29,14 @@
                         <!-- /.box-header -->
                         <div class="box-body">
 
-                            <form id="event_submit" action="{{ path('event_post') }}" method="post">
+                            <form id="event_submit" action="{{ path('event_post_to_id' , {'eventId': event.id }) }}" method="post">
 
                                 <!-- universities -->
                                 <div class="form-group">
                                     <label>Choose University</label>
                                     <select id="university_id" class="form-control" name="university_id">
 
-                                        {% for university in universities %}
-                                            <option value="{{ university.id }}">{{ university.name }}</option>
-                                        {% endfor %}
+                                        <option value="{{ event.communityUser.community.university.id }}" selected>{{ event.communityUser.community.university.name }}</option>
 
                                     </select>
                                 </div>
@@ -48,31 +46,49 @@
                                     <label>Choose Community (University Club)</label>
                                     <select id="community_id" class="form-control" name="community_id">
 
+                                        <option value="{{ event.communityUser.community.id }}" selected>{{ event.communityUser.community.name }}</option>
+
                                     </select>
                                 </div>
 
                                 <!-- event name -->
                                 <div class="form-group">
                                     <label>Event Title</label>
-                                    <input type="text" class="form-control" name="event_title" placeholder="Enter Event Title">
+                                    {% if event %}
+                                        <input type="text" class="form-control" name="event_title" placeholder="Enter Event Title" value="{{ event.title }}">
+                                    {% else %}
+                                        <input type="text" class="form-control" name="event_title" placeholder="Enter Event Title">
+                                    {% endif %}
                                 </div>
 
                                 <!-- event Description -->
                                 <div class="form-group">
                                     <label>Description</label>
-                                    <textarea class="form-control" rows="3" name="event_description" placeholder="Enter Event Description"></textarea>
+                                    {% if event %}
+                                        <textarea class="form-control" rows="3" name="event_description" placeholder="Enter Event Description">{{ event.description }}</textarea>
+                                    {% else %}
+                                        <textarea class="form-control" rows="3" name="event_description" placeholder="Enter Event Description"></textarea>
+                                    {% endif %}
                                 </div>
 
                                 <!-- event Date -->
                                 <div class="form-group">
                                     <label>Date</label>
-                                    <input type="text" class="form-control" name="event_date" id="event_date" placeholder="Enter Event Date" >
+                                    {% if event %}
+                                        <input type="text" class="form-control" name="event_date" id="event_date" placeholder="Enter Event Date" value="{{ event.startDate.format('m/d/Y') }}">
+                                    {% else %}
+                                        <input type="text" class="form-control" name="event_date" id="event_date" placeholder="Enter Event Date" >
+                                    {% endif %}
                                 </div>
 
                                 <!-- event Participant Count -->
                                 <div class="form-group">
                                     <label>Participant Count</label>
-                                    <input type="text" class="form-control" name="event_participant_count" placeholder="Enter Maximum Participant Count">
+                                    {% if event %}
+                                        <input type="text" class="form-control" name="event_participant_count" placeholder="Enter Maximum Participant Count" value="{{ event.maxParticipantNum }}">
+                                    {% else %}
+                                        <input type="text" class="form-control" name="event_participant_count" placeholder="Enter Maximum Participant Count">
+                                    {% endif %}
                                 </div>
 
                                 <!-- event Participant Count -->
@@ -85,7 +101,11 @@
 
                                 </div>
 
-                                <button type="submit">Register!</button>
+                                {% if event %}
+                                    <button type="submit">Update!</button>
+                                {% else %}
+                                    <button type="submit">Register!</button>
+                                {% endif %}
                             </form>
 
                         </div>
@@ -112,6 +132,9 @@
  **********************************************************************************************************************/
         var debugMode = true;
         var eventCommunityId = null;
+        {% if event %}
+            eventCommunityId = {{ event.communityUser.community.id }}
+        {% endif %}
 
 
 /***********************************************************************************************************************
