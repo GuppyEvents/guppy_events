@@ -22,6 +22,11 @@ class SecurityController extends Controller
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
+        
+        if($this->getUser() && $this->getUser()->getId() && $this->getUser()->getId()==18){
+            return $this->redirectToRoute('admin_homepage');
+        }
+
         return $this->render(
             'AppBundle:security:login.html.twig',
             array(
