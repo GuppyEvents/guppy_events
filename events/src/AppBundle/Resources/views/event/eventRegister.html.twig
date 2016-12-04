@@ -46,9 +46,7 @@
                                 <!-- communities -->
                                 <div class="form-group">
                                     <label>Choose Community (University Club)</label>
-                                    <select id="community_id" class="form-control" name="community_id">
-
-                                    </select>
+                                    <select id="community_id" class="form-control" name="community_id"></select>
                                 </div>
 
                                 <!-- event name -->
@@ -82,7 +80,14 @@
                                         <option value="0">Ticket is not required</option>
                                         <option value="1">Ticket is required</option>
                                     </select>
+                                </div>
 
+                                <!-- event Image -->
+                                <div class="form-group">
+                                    <label>Event Image</label>
+                                    <input id="temp_img_loader" type='file'>
+                                    <img id="img_viewer" height="150">
+                                    <input type="text" class="form-control" id="event_image_base64" name="event_image_base64" style="display: none;">
                                 </div>
 
                                 <button type="submit">Register!</button>
@@ -173,6 +178,17 @@
             return true;
         }
 
+        function fileToBase64Converter() {
+            if (this.files && this.files[0]) {
+                var FR= new FileReader();
+                FR.onload = function(e) {
+                    $('#img_viewer').attr('src', e.target.result);
+                    $('#event_image_base64').val(e.target.result);
+                };
+                FR.readAsDataURL( this.files[0] );
+            }
+        }
+
 /***********************************************************************************************************************
  *                                          EVENTS
  **********************************************************************************************************************/
@@ -193,6 +209,9 @@
  **********************************************************************************************************************/
         // -- jquery date picker
         $( "#event_date" ).datepicker();
+
+        // -- File to base64
+        document.getElementById("temp_img_loader").addEventListener("change", fileToBase64Converter, false);
 
         // -- get university community list on document ready
         if($('#community_id').children().length==0){

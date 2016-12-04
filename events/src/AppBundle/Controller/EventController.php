@@ -126,6 +126,7 @@ class EventController extends Controller
                 $event->setDescription( $request->get('event_description') );
                 $event->setStartDate( $date );
                 $event->setMaxParticipantNum( $request->get('event_participant_count') );
+                $event->setImageBase64($request->get('event_image_base64'));
                 $event->setCommunityUser( $communityUser );
 
                 $em->persist($event);
@@ -172,7 +173,7 @@ class EventController extends Controller
                     $event->setDescription( $request->get('event_description') );
                     $event->setStartDate( $date );
                     $event->setMaxParticipantNum( $request->get('event_participant_count') );
-
+                    $event->setImageBase64($request->get('event_image_base64'));
                     $em->persist($event);
                     $em->flush();
                 }
