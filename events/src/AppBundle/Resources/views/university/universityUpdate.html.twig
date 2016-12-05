@@ -81,6 +81,14 @@
                                     </select>
                                 </div>
 
+                                <!-- university Image -->
+                                <div class="form-group">
+                                    <label>University Image</label>
+                                    <input id="temp_img_loader" type='file'>
+                                    <img id="img_viewer" height="150" src="{{ university.imageBase64 }}">
+                                    <input type="text" class="form-control" id="university_image_base64" name="university_image_base64" style="display: none;" value="{{ university.imageBase64 }}">
+                                </div>
+
                                 <button type="submit">Update !</button>
                             </form>
                             {#{{ form_end(form) }}#}
@@ -165,6 +173,21 @@
  **********************************************************************************************************************/
         var debugMode = true;
 
+
+/***********************************************************************************************************************
+ *                                          UTIL FUNCTIONS
+ **********************************************************************************************************************/
+
+        function fileToBase64Converter() {
+            if (this.files && this.files[0]) {
+                var FR= new FileReader();
+                FR.onload = function(e) {
+                    $('#img_viewer').attr('src', e.target.result);
+                    $('#university_image_base64').val(e.target.result);
+                };
+                FR.readAsDataURL( this.files[0] );
+            }
+        }
 
 /***********************************************************************************************************************
  *                                          AJAX OPERATIONS
@@ -261,6 +284,15 @@
         $(document).on('click', 'tr td .university_remove_mailserver' , function (event) {
             ajaxRemoveUniversityMailServer($(event.target).attr('value'),$(event.target).parentsUntil('tr').last().parent());
         });
+
+/***********************************************************************************************************************
+ *                                          DOCUMENT ON READY
+ **********************************************************************************************************************/
+
+        // -- File to base64
+        document.getElementById("temp_img_loader").addEventListener("change", fileToBase64Converter, false);
+
+
 
     </script>
 {% endblock %}

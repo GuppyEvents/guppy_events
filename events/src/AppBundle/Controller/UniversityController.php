@@ -73,6 +73,7 @@ class UniversityController extends Controller
                 $university = new University();
                 $university->setName( $request->get('university_name') );
                 $university->setLink( $request->get('university_web_address') );
+                $university->setImageBase64( $request->get('university_image_base64') );
                 $university->setAddress( $address );
 
                 $em->persist($university);
@@ -126,6 +127,7 @@ class UniversityController extends Controller
 
                 $university->setName( $request->get('university_name') );
                 $university->setLink( $request->get('university_web_address') );
+                $university->setImageBase64( $request->get('university_image_base64') );
                 $em->flush();
 
             } catch (Exception $e){}

@@ -60,6 +60,15 @@
                                     <select id="address_borough_id" class="form-control" name="address_borough_id"></select>
                                 </div>
 
+
+                                <!-- university Image -->
+                                <div class="form-group">
+                                    <label>University Image</label>
+                                    <input id="temp_img_loader" type='file'>
+                                    <img id="img_viewer" height="150">
+                                    <input type="text" class="form-control" id="university_image_base64" name="university_image_base64" style="display: none;">
+                                </div>
+
                                 <button type="submit">Register!</button>
                             </form>
                             {#{{ form_end(form) }}#}
@@ -88,6 +97,21 @@
  **********************************************************************************************************************/
         var debugMode = true;
 
+
+/***********************************************************************************************************************
+ *                                          UTIL FUNCTIONS
+ **********************************************************************************************************************/
+
+        function fileToBase64Converter() {
+            if (this.files && this.files[0]) {
+                var FR= new FileReader();
+                FR.onload = function(e) {
+                    $('#img_viewer').attr('src', e.target.result);
+                    $('#university_image_base64').val(e.target.result);
+                };
+                FR.readAsDataURL( this.files[0] );
+            }
+        }
 
 /***********************************************************************************************************************
  *                                          AJAX OPERATIONS
@@ -142,6 +166,19 @@
         $('#address_city_id').on('change',function (event) {
             ajaxGetBoroughListByCity($(event.target).val());
         });
+
+
+/***********************************************************************************************************************
+ *                                          DOCUMENT ON READY
+ **********************************************************************************************************************/
+
+        // -- File to base64
+        document.getElementById("temp_img_loader").addEventListener("change", fileToBase64Converter, false);
+
+        // -- get university community list on document ready
+        if($('#address_borough_id').children().length==0){
+            ajaxGetBoroughListByCity($( "#address_city_id option:selected" ).val());
+        }
 
     </script>
 {% endblock %}
