@@ -27,11 +27,36 @@ class CommunityController extends Controller
     public function listAction(Request $request)
     {
 
+        $selectedUniversityId = null;
         $communityList = $this->getDoctrine()->getRepository('AppBundle:Community')->findAll();
+        $universityList = $this->getDoctrine()->getRepository('AppBundle:University')->findAll();
+
+        // 1) POST OPERATION
+        if($request->getMethod() == 'POST'){
+            $em = $this->getDoctrine()->getManager();
+
+            try{
+                $selectedUniversityId = $request->get('university_id');
+
+                // eğer universite id değeri varsa o universitenin topluluk listesi getir
+                if($selectedUniversityId && $this->getDoctrine()->getRepository('AppBundle:University')->find($request->get('university_id'))){
+                    $communityList = $this->getDoctrine()->getRepository('AppBundle:Community')->findBy(array('university'=>$request->get('university_id')));
+                    $communityIdList = array();
+                    for($i=0; $i<count($communityList);$i++){
+                        array_push($communityIdList ,$communityList[$i]->getId());
+                    }
+                }
+
+            } catch (Exception $e){
+
+            }
+        }
 
         return $this->render(
             'AppBundle:community:communityList.html.twig', array(
-                'communityList'=>$communityList
+                'communityList'=>$communityList,
+                'universityList'=>$universityList,
+                'selectedUniversityId'=>$selectedUniversityId
             )
         );
     }

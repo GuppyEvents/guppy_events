@@ -28,7 +28,34 @@
                             <h3 class="box-title">Community Register Page</h3>
                         </div>
 
-                        <!-- /.box-header -->
+                        <!-- /.box-body-filter -->
+                        <div class="box-body">
+                            <div class="box-body-filter">
+
+
+                                <form id="event_list" action="{{ path('community_list') }}" method="post">
+
+                                    <!-- universities -->
+                                    <div class="form-group">
+                                        <label>Choose University</label>
+                                        <select id="university_id" class="form-control" name="university_id">
+
+                                            <option value="" selected>All Universities</option>
+                                            
+                                            {% for university in universityList %}
+                                                <option value="{{ university.id }}" {% if selectedUniversityId == university.id  %} selected {% endif %}>{{ university.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <button type="submit">List Communities</button>
+                                </form>
+                            </div>
+
+                        </div>
+                        <!-- /.box-body-filter -->
+
+                        <!-- /.box-body -->
                         <div class="box-body">
                             <table id="university_list" class="table table-bordered table-hover">
                                 <thead>
