@@ -22,16 +22,15 @@
             <div class="row">
 
 
+                <!-- -- FILTER PART -- -->
                 <div class="col-md-12">
                     <div class="box box-info">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Community Register Page</h3>
+                            <h3 class="box-title">Community Filter</h3>
                         </div>
 
-                        <!-- /.box-body-filter -->
                         <div class="box-body">
                             <div class="box-body-filter">
-
 
                                 <form id="event_list" action="{{ path('community_list') }}" method="post">
 
@@ -41,7 +40,7 @@
                                         <select id="university_id" class="form-control" name="university_id">
 
                                             <option value="" selected>All Universities</option>
-                                            
+
                                             {% for university in universityList %}
                                                 <option value="{{ university.id }}" {% if selectedUniversityId == university.id  %} selected {% endif %}>{{ university.name }}</option>
                                             {% endfor %}
@@ -51,9 +50,19 @@
                                     <button type="submit">List Communities</button>
                                 </form>
                             </div>
-
                         </div>
-                        <!-- /.box-body-filter -->
+
+                        <div class="box-footer"></div>
+                    </div>
+                </div>
+
+
+                <!-- -- PAGE CONTENT PART -- -->
+                <div class="col-md-12">
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Community Register Page</h3>
+                        </div>
 
                         <!-- /.box-body -->
                         <div class="box-body">

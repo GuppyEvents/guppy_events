@@ -22,16 +22,15 @@
             <div class="row">
 
 
+                <!-- -- FILTER PART -- -->
                 <div class="col-md-12">
                     <div class="box box-info">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Event List Page</h3>
+                            <h3 class="box-title">Event Filter</h3>
                         </div>
 
-                        <!-- /.box-body -->
                         <div class="box-body">
                             <div class="box-body-filter">
-
 
                                 <form id="event_list" action="{{ path('event_list') }}" method="post">
 
@@ -39,6 +38,8 @@
                                     <div class="form-group">
                                         <label>Choose University</label>
                                         <select id="university_id" class="form-control" name="university_id">
+                                            <option value="" >All Universities</option>
+
                                             {% for university in universityList %}
                                                 <option value="{{ university.id }}" {% if selectedUniversityId == university.id  %} selected {% endif %}>{{ university.name }}</option>
                                             {% endfor %}
@@ -61,9 +62,19 @@
                                     <button type="submit">List Events</button>
                                 </form>
                             </div>
-
                         </div>
-                        <!-- /.box-body -->
+
+                        <div class="box-footer"></div>
+                    </div>
+                </div>
+
+
+                <!-- -- PAGE CONTENT PART -- -->
+                <div class="col-md-12">
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Event List Page</h3>
+                        </div>
 
                         <!-- /.box-body -->
                         <div class="box-body">
