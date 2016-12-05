@@ -3,6 +3,7 @@
 {% block stylesheets %}
 
     {% stylesheets
+            'theme/assets/css/guppy-style.css'
             'theme/assets/css/style.css' filter='cssrewrite' %}
         <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -22,31 +23,6 @@
     <div class="preloader-mask">
         <div class="preloader"></div>
     </div>
-
-    <!-- HEADER -->
-
-    {#<section style="z-index: 9;">#}
-        {#<header class="header">#}
-            {#<div class="header-wrapper">#}
-                {#<div class="container">#}
-                    {#<div class="col-xs-12 visible-xs navigation-header">#}
-                        {#<a href="#" class="buy-btn">Sign In</a>#}
-                        {#<button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigation8" aria-expanded="false" aria-controls="navigation3">#}
-                            {#<span class="icon-bar"></span>#}
-                            {#<span class="icon-bar"></span>#}
-                            {#<span class="icon-bar"></span>#}
-                        {#</button>#}
-                    {#</div>#}
-
-                    {#<div class="col-xs-12 navigation-container">#}
-                        {#<div id="navigation8" class="navbar-collapse collapse">#}
-                            {#<a href="{{ path('login') }}" class="hidden-xs pull-right buy-btn">Go to Admin Page</a>#}
-                        {#</div>#}
-                    {#</div>#}
-                {#</div>#}
-            {#</div>#}
-        {#</header>#}
-    {#</section>#}
 
     <!-- BODY -->
     <section id="countdown" class="section align-center" style="display: none;">
@@ -112,129 +88,21 @@
             <h5 class="heading-alt">Kayıtlı Kulüpler</h5>
             <br>
 
-            <div class="col-sm-3">
-                <div class="speaker">
-                    <div class="photo-wrapper rounded"><img src="https://s-media-cache-ak0.pinimg.com/564x/4f/0e/b3/4f0eb37910ce31857575ca120b87d17a.jpg" alt="John Doe" class="img-responsive"></div>
-                    <h3 class="name"><a href="{{ path("homepage_club") }}">Dağcılık Topluluğu</a></h3>
-                    <p class="text-alt"><small>Çanakkale Onsekiz Mart Üniversitesi</small></p>
-                    <p class="about">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-                    <ul class="speaker-socials">
-                        <li><a href="#"><span class="fa fa-facebook"></span></a></li>
-                        <li><a href="#"><span class="fa fa-twitter"></span></a></li>
-                        <li><a href="#"><span class="fa fa-google-plus"></span></a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="col-sm-3">
-                <div class="speaker">
-                    <div class="photo-wrapper rounded"><img src="http://birimler.dpu.edu.tr/app/views/panel/ckfinder/userfiles/29/images/tarihkulturturizimtop/000.jpg" alt="John Doe" class="img-responsive"></div>
-                    <h3 class="name">Tarih Kültür ve Turizm Topluluğu</h3>
-                    <p class="text-alt"><small>Dumlupınar Üniversitesi</small></p>
-                    <p class="about">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-                    <ul class="speaker-socials">
-                        <li><a href="#"><span class="fa fa-facebook"></span></a></li>
-                        <li><a href="#"><span class="fa fa-twitter"></span></a></li>
-                        <li><a href="#"><span class="fa fa-google-plus"></span></a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="col-sm-3">
-                <div class="speaker">
-                    <div class="photo-wrapper rounded"><img src="http://birimler.dpu.edu.tr/app/views/panel/ckfinder/userfiles/29/images/sosyalyasamidesteklemetop/000.jpg" alt="John Doe" class="img-responsive"></div>
-                    <h3 class="name">SOYAD Topluluğu</h3>
-                    <p class="text-alt"><small>Bilkent Üniversitesi</small></p>
-                    <p class="about">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-                    <ul class="speaker-socials">
-                        <li><a href="#"><span class="fa fa-facebook"></span></a></li>
-                        <li><a href="#"><span class="fa fa-twitter"></span></a></li>
-                        <li><a href="#"><span class="fa fa-google-plus"></span></a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="col-sm-3">
-                <div class="speaker">
-                    <div class="photo-wrapper rounded"><img src="http://birimler.dpu.edu.tr/app/views/panel/ckfinder/userfiles/29/images/yesilaytop/0000.JPG" alt="John Doe" class="img-responsive"></div>
-                    <h3 class="name">Genç Yeşilay Topluluğu</h3>
-                    <p class="text-alt"><small>Ankara Üniversitesi</small></p>
-                    <p class="about">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-                    <ul class="speaker-socials">
-                        <li><a href="#"><span class="fa fa-facebook"></span></a></li>
-                        <li><a href="#"><span class="fa fa-twitter"></span></a></li>
-                        <li><a href="#"><span class="fa fa-google-plus"></span></a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="col-sm-3">
-                <div class="speaker">
-                    <div class="photo-wrapper rounded"><img src="https://s-media-cache-ak0.pinimg.com/564x/4f/0e/b3/4f0eb37910ce31857575ca120b87d17a.jpg" alt="John Doe" class="img-responsive"></div>
-                    <h3 class="name">Dağcılık Topluluğu</h3>
-                    <p class="text-alt"><small>Çanakkale Onsekiz Mart Üniversitesi</small></p>
-                    <p class="about">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-                    <ul class="speaker-socials">
-                        <li><a href="#"><span class="fa fa-facebook"></span></a></li>
-                        <li><a href="#"><span class="fa fa-twitter"></span></a></li>
-                        <li><a href="#"><span class="fa fa-google-plus"></span></a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="col-sm-3">
-                <div class="speaker">
-                    <div class="photo-wrapper rounded"><img src="http://birimler.dpu.edu.tr/app/views/panel/ckfinder/userfiles/29/images/tarihkulturturizimtop/000.jpg" alt="John Doe" class="img-responsive"></div>
-                    <h3 class="name">Tarih Kültür ve Turizm Topluluğu</h3>
-                    <p class="text-alt"><small>Dumlupınar Üniversitesi</small></p>
-                    <p class="about">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-                    <ul class="speaker-socials">
-                        <li><a href="#"><span class="fa fa-facebook"></span></a></li>
-                        <li><a href="#"><span class="fa fa-twitter"></span></a></li>
-                        <li><a href="#"><span class="fa fa-google-plus"></span></a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="col-sm-3">
-                <div class="speaker">
-                    <div class="photo-wrapper rounded"><img src="http://birimler.dpu.edu.tr/app/views/panel/ckfinder/userfiles/29/images/sosyalyasamidesteklemetop/000.jpg" alt="John Doe" class="img-responsive"></div>
-                    <h3 class="name">SOYAD Topluluğu</h3>
-                    <p class="text-alt"><small>Bilkent Üniversitesi</small></p>
-                    <p class="about">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-                    <ul class="speaker-socials">
-                        <li><a href="#"><span class="fa fa-facebook"></span></a></li>
-                        <li><a href="#"><span class="fa fa-twitter"></span></a></li>
-                        <li><a href="#"><span class="fa fa-google-plus"></span></a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="col-sm-3">
-                <div class="speaker">
-                    <div class="photo-wrapper rounded"><img src="http://birimler.dpu.edu.tr/app/views/panel/ckfinder/userfiles/29/images/yesilaytop/0000.JPG" alt="John Doe" class="img-responsive"></div>
-                    <h3 class="name">Genç Yeşilay Topluluğu</h3>
-                    <p class="text-alt"><small>Ankara Üniversitesi</small></p>
-                    <p class="about">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-                    <ul class="speaker-socials">
-                        <li><a href="#"><span class="fa fa-facebook"></span></a></li>
-                        <li><a href="#"><span class="fa fa-twitter"></span></a></li>
-                        <li><a href="#"><span class="fa fa-google-plus"></span></a></li>
-                    </ul>
-                </div>
-            </div>
-
             {% for community in communities %}
-                <div class="col-sm-3">
-                    <div class="speaker">
+                <div class="col-sm-2 guppy-main-page-community-box">
+                    <div class="speaker guppy-main-page-community-box-content">
                         <div class="photo-wrapper rounded">
                             {% image 'upload/default-gallery1.jpg' %}
-                            <img src="{{ asset_url }}" alt="Community" class="img-responsive" />
+                                {% if community.imageBase64 %}
+                                    <img src="{{ community.imageBase64 }}" alt="Community" class="img-responsive" />
+                                {% else %}
+                                    <img src="{{ asset_url }}" alt="Community" class="img-responsive" />
+                                {% endif %}
                             {% endimage %}
                         </div>
                         <h3 class="name"><a href="{{ path("homepage_club") }}">{{ community.name }}</a></h3>
                         <p class="text-alt"><small>{{ community.university.name }}</small></p>
-                        <p class="about">{{ community.description }}</p>
+                        {#<p class="about">{{ community.description }}</p>#}
                         <ul class="speaker-socials">
                             <li><a href="#"><span class="fa fa-facebook"></span></a></li>
                             <li><a href="#"><span class="fa fa-twitter"></span></a></li>

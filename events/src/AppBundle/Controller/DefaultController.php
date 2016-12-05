@@ -14,7 +14,7 @@ class DefaultController extends Controller
     public function indexAction(Request $request)
     {
 
-        $communities = $this->getDoctrine()->getRepository('AppBundle:Community')->findAll();
+        $communities = $this->getDoctrine()->getRepository('AppBundle:Community')->findBy(array('university'=>5));
 
         return $this->render('default/home.html.twig' , array(
             'communities' => $communities
