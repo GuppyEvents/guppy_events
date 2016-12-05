@@ -186,9 +186,11 @@ class EventController extends Controller
 
         // 2) DEFAULT CASE
         $event = $this->getDoctrine()->getRepository('AppBundle:Event')->find($eventId);
+        $ticketList = $this->getDoctrine()->getRepository('AppBundle:Ticket')->findBy(array('event'=>$event->getId()));
 
         return $this->render('AppBundle:event:eventUpdate.html.twig', array(
-                'event'=>$event
+                'event'=>$event,
+                'eventTicketList'=>$ticketList
             )
         );
     }
