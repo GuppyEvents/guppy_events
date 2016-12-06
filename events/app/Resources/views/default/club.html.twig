@@ -146,7 +146,7 @@
                                     </div>
 
                                     <div class="col-sm-12 align-center">
-                                        <a href="elements/speakers.html" target="_blank" class="btn btn-outline-clr btn-md">TÜM ÜYELER</a>
+                                        <a href="" target="_blank" class="btn btn-outline-clr btn-md">TÜM ÜYELER</a>
                                     </div>
 
                                 </div>
@@ -170,31 +170,17 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>12/04/2016</td>
-                                        <td><a href="">consectetur adipisicing elit. Consectetur, ex?</a></td>
-                                        <td>Rudis Bar</td>
-                                    </tr>
-                                    <tr>
-                                        <td>02/04/2016</td>
-                                        <td><a href="">consectetur adipisicing.</a></td>
-                                        <td>Merkez Kampüs</td>
-                                    </tr>
-                                    <tr>
-                                        <td>25/03/2016</td>
-                                        <td><a href="">Maiores maxime, aut velit.</a></td>
-                                        <td>Toolbar</td>
-                                    </tr>
-                                    <tr>
-                                        <td>22/03/2016</td>
-                                        <td><a href="">Lorem ipsum dolor.</a></td>
-                                        <td>Passage Pub</td>
-                                    </tr>
-                                    <tr>
-                                        <td>11/03/2016</td>
-                                        <td><a href="">sit amet, ex?</a></td>
-                                        <td>Eymir Gölü</td>
-                                    </tr>
+                                        {% if eventList %}
+                                            {% for event in eventList %}
+                                                <tr>
+                                                    <td>{{ event.startDate.format('m/d/Y') }}</td>
+                                                    <td><a href="">{{ event.title }}</a></td>
+                                                    <td> Location will be here ... </td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% else %}
+                                        {% endif %}
+
                                     </tbody>
                                 </table>
                             </div>

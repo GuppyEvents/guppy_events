@@ -28,8 +28,11 @@ class DefaultController extends Controller
     public function clubAction($communityId)
     {
         $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
+        $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByCommunityId($communityId);
+
         return $this->render('default/club.html.twig' , array(
-            'community' => $community
+            'community' => $community,
+            'eventList' => $eventList
         ));
     }
 
