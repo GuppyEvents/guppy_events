@@ -23,11 +23,14 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/club", name="homepage_club")
+     * @Route("/society/{communityId}", name="homepage_club")
      */
-    public function clubAction(Request $request)
+    public function clubAction($communityId)
     {
-        return $this->render('default/club.html.twig');
+        $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
+        return $this->render('default/club.html.twig' , array(
+            'community' => $community
+        ));
     }
 
 }

@@ -23,37 +23,12 @@
         <div class="preloader"></div>
     </div>
 
-    <!-- HEADER -->
-    <!--
-    <section style="z-index: 9;">
-        <header class="header">
-            <div class="header-wrapper">
-                <div class="container">
-                    <div class="col-xs-12 visible-xs navigation-header">
-                        <a href="#" class="buy-btn">Sign In</a>
-                        <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigation8" aria-expanded="false" aria-controls="navigation3">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                    </div>
-
-                    <div class="col-xs-12 navigation-container">
-                        <div id="navigation8" class="navbar-collapse collapse">
-                            <a href="{{ path('login') }}" class="hidden-xs pull-right buy-btn">Go to Admin Page</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
-    </section>
--->
     <!-- BODY -->
     <section id="club_header">
         <div class="container">
-            <img src="https://s-media-cache-ak0.pinimg.com/564x/4f/0e/b3/4f0eb37910ce31857575ca120b87d17a.jpg" alt="" class="img-responsive" style="padding-top: 10px; text-align: center;width: 100px;display: block;margin: 0 auto;">
-            <h3 style="text-align: center;">DAĞCILIK TOPLULUĞU</h3>
-            <p style="text-align: center;" class="text-alt">Çanakkale Onsekiz Mart Üniversitesi</span></p>
+            <img src={{ community.imageBase64 }} alt="" class="img-responsive" style="padding-top: 10px; text-align: center;width: 100px;display: block;margin: 0 auto;">
+            <h3 style="text-align: center;">{{ community.name }}</h3>
+            <p style="text-align: center;" class="text-alt">{{ community.university.name }}</span></p>
             <br>
             <br>
 
@@ -79,13 +54,7 @@
                         </div>
                         <div class="col-sm-7 align-left">
                             <h6>Topluluk Hakkında</h6>
-                            <p>Faucibus sed pretium. Ridiculus <strong>consectetuer</strong> et. In arcu enim sit in libero scelerisque mauris sed. Nullam eleifend in varius arcu vitae feugiat magna id ut morbi consectetuer. In vivamus arcu. Id ut dui. Sed massa in. Scelerisque suscipit quisque maecenas aliquet in. Wisi mi ipsum. Elit et mauris. Duis in magni praesent <a href="#">content</a> massa.</p>
-                            <p>Consectetuer amet wisi felis sem <strong>tincidunt</strong>. Ultricies blandit id euismod inceptos mauris pulvinar nec nullam quisque consequat nulla eleifend elementum vivamus aliquam placerat nec. Vehicula leo praesent vitae leo mauris ullamcorper lectus sed mollis id turpis dui cras suspendisse. Porta diam <a href="#">eleifend</a>. Praesent magnis sit. Enim ligula vel justo urna.</p>
-                            <ul>
-                                <li>Nisl cras vitae wisi odio amet.</li>
-                                <li>Lacus amet vestibulum belas</li>
-                                <li>Quis nunc curabitur assumenda</li>
-                            </ul>
+                            {{ community.description }}
                         </div>
                     </div>
 
