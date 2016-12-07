@@ -13,15 +13,12 @@ class EventRepository extends EntityRepository
 {
 
     /**
-     * Loads the user for the given username.
-     * This method must return null if the user is not found.
      *
      * @param string $username The username
      * @return UserInterface|null
      */
     public function findEventsByCommunityId($communityId)
     {
-        // TODO: Implement loadUserByUsername() method.
         return $this->createQueryBuilder('event')
             ->join('event.communityUser', 'communityUser')
             ->join('communityUser.community', 'community')
@@ -33,20 +30,33 @@ class EventRepository extends EntityRepository
 
 
     /**
-     * Loads the user for the given username.
-     * This method must return null if the user is not found.
      *
-     * @param string $username The username
+     * @param array $communityIdList The community id list
      * @return UserInterface|null
      */
     public function findEventsByCommunityIdList($communityIdList)
     {
-        // TODO: Implement loadUserByUsername() method.
         return $this->createQueryBuilder('event')
             ->join('event.communityUser', 'communityUser')
             ->innerJoin('communityUser.community', 'community')
             ->where('community.id IN (:communityIdList)')
             ->setParameter('communityIdList', $communityIdList)
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    /**
+     *
+     * @param \DateTime $datetime The date
+     * @return UserInterface|null
+     */
+    public function findEventsByDate($firstDate , $lastDate)
+    {
+        return $this->createQueryBuilder('event')
+            ->where('event.startDate BETWEEN :targetDate AND :targetNextDate')
+            ->setParameter('targetDate', $firstDate)
+            ->setParameter('targetNextDate', $lastDate)
             ->getQuery()
             ->getResult();
     }
