@@ -15,7 +15,7 @@ class DefaultController extends Controller
     {
 
         // TODO: Şuan için sadece bilkent üniversitesi etkinliklerini getirir
-        $communities = $this->getDoctrine()->getRepository('AppBundle:Community')->findBy(array('university'=>5));
+        $communities = $this->getDoctrine()->getRepository('AppBundle:Community')->findBy(array('university'=>5) , array('name'=>'ASC'));
 
         $weekStartDate = new \DateTime();
         $weekStartDate->setTime(0,0);

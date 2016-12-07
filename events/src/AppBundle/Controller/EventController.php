@@ -127,6 +127,8 @@ class EventController extends Controller
                 $event->setStartDate( $date );
                 $event->setMaxParticipantNum( $request->get('event_participant_count') );
                 $event->setImageBase64($request->get('event_image_base64'));
+                $event->setGpsLocationLat($request->get('event_location_lat'));
+                $event->setGpsLocationLng($request->get('event_location_lng'));
                 $event->setCommunityUser( $communityUser );
 
                 $em->persist($event);

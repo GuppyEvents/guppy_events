@@ -99,7 +99,7 @@
                     <!-- /.box -->
                 </div>
 
-                <div class="col-md-12">
+                <div class="col-md-7">
                     <div class="box box-info">
                         <div class="box-header with-border">
                             <h3 class="box-title">Event Register Page</h3>
@@ -169,12 +169,17 @@
                                     {% endif %}
                                 </div>
 
+                                <!-- event Location -->
+                                <div class="form-group" style="display: none;">
+                                    <label>Event Location</label>
+                                    <input type="text" class="form-control" id="event_location_lat" name="event_location_lat" value="{{ event.gpsLocationLat }}" >
+                                    <input type="text" class="form-control" id="event_location_lng" name="event_location_lng" value="{{ event.gpsLocationLng }}" >
+                                </div>
+
                                 <!-- event Image -->
-                                <div class="form-group">
-                                    <label>Event Image</label>
-                                    <input id="temp_img_loader" type='file'>
-                                    <img id="img_viewer" height="150" src="{{ event.imageBase64 }}">
-                                    <input type="text" class="form-control" id="event_image_base64" name="event_image_base64" style="display: none;" value="{{ event.imageBase64 }}">
+                                <div class="form-group" style="display: none;">
+                                    <label>Event Image (Base64)</label>
+                                    <input type="text" class="form-control" id="event_image_base64" name="event_image_base64" value="{{ event.imageBase64 }}">
                                 </div>
 
                                 {% if event %}
@@ -183,6 +188,47 @@
                                     <button type="submit">Register!</button>
                                 {% endif %}
                             </form>
+
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.column -->
+
+                <!-- -- PAGE CONTENT MAP -- -->
+                <div class="col-md-5">
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Event Location</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+
+                            <div id="event_location" style="height: 300px;"></div>
+
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.column -->
+
+                <!-- -- PAGE CONTENT IMAGE -- -->
+                <div class="col-md-5">
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Event Image</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+
+                            <!-- event Image -->
+                            <div class="form-group">
+                                <label>Event Image</label>
+                                <input id="temp_img_loader" type='file'>
+                                <img id="img_viewer" height="150" src="{{ event.imageBase64 }}">
+                            </div>
 
                         </div>
                         <!-- /.box-body -->
@@ -211,6 +257,7 @@
         {% if event %}
             eventCommunityId = {{ event.communityUser.community.id }}
         {% endif %}
+        var marker;
 
 
 /***********************************************************************************************************************
@@ -365,6 +412,28 @@
             }
         }
 
+        function initMap() {
+            var event_gps_location = {lat: {{ event.gpsLocationLat }}, lng: {{ event.gpsLocationLng }} };
+            var map = new google.maps.Map(document.getElementById('event_location'), {
+                zoom: 12,
+                center: event_gps_location
+            });
+
+            marker = new google.maps.Marker({
+                draggable: true,
+                position: event_gps_location,
+                map: map
+            });
+
+            $('#event_location_lat').val(marker.position.lat());
+            $('#event_location_lng').val(marker.position.lng());
+
+            marker.addListener('dragend', function(){
+                $('#event_location_lat').val(this.position.lat());
+                $('#event_location_lng').val(this.position.lng());
+            });
+        }
+
 /***********************************************************************************************************************
  *                                          EVENTS
  **********************************************************************************************************************/
@@ -403,4 +472,9 @@
         }
 
     </script>
+
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDLqDBN5nlLAbTBnSrkI0gwft2v6SWFjh8&callback=initMap">
+    </script>
+    
 {% endblock %}

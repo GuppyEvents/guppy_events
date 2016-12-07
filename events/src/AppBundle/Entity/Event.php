@@ -55,11 +55,18 @@ class Event
     private $maxParticipantNum;
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="gps_location", type="string", length=45, nullable=true)
+     * @ORM\Column(name="gps_location_lat", type="float", nullable=true)
      */
-    private $gpsLocation;
+    private $gpsLocationLat;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="gps_location_lng", type="float", nullable=true)
+     */
+    private $gpsLocationLng;
 
     /**
      * @var string
@@ -235,26 +242,35 @@ class Event
     }
 
     /**
-     * Set gpsLocation
-     *
-     * @param string $gpsLocation
-     * @return Event
+     * @return float
      */
-    public function setGpsLocation($gpsLocation)
+    public function getGpsLocationLat()
     {
-        $this->gpsLocation = $gpsLocation;
-
-        return $this;
+        return $this->gpsLocationLat;
     }
 
     /**
-     * Get gpsLocation
-     *
-     * @return string 
+     * @param float $gpsLocationLat
      */
-    public function getGpsLocation()
+    public function setGpsLocationLat($gpsLocationLat)
     {
-        return $this->gpsLocation;
+        $this->gpsLocationLat = $gpsLocationLat;
+    }
+
+    /**
+     * @return float
+     */
+    public function getGpsLocationLng()
+    {
+        return $this->gpsLocationLng;
+    }
+
+    /**
+     * @param float $gpsLocationLng
+     */
+    public function setGpsLocationLng($gpsLocationLng)
+    {
+        $this->gpsLocationLng = $gpsLocationLng;
     }
 
     /**
