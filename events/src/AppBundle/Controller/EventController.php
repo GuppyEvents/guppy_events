@@ -119,7 +119,7 @@ class EventController extends Controller
                     $em->flush();
                 }
                 
-                $date = \DateTime::createFromFormat('m/d/Y', $request->get('event_date'));
+                $date = \DateTime::createFromFormat('m/d/Y H:i A', $request->get('event_date'));
 
                 $event = new Event();
                 $event->setTitle( $request->get('event_title') );
@@ -169,7 +169,7 @@ class EventController extends Controller
                         'No product found for id '.$event
                     );
                 }else{
-                    $date = \DateTime::createFromFormat('m/d/Y', $request->get('event_date'));
+                    $date = \DateTime::createFromFormat('m/d/Y H:i A', $request->get('event_date'));
 
                     $event->setTitle( $request->get('event_title') );
                     $event->setDescription( $request->get('event_description') );

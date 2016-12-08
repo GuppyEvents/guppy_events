@@ -289,7 +289,8 @@
  *                                          DOCUMENT ON READY
  **********************************************************************************************************************/
         // -- jquery date picker
-        $( "#event_date" ).datepicker();
+        // -- old -- $( "#event_date" ).datepicker();
+        $( "#event_date" ).datetimepicker();
 
         // -- File to base64
         document.getElementById("temp_img_loader").addEventListener("change", fileToBase64Converter, false);
