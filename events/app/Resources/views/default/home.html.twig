@@ -90,7 +90,7 @@
 
             {% for community in communities %}
                 <div class="col-sm-2 guppy-main-page-community-box">
-                    <div class="speaker guppy-main-page-community-box-content">
+                    <div class="society guppy-main-page-community-box-content">
                         <div class="photo-wrapper rounded">
                             {% image 'upload/default-gallery1.jpg' %}
                                 {% if community.imageBase64 %}
@@ -104,7 +104,7 @@
                         <p class="text-alt"><small>{{ community.university.name }}</small></p>
                         {#<p class="about">{{ community.description }}</p>#}
                         <ul class="speaker-socials">
-                            <li><a href="#"><span class="fa fa-facebook"></span></a></li>
+                            <li><a href="#"><span class="fa fa-facebook" aria-hidden="true"></span></a></li>
                             <li><a href="#"><span class="fa fa-twitter"></span></a></li>
                             <li><a href="#"><span class="fa fa-google-plus"></span></a></li>
                         </ul>
