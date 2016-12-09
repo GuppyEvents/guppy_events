@@ -34,6 +34,13 @@ class Event
     private $type;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="permission", type="string", nullable=true)
+     */
+    private $permission;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="start_date", type="datetime", nullable=false)
@@ -170,6 +177,22 @@ class Event
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPermission()
+    {
+        return $this->permission;
+    }
+
+    /**
+     * @param string $permission
+     */
+    public function setPermission($permission)
+    {
+        $this->permission = $permission;
     }
 
     /**

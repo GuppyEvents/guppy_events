@@ -149,6 +149,16 @@
                                     {% endif %}
                                 </div>
 
+                                <!-- event Permission -->
+                                <div class="form-group">
+                                    <label>Permissions</label>
+                                    <select id="event_permission" class="form-control" name="event_permission">
+                                        <option value="PUBLIC" {% if event.permission == 'PUBLIC' %}selected{% endif %}>PUBLIC</option>
+                                        <option value="UNIVERSITY" {% if event.permission == 'UNIVERSITY' %}selected{% endif %}>UNIVERSITY STUDENTS</option>
+                                        <option value="COMMUNITY" {% if event.permission == 'COMMUNITY' %}selected{% endif %}>COMMUNITY MEMBERS</option>
+                                    </select>
+                                </div>
+
                                 <!-- event Date -->
                                 <div class="form-group">
                                     <label>Date</label>

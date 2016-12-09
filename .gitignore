@@ -1,7 +1,11 @@
 #########################################
 ## 		OSX
 #########################################
+#general swap/backup files
+.DS_Store
 .idea/*
+Desktop.ini
+/target/
 
 events/src/AppBundle/Entity/*.php~
 

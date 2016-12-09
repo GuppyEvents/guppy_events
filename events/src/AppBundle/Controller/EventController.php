@@ -119,12 +119,14 @@ class EventController extends Controller
                     $em->flush();
                 }
                 
-                $date = \DateTime::createFromFormat('m/d/Y H:i A', $request->get('event_date'));
+                $request_date = \DateTime::createFromFormat('m/d/Y H:i A', $request->get('event_date'));
+                $request_permission = $request->get('event_permission') ? $request->get('event_permission') : 'PUBLIC';
 
                 $event = new Event();
                 $event->setTitle( $request->get('event_title') );
                 $event->setDescription( $request->get('event_description') );
-                $event->setStartDate( $date );
+                $event->setPermission($request_permission);
+                $event->setStartDate( $request_date );
                 $event->setMaxParticipantNum( $request->get('event_participant_count') );
                 $event->setImageBase64($request->get('event_image_base64'));
                 $event->setGpsLocationLat($request->get('event_location_lat'));
