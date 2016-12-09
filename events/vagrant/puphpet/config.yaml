@@ -31,8 +31,11 @@ vagrantfile:
                                 vflmnfp_gjk5bu56ctyf:
                                     host: '3306'
                                     guest: '3306'
-                        memory: '2048'
-                        cpus: '1'
+                                vflmnfp_cof2yt2jwmm7:
+                                    host: '8080'
+                                    guest: '80'
+                        memory: '4096'
+                        cpus: '2'
         provision:
             puppet:
                 manifests_path: puphpet/puppet/manifests

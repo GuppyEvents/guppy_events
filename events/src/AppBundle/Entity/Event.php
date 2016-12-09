@@ -15,14 +15,14 @@ class Event
     /**
      * @var string
      *
-     * @ORM\Column(name="title", type="string", length=45, nullable=true)
+     * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
     private $title;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=1000, nullable=true)
+     * @ORM\Column(name="description", type="string", length=1500, nullable=true)
      */
     private $description;
 

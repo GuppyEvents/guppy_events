@@ -66,3 +66,5 @@ events/composer.phar
 ##              VAGRANT
 #########################################
 events/vagrant/.vagrant/*
+/events/vagrant/.vagrant/machines/*
+

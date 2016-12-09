@@ -15,21 +15,21 @@ class Community extends Base
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=45, nullable=false)
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=250, nullable=true)
+     * @ORM\Column(name="description", type="string", length=1500, nullable=true)
      */
     private $description;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="image_url", type="string", length=250, nullable=true)
+     * @ORM\Column(name="image_url", type="string", length=255, nullable=true)
      */
     private $imageUrl;
 
