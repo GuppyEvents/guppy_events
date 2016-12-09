@@ -24,69 +24,17 @@
         <div class="preloader"></div>
     </div>
 
-    <!-- BODY -->
-    <section id="countdown" class="section align-center" style="display: none;">
-
-        <!-- Countdown  -->
-        <div class="row counters-wrapper countdown">
-            <div class="col-sm-3">
-                <div class="counter-block counter-block-no-border has-separator">
-                    <div class="counter-box">
-                        <div class="counter-content">
-                            <span class="count">{dnn}</span>
-
-                            <p class="title">days</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-3">
-                <div class="counter-block counter-block-no-border has-separator">
-                    <div class="counter-box">
-                        <div class="counter-content">
-                            <span class="count">{hnn}</span>
-
-                            <p class="title">hours</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-3">
-                <div class="counter-block counter-block-no-border has-separator">
-                    <div class="counter-box">
-                        <div class="counter-content">
-                            <span class="count">{mnn}</span>
-
-                            <p class="title">minutes</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-3">
-                <div class="counter-block counter-block-no-border ">
-                    <div class="counter-box">
-                        <div class="counter-content">
-                            <span class="count">{snn}</span>
-
-                            <p class="title">seconds</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> <!-- end-of-countdown -->
-
-        <h2 class="extra-heading">Guppy Event</h2>
-        <h6 class="thin base-font">Üniversite Etkinlikleri Portalı</h6>
-
-    </section>
-
     <section id="clubs" class="section align-center">
         <div class="container">
-            <h5 class="heading-alt">Kayıtlı Kulüpler</h5>
-            <br>
+
+            <div class="container-header">
+                {#<div class="container-header-button">#}
+                    {#<a href="#" class="btn btn-black btn-sm">Grid</a>#}
+                    {#<a href="#" class="btn btn-black btn-sm">List</a>#}
+                {#</div>#}
+                <h5 class="heading-alt">Kayıtlı Kulüpler</h5>
+                <br>
+            </div>
 
             {% for community in communities %}
                 <div class="col-sm-2 guppy-main-page-community-box">
@@ -114,6 +62,7 @@
 
         </div>
     </section>
+
 
     <section class="section align-center">
         <div class="container">

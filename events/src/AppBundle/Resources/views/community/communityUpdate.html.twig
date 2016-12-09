@@ -2,6 +2,37 @@
 
 {% block content %}
 
+
+    {#------------------------------------#}
+    {#--- --- MAIL ADD DIALOG --- ---#}
+    {#------------------------------------#}
+    <div class="modal" id="community_add_link_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Community Add Link Modal</h4>
+                </div>
+                <div class="modal-body">
+                    <input id="community_new_link" type="text" class="form-control" placeholder="Enter Community Link Address (https://www.facebook.com/mizahkultur/) ">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                    <button id="community_add_link_modal_summit" type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+
+
+    {#------------------------------------#}
+    {#--- --- PAGE CONTENT --- ---#}
+    {#------------------------------------#}
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
@@ -20,6 +51,61 @@
         <section class="content">
 
             <div class="row">
+
+                <div class="col-md-6">
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Community Social Network Links</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+
+                            <strong>*** You can add social networks link such as facebook, instagram etc. to community. ***</strong>
+
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>#ID</th>
+                                        <th>Community Link</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="community_link_list">
+                                    {% for communityLink in communityLinkList %}
+                                        <tr>
+                                            <td>{{ communityLink.id }}</td>
+                                            <td>{{ communityLink.link }}</td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-info">Action</button>
+                                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                                                        <span class="caret"></span>
+                                                        <span class="sr-only">Toggle Dropdown</span>
+                                                    </button>
+                                                    <ul class="dropdown-menu" role="menu">
+                                                        <li><a class='community_remove_link' value="{{ communityLink.id }}">Delete</a></li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+
+                                </tbody>
+                                    <tfoot>
+                                        <tr></tr>
+                                    </tfoot>
+                            </table>
+
+                        </div>
+                        <!-- /.box-body -->
+
+                        <div class="box-footer">
+                            <button id="community_add_link" data-toggle="modal" data-target="#community_add_link_modal">Add New Link</button>
+                        </div>
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.column -->
 
 
                 <div class="col-md-12">
@@ -98,18 +184,72 @@
 /***********************************************************************************************************************
  *                                          AJAX OPERATIONS
  **********************************************************************************************************************/
-        function ajaxGetBoroughListByCity(cityId){
+
+        function ajaxPostCommunityLink(){
 
             // -- 1 --
             // open alert box to inform user
 
             // -- 2 --
             // ajax call
-            $.post("{{ path('university_borough_list') }}" , {
-                cid : cityId
+            $.post("{{ path('community_link_add') }}" , {
+                cid : {{ community.id }},
+                clink : $('#community_new_link').val()
 
             }).always(function(){
+                $('#community_new_link').val('')
+                $('#community_add_link_modal').modal('hide');
+            }).done(function(data){
 
+                // -- 2.1 -- CONSOLE
+                if(debugMode)
+                    console.log(data);
+
+                // -- 2.2 -- sonuc düzenlenir
+                if(data.resultText == 'SUCCESS'){
+
+                    // -- 2.2.1 -- add mail to list
+                    row =   "<tr>" +
+                                "<td value="+data.content['id']+">" + data.content['id'] + "</td>" +
+                                "<td value="+data.content['linkname']+">" + data.content['linkname'] + "</td>" +
+                                "<td>" +
+                                    "<div class='btn-group'>" +
+                                        "<button type='button' class='btn btn-info'>Action</button>" +
+                                        "<button type='button' class='btn btn-info dropdown-toggle' data-toggle='dropdown'>" +
+                                            "<span class='caret'></span>" +
+                                            "<span class='sr-only'>Toggle Dropdown</span>" +
+                                        "</button>" +
+                                        "<ul class='dropdown-menu' role='menu'>" +
+                                            "<li><a class='community_remove_link' value='"+ data.content['id']+ "' >Delete</a></li>" +
+                                        "</ul>" +
+                                    "</div>" +
+                                "</td>"
+                            "</tr>";
+
+                    $("#community_link_list").append(row);
+
+                }else if(data.resultText == 'SUCCESS_EMPTY'){
+                    alert('Warning -- ' + ' SUCCESS_EMPTY');
+                }else if(data.resultText == 'FAILURE_PERMISSION'){
+                    alert('Warning -- ' + ' you are not authorization for this operation');
+                }else{
+                    alert('Warning -- ' + ' error occured while inserting new link to community');
+                }
+            });
+        }
+
+
+        function ajaxDeleteCommunityLink(community_link_id,tr_element){
+
+            // -- 1 --
+            // open alert box to inform user
+
+            // -- 2 --
+            // ajax call
+            $.post("{{ path('community_link_remove') }}" , {
+                clid : community_link_id
+
+            }).always(function(){
 
             }).done(function(data){
 
@@ -120,23 +260,14 @@
                 // -- 2.2 -- sonuc düzenlenir
                 if(data.resultText == 'SUCCESS'){
 
-                    // -- 2.2.1 -- remove options
-                    $('#address_borough_id').children().remove();
-
-                    // -- 2.2.2 -- insert new options
-                    data.content.forEach(function(borough) {
-                        $('#address_borough_id').append($('<option>', {
-                            value: borough['borough_id'],
-                            text: borough['borough_name']
-                        }));
-                    });
+                    tr_element.remove();
 
                 }else if(data.resultText == 'SUCCESS_EMPTY'){
-                    alert('Warning -- ' + ' could not found any borough');
+                    alert('Warning -- ' + ' SUCCESS_EMPTY');
                 }else if(data.resultText == 'FAILURE_PERMISSION'){
                     alert('Warning -- ' + ' you are not authorization for this operation');
                 }else{
-                    alert('Warning -- ' + ' error occured while getting borough list');
+                    alert('Warning -- ' + ' error occured while inserting new link to community');
                 }
             });
         }
@@ -145,8 +276,13 @@
 /***********************************************************************************************************************
  *                                          EVENTS
  **********************************************************************************************************************/
-        $('#address_city_id').on('change',function (event) {
-            ajaxGetBoroughListByCity($(event.target).val());
+
+        $('#community_add_link_modal_summit').on('click',function (event) {
+            ajaxPostCommunityLink();
+        });
+
+        $(document).on('click', 'tr td .community_remove_link' , function (event) {
+            ajaxDeleteCommunityLink($(event.target).attr('value'),$(event.target).parentsUntil('tr').last().parent());
         });
 
 

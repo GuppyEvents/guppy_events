@@ -2465,6 +2465,11 @@ li {
   position: relative;
   padding: 90px 0;
 }
+.section .container-header-button{
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
 .fullwidth-section {
   zoom: 1;
   -webkit-box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.18);
@@ -5927,6 +5932,7 @@ button[type="submit"] .loading {
   text-transform: uppercase;
   line-height: 14px;
   letter-spacing: 0.3em;
+  padding: 5px;
   height: 40px;
 }
 .society .name + p small {

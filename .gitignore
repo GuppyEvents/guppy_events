@@ -60,3 +60,9 @@ events/composer.phar
 
 # Backup entities generated with doctrine:generate:entities command
 */Entity/*~
+
+
+#########################################
+##              VAGRANT
+#########################################
+events/vagrant/.vagrant/*

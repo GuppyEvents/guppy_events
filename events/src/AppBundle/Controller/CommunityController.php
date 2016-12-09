@@ -143,10 +143,12 @@ class CommunityController extends Controller
 
         // 2) DEFAULT CASE
         $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
+        $communityLinkList = $this->getDoctrine()->getRepository('AppBundle:CommunityLink')->findBy(array('community'=>$community->getId()));
 
         return $this->render(
             'AppBundle:community:communityUpdate.html.twig', array(
                 'community' => $community,
+                'communityLinkList' => $communityLinkList
             )
         );
     }
