@@ -5,7 +5,8 @@ There are a few pre-requisites before you can begin guppy event web application 
   * [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
   * [Vagrant](https://www.vagrantup.com/downloads.html)
 
-2. Second, you must find vagrant directory which includes _**Vagrantfile**_ & _**puphpet**_ folder then you must call following command in vagrant directory.
+2. Second, you must find vagrant directory which includes _**Vagrantfile**_ & _**puphpet**_ folder then you must call following commands in vagrant directory. (vagrant needs _**vagrant-bindfs**_ plugin for shared folder configuration which is set to nfs)
+  * ```vagrant plugin install vagrant-bindfs```
   * ```vagrant up```
 
 4. Third, you must add the following hostname to your hosts file (**/etc/hosts**)
