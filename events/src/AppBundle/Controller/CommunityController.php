@@ -21,6 +21,34 @@ class CommunityController extends Controller
 {
 
     /**
+     * @Route("/{communityId}", name="user_community_homepage")
+     */
+    public function communityHomeAction($communityId)
+    {
+        $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
+        $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByCommunityId($communityId);
+
+        return $this->render('AppBundle:community:communityHome.html.twig' , array(
+            'community' => $community,
+            'eventList' => $eventList
+        ));
+    }
+
+    /**
+     * @Route("/events/{communityId}", name="user_community_events_homepage")
+     */
+    public function communityEventsAction($communityId)
+    {
+        $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
+        $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByCommunityId($communityId);
+
+        return $this->render('AppBundle:community:communityEvents.html.twig' , array(
+            'community' => $community,
+            'eventList' => $eventList
+        ));
+    }
+    
+    /**
      * @Route("/list", name="community_list")
      * @Security("has_role('ROLE_USER')")
      */

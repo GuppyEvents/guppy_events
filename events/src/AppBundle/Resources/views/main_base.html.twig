@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+
+    <!-- ----------------------------------- -->
+    <!-- ------------ HTML HEAD ------------ -->
+    <!-- ----------------------------------- -->
+    <head>
+        <meta charset="UTF-8" />
+        <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="description" content="Guppy Events">
+        <meta name="keywords" content="Events">
+        <meta name="author" content="Kemal Sami KARACA">
+
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+
+        <title>{% block title %}Guppy Home Page{% endblock %}</title>
+
+        {% stylesheets
+                'theme/assets/css/custom-animations.css'
+                'theme/assets/css/style.css'
+                'theme/assets/css/guppy-ui.css' filter='cssrewrite' %}
+            <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+        {% endstylesheets %}
+
+        {% block stylesheets %}{% endblock %}
+
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+            <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+
+
+    <!-- ----------------------------------- -->
+    <!-- ------------ HTML BODY ------------ -->
+    <!-- ----------------------------------- -->
+    <body>
+
+        <!-- ------------ PRELOADER ------------ -->
+        <div class="preloader-mask">
+            <div class="preloader"></div>
+        </div>
+
+        <!-- ------------ HEADER ------------ -->
+        <header class="header header-black fixed" style="min-height: 100px;">
+            <div class="header-wrapper">
+                <div class="container">
+                    <div class="col-sm-2 col-xs-12 navigation-header">
+                        <a href="{{ path("homepage") }}" class="logo">
+                            <img src="" alt="Guppy" width="80" height="40" class="retina-hide">
+                            <img src="" alt="Guppy" width="80" height="40" class="retina-show">
+                        </a>
+                        <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigation" aria-expanded="false" aria-controls="navigation">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+
+                    <div class="col-sm-10 col-xs-12 navigation-container">
+                        <div id="navigation" class="navbar-collapse collapse">
+                            <ul class="navigation-list pull-left light-text">
+                                <li class="navigation-item"><a href="{{ path("homepage") }}" class="navigation-link">Anasayfa</a></li>
+                                <li class="navigation-item"><a href="{{ path("homepage") }}" class="navigation-link">KULÜP</a></li>
+                                <li class="navigation-item"><a href="{{ path("homepage") }}" class="navigation-link">ETKİNLİK</a></li>
+                                <li class="navigation-item"><a href="{{ path("login") }}" class="navigation-link">Yönetici Sayfasına Git</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        {% block content %}{% endblock %}
+
+
+        <!-- ------------ FOOTER ------------ -->
+        <section class="footer">
+            <div class="container">
+
+                <div class="col-md-4">
+                    <div class="widget about-widget">
+                        <h6 class="widget-head">About <span class="highlight">Guppy</span></h6>
+                        <p class="text-alt">
+                            <small>
+                                Guppy projesinin amacı bireyleri topluluklarla olan ilişkisini arttırmaktır ;)
+                            </small>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="footer-base">
+                <div class="container">
+
+                    <div class="col-md-6">
+                        <ul class="footer-nav">
+                            <li class="footer-nav-item"><a href="#">Contact</a></li>
+                            <li class="footer-nav-item"><a href="#">Privacy policy</a></li>
+                            <li class="footer-nav-item"><a href="#">Press</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-md-6 align-right">
+                        <ul class="socials-nav align-right">
+                            <li class="socials-nav-item"><a href="#"><span class="fa fa-twitter"></span></a></li>
+                            <li class="socials-nav-item"><a href="#"><span class="fa fa-facebook"></span></a></li>
+                            <li class="socials-nav-item"><a href="#"><span class="fa fa-github"></span></a></li>
+                            <li class="socials-nav-item"><a href="#"><span class="fa fa-vimeo-square"></span></a></li>
+                            <li class="socials-nav-item"><a href="#"><span class="fa fa-google-plus"></span></a></li>
+                            <li class="socials-nav-item"><a href="#"><span class="fa fa-instagram"></span></a></li>
+                        </ul>
+
+                        <p class="text-alt"><small>All Rights Reserved © 2016</small></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        {% javascripts
+                'plugins/jQuery/jQuery-2.2.0.min.js'
+                'theme/assets/js/bootstrap.min.js'
+                'theme/assets/js/jquery.validate.min.js'
+                'theme/assets/js/toastr.min.js'
+                'theme/assets/js/jquery.waypoints.min.js'
+                'theme/assets/js/jquery.appear.js'
+                'theme/assets/js/jquery.plugin.js'
+                'theme/assets/js/jquery.countTo.js'
+                'theme/assets/js/jquery.countdown.js'
+                'theme/assets/js/masonry.pkgd.min.js'
+                'theme/assets/js/modal-box.js'
+                'theme/assets/js/guppy.js' %}
+            <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+
+        {% block javascriptcontent %}{% endblock %}
+
+    </body>
+</html>

@@ -1,0 +1,93 @@
+{% extends 'AppBundle::main_base.html.twig' %}
+
+{% block title %}Guppy - Community Events{% endblock %}
+
+
+{% block content %}
+
+    <!-- --------------------------------------------- -->
+    <!-- ------------------ CONTENT ------------------ -->
+    <!-- --------------------------------------------- -->
+    <section id="community-home" class="guppy-section align-center">
+        <div class="container">
+
+            <!-- -------------- SIDEBAR -------------- -->
+            <div class="community-sidebar col-md-2">
+                <div class="community-sidebar-photo" >
+                    <div class="society">
+                        <div class="photo-wrapper rounded">
+                            <img src="{{ community.imageBase64 }}" alt="{{ community.name }}" class="img-responsive" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="community-sidebar-name">
+
+                    <h7><span class="highlight">{{ community.name }}</span></h7>
+                </div>
+
+                <hr>
+                <div class="community-sidebar-navigation">
+                    <ul class="community-dropdown-menu">
+                        <li class="community-navigation-item"><a href="{{ path('user_community_homepage', {'communityId': community.id}) }}" class="navigation-link">Genel Bilgi</a></li>
+                        <li class="community-navigation-item"><a href="{{ path('user_community_events_homepage', {'communityId': community.id}) }}" class="navigation-link active">Etkinlikler</a></li>
+                        <li class="community-navigation-item"><a href="" class="navigation-link">Üyeler</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- -------------- CONTENT -------------- -->
+            <div class="community-content col-md-10">
+
+                <div class="community-content-header">
+                    {#<img src="assets/img/community/guppy_bilkent_banner_01.jpg" alt="Mizah Kültür Arkaplan" class="img-responsive" />#}
+
+                    {% image 'theme/assets/img/guppy_bilkent_banner_01.jpg' %}
+                        <img src="{{ asset_url }}" class="img-responsive" alt="User Image" />
+                    {% endimage %}
+                </div>
+
+
+                <div class="community-content-body">
+
+                    {% for event in eventList %}
+
+                        <!-- event-card start-->
+                        <div class="col-sm-4">
+                            <div class="community-event-card">
+                                <a href="#" class="community-event-card-main">
+                                    <div class="community-event-card-main-header">
+                                        <div class="community-event-card-main-header-image">
+                                            <img src="{{ event.imageBase64 }}" alt="Event Name">
+                                        </div>
+
+                                        <span class="community-event-card-ticket">Ücretsiz</span>
+                                        <!--<span class="community-event-card-hourglass"><i class="fa fa-clock-o" aria-hidden="true"></i></span>-->
+                                    </div>
+                                    <div class="community-event-card-main-body">
+                                        <div class="community-event-card-date"> {{ event.startDate.format('d/m/Y H:i A') }} </div>
+                                        <div class="community-event-card-title">{{ event.title }}</div>
+                                        <div class="community-event-card-venue">Ankara, Bilkent</div>
+                                    </div>
+                                </a>
+
+                                <div class="community-event-card-footer">
+                                    <div class="community-event-card-footer-tags"></div>
+                                    <div class="community-event-card-footer-actions">
+                                        <a href=""><span class="fa fa-share"></span></a>
+                                        <a href=""><span class="fa fa-bookmark-o"></span></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- event-card end-->
+
+                    {% endfor %}
+
+                </div><!-- community-content-body end -->
+
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+

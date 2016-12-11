@@ -1,0 +1,77 @@
+{% extends 'AppBundle::main_base.html.twig' %}
+
+{% block title %}Guppy - Community Home{% endblock %}
+
+
+{% block content %}
+
+    <!-- --------------------------------------------- -->
+    <!-- ------------------ CONTENT ------------------ -->
+    <!-- --------------------------------------------- -->
+    <section id="community-home" class="guppy-section align-center">
+        <div class="container">
+
+            <!-- -------------- SIDEBAR -------------- -->
+            <div class="community-sidebar col-md-2">
+                <div class="community-sidebar-photo" >
+                    <div class="society">
+                        <div class="photo-wrapper rounded">
+                            <img src="{{ community.imageBase64 }}" alt="{{ community.name }}" class="img-responsive" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="community-sidebar-name">
+
+                    <h7><span class="highlight">{{ community.name }}</span></h7>
+                </div>
+
+                <hr>
+                <div class="community-sidebar-navigation">
+                    <ul class="community-dropdown-menu">
+                        <li class="community-navigation-item"><a href="{{ path('user_community_homepage', {'communityId': community.id}) }}" class="navigation-link active">Genel Bilgi</a></li>
+                        <li class="community-navigation-item"><a href="{{ path('user_community_events_homepage', {'communityId': community.id}) }}" class="navigation-link">Etkinlikler</a></li>
+                        <li class="community-navigation-item"><a href="community-home-people.html" class="navigation-link">Üyeler</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- -------------- CONTENT -------------- -->
+            <div class="community-content col-md-10">
+
+                <div class="community-content-header">
+                    {#<img src="assets/img/community/guppy_bilkent_banner_01.jpg" alt="Mizah Kültür Arkaplan" class="img-responsive" />#}
+
+                    {% image 'theme/assets/img/guppy_bilkent_banner_01.jpg' %}
+                        <img src="{{ asset_url }}" class="img-responsive" alt="User Image" />
+                    {% endimage %}
+                </div>
+
+
+                <div class="community-content-body">
+
+                    <div class="fade active in">
+                        <div class="col-sm-12 align-left">
+                            <h6>Hakkında</h6>
+                            <p>{{ community.description }}</p>
+                        </div>
+
+                        <div class="col-sm-6 align-left" style="padding-top: 20px;">
+                            <h6>İletişim Bilgileri</h6>
+                            <ul class="list">
+                                <li><i class="fa fa-facebook "></i>https://www.facebook.com/pg/mizahkultur/</li>
+                                <li><i class="fa fa-twitter"></i>https://twitter.com/mizah_kultur</li>
+                                <li><i class="fa fa-envelope"></i>bilkentmizahkultur@gmail.com</li>
+                                <li><i class="fa fa-phone"></i>(518) 457-5181 10001</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div><!-- community-content-body end -->
+
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+

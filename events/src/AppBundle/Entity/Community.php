@@ -22,7 +22,7 @@ class Community extends Base
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=1500, nullable=true)
+     * @ORM\Column(name="description", type="string", length=5000, nullable=true)
      */
     private $description;
 
