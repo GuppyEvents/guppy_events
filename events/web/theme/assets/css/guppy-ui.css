@@ -80,6 +80,7 @@
 }
 
 .community-content-body {
+    min-height: 200px;
     padding-top: 30px;
     padding-bottom: 30px;
 }
@@ -196,6 +197,7 @@
     transform: translateY(-50%);
     position: relative;
     top: 50%;
+    width: 100%; /* -- bu değer kişisel olarak eklenmiştir --*/
 }
 
 .community-event-card .community-event-card-main-body{

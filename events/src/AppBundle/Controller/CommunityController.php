@@ -21,40 +21,61 @@ class CommunityController extends Controller
 {
 
     /**
-     * @Route("/{communityId}", name="user_community_homepage")
+     * @Route("/home/{communityId}", name="user_community_homepage")
      */
     public function communityHomeAction($communityId)
     {
+        $data = array();
         $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
         $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByCommunityId($communityId);
 
-        return $this->render('AppBundle:community:communityHome.html.twig' , array(
-            'community' => $community,
-            'eventList' => $eventList
-        ));
+        $data['community'] = $community;
+        $data['eventList'] = $eventList;
+        $data['facebook'] = null;
+        $data['twitter'] = null;
+        $data['instagram'] = null;
+
+        $facebook_pattern = '/^((http(s)?:\/\/)?(w{3}\.)?)?(facebook.com\/){1}.*/';
+        $twitter_pattern = '/^((http(s)?:\/\/)?(w{3}\.)?)?(twitter.com\/){1}.*/';
+        $instagram_pattern = '/^((http(s)?:\/\/)?(w{3}\.)?)?(instagram.com\/){1}.*/';
+
+        $communityLinkList = $this->getDoctrine()->getRepository('AppBundle:CommunityLink')->findBy(array('community'=>$community->getId()));
+        foreach ($communityLinkList as &$communityLink) {
+            if(preg_match($facebook_pattern,$communityLink->getLink())){
+               $data['facebook'] = $communityLink->getLink();
+            }else if(preg_match($twitter_pattern,$communityLink->getLink())){
+               $data['twitter'] = $communityLink->getLink();
+            }else if(preg_match($instagram_pattern,$communityLink->getLink())){
+               $data['instagram'] = $communityLink->getLink();
+            }
+        }
+
+        return $this->render('AppBundle:community:communityHome.html.twig' , $data);
     }
+
+
 
     /**
      * @Route("/events/{communityId}", name="user_community_events_homepage")
      */
     public function communityEventsAction($communityId)
     {
+        $data = array();
         $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
         $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByCommunityId($communityId);
-
-        return $this->render('AppBundle:community:communityEvents.html.twig' , array(
-            'community' => $community,
-            'eventList' => $eventList
-        ));
+        $data['community'] = $community;
+        $data['eventList'] = $eventList;
+        return $this->render('AppBundle:community:communityEvents.html.twig' , $data);
     }
-    
+
+
+
     /**
      * @Route("/list", name="community_list")
      * @Security("has_role('ROLE_USER')")
      */
     public function listAction(Request $request)
     {
-
         $selectedUniversityId = null;
         $communityList = $this->getDoctrine()->getRepository('AppBundle:Community')->findAll();
         $universityList = $this->getDoctrine()->getRepository('AppBundle:University')->findAll();
@@ -88,6 +109,8 @@ class CommunityController extends Controller
             )
         );
     }
+
+
 
     /**
      * @Route("/post", name="community_post")
@@ -130,6 +153,8 @@ class CommunityController extends Controller
             )
         );
     }
+
+
 
     /**
      * @Route("/put/{communityId}", name="community_put")
@@ -182,6 +207,7 @@ class CommunityController extends Controller
     }
 
 
+
     /**
      * @Route("/delete/{communityId}", name="community_delete")
      * @Security("has_role('ROLE_USER')")
@@ -210,6 +236,7 @@ class CommunityController extends Controller
         return $this->redirectToRoute('community_list');
 
     }
+
 
 
     /*******************************************************************************************************************

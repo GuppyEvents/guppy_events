@@ -48,7 +48,7 @@
                                 {% endif %}
                             {% endimage %}
                         </div>
-                        <h3 class="name"><a href="{{ path("homepage_club" , {'communityId': community.id}) }}">{{ community.name }}</a></h3>
+                        <h3 class="name"><a href="{{ path("user_community_homepage" , {'communityId': community.id}) }}">{{ community.name }}</a></h3>
                         <p class="text-alt"><small>{{ community.university.name }}</small></p>
                         {#<p class="about">{{ community.description }}</p>#}
                         <ul class="speaker-socials">

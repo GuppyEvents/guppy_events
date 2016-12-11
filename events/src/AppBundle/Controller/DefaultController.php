@@ -27,26 +27,12 @@ class DefaultController extends Controller
 
         $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByDate( $weekStartDate,$weekFinishDate);
 
-        return $this->render('default/home.html.twig' , array(
-            'communities' => $communities,
-            'eventList' => $eventList,
-            'weekStartDate' => $weekStartDate
-        ));
+        $data['communities'] = $communities;
+        $data['eventList'] = $eventList;
+        $data['weekStartDate'] = $weekStartDate;
 
-    }
+        return $this->render('default/home.html.twig' , $data);
 
-    /**
-     * @Route("/society/{communityId}", name="homepage_club")
-     */
-    public function clubAction($communityId)
-    {
-        $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
-        $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByCommunityId($communityId);
-
-        return $this->render('default/club.html.twig' , array(
-            'community' => $community,
-            'eventList' => $eventList
-        ));
     }
 
 }
