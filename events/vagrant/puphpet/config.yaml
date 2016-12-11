@@ -19,19 +19,19 @@ vagrantfile:
                         check_guest_tools: 0
                         update_guest_tools: 0
                 machines:
-                    vflm_z6nry0z0hlwi:
+                    vflm_1mq8bamwrvyd:
                         id: guppy
                         hostname: local.guppy.com.tr
                         network:
                             private_network: 192.168.56.101
                             forwarded_port:
-                                vflmnfp_nmszzmlctq6v:
+                                vflmnfp_a552biqixdla:
                                     host: '5112'
                                     guest: '22'
-                                vflmnfp_gjk5bu56ctyf:
+                                vflmnfp_6hws8e9qokrq:
                                     host: '3306'
                                     guest: '3306'
-                                vflmnfp_cof2yt2jwmm7:
+                                vflmnfp_ea3vysvcpskh:
                                     host: '8080'
                                     guest: '80'
                         memory: '4096'
@@ -46,10 +46,10 @@ vagrantfile:
                     - '--verbose'
                     - '--hiera_config /vagrant/puphpet/puppet/hiera.yaml'
         synced_folder:
-            vflsf_l6aerim1dv2n:
+            vflsf_k95470vmgz52:
                 source: ../../
                 target: /var/www
-                sync_type: default
+                sync_type: nfs
                 smb:
                     smb_host: ''
                     smb_username: ''
@@ -124,7 +124,7 @@ nginx:
         names_hash_bucket_size: 128
     upstreams: {  }
     vhosts:
-        nxv_fn68i2k5ttok:
+        nxv_z2qnfil7e4z2:
             server_name: local.guppy.com.tr
             server_aliases:
                 - www.local.guppy.com.tr
@@ -140,7 +140,7 @@ nginx:
             rewrite_to_https: '1'
             spdy: '1'
             locations:
-                nxvl_yhe4cglweqr5:
+                nxvl_i4spz30ylz55:
                     www_root: ''
                     location: /
                     index_files:
@@ -158,7 +158,7 @@ nginx:
                     fastcgi_split_path: ''
                     proxy: ''
                     proxy_redirect: ''
-                nxvl_52qq26jgnfv2:
+                nxvl_04m47qna8t6s:
                     www_root: ''
                     location: '~ \.php$'
                     try_files:
@@ -178,7 +178,7 @@ nginx:
                     proxy_redirect: ''
     proxies: {  }
 apache:
-    install: 0
+    install: '0'
     settings:
         version: 2.4
         user: www-data
@@ -191,7 +191,7 @@ apache:
         - proxy_fcgi
         - rewrite
     vhosts:
-        av_5p5sjg408sni:
+        av_cern8r16j03i:
             servername: awesome.dev
             serveraliases:
                 - www.awesome.dev
@@ -210,7 +210,7 @@ apache:
             ssl_protocol: ''
             ssl_cipher: ''
             directories:
-                avd_7ltnefc35yg7:
+                avd_gg5s4hmyau5r:
                     path: /var/www/awesome
                     options:
                         - Indexes
@@ -222,7 +222,7 @@ apache:
                         - 'all granted'
                     custom_fragment: ''
                     files_match:
-                        avdfm_5szmnxkxuidr:
+                        avdfm_iti2ibuz46mk:
                             path: \.php$
                             sethandler: 'proxy:fcgi://127.0.0.1:9000'
                             custom_fragment: ''
@@ -252,7 +252,7 @@ php:
     fpm_ini:
         error_log: /var/log/php-fpm.log
     fpm_pools:
-        phpfp_d7n2hxwah8kk:
+        phpfp_bapq3ifkwuuv:
             ini:
                 prefix: www
                 listen: '127.0.0.1:9000'
@@ -295,7 +295,7 @@ drush:
 ruby:
     install: '1'
     versions:
-        rv_a3fb74ymgpl4:
+        rv_spuey9yvvldk:
             default: '1'
             bundler: '1'
             version: 2.3.1
@@ -334,15 +334,15 @@ mariadb:
         override_options: {  }
     adminer: 0
     users:
-        mariadbnu_724e99s62hlt:
+        mariadbnu_ktpxxjghm1sq:
             name: dbuser
             password: '123'
     databases:
-        mariadbnd_ksgrl9chce19:
+        mariadbnd_hv2ns1iqqskk:
             name: dbname
             sql: ''
     grants:
-        mariadbng_go5mq7kz9aqq:
+        mariadbng_x5a585odjdym:
             user: dbuser
             table: '*.*'
             privileges:
@@ -352,23 +352,21 @@ mysql:
     settings:
         version: '5.6'
         root_password: ''
-        override_options: 
-            mysqld:
-                bind-address: '0.0.0.0'
+        override_options: {  }
     adminer: 0
     users:
-        mysqlnu_d6ut8nht9n35:
+        mysqlnu_fy37tqzgdm5p:
             name: guppy@%
             password: guppy
-        mysqlnu_gvrieeuapa81:
+        mysqlnu_xl6uu1vubce9:
             name: guppylocal
             password: guppylocal
     databases:
-        mysqlnd_hgypo80dnycg:
+        mysqlnd_7qf1ivnrckv2:
             name: GuppyEventHub
             sql: /var/www/events/db/GuppyEventHub.sql
     grants:
-        mysqlng_xizdsaoiv42d:
+        mysqlng_wb8cxsbeheye:
             user: guppy@%
             table: '*.*'
             privileges:
@@ -433,7 +431,7 @@ elastic_search:
         version: 2.3.1
         java_install: true
     instances:
-        esi_w7xw2fvsfa36:
+        esi_wqqpcslzwg49:
             name: es-01
 solr:
     install: '0'
