@@ -48,6 +48,13 @@ class Community extends Base
     private $imageBase64;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="image_background_base64", type="text", nullable=true)
+     */
+    private $imageBackgroundBase64;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
@@ -179,6 +186,22 @@ class Community extends Base
     public function setImageBase64($imageBase64)
     {
         $this->imageBase64 = $imageBase64;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImageBackgroundBase64()
+    {
+        return $this->imageBackgroundBase64;
+    }
+
+    /**
+     * @param string $imageBackgroundBase64
+     */
+    public function setImageBackgroundBase64($imageBackgroundBase64)
+    {
+        $this->imageBackgroundBase64 = $imageBackgroundBase64;
     }
 
     /**

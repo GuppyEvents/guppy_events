@@ -132,6 +132,7 @@ class CommunityController extends Controller
                 $community->setName( $request->get('community_name') );
                 $community->setDescription( $request->get('community_description') );
                 $community->setImageBase64($request->get('community_image_base64'));
+                $community->setImageBackgroundBase64($request->get('community_image_background_base64'));
                 $community->setUniversity( $university );
 
                 $em->persist($community);
@@ -184,6 +185,7 @@ class CommunityController extends Controller
                 $community->setName( $request->get('community_name') );
                 $community->setDescription( $request->get('community_description') );
                 $community->setImageBase64($request->get('community_image_base64'));
+                $community->setImageBackgroundBase64($request->get('community_image_background_base64'));
                 
                 $em->persist($community);
                 $em->flush();
@@ -237,6 +239,80 @@ class CommunityController extends Controller
 
     }
 
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    //                                          APPLICATION/JSON SERVICES
+    // -----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    /**
+     * @Route("/add-event-from-fb", name="community_add_event_from_facebook")
+     */
+    public function addEventFromFacebook(Request $request){
+
+        /**
+         * -- -- READ ME -- --
+         * Bu fonksiyon, etkinliklerin facebook üzerinden alınması için yazılmaya başlanmış olup yarıda bırakılmıştır.
+         */
+
+        // -- 1 -- Initialization
+        $data = array();
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+
+        // -- 2 -- Try to Add New Mail Server
+        try{
+
+            // -- 2.1 -- Get Community id
+            $communityId = $request->get('cid');
+
+            $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
+
+            $facebook_pattern = '/^((http(s)?:\/\/)?(w{3}\.)?)?(facebook.com\/){1}.*/';
+            $twitter_pattern = '/^((http(s)?:\/\/)?(w{3}\.)?)?(twitter.com\/){1}.*/';
+            $instagram_pattern = '/^((http(s)?:\/\/)?(w{3}\.)?)?(instagram.com\/){1}.*/';
+
+            $communityLinkList = $this->getDoctrine()->getRepository('AppBundle:CommunityLink')->findBy(array('community'=>$community->getId()));
+            foreach ($communityLinkList as &$communityLink) {
+                if(preg_match($facebook_pattern,$communityLink->getLink())){
+                    $data['facebook'] = $communityLink->getLink();
+                }else if(preg_match($twitter_pattern,$communityLink->getLink())){
+                    $data['twitter'] = $communityLink->getLink();
+                }else if(preg_match($instagram_pattern,$communityLink->getLink())){
+                    $data['instagram'] = $communityLink->getLink();
+                }
+            }
+
+
+//            $this->getDoctrine()->getManager()->persist();
+//            $this->getDoctrine()->getManager()->flush();
+
+            $data['id'] = $community->getId();
+            $data['name'] = $community->getName();
+            $data['facebookEvents'] = $data['facebook'].'events';
+
+
+//            $ch = curl_init();
+//            curl_setopt($ch, CURLOPT_URL, $data['facebookEvents']);
+//            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+//            $response = curl_exec($ch);
+//            $data['facebookEventsRespond'] = $response;
+
+            // -- 2.2 -- Return Result
+            $response->setContent(json_encode(Result::$SUCCESS->setContent( $data )));
+            return $response;
+
+        }catch (\Exception $ex){
+            // content == "Unexpected Error"
+            $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent($ex)));
+            return $response;
+        }
+
+        // -- 3 -- Set & Return value
+        $response->setContent(json_encode(Result::$SUCCESS_EMPTY));
+        return $response;
+
+    }
 
 
     /*******************************************************************************************************************

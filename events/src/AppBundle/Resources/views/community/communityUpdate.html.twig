@@ -52,7 +52,33 @@
 
             <div class="row">
 
-                <div class="col-md-6">
+
+                <!-- -- COMMUNITY BACKGROUND IMAGE -- -->
+                <div class="col-md-7">
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Community Background Image</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+
+                            <!-- event Image -->
+                            <div class="form-group">
+                                <label>Event Image</label>
+                                <input id="temp_img_background_loader" type='file'>
+                                <img id="img_background_viewer" height="150" src="{{ community.imageBackgroundBase64 }}">
+                            </div>
+
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.column -->
+
+
+                <!-- -- COMMUNITY LINKS -- -->
+                <div class="col-md-5">
                     <div class="box box-info">
                         <div class="box-header with-border">
                             <h3 class="box-title">Community Social Network Links</h3>
@@ -139,6 +165,12 @@
                                     <input type="text" class="form-control" id="community_image_base64" name="community_image_base64" style="display: none;" value="{{ community.imageBase64 }}">
                                 </div>
 
+                                <!-- Community Background Image -->
+                                <div class="form-group" style="display: none;">
+                                    <label>Community Image (Base64)</label>
+                                    <input type="text" class="form-control" id="community_image_background_base64" name="community_image_background_base64" value="{{ community.imageBackgroundBase64 }}">
+                                </div>
+
                                 <button type="submit">Update !</button>
                             </form>
                             {#{{ form_end(form) }}#}
@@ -170,14 +202,16 @@
 /***********************************************************************************************************************
  *                                          UTIL FUNCTIONS
  **********************************************************************************************************************/
-        function fileToBase64Converter() {
-            if (this.files && this.files[0]) {
+
+        function fileToBase64Converter(eventTargetElement, targetImgElementId, targetImgBase64ElementId) {
+
+            if (eventTargetElement.files && eventTargetElement.files[0]) {
                 var FR= new FileReader();
                 FR.onload = function(e) {
-                    $('#img_viewer').attr('src', e.target.result);
-                    $('#community_image_base64').val(e.target.result);
+                    $(targetImgElementId).attr('src', e.target.result);
+                    $(targetImgBase64ElementId).val(e.target.result);
                 };
-                FR.readAsDataURL( this.files[0] );
+                FR.readAsDataURL( eventTargetElement.files[0] );
             }
         }
 
@@ -285,12 +319,19 @@
             ajaxDeleteCommunityLink($(event.target).attr('value'),$(event.target).parentsUntil('tr').last().parent());
         });
 
+        // -- File to base64
+        $(document).on('change' , '#temp_img_loader' , function (e) {
+            fileToBase64Converter(e.target ,'#img_viewer', '#community_image_base64');
+        });
+
+        $(document).on('change' , '#temp_img_background_loader' , function (e) {
+            fileToBase64Converter(e.target ,'#img_background_viewer', '#community_image_background_base64');
+        });
+
 
 /***********************************************************************************************************************
  *                                          DOCUMENT ON READY
  **********************************************************************************************************************/
-        // -- File to base64
-        document.getElementById("temp_img_loader").addEventListener("change", fileToBase64Converter, false);
 
 
     </script>

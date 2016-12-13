@@ -40,11 +40,16 @@
             <div class="community-content col-md-10">
 
                 <div class="community-content-header">
-                    {#<img src="assets/img/community/guppy_bilkent_banner_01.jpg" alt="Mizah Kültür Arkaplan" class="img-responsive" />#}
 
-                    {% image 'theme/assets/img/guppy_bilkent_banner_01.jpg' %}
-                        <img src="{{ asset_url }}" class="img-responsive" alt="User Image" />
-                    {% endimage %}
+                    {% if community.imageBackgroundBase64 %}
+                        <img src="{{ community.imageBackgroundBase64 }}" alt="{{ community.name }}" class="img-responsive" />
+                    {% else %}
+                        {% image 'theme/assets/img/guppy_bilkent_banner_01.jpg' %}
+                        <img src="{{ asset_url }}" class="img-responsive" alt="{{ community.name }}" />
+                        {% endimage %}
+                    {% endif %}
+
+                    <span class="community-content-header-edit"><i class="fa fa-cog" aria-hidden="true"></i></span>
                 </div>
 
 
@@ -91,3 +96,54 @@
 
 {% endblock %}
 
+
+
+
+{% block javascriptcontent %}
+    <script>
+
+/***********************************************************************************************************************
+ *                                          GLOBAL VARIABLE
+ **********************************************************************************************************************/
+        var debugMode = true;
+
+
+/***********************************************************************************************************************
+ *                                          UTIL FUNCTIONS
+ **********************************************************************************************************************/
+
+        function fileToBase64Converter() {
+            if (this.files && this.files[0]) {
+                var FR= new FileReader();
+                FR.onload = function(e) {
+                    $('#img_viewer').attr('src', e.target.result);
+                    $('#university_image_base64').val(e.target.result);
+                };
+                FR.readAsDataURL( this.files[0] );
+            }
+        }
+
+/***********************************************************************************************************************
+ *                                          AJAX OPERATIONS
+ **********************************************************************************************************************/
+
+
+/***********************************************************************************************************************
+ *                                          EVENTS
+ **********************************************************************************************************************/
+
+        $(document).on('click', '.community-content-header-edit i' , function (event) {
+            alert("Kulüp yöneticisi arkaplan resmini buradan değiştirebilecek...");
+        });
+
+/***********************************************************************************************************************
+ *                                          DOCUMENT ON READY
+ **********************************************************************************************************************/
+
+        // -- File to base64
+        // document.getElementById("temp_img_loader").addEventListener("change", fileToBase64Converter, false);
+
+
+    </script>
+
+{% endblock %}

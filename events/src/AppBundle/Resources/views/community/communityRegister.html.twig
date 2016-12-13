@@ -21,6 +21,29 @@
             <div class="row">
 
 
+                <!-- -- PAGE CONTENT IMAGE -- -->
+                <div class="col-md-12">
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Community Background Image</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+
+                            <!-- event Image -->
+                            <div class="form-group">
+                                <label>Event Image</label>
+                                <input id="temp_img_background_loader" type='file'>
+                                <img id="img_background_viewer" height="150">
+                            </div>
+
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.column -->
+
                 <div class="col-md-12">
                     <div class="box box-info">
                         <div class="box-header with-border">
@@ -59,6 +82,12 @@
                                     <input id="temp_img_loader" type='file'>
                                     <img id="img_viewer" height="150">
                                     <input type="text" class="form-control" id="community_image_base64" name="community_image_base64" style="display: none;">
+                                </div>
+
+                                <!-- Community Background Image -->
+                                <div class="form-group" style="display: none;">
+                                    <label>Community Image (Base64)</label>
+                                    <input type="text" class="form-control" id="community_image_background_base64" name="community_image_background_base64">
                                 </div>
 
                                 <button type="submit">Register!</button>
@@ -142,14 +171,15 @@
             return true;
         }
 
-        function fileToBase64Converter() {
-            if (this.files && this.files[0]) {
+        function fileToBase64Converter(eventTargetElement, targetImgElementId, targetImgBase64ElementId) {
+
+            if (eventTargetElement.files && eventTargetElement.files[0]) {
                 var FR= new FileReader();
                 FR.onload = function(e) {
-                    $('#img_viewer').attr('src', e.target.result);
-                    $('#community_image_base64').val(e.target.result);
+                    $(targetImgElementId).attr('src', e.target.result);
+                    $(targetImgBase64ElementId).val(e.target.result);
                 };
-                FR.readAsDataURL( this.files[0] );
+                FR.readAsDataURL( eventTargetElement.files[0] );
             }
         }
 
@@ -158,21 +188,25 @@
  **********************************************************************************************************************/
 
         $( "#community_submit" ).submit(function( event ) {
-
-
             if(!checkCommunity()){
                 alert( "Form not valid" );
                 event.preventDefault();
             }
+        });
 
+        // -- File to base64
+        $(document).on('change' , '#temp_img_loader' , function (e) {
+            fileToBase64Converter(e.target ,'#img_viewer', '#community_image_base64');
+        });
+
+        $(document).on('change' , '#temp_img_background_loader' , function (e) {
+            fileToBase64Converter(e.target ,'#img_background_viewer', '#community_image_background_base64');
         });
 
 /***********************************************************************************************************************
  *                                          DOCUMENT ON READY
  **********************************************************************************************************************/
 
-        // -- File to base64
-        document.getElementById("temp_img_loader").addEventListener("change", fileToBase64Converter, false);
 
     </script>
 {% endblock %}
