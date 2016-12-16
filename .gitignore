@@ -67,4 +67,4 @@ events/composer.phar
 #########################################
 events/vagrant/.vagrant/*
 /events/vagrant/.vagrant/machines/*
-
+events/vagrant/puphpet/files/dot/ssh/*
