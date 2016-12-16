@@ -1,0 +1,12 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host: local.guppy.com.tr
+    database_port: null
+    database_name: GuppyEventHub
+    database_user: guppy
+    database_password: guppy
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null
+    secret: c51ac6d858ae74fd291b27cd95ccd178c08d5e72

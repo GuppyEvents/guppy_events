@@ -30,23 +30,23 @@ events/var/sessions/*
 !var/sessions/.gitkeep
 
 # Parameters
-events/app/config/parameters.yml
-events/app/config/parameters.ini
+# events/app/config/parameters.yml
+# events/app/config/parameters.ini
 
 # Managed by Composer
 events/app/bootstrap.php.cache
 events/var/bootstrap.php.cache
-events/bin/*
 !bin/console
 !bin/symfony_requirements
-events/vendor/
+# events/vendor/
+# events/bin/*
 
 # Assets and user uploads
-events/web/bundles/
+# events/web/bundles/
 events/web/uploads/
 
 # Assets managed by Bower
-events/web/assets/vendor/
+# events/web/assets/vendor/
 
 # PHPUnit
 events/app/phpunit.xml
