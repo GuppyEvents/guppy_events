@@ -283,3 +283,121 @@
     box-sizing: border-box;
     text-align: center;
 }
+
+/* ----------------------------------------------------------------------------
+    Event Page Header
+---------------------------------------------------------------------------- */
+body{
+    background: #F8F8FA;
+}
+.event-content {
+    position: relative;
+    top: 40px;
+    background: #FFFFFF;
+    padding-left: 0px;
+    padding-right: 0px;
+    box-shadow: 1px 1px 15px #888888;
+    border-radius: 10px;
+}
+
+.event-content .event-content-header .event-content-header-image{
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.event-content-header-image{
+    height: 100%;
+}
+.event-content-header-image > img{
+    height: 100%;
+    width: 100%;
+}
+.event-content-header{
+    height: 360px;
+}
+.event-content-header-detail{
+    height: 100%;
+}
+.event-content .event-content-header .event-content-header-detail {
+    border-top-right-radius: 4px;
+    background-color: #F9F3E9;
+}
+
+.event-content-header-time{
+    left: 20px;
+    top: 20px;
+    position: relative;
+    width: 0px;
+    height: 100px;
+}
+
+.event-content-header-time-month{
+    font-size: 20px;
+    height: 20px;
+}
+.event-content-header-time-day{
+    font-size: 30px;
+}
+
+.event-content-header-title{
+    padding-left:20px;
+    font-size: 30px;
+    text-align: left;
+    font-weight: 400;
+    color: black;
+    line-height: normal;
+
+}
+.event-content-header-owner{
+    text-align: left;
+    padding-left: 22px;
+    padding-top: 2px;
+}
+.event-content-header-price{
+    position: absolute;
+    bottom: 10px;
+    padding-left: 20px;
+}
+
+.event-content-body-description{
+    padding-top: 70px;
+    background: #FFFFFF;
+}
+.event-content-body-description-date{
+    padding-left: 200px;
+    padding-top: 70px;
+    background: #FFFFFF;
+}
+.event-content-body-description-location{
+    padding-left: 200px;
+    padding-top: 70px;
+    background: #FFFFFF;
+}
+
+h6{
+    font-size: 20px;
+    font-weight: 500;
+}
+.event-content-body-map{
+    padding-left: 0px;
+    padding-right: 0px;
+}
+.event-content-body-map > img{
+    width: 100%;
+}
+
+.event-share-register > a{
+    background: green;
+}
+
+.blurred-header{
+    width: 100%;
+    height: 400px;
+    position: absolute;
+}
+.blurred-header > img{
+    width: 100%;
+    height: 100%;
+    -webkit-filter: blur(25px); /* Safari 6.0 - 9.0 */
+    filter: blur(25px);
+}

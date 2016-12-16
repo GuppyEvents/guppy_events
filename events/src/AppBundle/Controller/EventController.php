@@ -22,6 +22,22 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 class EventController extends Controller
 {
 
+
+    /**
+     * @Route("/h/{eventId}", name="user_event_mainpage")
+     */
+    public function eventMainPageAction($eventId)
+    {
+        $data = array();
+
+        $event = $this->getDoctrine()->getRepository('AppBundle:Event')->find($eventId);
+
+        $data['event'] = $event;
+
+        return $this->render('AppBundle:event:eventMain.html.twig' , $data);
+    }
+
+
     /**
      * @Route("/list", name="event_list")
      * @Security("has_role('ROLE_USER')")

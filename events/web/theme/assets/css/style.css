@@ -6973,7 +6973,7 @@ button[type="submit"] .loading {
 .footer {
   padding: 50px 0 0;
   color: #ffffff;
-  background-color: #262627;
+  /* background-color: #262627; */
 }
 .footer-base {
   padding: 40px 0 30px;

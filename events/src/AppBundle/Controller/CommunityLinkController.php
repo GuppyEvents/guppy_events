@@ -31,7 +31,7 @@ class CommunityLinkController extends Controller
      * @Route("/add", name="community_link_add")
      * @Security("has_role('ROLE_ADMIN')")
      */
-    public function addMailServer(Request $request){
+    public function addCommunityLink(Request $request){
 
         // -- 1 -- Initialization
             $response = new Response();
@@ -77,7 +77,7 @@ class CommunityLinkController extends Controller
      * @Route("/remove", name="community_link_remove")
      * @Security("has_role('ROLE_ADMIN')")
      */
-    public function removeMailServer(Request $request){
+    public function removeCommunityLink(Request $request){
 
         // -- 1 -- Initialization
         $response = new Response();
@@ -115,6 +115,37 @@ class CommunityLinkController extends Controller
         $response->setContent(json_encode(Result::$SUCCESS_EMPTY));
         return $response;
 
+    }
+
+
+    /**
+     * @Route("/list", name="community_link_list")
+     * @Security("has_role('ROLE_ADMIN')")
+     */
+    public function listCommunityLinks(Request $request){
+
+        // -- 1 -- Initialization
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+
+        // -- 2 -- Try to Get Community Link List
+        try{
+
+            $distinctCommunityLinkType = $this->getDoctrine()->getRepository('AppBundle:CommunityLink')->findCommunityLinkTypeList();
+
+            // -- 2.2 -- Return Result
+            $response->setContent(json_encode(Result::$SUCCESS->setContent( $distinctCommunityLinkType )));
+            return $response;
+
+        }catch (\Exception $ex){
+            // content == "Unexpected Error"
+            $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent($ex)));
+            return $response;
+        }
+
+        // -- 3 -- Set & Return value
+        $response->setContent(json_encode(Result::$SUCCESS_EMPTY));
+        return $response;
     }
 
 }

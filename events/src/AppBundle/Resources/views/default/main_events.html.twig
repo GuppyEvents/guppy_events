@@ -1,0 +1,98 @@
+{% extends 'AppBundle::main_base.html.twig' %}
+
+{% block title %}Guppy - Events Page{% endblock %}
+
+{% block content %}
+
+    <div class="preloader-mask">
+        <div class="preloader"></div>
+    </div>
+
+    <section class="section align-center">
+        <div class="container">
+            <h5 class="heading-alt">Yaklaşan Etkinlikler</h5>
+
+            <!-- Schedule start -->
+            <div class="schedule">
+
+                <!-- Navigation by day start -->
+                <div class="nav-wrapper">
+                    <ul class="nav nav-schedule">
+                        <li class="active"><a href="#schedule_{{ weekStartDate|date('Ymd') }}" data-toggle="tab"><h5 class="highlight">{{ weekStartDate|date('l') }}</h5><p class="text-alt">{{ weekStartDate|date('d/m/Y') }}</p></a></li>
+                        <li><a href="#schedule_{{ weekStartDate|date_modify('+1 day')|date('Ymd') }}" data-toggle="tab"><h5 class="highlight">{{ weekStartDate|date_modify("+1 day")|date('l') }}</h5><p class="text-alt">{{ weekStartDate|date_modify("+1 day")|date('d/m/Y') }}</p></a></li>
+                        <li><a href="#schedule_{{ weekStartDate|date_modify('+2 day')|date('Ymd') }}" data-toggle="tab"><h5 class="highlight">{{ weekStartDate|date_modify("+2 day")|date('l') }}</h5><p class="text-alt">{{ weekStartDate|date_modify("+2 day")|date('d/m/Y') }}</p></a></li>
+                        <li><a href="#schedule_{{ weekStartDate|date_modify('+3 day')|date('Ymd') }}" data-toggle="tab"><h5 class="highlight">{{ weekStartDate|date_modify("+3 day")|date('l') }}</h5><p class="text-alt">{{ weekStartDate|date_modify("+3 day")|date('d/m/Y') }}</p></a></li>
+                        <li><a href="#schedule_{{ weekStartDate|date_modify('+4 day')|date('Ymd') }}" data-toggle="tab"><h5 class="highlight">{{ weekStartDate|date_modify("+4 day")|date('l') }}</h5><p class="text-alt">{{ weekStartDate|date_modify("+4 day")|date('d/m/Y') }}</p></a></li>
+                        <li><a href="#schedule_{{ weekStartDate|date_modify('+5 day')|date('Ymd') }}" data-toggle="tab"><h5 class="highlight">{{ weekStartDate|date_modify("+5 day")|date('l') }}</h5><p class="text-alt">{{ weekStartDate|date_modify("+5 day")|date('d/m/Y') }}</p></a></li>
+                        <li><a href="#schedule_{{ weekStartDate|date_modify('+6 day')|date('Ymd') }}" data-toggle="tab"><h5 class="highlight">{{ weekStartDate|date_modify("+6 day")|date('l') }}</h5><p class="text-alt">{{ weekStartDate|date_modify("+6 day")|date('d/m/Y') }}</p></a></li>
+                    </ul>
+                </div>
+                <!-- Navigation by day end -->
+
+                <!-- First level content start -->
+                <div class="tab-content">
+
+                    {% set isFirstDayActive = 0 %}
+                    {% for weekday in range(weekStartDate|date('U'), weekStartDate|date_modify("+6 day")|date('U'), 86400 ) %}
+                        {% set eventCountInDay = 0 %}
+
+                        <div id="schedule_{{ date(weekday)|date('Ymd') }}" class="tab-pane fade in {% if isFirstDayActive==0 %}{% set isFirstDayActive=1 %}active {% endif %}">
+                            <div class="nav-wrapper"><span class="nav-current">Ankara</span>
+                                <ul class="nav nav-schedule">
+                                    <li class="active"><a href="#scheduleday_{{ date(weekday)|date('Ymd') }}" data-toggle="tab">Bilkent</a></li>
+                                </ul>
+                            </div>
+
+                            <div class="tab-content tab-content-schedule">
+                                <div id="scheduleday_{{ date(weekday)|date('Ymd') }}" class="tab-pane fade active in">
+
+                                    <!-- Accordion start -->
+                                    <div class="panel-group" id="scheduleday_timeline_{{ date(weekday)|date('Ymd') }} }}">
+
+                                        {% for event in eventList %}
+                                            {% if date(event.startDate) >= date(weekday) and date(event.startDate) < date(weekday)|date_modify("+1 day") %}
+                                                {% set eventCountInDay = eventCountInDay + 1 %}
+
+                                                <!-- Event start -->
+                                                <div class="panel schedule-item">
+                                                    <div class="lecture-icon-wrapper">
+                                                        <img src="{{ event.communityUser.community.imageBase64 }}" alt="" class="img-responsive">
+                                                    </div>
+                                                    <a data-toggle="collapse" data-parent="#scheduleday_timeline_{{ date(weekday)|date('Ymd') }}" href="#bilkent_day_time{{ event.id }}" class="schedule-item-toggle collapsed">
+                                                        <strong class="time highlight"><span class="icon icon-office-24"></span>00:00 PM</strong>
+                                                        <h6 class="title">{{ event.title }}</h6>
+                                                    </a>
+                                                    <div id="bilkent_day_time{{ event.id }}" class="panel-collapse collapse schedule-item-body">
+                                                        <article>
+                                                            <p class="description">{{ event.description }}</p>
+                                                            <strong class="highlight speaker-name">{{ event.communityUser.community.name }}</strong>
+                                                        </article>
+                                                    </div>
+                                                </div>
+                                                <!-- Event end -->
+
+                                            {% endif %}
+                                        {% endfor %}
+
+                                        {% if eventCountInDay == 0 %}
+                                            <!-- Event not found  -->
+                                            <div class="panel schedule-item">Bugün için herhangi bir etkinlik bulunmamaktadır :( </div>
+                                        {% endif %}
+
+                                    </div>
+                                    <!-- Accordion end -->
+
+                                </div>
+                            </div>
+                        </div>
+
+                    {% endfor %}
+                </div>
+
+            </div>
+            <!-- Schedule end -->
+
+        </div>
+    </section>
+
+{% endblock %}

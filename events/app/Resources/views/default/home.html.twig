@@ -52,9 +52,12 @@
                         <p class="text-alt"><small>{{ community.university.name }}</small></p>
                         {#<p class="about">{{ community.description }}</p>#}
                         <ul class="speaker-socials">
-                            <li><a href="#"><span class="fa fa-facebook" aria-hidden="true"></span></a></li>
-                            <li><a href="#"><span class="fa fa-twitter"></span></a></li>
-                            <li><a href="#"><span class="fa fa-google-plus"></span></a></li>
+
+                            <li><a href="{% if community.link_facebook %}{{ community.link_facebook.link }}{% endif %}"><span class="fa fa-facebook" aria-hidden="true"></span></a></li>
+                            <li><a href="{% if community.link_twitter %}{{ community.link_twitter.link }}{% endif %}"><span class="fa fa-twitter"></span></a></li>
+                            <li><a href="{% if community.link_instagram %}{{ community.link_instagram.link }}{% endif %}"><span class="fa fa-instagram"></span></a></li>
+                            {#<li><a href="#"><span class="fa fa-google-plus"></span></a></li>#}
+
                         </ul>
                     </div>
                 </div>

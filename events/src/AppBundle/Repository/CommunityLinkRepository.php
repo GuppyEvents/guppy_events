@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\CommunityLink;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -11,4 +12,34 @@ use Doctrine\ORM\EntityRepository;
  */
 class CommunityLinkRepository extends EntityRepository
 {
+    /**
+     *
+     * @param array $communityIdList The community id list
+     * @return CommunityLink|null
+     */
+    public function findCommunityLinksByCommunityIdList($communityIdList)
+    {
+        return $this->createQueryBuilder('communityLinks')
+            ->join('communityLinks.community', 'community')
+            ->where('community.id IN (:communityIdList)')
+            ->setParameter('communityIdList', $communityIdList)
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    /**
+     *
+     * @return array|null
+     */
+    public function findCommunityLinkTypeList()
+    {
+        return $this->createQueryBuilder('communityLinks')
+            ->select('communityLinks.linkType')
+            ->where('communityLinks.linkType is not null')
+            ->distinct()
+            ->getQuery()
+            ->getResult();
+    }
+
 }

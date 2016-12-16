@@ -1,0 +1,53 @@
+{% extends 'AppBundle::main_base.html.twig' %}
+
+{% block title %}Guppy - Community List{% endblock %}
+
+{% block content %}
+
+    <div class="preloader-mask">
+        <div class="preloader"></div>
+    </div>
+
+    <section id="clubs" class="section align-center">
+        <div class="container">
+
+            <div class="container-header">
+                {#<div class="container-header-button">#}
+                    {#<a href="#" class="btn btn-black btn-sm">Grid</a>#}
+                    {#<a href="#" class="btn btn-black btn-sm">List</a>#}
+                {#</div>#}
+                <h5 class="heading-alt">Kayıtlı Kulüpler</h5>
+                <br>
+            </div>
+
+            {% for community in communities %}
+                <div class="col-sm-2 guppy-main-page-community-box">
+                    <div class="society guppy-main-page-community-box-content">
+                        <div class="photo-wrapper rounded">
+                            {% image 'upload/default-gallery1.jpg' %}
+                                {% if community.imageBase64 %}
+                                    <img src="{{ community.imageBase64 }}" alt="Community" class="img-responsive" />
+                                {% else %}
+                                    <img src="{{ asset_url }}" alt="Community" class="img-responsive" />
+                                {% endif %}
+                            {% endimage %}
+                        </div>
+                        <h3 class="name"><a href="{{ path("user_community_homepage" , {'communityId': community.id}) }}">{{ community.name }}</a></h3>
+                        <p class="text-alt"><small>{{ community.university.name }}</small></p>
+                        {#<p class="about">{{ community.description }}</p>#}
+                        <ul class="speaker-socials">
+
+                            <li><a href="{% if community.link_facebook %}{{ community.link_facebook.link }}{% endif %}"><span class="fa fa-facebook" aria-hidden="true"></span></a></li>
+                            <li><a href="{% if community.link_twitter %}{{ community.link_twitter.link }}{% endif %}"><span class="fa fa-twitter"></span></a></li>
+                            <li><a href="{% if community.link_instagram %}{{ community.link_instagram.link }}{% endif %}"><span class="fa fa-instagram"></span></a></li>
+                            {#<li><a href="#"><span class="fa fa-google-plus"></span></a></li>#}
+
+                        </ul>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+    </section>
+
+{% endblock %}

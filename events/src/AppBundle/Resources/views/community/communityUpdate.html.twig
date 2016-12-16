@@ -15,7 +15,8 @@
                     <h4 class="modal-title">Community Add Link Modal</h4>
                 </div>
                 <div class="modal-body">
-                    <input id="community_new_link" type="text" class="form-control" placeholder="Enter Community Link Address (https://www.facebook.com/mizahkultur/) ">
+                    <select id="social_network" name="social_network"></select>
+                    <input id="community_new_link" type="text" placeholder="Enter Community Link Address (https://www.facebook.com/mizahkultur/)" style="width: 300px;">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
@@ -307,6 +308,45 @@
         }
 
 
+        function ajaxGetSocialNetworks(){
+
+            // -- 1 --
+            // open alert box to inform user
+
+            // -- 2 --
+            // ajax call
+            $.post("{{ path('social_network_list') }}" ,{
+
+            }).always(function(){
+
+            }).done(function(data){
+
+                // -- 2.1 -- CONSOLE
+                if(debugMode)
+                    console.log(data);
+
+                // -- 2.2 -- sonuc düzenlenir
+                if(data.resultText == 'SUCCESS'){
+
+                    // -- 2.2.1 -- insert new options
+                    data.content.forEach(function(socialNetwork) {
+                        $('#social_network').append($('<option>', {
+                            value: socialNetwork['id'],
+                            text: socialNetwork['name']
+                        }));
+                    });
+
+                }else if(data.resultText == 'SUCCESS_EMPTY'){
+                    alert('Warning -- ' + ' SUCCESS_EMPTY');
+                }else if(data.resultText == 'FAILURE_PERMISSION'){
+                    alert('Warning -- ' + ' you are not authorization for this operation');
+                }else{
+                    alert('Warning -- ' + ' error occured while getting social network list');
+                }
+            });
+        }
+
+
 /***********************************************************************************************************************
  *                                          EVENTS
  **********************************************************************************************************************/
@@ -332,6 +372,8 @@
 /***********************************************************************************************************************
  *                                          DOCUMENT ON READY
  **********************************************************************************************************************/
+
+        ajaxGetSocialNetworks();
 
 
     </script>

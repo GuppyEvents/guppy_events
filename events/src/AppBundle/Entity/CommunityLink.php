@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CommunityLink
  *
- * @ORM\Table(name="community_link", uniqueConstraints={@ORM\UniqueConstraint(name="id_UNIQUE", columns={"id"})}, indexes={@ORM\Index(name="community_link_community_idx", columns={"community_id"})})
+ * @ORM\Table(name="community_link", uniqueConstraints={@ORM\UniqueConstraint(name="id_UNIQUE", columns={"id"})}, indexes={@ORM\Index(name="community_link_community_idx", columns={"community_id"}) , @ORM\Index(name="community_link_social_network_idx", columns={"social_network_id"})})
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CommunityLinkRepository")
  */
 class CommunityLink
@@ -30,6 +30,13 @@ class CommunityLink
     private $link;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="link_type", type="string", length=255, nullable=true)
+     */
+    private $linkType;
+
+    /**
      * @var \AppBundle\Entity\Community
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Community")
@@ -38,6 +45,16 @@ class CommunityLink
      * })
      */
     private $community;
+
+    /**
+     * @var \AppBundle\Entity\SocialNetwork
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SocialNetwork")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="social_network_id", referencedColumnName="id", nullable=true)
+     * })
+     */
+    private $socialNetwork;
 
     /**
      * Get id
@@ -66,6 +83,22 @@ class CommunityLink
     }
 
     /**
+     * @return string
+     */
+    public function getLinkType()
+    {
+        return $this->linkType;
+    }
+
+    /**
+     * @param string $linkType
+     */
+    public function setLinkType($linkType)
+    {
+        $this->linkType = $linkType;
+    }
+
+    /**
      * Set community
      *
      * @param \AppBundle\Entity\Community $community
@@ -86,5 +119,21 @@ class CommunityLink
     public function getCommunity()
     {
         return $this->community;
+    }
+
+    /**
+     * @return SocialNetwork
+     */
+    public function getSocialNetwork()
+    {
+        return $this->socialNetwork;
+    }
+
+    /**
+     * @param SocialNetwork $socialNetwork
+     */
+    public function setSocialNetwork($socialNetwork)
+    {
+        $this->socialNetwork = $socialNetwork;
     }
 }

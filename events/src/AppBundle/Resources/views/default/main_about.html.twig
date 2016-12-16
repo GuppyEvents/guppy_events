@@ -1,0 +1,237 @@
+{% extends 'AppBundle::main_base.html.twig' %}
+
+{% block title %}Guppy - About{% endblock %}
+
+
+{% block content %}
+
+    <!-- --------------------------------------------- -->
+    <!-- ------------------ CONTENT ------------------ -->
+    <!-- --------------------------------------------- -->
+
+    <section id="about" class="section align-center">
+        <div class="container">
+            <span class="icon section-icon fa fa-calendar "></span>
+            <h3>Etkinlik Ağı Projesi</h3>
+            <p class="text-alt">Etkinlik ağı ile bireylerin topluluklarlar iletişimi artık daha kolay...</p>
+            <br />
+            <br />
+
+            <div class="tabs-wrapper tabs-horizontal">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#horizontal_tab1" data-toggle="tab">
+                            <h6 class="heading-alt"><span class="fa fa-code"></span> Genel Bilgi</h6>
+                        </a></li>
+                    <li><a href="#horizontal_tab2" data-toggle="tab">
+                            <h6 class="heading-alt"><span class="fa fa-rocket"></span>Kullanılan Yapı</h6>
+                        </a></li>
+                    <li><a href="#horizontal_tab3" data-toggle="tab">
+                            <h6 class="heading-alt"><span class="fa fa-external-link"></span> Teklif Edilen Yapı</h6>
+                        </a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div id="horizontal_tab1" class="tab-pane fade active in">
+                        <div class="col-sm-5 img-column">
+                            {% image 'theme/assets/img/guppy_about_image_01.jpg' %}
+                                <img src="{{ asset_url }}" alt="Guppy Icon" class="img-responsive" style="border-radius: 5px;" />
+                            {% endimage %}
+                        </div>
+                        <div class="col-sm-7 align-left">
+                            <h6>Proje Hakkında</h6>
+                            <p>Bilkent üniversitesinde  <a href="http://www.bilkent.edu.tr/bilkent-tr/admin-unit/dos/okk/kulupler.html">100’ün üzerinde kulüp</a> bulunmaktadır. Bu kulüpler dönem içerisinde birçok etkinlikler (veya toplantılar) düzenlemektedir ve düzenledikleri bu etkinlikleri farklı şekillerde duyurmaktadırlar. Duyurulan etkinlikler katılımcılar tarafından afişler üzerinden veya sosyal ağlardan öğrenilmektedir. Sosyal ağlarda hesabı olmayan öğrencilerin bir kulübün <strong>etkinliklerini takip etmesi oldukça zordur</strong>. Hesabı olsa bile öğrenciler bu 100 kulübün büyük bir çoğunluğundan haberdar olmadıklarından, bu kulüplerin yaptıkları ekinliklerden de haberleri olmayacaktır.</p>
+                            <p>Proje, öncelik olarak Bilkent Üniversitesini hedeflemiş de olsa hedeflerimiz arasında üniversiteler arasında kulüplerin etkileşimlerini arttırmak da bulunmaktadır. Farklı üniversitelerdeki benzer kulüplerin ortak etkinlikler yapması şuan ki sistemde kolay değildir. (ESN gibi büyük kulüpler ancak başarabilmektedir)</p>
+                            <p>Bu gibi sebeplerden dolayı projenin hedefi, öğrenci-kulüp ve kulüp-kulüp ilişkilerini arttırmaktır.</p>
+
+                        </div>
+                    </div>
+
+                    <div id="horizontal_tab2" class="tab-pane fade">
+                        <div class="col-sm-7 align-left">
+                            <h6>Kullanılan Yapı</h6>
+                            <p>Kulüpler, etkinliklerinin tanıtımlarını genel olarak 3 şekilde yapmaktadırlar.</p>
+                            <ol>
+                                <li style="padding-left:3em"> - BAIS</li>
+                                <li style="padding-left:3em"> - Sosyal ağlar</li>
+                                <li style="padding-left:3em"> - Sub Domain</li>
+                            </ol>
+                            <p>Kulüpler, düzenledikleri etkinlikleri, Bilkent Üniversitesi <strong>BAIS</strong> sistemi ile öğrencilerin mail adreslerine yollanmaktadır. Tabi bu işlem için kulüp yönetimi okula etkinlik bilgilerini vermesi gerekmektedir.</p>
+                            <p>Kulüplerin, etkinliklerini duyurma yöntemlerinden bir diğeri de <strong>sosyal ağlardır</strong>. Sosyal ağlara oluşturdukları etkinlikleri tek tek koymak zorunda kalmaktadırlar. Sosyal ağlardan biri olan facebook’u ele aldığımızda facebook üzerinden grup oluşturma ve grup içerisinde bir event tanımlanabilmektedir. Facebook grupları kulüplere birçok özellik sağlamış olmasına karşın etkinliğe katılacak  olan kişiler açısından klubün varlığını bile kimi zaman bilinemeyebiliyor. Bilinse bile aynı isimlerde birden fazla grup olabilmektedir. Daha öncede belirtildiği gibi 100’ün üstünde kulüp bulunmaktadır ve bunları takibi öğrenciler için oldukça zordur. </p>
+                            <p>Öğrenciler, toplulukları ve kulüpleri üniversitelerin kulüp/topluluk listelerinden alıp sosyal medyalarda incelemektedirler. Bununla beraber hangi kulübün hangi tarihlerde etkinliklerinin olduğunu tek bir sayfa üzerinden görememektedir.</p>
+                            <p>Bilkent üniversitesi, kulüplere kendilerini tanıtabilecekleri veya etkinliklerini duyurabilecekleri <strong>sub domain</strong> sağlamaktadır. Her ne kadar bu güzel bir şey gibi gözükse de kulüp içerisinde web sitelerini yönetebilecek özelliklerde üyeler olmayabilir. </p>
+                            <p>Bunlar Bilkent gibi bir üniversitede yaşanan sorunlardan bazılarıdır. ODTU’de kulüplerin etkinliklerini paylaşabilecekleri kişisel web sitesi bulunmaktadır. Ancak bu sistemdeki en büyük eksik kulüplerin <strong>diğer üniversitedeki kulüplerle etkileşimlerini</strong> sağlayacak bir ortamı bulundurmamasıdır.</p>
+                        </div>
+
+                        <div class="col-sm-5 img-column">
+                            {% image 'theme/assets/img/guppy_about_current_system_001.jpg' %}
+                                <img src="{{ asset_url }}" class="img-responsive" style="border-radius: 5px;" />
+                            {% endimage %}
+                        </div>
+                    </div>
+
+                    <div id="horizontal_tab3" class="tab-pane fade">
+                        <div class="col-sm-5 img-column">
+                            {% image 'theme/assets/img/guppy_about_proposed_system_001.png' %}
+                                <img src="{{ asset_url }}" class="img-responsive" style="border-radius: 5px;" />
+                            {% endimage %}
+                        </div>
+                        <div class="col-sm-7 align-left">
+                            <h6>Teklifimiz</h6>
+                            <p>Kulüplerin etkinliklerini ve kendilerini tanıtma yöntemlerinin farklı yerlerde olması kulüp yönetimi, üyeler ve kulüp etkinliklerine davet edilen kişiler için zorlayıcıdır. Bu sebepten dolayı current system de belirtilen farklı yapıların birleştirilmesi ve tek bir yerde toplanması hedeflenmektedir. Böylelikle sistem hem kulüp üyelerine hemde kulübü takip edenlere kolaylık sağlayacaktır.</p>
+
+                            <h7><strong>Kulübe Faydaları</strong></h7>
+                            <ul>
+                                <li style="padding-left:3em">Öğrencilere mail atma, sosyal medyada paylaşma gibi özellikler tek bir yerden sağlanacaktır.</li>
+                                <li style="padding-left:3em">Kulüplerin kendi web sayfalarını hazırlamasına gerek kalmayacaktır. Çünkü sistem üzerinde kulüplerin özelleştirilebilir sayfaları olacaktır.</li>
+                                <li style="padding-left:3em">Kulüple yapılan etkinlikler sonrası kişiler resim ve yorum paylaşabilecekler. Paylaşılan bu yorum ve resimler yayınlanmadan önce kulüp yöneticileri tarafından onaylanacaktır</li>
+                                <li style="padding-left:3em">Diğer üniversitelerdeki benzer kulüplerle iletişimi arttırmaya yardımcı olacak ve ortak etkinlikler düzenlemelerine olanak sağlayacaktır</li>
+                            </ul>
+
+                            <h7><strong>Kulüp takipçilerine faydaları</strong></h7>
+                            <ul>
+                                <li style="padding-left:3em">Üniversite içerisindeki tüm kulüplere ulaşabilecek (bilinmeyen kulüplerin bilinmesi sağlanacaktır)</li>
+                                <li style="padding-left:3em">Kulüplerin etkinliklerini(izin verilmiş ise) görüntüleyebilecek</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="speakers" class="section align-center">
+        <div class="container">
+            <span class="icon section-icon icon-faces-users-04"></span>
+            <h3>Proje Ekibi</h3>
+            <p class="text-alt">Meet our <span class="highlight">professonals</span></p>
+            <br />
+            <br />
+
+            <div class="col-sm-3">
+                <div class="speaker">
+                    <div class="photo-wrapper rounded">
+                        {% image 'theme/assets/img/guppy_subscriber_001.png' %}
+                            <img src="{{ asset_url }}" class="img-responsive" alt="Kemal Sami KARACA" />
+                        {% endimage %}
+                    </div>
+                    <h3 class="name">Kemal Sami KARACA</h3>
+                    <p class="text-alt"><small>Yazılım Geliştirici @ TÜBİTAK-ULAKBİM</small></p>
+                    <p class="about"> Projenin sunucu uygulama geliştiricisi </p>
+                    <ul class="speaker-socials">
+                        <li><a href="https://www.facebook.com/kemalsamikaraca"><span class="fa fa-facebook"></span></a></li>
+                        <li><a href="https://twitter.com/KemalSamiKARACA"><span class="fa fa-twitter"></span></a></li>
+                        <li><a href="https://github.com/kemalsami"><span class="fa fa-github"></span></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-sm-3">
+                <div class="speaker">
+                    <div class="photo-wrapper rounded">
+                        {% image 'theme/assets/img/guppy_subscriber_002.png' %}
+                            <img src="{{ asset_url }}" class="img-responsive" alt="Celal Selçuk KARACA" />
+                        {% endimage %}
+                        </div>
+                    <h3 class="name">Celal Selçuk KARACA</h3>
+                    <p class="text-alt"><small>Endüstri Mühendisliği Son Sınıf @ Bilkent Üniversitesi</small></p>
+                    <p class="about"> Proje arayüz geliştiricisi </p>
+                    <ul class="speaker-socials">
+                        <li><a href="https://www.facebook.com/celal.s.karaca"><span class="fa fa-facebook"></span></a></li>
+                        <li><a href="https://twitter.com/realCSKaraca"><span class="fa fa-twitter"></span></a></li>
+                        <li><a href="#"><span class="fa fa-github"></span></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-sm-3">
+                <div class="speaker">
+                    <div class="photo-wrapper rounded">
+                        {% image 'theme/assets/img/guppy_subscriber_003.png' %}
+                            <img src="{{ asset_url }}" class="img-responsive" alt="Beraat ALDEMİR" />
+                        {% endimage %}
+                    </div>
+                    <h3 class="name">Beraat ALDEMİR</h3>
+                    <p class="text-alt"><small>Yazılım Geliştirici @ TÜBİTAK-ULAKBİM</small></p>
+                    <p class="about"> Projenin IOS uygulama geliştiricisi</p>
+                    <ul class="speaker-socials">
+                        <li><a href="https://www.facebook.com/berataldemir"><span class="fa fa-facebook"></span></a></li>
+                        <li><a href="#"><span class="fa fa-twitter"></span></a></li>
+                        <li><a href="https://github.com/baldemir"><span class="fa fa-github"></span></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-sm-3">
+                <div class="speaker">
+                    <div class="photo-wrapper rounded">
+                        {% image 'theme/assets/img/guppy_subscriber_004.png' %}
+                            <img src="{{ asset_url }}" class="img-responsive" alt="Orhan Alirzayev" />
+                        {% endimage %}
+                    </div>
+                    <h3 class="name">Orhan Alirzayev</h3>
+                    <p class="text-alt"><small>Android Geliştirici @ youbaku</small></p>
+                    <p class="about">Projenin android uygulama geliştiricisi </p>
+                    <ul class="speaker-socials">
+                        <li><a href="https://www.facebook.com/orxan.alirzayev"><span class="fa fa-facebook"></span></a></li>
+                        <li><a href="#"><span class="fa fa-twitter"></span></a></li>
+                        <li><a href="https://github.com/alirzayev"><span class="fa fa-github"></span></a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}
+
+
+
+
+
+{% block javascriptcontent %}
+    <script>
+
+/***********************************************************************************************************************
+ *                                          GLOBAL VARIABLE
+ **********************************************************************************************************************/
+        var debugMode = true;
+
+
+/***********************************************************************************************************************
+ *                                          UTIL FUNCTIONS
+ **********************************************************************************************************************/
+
+        function fileToBase64Converter() {
+            if (this.files && this.files[0]) {
+                var FR= new FileReader();
+                FR.onload = function(e) {
+                    $('#img_viewer').attr('src', e.target.result);
+                    $('#university_image_base64').val(e.target.result);
+                };
+                FR.readAsDataURL( this.files[0] );
+            }
+        }
+
+/***********************************************************************************************************************
+ *                                          AJAX OPERATIONS
+ **********************************************************************************************************************/
+
+
+/***********************************************************************************************************************
+ *                                          EVENTS
+ **********************************************************************************************************************/
+
+
+/***********************************************************************************************************************
+ *                                          DOCUMENT ON READY
+ **********************************************************************************************************************/
+
+        // -- File to base64
+        //document.getElementById("temp_img_loader").addEventListener("change", fileToBase64Converter, false);
+
+
+    </script>
+
+{% endblock %}
+
