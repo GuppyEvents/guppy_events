@@ -16,7 +16,7 @@
                 </div>
                 <div class="modal-body">
                     <select id="social_network" name="social_network"></select>
-                    <input id="community_new_link" type="text" placeholder="Enter Community Link Address (https://www.facebook.com/mizahkultur/)" style="width: 300px;">
+                    <input id="community_new_link" type="text" placeholder="Enter Community Link Address" style="width: 300px;">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
@@ -229,6 +229,7 @@
             // ajax call
             $.post("{{ path('community_link_add') }}" , {
                 cid : {{ community.id }},
+                snid : $('#social_network option:selected').val(),
                 clink : $('#community_new_link').val()
 
             }).always(function(){

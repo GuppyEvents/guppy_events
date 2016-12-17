@@ -43,19 +43,22 @@ class CommunityLinkController extends Controller
             // -- 2.1 -- Get borough list
                 $communityId = $request->get('cid');
                 $communityLinkStr = $request->get('clink');
+                $socialNetworkId = $request->get('snid');
 
                 $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
+                $socialNetwork = $this->getDoctrine()->getRepository('AppBundle:SocialNetwork')->find($socialNetworkId);
 
                 $communityLink = new CommunityLink();
                 $communityLink->setLink($communityLinkStr);
                 $communityLink->setCommunity($community);
+                $communityLink->setSocialNetwork($socialNetwork);
 
                 $this->getDoctrine()->getManager()->persist($communityLink);
                 $this->getDoctrine()->getManager()->flush();
 
                 $newLink = array();
                 $newLink['id'] = $communityLink->getId();
-                $newLink['linkname'] = $communityLink->getLink();
+                $newLink['linkname'] = $socialNetwork->getName() + $communityLink->getLink();
 
             // -- 2.2 -- Return Result
                 $response->setContent(json_encode(Result::$SUCCESS->setContent( $newLink )));
