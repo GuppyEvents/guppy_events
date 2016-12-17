@@ -15,7 +15,7 @@ There are a few pre-requisites before you can begin guppy event web application 
 4. Forth … well, that's all you need, really. You can call **local.guppy.com.tr** from your browser to see guppy event web application ;)
 
 
-
+<br /><br />
 ### What do you need to connect VM mysql from your local ?
 If you want to connect VM mysql from your local machine, you need to update mysql configurations in VM.
 
@@ -35,7 +35,8 @@ If you want to connect VM mysql from your local machine, you need to update mysq
 5. Restart mysql service 
  * ```service mysql restart```
  
-
+ 
+<br /><br />
 ### What do you need to overcome underperforming VM issue ?
 In some cases the default shared folder implementations (such as VirtualBox shared folders) have high performance penalties. If you are seeing less than ideal performance with synced folders, NFS can offer a solution.
 
