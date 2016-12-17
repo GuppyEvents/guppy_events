@@ -29,26 +29,46 @@ class CommunityController extends Controller
         $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
         $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByCommunityId($communityId);
 
-        $data['community'] = $community;
-        $data['eventList'] = $eventList;
-        $data['facebook'] = null;
-        $data['twitter'] = null;
-        $data['instagram'] = null;
-
-        $facebook_pattern = '/^((http(s)?:\/\/)?(w{3}\.)?)?(facebook.com\/){1}.*/';
-        $twitter_pattern = '/^((http(s)?:\/\/)?(w{3}\.)?)?(twitter.com\/){1}.*/';
-        $instagram_pattern = '/^((http(s)?:\/\/)?(w{3}\.)?)?(instagram.com\/){1}.*/';
-
-        $communityLinkList = $this->getDoctrine()->getRepository('AppBundle:CommunityLink')->findBy(array('community'=>$community->getId()));
-        foreach ($communityLinkList as &$communityLink) {
-            if(preg_match($facebook_pattern,$communityLink->getLink())){
-               $data['facebook'] = $communityLink->getLink();
-            }else if(preg_match($twitter_pattern,$communityLink->getLink())){
-               $data['twitter'] = $communityLink->getLink();
-            }else if(preg_match($instagram_pattern,$communityLink->getLink())){
-               $data['instagram'] = $communityLink->getLink();
+        $community->link_facebook = null;
+        $community->link_twitter = null;
+        $community->link_instagram = null;
+        $communityLinks = $this->getDoctrine()->getRepository('AppBundle:CommunityLink')->findCommunitySocialNetworksByCommunityId($community->getId());
+        foreach ($communityLinks as $communityLink){
+            switch ($communityLink->getSocialNetwork()->getId()){
+                case 5001:
+                    $community->link_facebook = $communityLink->getSocialNetwork()->getName() . $communityLink->getLink();
+                    break;
+                case 5002:
+                    $community->link_twitter = $communityLink->getSocialNetwork()->getName() . $communityLink->getLink();
+                    break;
+                case 5003:
+                    $community->link_instagram = $communityLink->getSocialNetwork()->getName() . $communityLink->getLink();
+                    break;
+                default:
+                    break;
             }
         }
+
+//        $data['facebook'] = null;
+//        $data['twitter'] = null;
+//        $data['instagram'] = null;
+//        $facebook_pattern = '/^((http(s)?:\/\/)?(w{3}\.)?)?(facebook.com\/){1}.*/';
+//        $twitter_pattern = '/^((http(s)?:\/\/)?(w{3}\.)?)?(twitter.com\/){1}.*/';
+//        $instagram_pattern = '/^((http(s)?:\/\/)?(w{3}\.)?)?(instagram.com\/){1}.*/';
+//
+//        $communityLinkList = $this->getDoctrine()->getRepository('AppBundle:CommunityLink')->findBy(array('community'=>$community->getId()));
+//        foreach ($communityLinkList as &$communityLink) {
+//            if(preg_match($facebook_pattern,$communityLink->getLink())){
+//               $data['facebook'] = $communityLink->getLink();
+//            }else if(preg_match($twitter_pattern,$communityLink->getLink())){
+//               $data['twitter'] = $communityLink->getLink();
+//            }else if(preg_match($instagram_pattern,$communityLink->getLink())){
+//               $data['instagram'] = $communityLink->getLink();
+//            }
+//        }
+
+        $data['community'] = $community;
+        $data['eventList'] = $eventList;
 
         return $this->render('AppBundle:community:communityHome.html.twig' , $data);
     }
@@ -198,7 +218,7 @@ class CommunityController extends Controller
 
         // 2) DEFAULT CASE
         $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
-        $communityLinkList = $this->getDoctrine()->getRepository('AppBundle:CommunityLink')->findBy(array('community'=>$community->getId()));
+        $communityLinkList = $this->getDoctrine()->getRepository('AppBundle:CommunityLink')->findCommunitySocialNetworksByCommunityId($community->getId());
 
         return $this->render(
             'AppBundle:community:communityUpdate.html.twig', array(

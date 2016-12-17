@@ -93,7 +93,7 @@
                                 <thead>
                                     <tr>
                                         <th>#ID</th>
-                                        <th>Community Link</th>
+                                        <th>Community Social Network</th>
                                     </tr>
                                 </thead>
 
@@ -101,7 +101,7 @@
                                     {% for communityLink in communityLinkList %}
                                         <tr>
                                             <td>{{ communityLink.id }}</td>
-                                            <td>{{ communityLink.link }}</td>
+                                            <td>{{ communityLink.socialNetwork.name }}{{ communityLink.link }}</td>
                                             <td>
                                                 <div class="btn-group">
                                                     <button type="button" class="btn btn-info">Action</button>

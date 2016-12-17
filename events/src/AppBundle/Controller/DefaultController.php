@@ -29,27 +29,30 @@ class DefaultController extends Controller
 
         $communityList = $this->getDoctrine()->getRepository('AppBundle:Community')->findBy(array('university'=>$universityId) , array('name'=>'ASC'));
 
-        $communityIdList = array();
         for($i=0; $i<count($communityList);$i++){
-            $communityList[$i]->link_facebook = $this->getDoctrine()->getRepository('AppBundle:CommunityLink')->findOneBy(array('community'=>$communityList[$i]->getId(), 'linkType'=>'https://www.facebook.com'));
-            $communityList[$i]->link_twitter = $this->getDoctrine()->getRepository('AppBundle:CommunityLink')->findOneBy(array('community'=>$communityList[$i]->getId(), 'linkType'=>'https://twitter.com'));
-            $communityList[$i]->link_instagram = $this->getDoctrine()->getRepository('AppBundle:CommunityLink')->findOneBy(array('community'=>$communityList[$i]->getId(), 'linkType'=>'https://www.instagram.com'));
+
+            $communityList[$i]->link_facebook = null;
+            $communityList[$i]->link_twitter = null;
+            $communityList[$i]->link_instagram = null;
+            $communityLinks = $this->getDoctrine()->getRepository('AppBundle:CommunityLink')->findCommunitySocialNetworksByCommunityId($communityList[$i]->getId());
+            foreach ($communityLinks as $communityLink){
+                switch ($communityLink->getSocialNetwork()->getId()){
+                    case 5001:
+                        $communityList[$i]->link_facebook = $communityLink->getSocialNetwork()->getName() . $communityLink->getLink();
+                        break;
+                    case 5002:
+                        $communityList[$i]->link_twitter = $communityLink->getSocialNetwork()->getName() . $communityLink->getLink();
+                        break;
+                    case 5003:
+                        $communityList[$i]->link_instagram = $communityLink->getSocialNetwork()->getName() . $communityLink->getLink();
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
 
-        $weekStartDate = new \DateTime();
-        $weekStartDate->setTime(0,0);
-        $weekStartDate->sub(new \DateInterval("P3D"));
-
-        $weekFinishDate = new \DateTime();
-        $weekFinishDate->setTime(0,0);
-        $weekFinishDate->add(new \DateInterval("P3D"));
-
-        $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByDate( $weekStartDate,$weekFinishDate);
-
         $data['communities'] = $communityList;
-        $data['eventList'] = $eventList;
-        $data['weekStartDate'] = $weekStartDate;
-
         return $this->render('AppBundle:default:main_community_list.html.twig' , $data);
 
     }
@@ -61,18 +64,6 @@ class DefaultController extends Controller
     public function eventsAction(Request $request)
     {
 
-        // TODO: Şuan için sadece bilkent üniversitesi etkinliklerini getirir
-        $universityId = 5;
-
-        $communityList = $this->getDoctrine()->getRepository('AppBundle:Community')->findBy(array('university'=>$universityId) , array('name'=>'ASC'));
-
-        $communityIdList = array();
-        for($i=0; $i<count($communityList);$i++){
-            $communityList[$i]->link_facebook = $this->getDoctrine()->getRepository('AppBundle:CommunityLink')->findOneBy(array('community'=>$communityList[$i]->getId(), 'linkType'=>'https://www.facebook.com'));
-            $communityList[$i]->link_twitter = $this->getDoctrine()->getRepository('AppBundle:CommunityLink')->findOneBy(array('community'=>$communityList[$i]->getId(), 'linkType'=>'https://twitter.com'));
-            $communityList[$i]->link_instagram = $this->getDoctrine()->getRepository('AppBundle:CommunityLink')->findOneBy(array('community'=>$communityList[$i]->getId(), 'linkType'=>'https://www.instagram.com'));
-        }
-
         $weekStartDate = new \DateTime();
         $weekStartDate->setTime(0,0);
         $weekStartDate->sub(new \DateInterval("P3D"));
@@ -82,8 +73,7 @@ class DefaultController extends Controller
         $weekFinishDate->add(new \DateInterval("P3D"));
 
         $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByDate( $weekStartDate,$weekFinishDate);
-
-        $data['communities'] = $communityList;
+        
         $data['eventList'] = $eventList;
         $data['weekStartDate'] = $weekStartDate;
 

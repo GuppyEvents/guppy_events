@@ -27,17 +27,19 @@ class CommunityLinkRepository extends EntityRepository
             ->getResult();
     }
 
-
+    
     /**
      *
-     * @return array|null
+     * @param array $communityId The community id
+     * @return CommunityLink|null
      */
-    public function findCommunityLinkTypeList()
+    public function findCommunitySocialNetworksByCommunityId($communityId)
     {
         return $this->createQueryBuilder('communityLinks')
-            ->select('communityLinks.linkType')
-            ->where('communityLinks.linkType is not null')
-            ->distinct()
+            ->join('communityLinks.community', 'community')
+            ->join('communityLinks.socialNetwork', 'socialNetwork')
+            ->where('community.id =:communityId')
+            ->setParameter('communityId', $communityId)
             ->getQuery()
             ->getResult();
     }

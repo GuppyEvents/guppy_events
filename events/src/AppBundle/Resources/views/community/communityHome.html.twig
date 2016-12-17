@@ -65,9 +65,12 @@
                         <div class="col-sm-6 align-left" style="padding-top: 20px;">
                             <h6>İletişim Bilgileri</h6>
                             <ul class="list">
-                                {% if facebook is defined and facebook is not null %}<li><i class="fa fa-facebook "></i>{{ facebook }}</li>{% endif %}
-                                {% if twitter is defined and  twitter is not null %}<li><i class="fa fa-twitter "></i>{{ twitter }}</li>{% endif %}
-                                {% if instagram is defined and instagram is not null %}<li><i class="fa fa-instagram "></i>{{ instagram }}</li>{% endif %}
+                                {% if community.link_facebook %}<li><i class="fa fa-facebook "></i><a href="{{ community.link_facebook }}" target="_blank">{{ community.link_facebook }}</a></li>{% endif %}
+                                {% if community.link_twitter %}<li><i class="fa fa-twitter "></i><a href="{{ community.link_twitter }}" target="_blank">{{ community.link_twitter }}</a></li>{% endif %}
+                                {% if community.link_instagram %}<li><i class="fa fa-instagram "></i><a href="{{ community.link_instagram }}" target="_blank">{{ community.link_instagram }}</a></li>{% endif %}
+                                {#{% if facebook is defined and facebook is not null %}<li><i class="fa fa-facebook "></i>{{ facebook }}</li>{% endif %}#}
+                                {#{% if twitter is defined and  twitter is not null %}<li><i class="fa fa-twitter "></i>{{ twitter }}</li>{% endif %}#}
+                                {#{% if instagram is defined and instagram is not null %}<li><i class="fa fa-instagram "></i>{{ instagram }}</li>{% endif %}#}
                                 {#<li><i class="fa fa-envelope"></i>bilkentmizahkultur@gmail.com</li>#}
                                 {#<li><i class="fa fa-phone"></i>(518) 457-5181 10001</li>#}
                             </ul>

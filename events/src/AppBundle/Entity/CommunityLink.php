@@ -30,13 +30,6 @@ class CommunityLink
     private $link;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="link_type", type="string", length=255, nullable=true)
-     */
-    private $linkType;
-
-    /**
      * @var \AppBundle\Entity\Community
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Community")
@@ -80,22 +73,6 @@ class CommunityLink
     public function setLink($link)
     {
         $this->link = $link;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLinkType()
-    {
-        return $this->linkType;
-    }
-
-    /**
-     * @param string $linkType
-     */
-    public function setLinkType($linkType)
-    {
-        $this->linkType = $linkType;
     }
 
     /**

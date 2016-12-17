@@ -68,6 +68,15 @@
                                 <li class="navigation-item"><a href="{{ path("home_events") }}" class="navigation-link">Etkinlikler</a></li>
                                 {#<li class="navigation-item"><a href="{{ path("login") }}" class="navigation-link">Yönetici Sayfasına Git</a></li>#}
                             </ul>
+
+                            <ul class="navigation-list pull-right light-text">
+                                {% if app.user %}
+                                    <li class="navigation-item"><a href="{{ path("login") }}" class="navigation-link">Yönetim Sayfası</a></li>
+                                {% else %}
+                                    <li class="navigation-item"><a href="{{ path("login") }}" class="navigation-link">Giriş</a></li>
+                                {% endif %}
+                            </ul>
+
                         </div>
                     </div>
                 </div>
