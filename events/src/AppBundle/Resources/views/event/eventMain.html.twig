@@ -9,9 +9,13 @@
     <!-- ------------------ CONTENT ------------------ -->
     <!-- --------------------------------------------- -->
     <div class="blurred-header">
-        {% image 'theme/assets/img/event_header.jpeg' %}
-            <img src="{{ asset_url }}" class="img-responsive" alt="" />
-        {% endimage %}
+        {% if event.imageBase64 %}
+            <img src="{{ event.imageBase64 }}" class="img-responsive" alt="{{ event.title }}" />
+        {% else %}
+            {% image 'theme/assets/img/event_header.jpeg' %}
+                <img src="{{ asset_url }}" class="img-responsive" alt="" />
+            {% endimage %}
+        {% endif %}
     </div>
 
     <section class="guppy-section align-center">
@@ -23,22 +27,34 @@
             <div class="event-content col-md-12">
 
                 <div class="event-content-header">
-                    <div class="col-md-8 event-content-header-image">
-                        {% image 'theme/assets/img/event_header.jpeg' %}
-                            <img src="{{ asset_url }}" class="img-responsive" alt="" />
-                        {% endimage %}
 
+                    <!-- Event Image Panel -->
+                    <div class="col-md-8 event-content-header-image">
+                        {% if event.imageBase64 %}
+                            <img src="{{ event.imageBase64 }}" class="img-responsive" alt="{{ event.title }}" />
+                        {% else %}
+                            {% image 'theme/assets/img/event_header.jpeg' %}
+                                <img src="{{ asset_url }}" class="img-responsive" alt="" />
+                            {% endimage %}
+                        {% endif %}
                     </div>
+
+                    <!-- Event Detail Panel -->
                     <div class="event-content-header-detail col-md-4">
                         <div class="event-content-header-time">
-                            <div class="event-content-header-time-month">DEC</div>
-                            <div class="event-content-header-time-day">17</div>
+                            {% if event.startDate %}
+                                <div class="event-content-header-time-month">{{ event.startDate.format('F') }}</div>
+                                <div class="event-content-header-time-day">{{ event.startDate.format('d') }}</div>
+                            {% else %}
+                                <div class="event-content-header-time-month">??</div>
+                                <div class="event-content-header-time-day">??</div>
+                            {% endif %}
                         </div>
                         <div class="event-content-header-title">
-                            Influencer Talks Ankara Vol.I
+                            {{ event.title }}
                         </div>
                         <div class="event-content-header-owner">
-                            by Influencer Talks
+                            <a href="{{ path('user_community_homepage',{'communityId': event.communityUser.community.id}) }}">{{ event.communityUser.community.name }}</a>
                         </div>
                         <div class="event-content-header-price">
                             Free
@@ -53,28 +69,34 @@
                     <div class="fade active in">
                         <div class="col-sm-1 align-left event-content-body-description"></div>
                         <div class="col-sm-6 align-left event-content-body-description">
-                            <h6>DESCRIPTION</h6>
-                            <p><strong>Yaratıcılığınıza güveniyor musunuz? Sosyal medyada içerik paylaşmaktan keyif mi alıyorsunuz? Aktif sosyal medya kullanıcısı mısınız?</strong></p>
-                            <p>Influencer Talks sosyal medya influencer’larindan ilham almak ve onlarla bağlantı kurabilmek amacıyla oluşturulmuş bir organizasyondur. Bu hareketin temel felsefesi, sosyal medya kullanımıyla ilgili sorular sorarak kullanım alanının daha verimli bir şekilde değerlendirilmesini sağlamak.</p>
-                            <p><strong>Sizi Neler Bekliyor?</strong></p>
-                            <p>Üç ya da daha fazla influencer ile kişisel markanızı nasıl geliştireceğiniz, müşteri kitlenizi nasıl geliştirebileceğiniz ve onların hatalarından öğrenecekleriniz hakkında sohbet edebiliceksiniz!</p>
-                            <p><strong>Neden Bunu Yapıyoruz?</strong></p>
-                            <p>Çünkü sosyal medya, reklam kültürünün en önemli parçası olma yolunda. Bu yüzden, onu kullanırken hayal kırıklıkları yaşamamak için önce hayatımızı nasıl şekillendirdiğini anlamalıyız.</p>
-                            <p><br></p>
+                            <h6>ETKİNLİK HAKKINDA</h6>
+
+                            <p>{{ event.description }}</p>
+
+                            {#<p><strong>Yaratıcılığınıza güveniyor musunuz? Sosyal medyada içerik paylaşmaktan keyif mi alıyorsunuz? Aktif sosyal medya kullanıcısı mısınız?</strong></p>#}
+                            {#<p>Influencer Talks sosyal medya influencer’larindan ilham almak ve onlarla bağlantı kurabilmek amacıyla oluşturulmuş bir organizasyondur. Bu hareketin temel felsefesi, sosyal medya kullanımıyla ilgili sorular sorarak kullanım alanının daha verimli bir şekilde değerlendirilmesini sağlamak.</p>#}
+                            {#<p><strong>Sizi Neler Bekliyor?</strong></p>#}
+                            {#<p>Üç ya da daha fazla influencer ile kişisel markanızı nasıl geliştireceğiniz, müşteri kitlenizi nasıl geliştirebileceğiniz ve onların hatalarından öğrenecekleriniz hakkında sohbet edebiliceksiniz!</p>#}
+                            {#<p><strong>Neden Bunu Yapıyoruz?</strong></p>#}
+                            {#<p>Çünkü sosyal medya, reklam kültürünün en önemli parçası olma yolunda. Bu yüzden, onu kullanırken hayal kırıklıkları yaşamamak için önce hayatımızı nasıl şekillendirdiğini anlamalıyız.</p>#}
+                            {#<p><br></p>#}
                         </div>
                         <div class="col-sm-5 align-left event-content-body-description-date">
-                            <h6>DATE AND TIME</h6>
-                            <p>Sat, December 17, 2016</p>
-                            <p>6:00 PM – 8:30 PM Eastern European Standard Time Turkey Time</p>
-                            <a>Add to Calendar</a>
+                            <h6>Tarih & Saat</h6>
+                            {#<p>Sat, December 17, 2016</p>#}
+                            <p>{{ event.startDate.format('D, F d, Y') }}</p>
+                            {#<p>6:00 PM – 8:30 PM Eastern European Standard Time Turkey Time</p>#}
+                            <p>{{ event.startDate.format('H:i A') }}</p>
+                            <a>Takvime ekle</a>
                         </div>
-                        <div class="col-sm-5 align-left event-content-body-description-location">
-                            <h6>LOCATION</h6>
-                            <p>CerModern</p>
-                            <p>3 Altınsoy Cad. </p>
-                            <p>Ankara, 06101</p>
-                            <a>View Map</a>
-                        </div>
+
+                        {#<div class="col-sm-5 align-left event-content-body-description-location">#}
+                            {#<h6>LOCATION</h6>#}
+                            {#<p>CerModern</p>#}
+                            {#<p>3 Altınsoy Cad. </p>#}
+                            {#<p>Ankara, 06101</p>#}
+                            {#<a>View Map</a>#}
+                        {#</div>#}
 
 
                         <div class="col-sm-12 align-left"></div>
@@ -83,13 +105,13 @@
                             <h6>TAGS</h6>
                             <section>
 								<span>
-									<a href="/things-to-do/turkey--ankara/" class="js-d-track-link badge badge--tag l-mar-top-2" data-event-action="BreadcrumbAddress" data-event-category="listing" data-event-label="/things-to-do/turkey--ankara/" data-automation="BreadcrumbAddress" dorsal-guid="d0b61986-de02-c4d5-208f-ec1afff426db" data-xd-wired="track-link">
-                                        <span>Things to do in Ankara</span>
+									<a href="" class="js-d-track-link badge badge--tag l-mar-top-2" data-event-action="BreadcrumbAddress" data-event-category="listing" data-event-label="/things-to-do/turkey--ankara/" data-automation="BreadcrumbAddress" data-xd-wired="track-link">
+                                        <span>MizahKültür</span>
                                     </a>
 								</span>
 								<span>
-									<a href="/d/turkey--ankara/seminars/" class="js-d-track-link badge badge--tag l-mar-top-2" data-event-action="BreadcrumbFormat" data-event-category="listing" data-event-label="/d/turkey--ankara/seminars/" data-automation="BreadcrumbFormat" dorsal-guid="5485c910-c976-14ee-8ec5-f9db7b39c3c4" data-xd-wired="track-link">
-                                        <span>Seminar</span>
+									<a href="" class="js-d-track-link badge badge--tag l-mar-top-2" data-event-action="BreadcrumbFormat" data-event-category="listing" data-event-label="/d/turkey--ankara/seminars/" data-automation="BreadcrumbFormat" data-xd-wired="track-link">
+                                        <span>ge250</span>
                                     </a>
 								</span>
                             </section>
@@ -99,30 +121,30 @@
                         <div class="col-sm-10 align-left" style="height: 1px; background: gray; margin-top: 30px; margin-bottom: 30px;"></div>
                         <div class="col-sm-12 align-left"></div>
 
+                        <!-- Event Tickets -->
                         <div class="col-sm-1 align-left"></div>
                         <div class="col-sm-12 align-left" style="padding-top: 20px; padding-bottom: 100px;">
-                            <div style="text-align: center">
-                                <h6>Influencer Talks</h6>
-                                <div>Organizer of Influencer Talks Ankara Vol.I</div>
-                                <a>PROFILE</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a>CONTACT</a>
+                            <div style="text-align: center;">
+                                <h6>Bilet Fiyatları</h6>
+                                <div>(Eğer varsa)Bilet bilgileri bu alana yerleştirilecektir</div>
+                                <a>Bilet#1</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a>Bilet#2</a>
                             </div>
                         </div>
 
+                        <!-- Event Location -->
+                        <div class="col-sm-1 align-left"></div>
+                        <div class="col-sm-10 align-left" style="height: 1px; background: gray; margin-top: 30px; margin-bottom: 30px;"></div>
                         <div class="col-sm-12 event-content-body-map">
-                            {% image 'theme/assets/img/event_map.png' %}
-                                <img src="{{ asset_url }}" class="img-responsive" alt="Harita" />
-                            {% endimage %}
+                            <div style="text-align: center; padding-bottom: 25px;">
+                                <h6>Lokasyon</h6>
+                            </div>
+
+                            <input id="event_location_lat" name="event_location_lat" value="{{ event.gpsLocationLat }}" style="display: none;"/>
+                            <input id="event_location_lng" name="event_location_lng" value="{{ event.gpsLocationLng }}" style="display: none;"/>
+                            <div id="event_location" style="height: 400px;"></div>
                         </div>
 
-                        <div class="col-sm-12 align-left" style="padding-top: 20px; margin-bottom: 100px;">
-                            <div style="text-align: center">
-                                <h6>Influencer Talks Ankara Vol.I </h6>
-                                at
-                                <h6>CerModern</h6>
-                                3 Altınsoy Cad., Ankara, 06101
-                            </div>
-                        </div>
-                        <div class="col-sm-12 align-left" style="height: 400px;"></div>
+                        <div class="col-sm-12 align-left" style="height: 100px;"></div>
                     </div>
 
                 </div><!-- community-content-body end -->
@@ -150,15 +172,20 @@
  *                                          UTIL FUNCTIONS
  **********************************************************************************************************************/
 
-        function fileToBase64Converter() {
-            if (this.files && this.files[0]) {
-                var FR= new FileReader();
-                FR.onload = function(e) {
-                    $('#img_viewer').attr('src', e.target.result);
-                    $('#university_image_base64').val(e.target.result);
-                };
-                FR.readAsDataURL( this.files[0] );
-            }
+        function initMap() {
+            var event_gps_location = {lat: parseFloat($('#event_location_lat').val()), lng: parseFloat($('#event_location_lng').val()) };
+            var map = new google.maps.Map(document.getElementById('event_location'), {
+                zoom: 11,
+                scrollwheel:  false,
+                draggable: false,
+                center: event_gps_location,
+            });
+
+            marker = new google.maps.Marker({
+                position: event_gps_location,
+                map: map
+            });
+
         }
 
 /***********************************************************************************************************************
@@ -170,18 +197,15 @@
  *                                          EVENTS
  **********************************************************************************************************************/
 
-        $(document).on('click', '.community-content-header-edit i' , function (event) {
-            alert("Kulüp yöneticisi arkaplan resmini buradan değiştirebilecek...");
-        });
 
 /***********************************************************************************************************************
  *                                          DOCUMENT ON READY
  **********************************************************************************************************************/
 
-        // -- File to base64
-        //document.getElementById("temp_img_loader").addEventListener("change", fileToBase64Converter, false);
+    </script>
 
-
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDLqDBN5nlLAbTBnSrkI0gwft2v6SWFjh8&callback=initMap">
     </script>
 
 {% endblock %}

@@ -60,7 +60,7 @@
                         <!-- event-card start-->
                         <div class="col-sm-4">
                             <div class="community-event-card">
-                                <a href="#" class="community-event-card-main">
+                                <a href="{{ path('user_event_mainpage' , {'eventId': event.id}) }}" class="community-event-card-main">
                                     <div class="community-event-card-main-header">
                                         <div class="community-event-card-main-header-image">
                                             <img src="{{ event.imageBase64 }}" alt="Event Name">
