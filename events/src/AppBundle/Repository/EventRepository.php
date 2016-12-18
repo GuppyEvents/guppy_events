@@ -23,6 +23,7 @@ class EventRepository extends EntityRepository
             ->join('event.communityUser', 'communityUser')
             ->join('communityUser.community', 'community')
             ->where('community.id = :communityId')
+            ->orderBy('event.startDate', 'DESC')
             ->setParameter('communityId', intval($communityId))
             ->getQuery()
             ->getResult();

@@ -45,7 +45,7 @@
                         <img src="{{ community.imageBackgroundBase64 }}" alt="{{ community.name }}" class="img-responsive" />
                     {% else %}
                         {% image 'theme/assets/img/guppy_bilkent_banner_01.jpg' %}
-                        <img src="{{ asset_url }}" class="img-responsive" alt="{{ community.name }}" />
+                            <img src="{{ asset_url }}" class="img-responsive" alt="{{ community.name }}" />
                         {% endimage %}
                     {% endif %}
 
@@ -59,7 +59,7 @@
 
                         <!-- event-card start-->
                         <div class="col-sm-4">
-                            <div class="community-event-card">
+                            <div class="community-event-card {% if date(event.startDate) < date() %}past{% endif %}">
                                 <a href="{{ path('user_event_mainpage' , {'eventId': event.id}) }}" class="community-event-card-main">
                                     <div class="community-event-card-main-header">
                                         <div class="community-event-card-main-header-image">
