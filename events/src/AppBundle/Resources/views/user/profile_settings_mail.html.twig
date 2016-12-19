@@ -1,0 +1,120 @@
+{% extends 'AppBundle::main_base.html.twig' %}
+
+{% block title %}Mail Settings{% endblock %}
+
+
+{% block content %}
+
+    <!-- --------------------------------------------- -->
+    <!-- ------------------ CONTENT ------------------ -->
+    <!-- --------------------------------------------- -->
+
+    <section class="guppy-section align-center">
+        <div class="container">
+
+
+            <!-- -------------- SIDEBAR -------------- -->
+            {{ include('AppBundle:user:profile_sidebar.html.twig') }}
+
+
+            <!-- -------------- CONTENT -------------- -->
+            <div class="profile-content col-md-10">
+
+                <!-- MAIL PANEL HEADER -->
+                <div class="profile-content-header"></div>
+
+                <!-- MAIL PANEL BODY -->
+                <div class="profile-content-body">
+                    <div class="fade active in">
+                        <div class="col-sm-12 align-left">
+                            <h6>Kullanıcı mail listesi</h6>
+                            <p>Mail listesi & mail onaylanma durumu & üniversite maili ise geçerlilik süresi </p>
+
+                            <div class="col-sm-12">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Durum</th>
+                                        <th>Mail Adresi</th>
+                                        <th>Geçerlilik Tarihi</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>Lorem</td>
+                                        <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur, ex?</td>
+                                        <td>2adadasdsa5€</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ipsum</td>
+                                        <td>Lorem ipsum dolor sit amet, consectetur adipisicing.</td>
+                                        <td>65€</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dolor sit</td>
+                                        <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maiores maxime, vitae odit quisquam. Voluptate excepturi illo voluptatem reprehenderit aut velit.</td>
+                                        <td>85€</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p> </p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+
+
+{% block javascriptcontent %}
+    <script>
+
+/***********************************************************************************************************************
+ *                                          LOCAL VARIABLE
+ **********************************************************************************************************************/
+        var debugMode = true;
+
+
+/***********************************************************************************************************************
+ *                                          UTIL FUNCTIONS
+ **********************************************************************************************************************/
+
+        function fileToBase64Converter() {
+            if (this.files && this.files[0]) {
+                var FR= new FileReader();
+                FR.onload = function(e) {
+                    $('#img_viewer').attr('src', e.target.result);
+                    $('#university_image_base64').val(e.target.result);
+                };
+                FR.readAsDataURL( this.files[0] );
+            }
+        }
+
+/***********************************************************************************************************************
+ *                                          AJAX OPERATIONS
+ **********************************************************************************************************************/
+
+
+/***********************************************************************************************************************
+ *                                          EVENTS
+ **********************************************************************************************************************/
+
+
+/***********************************************************************************************************************
+ *                                          DOCUMENT ON READY
+ **********************************************************************************************************************/
+
+        // -- File to base64
+        //document.getElementById("temp_img_loader").addEventListener("change", fileToBase64Converter, false);
+
+
+    </script>
+
+{% endblock %}
+

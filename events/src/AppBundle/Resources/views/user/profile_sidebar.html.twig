@@ -1,0 +1,31 @@
+
+        <!-- -------------- SIDEBAR -------------- -->
+        <div class="community-sidebar col-md-2">
+            <div class="community-sidebar-photo" >
+                <div class="society">
+                    <div class="photo-wrapper rounded">
+                        {% image 'theme/assets/img/guppy_subscriber_001.png' %}
+                            <img src="{{ asset_url }}" alt="{{ app.user.name }}" class="img-responsive" style="border-radius: 5px;" />
+                        {% endimage %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="community-sidebar-name">
+                <h7><span class="highlight">Ayarlar</span></h7>
+            </div>
+
+            <hr>
+            <div class="community-sidebar-navigation">
+                <ul class="community-dropdown-menu">
+                    <li class="community-navigation-item"><a href="{{ path('user_profile_account') }}" class="navigation-link {% if app.request.get('_route') == 'user_profile_account'%}active{% endif %}">Hesap</a></li>
+                    <li class="community-navigation-item"><a href="{{ path('user_profile_mail') }}" class="navigation-link {% if app.request.get('_route') == 'user_profile_mail'%}active{% endif %}">Mail Adresleri </a></li>
+                    <li class="community-navigation-item"><a href="{{ path('user_profile_password') }}" class="navigation-link {% if app.request.get('_route') == 'user_profile_password'%}active{% endif %}">Şifre İşlemleri</a></li>
+                    <li class="community-navigation-item"><a href="{{ path('user_profile_password') }}" class="navigation-link ">Rozetlerim</a></li>
+                </ul>
+            </div>
+        </div>
+
+
+
+

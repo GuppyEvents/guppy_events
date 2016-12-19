@@ -71,8 +71,12 @@
 
                             <ul class="navigation-list pull-right light-text">
                                 {% if app.user %}
-                                    <li class="navigation-item"><a href="{{ path("login") }}" class="navigation-link">Yönetim Sayfası</a></li>
+                                    {% if app.user.role == 'ROLE_ADMIN' %}
+                                        <li class="navigation-item"><a href="{{ path("login") }}" class="navigation-link">Yönetim Sayfası</a></li>
+                                    {% endif %}
+                                    <li class="navigation-item"><a href="{{ path('user_profile_account') }}" class="navigation-link">Profil</a></li>
                                 {% else %}
+                                    <li class="navigation-item"><a href="{{ path("user_registration") }}" class="navigation-link">Kayıt</a></li>
                                     <li class="navigation-item"><a href="{{ path("login") }}" class="navigation-link">Giriş</a></li>
                                 {% endif %}
                             </ul>

@@ -35,33 +35,31 @@
 
             <div class="register-box-body">
 
-                <p class="login-box-msg">!!! This page is not work for now !!!</p>
-
                 <p class="login-box-msg">Register a new membership</p>
 
                 {{ form_start(form) }}
                     <div class="form-group has-feedback">
-                        {{ form_widget(form.name, {'attr': {'class': 'form-control' , 'placeholder':'First Name' , 'value':'kemal'}}) }}
+                        {{ form_widget(form.name, {'attr': {'class': 'form-control' , 'placeholder':'First Name'}}) }}
                         <span class="glyphicon glyphicon-user form-control-feedback"></span>
                     </div>
                     <div class="form-group has-feedback">
-                        {{ form_widget(form.surname, {'attr': {'class': 'form-control' , 'placeholder':'Surname' , 'value':'karaca'}}) }}
+                        {{ form_widget(form.surname, {'attr': {'class': 'form-control' , 'placeholder':'Surname'}}) }}
                         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                     </div>
                     <div class="form-group has-feedback">
-                        {{ form_widget(form.username, {'attr': {'class': 'form-control', 'placeholder':'Username' , 'value':'kskaraca'}}) }}
+                        {{ form_widget(form.username, {'attr': {'class': 'form-control', 'placeholder':'Username'}}) }}
                         <span class="glyphicon glyphicon-user form-control-feedback"></span>
                     </div>
                     <div class="form-group has-feedback">
-                        {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder':'Email' , 'value':'kskaraca@gmail.com'}}) }}
+                        {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder':'Email' }}) }}
                         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                     </div>
                     <div class="form-group has-feedback">
-                        {{ form_widget(form.password.first, {'attr': {'class': 'form-control', 'placeholder':'Password' , 'value':'kemal'}}) }}
+                        {{ form_widget(form.password.first, {'attr': {'class': 'form-control', 'placeholder':'Password' }}) }}
                         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                     </div>
                     <div class="form-group has-feedback">
-                        {{ form_widget(form.password.second, {'attr': {'class': 'form-control', 'placeholder':'Retype password' , 'value':'kemal'}}) }}
+                        {{ form_widget(form.password.second, {'attr': {'class': 'form-control', 'placeholder':'Retype password' }}) }}
                         <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
                     </div>
                     <div class="row">

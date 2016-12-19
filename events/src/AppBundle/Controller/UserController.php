@@ -15,13 +15,46 @@ class UserController extends Controller
 {
 
     /**
-     * @Route("/profile", name="user_profile")
+     * @Route("/a/profile", name="admin_profile")
+     * @Security("has_role('ROLE_ADMIN')")
      */
-    public function indexAction(Request $request)
+    public function adminProfileAction(Request $request)
     {
-        return $this->render('AppBundle:user:profile.html.twig', array(
+        return $this->render('AppBundle:user:admin_profile.html.twig', array(
             'aa'=>'aa',
         ));
     }
 
+    /**
+     * @Route("/profile", name="user_profile_account")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function userProfileAction(Request $request)
+    {
+        $data = array();
+        $data['a'] = 'a';
+        return $this->render('AppBundle:user:profile_settings_account.html.twig', $data);
+    }
+
+    /**
+     * @Route("/profile/mail", name="user_profile_mail")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function userProfileMailAction(Request $request)
+    {
+        $data = array();
+        $data['a'] = 'a';
+        return $this->render('AppBundle:user:profile_settings_mail.html.twig', $data);
+    }
+
+    /**
+     * @Route("/profile/password", name="user_profile_password")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function userProfilePasswordAction(Request $request)
+    {
+        $data = array();
+        $data['a'] = 'a';
+        return $this->render('AppBundle:user:profile_settings_password.html.twig', $data);
+    }
 }

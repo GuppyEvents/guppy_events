@@ -21,10 +21,11 @@ class SecurityController extends Controller
 
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
-
         
-        if($this->getUser() && $this->getUser()->getId() && $this->getUser()->getId()==18){
+        if($this->getUser() && $this->getUser()->getId() && $this->getUser()->getRole()=='ROLE_ADMIN'){
             return $this->redirectToRoute('admin_homepage');
+        }else if($this->getUser()){
+            return $this->redirectToRoute('home_about');
         }
 
         return $this->render(

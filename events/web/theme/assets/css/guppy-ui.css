@@ -401,3 +401,20 @@ h6{
     -webkit-filter: blur(25px); /* Safari 6.0 - 9.0 */
     filter: blur(25px);
 }
+
+/* ----------------------------------------------------------------------------
+    Profile Page
+---------------------------------------------------------------------------- */
+.profile-content {
+    min-height: 600px;
+}
+
+.profile-content-header {
+    /*height: 275px;*/
+}
+
+.profile-content-body {
+    min-height: 200px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
