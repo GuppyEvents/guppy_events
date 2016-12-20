@@ -4,7 +4,8 @@ var Guppy;
 ;(function($){
 
     $(document).on('ready', function () {
-        Guppy.init(Guppy.defaults);
+        // Guppy.init(Guppy.defaults);
+        Guppy.init(Guppy.guppt_defaults);
     });
 
 })( jQuery );
@@ -23,6 +24,22 @@ Guppy = {
         smoothScrollSpeed: 800,
         pseudoSelect: true,
         ajaxedForm: true,
+        ajaxedFormSuccessMsg: 'Success',
+        ajaxedFormErrorMsg: 'An error occured. Please try again later.',
+        toastrPositionClass: 'toast-top-full-width'
+    },
+
+    guppt_defaults: {
+        log: true,
+        styleSwitcher: false,
+        animations: true,
+        onePageNav: true,
+        alwaysMobileMenuMode: false,
+        mobileMenuMaxWidth: 768,
+        smoothScroll: false,
+        smoothScrollSpeed: 800,
+        pseudoSelect: true,
+        ajaxedForm: false,
         ajaxedFormSuccessMsg: 'Success',
         ajaxedFormErrorMsg: 'An error occured. Please try again later.',
         toastrPositionClass: 'toast-top-full-width'

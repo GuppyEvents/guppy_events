@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\UniversityUser;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -25,6 +26,8 @@ class UserController extends Controller
         ));
     }
 
+
+
     /**
      * @Route("/profile", name="user_profile_account")
      * @Security("has_role('ROLE_USER')")
@@ -36,6 +39,8 @@ class UserController extends Controller
         return $this->render('AppBundle:user:profile_settings_account.html.twig', $data);
     }
 
+
+
     /**
      * @Route("/profile/mail", name="user_profile_mail")
      * @Security("has_role('ROLE_USER')")
@@ -43,9 +48,52 @@ class UserController extends Controller
     public function userProfileMailAction(Request $request)
     {
         $data = array();
-        $data['a'] = 'a';
+        $em = $this->getDoctrine()->getManager();
+
+        // 1) POST OPERATION
+        if($request->getMethod() == 'POST'){
+
+            try{
+                // --1.1-- Get post parameter
+                $mailAddress = $request->get('mail_address');
+                if(!$mailAddress){
+                    $data['error_msg']='Mail adresi boş olamaz';
+                }else{
+
+                    // --1.2-- check that user has mail_address
+                    $userUniversityMail = $em->getRepository('AppBundle:UniversityUser')->findBy(array('user'=>$this->getUser()->getId() , 'email'=>$mailAddress));
+                    if($userUniversityMail){
+                        $data['error_msg'] = 'Eklenmek istenen mail adresi zaten bulunmaktadır';
+
+                    }else {
+                        $universityUser = new UniversityUser();
+                        $universityUser->setEmail($mailAddress);
+                        $universityUser->setIsValidated(false);
+                        $universityUser->setRegisterDate(new \DateTime());
+                        $universityUser->setUpdateDate(new \DateTime());
+                        $universityUser->setUser($this->getUser());
+
+                        // TODO: university_id değeri kaldırılacaktır
+                        // Kişinin mail adresini update etmesi durumunda okul mail adresini kontrol edilmesi yerine, okul mail adresine uygun ise adres kişiye okul etkinliklerine erişim hakkı verilir.
+                        $universityUser->setUniversityMail($em->getRepository('AppBundle:UniversityMail')->find(21));
+
+                        $em->persist($universityUser);
+                        $em->flush();
+
+                        $data['success_msg'] = 'Mail Başarılı Şekilde Eklenmiştir';
+                    }
+                }
+
+            } catch (Exception $e){}
+        }
+
+        $userUniversityMailList = $em->getRepository('AppBundle:UniversityUser')->findBy(array('user'=>$this->getUser()->getId()));
+        $data['userUniversityMailList'] = $userUniversityMailList;
+
         return $this->render('AppBundle:user:profile_settings_mail.html.twig', $data);
     }
+
+
 
     /**
      * @Route("/profile/password", name="user_profile_password")

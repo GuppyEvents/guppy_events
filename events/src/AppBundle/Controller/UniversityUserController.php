@@ -63,4 +63,53 @@ class UniversityUserController extends Controller
         return $this->redirectToRoute('settings_emails');
     }
 
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    //                                          APPLICATION/JSON SERVICES
+    // -----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    /**
+     * @Route("/s/remove", name="university_user_delete_service")
+     */
+    public function addEventFromFacebook(Request $request){
+
+        // -- 1 -- Initialization
+        $data = array();
+        $em = $this->getDoctrine()->getManager();
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+
+        // -- 2 -- Try to delete university user mail
+        try{
+
+            $universityUserId = $request->get('mid');
+            $userUniversityMail = $em->getRepository('AppBundle:UniversityUser')->findOneBy(array('user'=>$this->getUser()->getId() , 'id'=>$universityUserId));
+            if($userUniversityMail){
+
+                $em->remove($userUniversityMail);
+                $em->flush();
+
+            }else {
+                $data['error_msg'] = 'Kullanıcı için mail adresi bulunamadı';
+                $response->setContent(json_encode(Result::$SUCCESS_EMPTY->setContent( $data )));
+                return $response;
+            }
+
+            // -- 2.2 -- Return Result
+            $response->setContent(json_encode(Result::$SUCCESS->setContent( $data )));
+            return $response;
+
+        }catch (\Exception $ex){
+            // content == "Unexpected Error"
+            $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent($ex)));
+            return $response;
+        }
+
+        // -- 3 -- Set & Return value
+        $response->setContent(json_encode(Result::$SUCCESS_EMPTY));
+        return $response;
+
+    }
+
 }

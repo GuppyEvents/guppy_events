@@ -418,3 +418,26 @@ h6{
     padding-top: 30px;
     padding-bottom: 30px;
 }
+
+.profile-content-body .mail-operation {
+    display: inline-block;
+    margin-bottom: 0px!important;
+}
+
+.profile-content-body .mail-operation-link {
+    -webkit-transition: color 0.15s ease, background 0.15s ease, border 0.15s ease, opacity 0.15s ease;
+    -moz-transition: color 0.15s ease, background 0.15s ease, border 0.15s ease, opacity 0.15s ease;
+    -o-transition: color 0.15s ease, background 0.15s ease, border 0.15s ease, opacity 0.15s ease;
+    transition: color 0.15s ease, background 0.15s ease, border 0.15s ease, opacity 0.15s ease;
+    display: inline-block;
+    font-family: "PT Sans Caption", Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: #262627;
+    border-style: solid;
+    border-width: 0 0 2px;
+    border-color: transparent;
+    cursor: pointer;
+}

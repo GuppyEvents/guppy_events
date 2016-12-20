@@ -1,6 +1,6 @@
 {% extends 'AppBundle::main_base.html.twig' %}
 
-{% block title %}Mail Settings{% endblock %}
+{% block title %}Mail Ayarları{% endblock %}
 
 
 {% block content %}
@@ -27,45 +27,67 @@
                 <div class="profile-content-body">
                     <div class="fade active in">
                         <div class="col-sm-12 align-left">
-                            <h6>Kullanıcı mail listesi</h6>
-                            <p>Mail listesi & mail onaylanma durumu & üniversite maili ise geçerlilik süresi </p>
-
-                            <div class="col-sm-12">
+                            <h6>Mail Adresi İşlemleri</h6>
+                            <p>Mail listem </p>
+                            <div>
                                 <table class="table">
                                     <thead>
                                     <tr>
                                         <th>Durum</th>
                                         <th>Mail Adresi</th>
                                         <th>Geçerlilik Tarihi</th>
+                                        <th>İşlem</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>Lorem</td>
-                                        <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur, ex?</td>
-                                        <td>2adadasdsa5€</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Ipsum</td>
-                                        <td>Lorem ipsum dolor sit amet, consectetur adipisicing.</td>
-                                        <td>65€</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Dolor sit</td>
-                                        <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maiores maxime, vitae odit quisquam. Voluptate excepturi illo voluptatem reprehenderit aut velit.</td>
-                                        <td>85€</td>
-                                    </tr>
+                                        {% for userUniversityMail in userUniversityMailList %}
+                                            <tr id="mailid{{ userUniversityMail.id }}" mailId="{{ userUniversityMail.id }}">
+                                                <td>{% if userUniversityMail.isValidated %}Aktif{% else %}Pasif{% endif %}</td>
+                                                <td>{{ userUniversityMail.email }}</td>
+                                                <td>{{ userUniversityMail.updateDate|date_modify("+2 year")|date('d/m/Y') }}</td>
+                                                <td>
+                                                    <form id="mail_setting" action="{{ path('user_profile_mail') }}" method="post">
+                                                        <li class="mail-operation dropdown">
+                                                            <a class="mail-operation-link dropdown-toggle" data-toggle="dropdown">İşlem</a>
+                                                            <ul class="dropdown-menu">
+                                                                <li class="mail-operation"><a class="navigation-link" id="op_mail_save">Kaydet</a></li>
+                                                                <li class="mail-operation"><a class="navigation-link" id="op_mail_send_activation">Aktivasyon Linki</a></li>
+                                                                <li class="mail-operation"><a class="navigation-link" id="op_mail_remove">Sil</a></li>
+                                                            </ul>
+                                                        </li>
+
+                                                        <!-- TODO: Form yapısı kaldırılabilir  -->
+                                                        <input type="text" class="form-control" name="mail_id" style="display: none;">
+                                                        <button type="submit" class="btn btn-rounded btn-sm" style="display: none;"></button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
-                            <p> </p>
+
+
+                            <div style="padding-top: 40px;">
+                                <form id="add_new_mail_submit" action="{{ path('user_profile_mail') }}" method="post">
+
+                                    <!-- mail address -->
+                                    <div class="form-group">
+                                        <h6>Mail adresi ekle</h6>
+                                        <input type="text" class="form-control" name="mail_address" placeholder="Yeni mail adresinizi girebilirsiniz">
+                                    </div>
+
+                                    <button type="submit" class="btn btn-rounded btn-sm">Ekle!</button>
+                                </form>
+                            </div> <!-- new mail form ends -->
+
                         </div>
                     </div>
 
-                </div>
+                </div> <!-- .profile-content-body ends -->
+            </div> <!-- .profile-content -->
 
-            </div>
-        </div>
+        </div> <!-- .container ends -->
     </section>
 
 {% endblock %}
@@ -79,32 +101,70 @@
  *                                          LOCAL VARIABLE
  **********************************************************************************************************************/
         var debugMode = true;
+        var error_msg = '{% if error_msg is defined %}{{ error_msg|json_encode|raw }}{% endif %}';
+        var success_msg = '{% if success_msg is defined %}{{ success_msg|json_encode|raw }}{% endif %}';
 
 
 /***********************************************************************************************************************
  *                                          UTIL FUNCTIONS
  **********************************************************************************************************************/
 
-        function fileToBase64Converter() {
-            if (this.files && this.files[0]) {
-                var FR= new FileReader();
-                FR.onload = function(e) {
-                    $('#img_viewer').attr('src', e.target.result);
-                    $('#university_image_base64').val(e.target.result);
-                };
-                FR.readAsDataURL( this.files[0] );
-            }
-        }
 
 /***********************************************************************************************************************
  *                                          AJAX OPERATIONS
  **********************************************************************************************************************/
 
+        function ajaxRemoveMail(mailId){
+
+            // -- 1 --
+            // open alert box to inform user
+
+            // -- 2 --
+            // ajax call
+            $.post("{{ path('university_user_delete_service') }}" ,{
+                mid : mailId
+            }).always(function(){
+
+            }).done(function(data){
+
+                // -- 2.1 -- CONSOLE
+                if(debugMode)
+                    console.log(data);
+
+                // -- 2.2 -- sonuc düzenlenir
+                if(data.resultText == 'SUCCESS'){
+
+                    // -- 2.2.1 -- insert new options
+                    $('#mailid'+mailId).remove();
+
+                    // -- 2.2.2 --
+                    toastr.success('Mailiniz silindi');
+
+                }else if(data.resultText == 'SUCCESS_EMPTY'){
+                    toastr.error('Beklenmeyen hata ile karşılaşıldı');
+                }else if(data.resultText == 'FAILURE_PERMISSION'){
+                    toastr.error('Bu işlem için izniniz bulunmamaktadır');
+                }else{
+                    toastr.error('Beklenmeyen hata ile karşılaşıldı');
+                }
+            });
+        }
 
 /***********************************************************************************************************************
  *                                          EVENTS
  **********************************************************************************************************************/
 
+        $(document).on('click' , '#op_mail_save' , function(){
+            toastr.warning('mail adresinde değişiklik kaydetme işlemi...', 'YAPIM AŞAMASINDA');
+        });
+
+        $(document).on('click' , '#op_mail_send_activation' , function(){
+            toastr.warning('mail adresine aktivasyon maili yollanacak...', 'YAPIM AŞAMASINDA');
+        });
+
+        $(document).on('click' , '#op_mail_remove' , function(event){
+            ajaxRemoveMail($(event.target).parentsUntil('tr').last().parent().attr('mailId'));
+        });
 
 /***********************************************************************************************************************
  *                                          DOCUMENT ON READY
@@ -112,6 +172,13 @@
 
         // -- File to base64
         //document.getElementById("temp_img_loader").addEventListener("change", fileToBase64Converter, false);
+
+        // -- Operation Result Message
+        if(success_msg){
+            toastr.success(success_msg);
+        }else if(error_msg){
+            toastr.error(error_msg);
+        }
 
 
     </script>
