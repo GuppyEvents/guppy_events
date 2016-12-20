@@ -71,10 +71,18 @@
 
                             <ul class="navigation-list pull-right light-text">
                                 {% if app.user %}
-                                    {% if app.user.role == 'ROLE_ADMIN' %}
-                                        <li class="navigation-item"><a href="{{ path("login") }}" class="navigation-link">Yönetim Sayfası</a></li>
-                                    {% endif %}
-                                    <li class="navigation-item"><a href="{{ path('user_profile_account') }}" class="navigation-link">Profil</a></li>
+
+                                    <li class="navigation-item dropdown">
+                                        <a class="navigation-link dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user" aria-hidden="true"></i>{{ app.user.name }}</a>
+                                        <ul class="dropdown-menu">
+                                            <li class="navigation-item"><a href="{{ path('user_profile_account') }}" class="navigation-link">Profil</a></li>
+                                            {% if app.user.role == 'ROLE_ADMIN' %}
+                                                <li class="navigation-item"><a href="{{ path("login") }}" class="navigation-link">Yönetim Sayfası</a></li>
+                                            {% endif %}
+                                            <li class="navigation-item"><a href="{{ path('logout') }}" class="navigation-link">Çıkış</a></li>
+                                        </ul>
+                                    </li>
+
                                 {% else %}
                                     <li class="navigation-item"><a href="{{ path("user_registration") }}" class="navigation-link">Kayıt</a></li>
                                     <li class="navigation-item"><a href="{{ path("login") }}" class="navigation-link">Giriş</a></li>
