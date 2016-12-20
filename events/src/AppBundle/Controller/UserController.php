@@ -2,11 +2,16 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\AppBundle;
 use AppBundle\Entity\UniversityUser;
+use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Form\Model\ChangePassword;
+use AppBundle\Form\ChangePasswordType;
+use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 
 /**
  * @Route("/user", name="user")
@@ -101,8 +106,46 @@ class UserController extends Controller
      */
     public function userProfilePasswordAction(Request $request)
     {
+
         $data = array();
-        $data['a'] = 'a';
+        $em = $this->getDoctrine()->getManager();
+
+        // 1) POST OPERATION
+        if($request->getMethod() == 'POST'){
+
+            try{
+                // --1.1-- Get post parameters
+                $oldPassword = $request->get('oldPassword');
+                $newPassword = $request->get('newPassword');
+                $newPasswordRep = $request->get('newPasswordRep');
+
+                if(!$oldPassword || !$newPassword || !$newPasswordRep) {
+                    $data['error_msg'] = 'Şifre boş bırakılamaz';
+                }else if($newPassword!=$newPasswordRep){
+                    $data['error_msg'] = 'Şifreleriniz uyumsuz';
+                }else{
+
+                    $encoder = $this->container->get('security.password_encoder');
+                    $valid = $encoder->isPasswordValid($this->getUser(), $oldPassword);
+
+                    if($valid){
+                        $user = $this->getUser();
+                        $password = $this->get('security.password_encoder')->encodePassword($user, $newPassword);
+                        $user->setPassword($password);
+
+                        $em->persist($user);
+                        $em->flush();
+
+                        $data['success_msg'] = 'Şifre başarılı şekilde değiştirildi.';
+                    }else{
+                        $data['error_msg'] = 'Eski şifrenizi yanlış girdiniz.';
+                    }
+
+                }
+
+            } catch (Exception $e){}
+        }
+
         return $this->render('AppBundle:user:profile_settings_password.html.twig', $data);
     }
 }
