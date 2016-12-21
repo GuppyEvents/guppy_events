@@ -49,24 +49,6 @@ class CommunityController extends Controller
             }
         }
 
-//        $data['facebook'] = null;
-//        $data['twitter'] = null;
-//        $data['instagram'] = null;
-//        $facebook_pattern = '/^((http(s)?:\/\/)?(w{3}\.)?)?(facebook.com\/){1}.*/';
-//        $twitter_pattern = '/^((http(s)?:\/\/)?(w{3}\.)?)?(twitter.com\/){1}.*/';
-//        $instagram_pattern = '/^((http(s)?:\/\/)?(w{3}\.)?)?(instagram.com\/){1}.*/';
-//
-//        $communityLinkList = $this->getDoctrine()->getRepository('AppBundle:CommunityLink')->findBy(array('community'=>$community->getId()));
-//        foreach ($communityLinkList as &$communityLink) {
-//            if(preg_match($facebook_pattern,$communityLink->getLink())){
-//               $data['facebook'] = $communityLink->getLink();
-//            }else if(preg_match($twitter_pattern,$communityLink->getLink())){
-//               $data['twitter'] = $communityLink->getLink();
-//            }else if(preg_match($instagram_pattern,$communityLink->getLink())){
-//               $data['instagram'] = $communityLink->getLink();
-//            }
-//        }
-
         $data['community'] = $community;
         $data['eventList'] = $eventList;
 
@@ -83,6 +65,12 @@ class CommunityController extends Controller
         $data = array();
         $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
         $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByCommunityId($communityId);
+
+        foreach ($eventList as $event){
+            $eventUser = $this->getDoctrine()->getRepository('AppBundle:EventUserRating')->findOneBy(array('user'=>$this->getUser()->getId() , 'event'=>$event->getId()));
+            $event->is_saved = $eventUser ? $eventUser->getIsAttend() : false;
+        }
+
         $data['community'] = $community;
         $data['eventList'] = $eventList;
         return $this->render('AppBundle:community:communityEvents.html.twig' , $data);
