@@ -59,14 +59,28 @@
                                                         <img src="{{ event.communityUser.community.imageBase64 }}" alt="" class="img-responsive">
                                                     </div>
                                                     <a data-toggle="collapse" data-parent="#scheduleday_timeline_{{ date(weekday)|date('Ymd') }}" href="#bilkent_day_time{{ event.id }}" class="schedule-item-toggle collapsed">
-                                                        <strong class="time highlight"><span class="icon icon-office-24"></span>00:00 PM</strong>
+                                                        <strong class="time highlight"><span class="icon icon-office-24"></span>{{  date(event.startDate).format('H:i A') }}</strong> <!-- event time -->
                                                         <h6 class="title">{{ event.title }}</h6>
                                                     </a>
                                                     <div id="bilkent_day_time{{ event.id }}" class="panel-collapse collapse schedule-item-body">
-                                                        <article>
-                                                            <p class="description">{{ event.description }}</p>
-                                                            <strong class="highlight speaker-name">{{ event.communityUser.community.name }}</strong>
-                                                        </article>
+                                                        <div class="col-md-9">
+                                                            <article>
+                                                                <p class="description">{{ event.description }}</p>
+
+                                                                <div style="position: relative; bottom: 0px; right: 0px; line-height: 40px; padding-top: 40px;">
+                                                                    <div style="position: absolute; bottom: 0px; left: 0px;">
+                                                                        <a href="{{ path('user_community_events_homepage', {'communityId':event.communityUser.community.id}) }}">
+                                                                            <strong class="highlight speaker-name">{{ event.communityUser.community.name }}</strong>
+                                                                        </a>
+                                                                    </div>
+                                                                    <div style="position: absolute; bottom: 0px; right: 0px; line-height: 40px;  padding-top: 40px;">
+                                                                        <a href="{{ path('user_event_mainpage', {'eventId':event.id}) }}">
+                                                                            <strong class="highlight speaker-name">Detay</strong>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </article>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <!-- Event end -->
