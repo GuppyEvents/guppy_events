@@ -42,6 +42,7 @@ In some cases the default shared folder implementations (such as VirtualBox shar
 
 1. First you should find "config.yaml" file.
 
+
 2. Second, you must change following setting to _**sync_type: nfs**_ from _**sync_type: default**_.
 
 3. Third, you should restart your vagrant vm.
