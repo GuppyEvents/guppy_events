@@ -2,6 +2,15 @@
 
 {% block title %}Guppy - Community Home{% endblock %}
 
+{% block stylesheets %}
+
+    {% stylesheets
+            'theme/assets/css/cropper.css'
+            'theme/assets/css/cropper-main.css' filter='cssrewrite' %}
+        <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+    {% endstylesheets %}
+
+{% endblock %}
 
 {% block content %}
 
@@ -16,7 +25,7 @@
                 <div class="community-sidebar-photo" >
                     <div class="society">
                         <div class="photo-wrapper rounded">
-                            <img src="{{ community.imageBase64 }}" alt="{{ community.name }}" class="img-responsive" />
+                            <img src="{{ community.imageBase64 }}" alt="{{ community.name }}" class="img-responsive"/>
                         </div>
                     </div>
                 </div>
@@ -50,9 +59,33 @@
                         {% endimage %}
                     {% endif %}
 
-                    <span class="community-content-header-edit"><i class="fa fa-cog" aria-hidden="true"></i></span>
-                </div>
+                    <span class="community-content-header-edit" data-modal-link="gallery-1"><i class="fa fa-cog" aria-hidden="true"></i></span>
 
+                    <div class="modal-window" data-modal="gallery-1">
+                        <div class="modal-box medium animated" data-animation="zoomIn" data-duration="100">
+                            <span class="close-btn icon icon-office-52"></span>
+
+                            <div class="row">
+                                <div id="img-container-modal" class="col-md-12">
+                                    <!-- <h3 class="page-header">Demo:</h3> -->
+                                    <div class="img-container">
+                                        {% if community.imageBackgroundBase64 %}
+                                                <img src="{{ community.imageBackgroundBase64 }}" alt="{{ community.name }}" class="img-responsive" />
+                                        {% else %}
+                                            {% image 'theme/assets/img/guppy_bilkent_banner_01.jpg' %}
+                                                <img src="{{ asset_url }}" class="img-responsive" alt="{{ community.name }}" />
+                                            {% endimage %}
+
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="img-preview preview-lg"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
 
                 <div class="community-content-body">
 
@@ -68,11 +101,6 @@
                                 {% if community.link_facebook %}<li><i class="fa fa-facebook "></i><a href="{{ community.link_facebook }}" target="_blank">{{ community.link_facebook }}</a></li>{% endif %}
                                 {% if community.link_twitter %}<li><i class="fa fa-twitter "></i><a href="{{ community.link_twitter }}" target="_blank">{{ community.link_twitter }}</a></li>{% endif %}
                                 {% if community.link_instagram %}<li><i class="fa fa-instagram "></i><a href="{{ community.link_instagram }}" target="_blank">{{ community.link_instagram }}</a></li>{% endif %}
-                                {#{% if facebook is defined and facebook is not null %}<li><i class="fa fa-facebook "></i>{{ facebook }}</li>{% endif %}#}
-                                {#{% if twitter is defined and  twitter is not null %}<li><i class="fa fa-twitter "></i>{{ twitter }}</li>{% endif %}#}
-                                {#{% if instagram is defined and instagram is not null %}<li><i class="fa fa-instagram "></i>{{ instagram }}</li>{% endif %}#}
-                                {#<li><i class="fa fa-envelope"></i>bilkentmizahkultur@gmail.com</li>#}
-                                {#<li><i class="fa fa-phone"></i>(518) 457-5181 10001</li>#}
                             </ul>
                         </div>
                     </div>
@@ -90,6 +118,13 @@
 
 
 {% block javascriptcontent %}
+
+    {% javascripts
+            'theme/assets/js/cropper.js'
+            'theme/assets/js/cropper-main.js' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
     <script>
 
 /***********************************************************************************************************************
@@ -123,7 +158,7 @@
  **********************************************************************************************************************/
 
         $(document).on('click', '.community-content-header-edit i' , function (event) {
-            alert("Kulüp yöneticisi arkaplan resmini buradan değiştirebilecek...");
+            //alert("Kulüp yöneticisi arkaplan resmini buradan değiştirebilecek...");
         });
 
 /***********************************************************************************************************************
@@ -132,6 +167,8 @@
 
         // -- File to base64
         //document.getElementById("temp_img_loader").addEventListener("change", fileToBase64Converter, false);
+        console.log($('#img-container-modal').width());
+        console.log($('#img-container-modal').height());
 
 
     </script>
