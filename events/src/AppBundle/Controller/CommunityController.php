@@ -66,9 +66,11 @@ class CommunityController extends Controller
         $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
         $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByCommunityId($communityId);
 
-        foreach ($eventList as $event){
-            $eventUser = $this->getDoctrine()->getRepository('AppBundle:EventUserRating')->findOneBy(array('user'=>$this->getUser()->getId() , 'event'=>$event->getId()));
-            $event->is_saved = $eventUser ? $eventUser->getIsAttend() : false;
+        if($this->getUser()){
+            foreach ($eventList as $event){
+                $eventUser = $this->getDoctrine()->getRepository('AppBundle:EventUserRating')->findOneBy(array('user'=>$this->getUser()->getId() , 'event'=>$event->getId()));
+                $event->is_saved = $eventUser ? $eventUser->getIsAttend() : false;
+            }
         }
 
         $data['community'] = $community;
