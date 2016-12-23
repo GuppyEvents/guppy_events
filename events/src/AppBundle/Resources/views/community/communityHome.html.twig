@@ -50,14 +50,15 @@
             <div class="community-content col-md-10">
 
                 <div class="community-content-header">
+                    {#{% if community.imageBackgroundBase64 %}#}
+                        {#<img src="{{ community.imageBackgroundBase64 }}" alt="{{ community.name }}" class="img-responsive" />#}
+                    {#{% else %}#}
+                        {#{% image 'theme/assets/img/guppy_bilkent_banner_01.jpg' %}#}
+                            {#<img src="{{ asset_url }}" class="img-responsive" alt="{{ community.name }}" />#}
+                        {#{% endimage %}#}
+                    {#{% endif %}#}
 
-                    {% if community.imageBackgroundBase64 %}
-                        <img src="{{ community.imageBackgroundBase64 }}" alt="{{ community.name }}" class="img-responsive" />
-                    {% else %}
-                        {% image 'theme/assets/img/guppy_bilkent_banner_01.jpg' %}
-                            <img src="{{ asset_url }}" class="img-responsive" alt="{{ community.name }}" />
-                        {% endimage %}
-                    {% endif %}
+                    <div class="img-preview preview-lg"></div>
 
                     <span class="community-content-header-edit" data-modal-link="gallery-1"><i class="fa fa-cog" aria-hidden="true"></i></span>
 
@@ -79,7 +80,23 @@
                                         {% endif %}
                                     </div>
 
-                                    <div class="img-preview preview-lg"></div>
+                                    <!-- <h3 class="page-header">Data:</h3> -->
+                                    <div class="docs-data">
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" class="form-control" id="dataX" style="display:none;" placeholder="x">
+                                        </div>
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" class="form-control" id="dataY" style="display:none;" placeholder="y">
+                                        </div>
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" class="form-control" id="dataWidth" style="display:none;" placeholder="width">
+                                        </div>
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" class="form-control" id="dataHeight" style="display:none;" placeholder="height">
+                                        </div>
+                                    </div>
+                                
+
                                 </div>
                             </div>
 
@@ -137,16 +154,6 @@
  *                                          UTIL FUNCTIONS
  **********************************************************************************************************************/
 
-        function fileToBase64Converter() {
-            if (this.files && this.files[0]) {
-                var FR= new FileReader();
-                FR.onload = function(e) {
-                    $('#img_viewer').attr('src', e.target.result);
-                    $('#university_image_base64').val(e.target.result);
-                };
-                FR.readAsDataURL( this.files[0] );
-            }
-        }
 
 /***********************************************************************************************************************
  *                                          AJAX OPERATIONS
@@ -157,18 +164,10 @@
  *                                          EVENTS
  **********************************************************************************************************************/
 
-        $(document).on('click', '.community-content-header-edit i' , function (event) {
-            //alert("Kulüp yöneticisi arkaplan resmini buradan değiştirebilecek...");
-        });
 
 /***********************************************************************************************************************
  *                                          DOCUMENT ON READY
  **********************************************************************************************************************/
-
-        // -- File to base64
-        //document.getElementById("temp_img_loader").addEventListener("change", fileToBase64Converter, false);
-        console.log($('#img-container-modal').width());
-        console.log($('#img-container-modal').height());
 
 
     </script>

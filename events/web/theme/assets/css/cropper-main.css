@@ -154,8 +154,8 @@ body {
 }
 
 .preview-lg {
-  width: 255px;
-  height: 143px;
+  width: 920px!important;
+  height: 275px!important;
 }
 
 .preview-md {
