@@ -34,21 +34,21 @@
                                         <fieldset>
                                             <label for="username">Kullanıcı adı</label>
                                             <div class="fieldset-input-panel">
-                                                <input id="username" name="username" type="text" value="{{ app.user.username }}" disabled>
+                                                <input id="username" name="username" type="text" value="{{ app.user.username }}" disabled/>
                                             </div>
                                         </fieldset>
 
                                         <fieldset>
                                             <label for="email">Birincil Mail Adresi</label>
                                             <div class="fieldset-input-panel">
-                                                <input id="email" name="email" type="email" value="{{ app.user.email }}" disabled>
+                                                <input id="email" name="email" type="email" value="{{ app.user.email }}" disabled/>
                                             </div>
                                         </fieldset>
 
                                         <fieldset>
                                             <label for="uname" >İsminiz</label>
                                             <div class="fieldset-input-panel">
-                                                <input id="uname" name="uname" type="text" value="{{ app.user.name }}" disabled >
+                                                <input id="uname" name="uname" type="text" value="{{ app.user.name }}" disabled />
                                             </div>
                                             <div class="fieldset-edit-panel">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
@@ -58,7 +58,7 @@
                                         <fieldset>
                                             <label for="usurname">Soyisminiz</label>
                                             <div class="fieldset-input-panel">
-                                                <input id="usurname" name="usurname" type="text" value="{{ app.user.surname }}" disabled>
+                                                <input id="usurname" name="usurname" type="text" value="{{ app.user.surname }}" disabled/>
                                             </div>
                                             <div class="fieldset-edit-panel">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
@@ -68,11 +68,16 @@
                                         <fieldset>
                                             <label for="uphone">Cep Numaranız</label>
                                             <div class="fieldset-input-panel">
-                                                <input id="uphone" name="uphone" type="tel" value="{{ app.user.phone }}" disabled>
+                                                <input id="uphone" name="uphone" type="tel" value="{{ app.user.phone }}" disabled/>
                                             </div>
                                             <div class="fieldset-edit-panel">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </div>
+                                        </fieldset>
+
+                                        <!-- Hidden Parameters -->
+                                        <fieldset style="display: none">
+                                            <input type="text" id="profile_image_base64" name="profile_image_base64" value="{{ app.user.imageBase64 }}">
                                         </fieldset>
 
                                     </div>
@@ -88,38 +93,48 @@
                         <div class="col-sm-4 align-left">
                             <h6>&nbsp;</h6>
 
-                            {#<div>#}
-                                {#<form action="{{ path('user_profile_account') }}" method="post">#}
+                            <div>
+                                <span class="masonry-item">
+                                    <a href="#" class="gallery-thumb-link" data-modal-link="user-profile-picture">
+                                        {% if app.user.imageBase64 %}
+                                            <img id="img_viewer" src="{{ app.user.imageBase64 }}" alt="{{ app.user.name }}" class="img-responsive" />
+                                        {% else %}
+                                            {% image 'theme/assets/img/guppy_avatar_001.png' %}
+                                                <img id="img_viewer" src="{{ asset_url }}" class="img-responsive" alt="{{ app.user.name }}" />
+                                            {% endimage %}
+                                        {% endif %}
+                                    </a>
 
-                                    {#<div class="col-sm-6 col-md-5 align-left">#}
-                                        {#<fieldset>#}
-                                            {#<label for="cc">Eski Şifreniz</label>#}
-                                            {#<input id="cc" name="cc" type="password" disabled>#}
-                                        {#</fieldset>#}
+                                    <div class="modal-window" data-modal="user-profile-picture">
+                                        <div class="modal-box small animated" data-animation="zoomIn" data-duration="700">
+                                            <span class="close-btn icon icon-office-52"></span>
 
-                                        {#<fieldset>#}
-                                            {#<label for="bb">Yeni Şifreniz</label>#}
-                                            {#<input id="bb" name="bb" type="password">#}
-                                        {#</fieldset>#}
+                                            <h5 class="heading-alt">Profil Resminiz</h5>
 
-                                        {#<fieldset>#}
-                                            {#<label for="aa">Yeni Şifreniz Tekrar</label>#}
-                                            {#<input id="aa" name="aa" type="password">#}
-                                        {#</fieldset>#}
+                                            {% if false and app.user.imageBase64 %}
+                                                <img src="{{ app.user.imageBase64 }}" alt="{{ app.user.name }}" class="img-responsive" />
+                                            {% else %}
+                                                {% image 'theme/assets/img/guppy_avatar_001.png' %}
+                                                    <img src="{{ asset_url }}" class="full-width-img" alt="{{ app.user.name }}" />
+                                                {% endimage %}
+                                            {% endif %}
 
-                                    {#</div>#}
+                                        </div>
+                                    </div>
 
-                                    {#<fieldset class="col-sm-12">#}
-                                        {#<input type="submit" class="btn btn-rounded btn-sm" value="Kaydet">#}
-                                    {#</fieldset>#}
-                                {#</form>#}
-                            {#</div>#}
+                                </span>
+                                <div>
+                                    <input id="temp_img_loader" type='file' style="display: none;"/>
+                                    <a id="temp_img_loader_trigger">
+                                        <i class="fa fa-upload" aria-hidden="true"> Resim Yükle</i></a>
+                                </div>
 
-                        </div>
+                            </div>
+                        </div> <!-- profil-content-body right end -->
 
                     </div>
 
-                </div><!-- community-content-body end -->
+                </div><!-- profil-content-body end -->
 
             </div>
         </div>
@@ -142,10 +157,20 @@
         var error_msg = '{% if error_msg is defined %}{{ error_msg|json_encode|raw }}{% endif %}';
         var success_msg = '{% if success_msg is defined %}{{ success_msg|json_encode|raw }}{% endif %}';
 
-/***********************************************************************************************************************
- *                                          UTIL FUNCTIONS
- **********************************************************************************************************************/
 
+/***************************************************************************************************************
+ *                                          UTIL FUNCTIONS
+ ********************************************************************-******************************************/
+        function fileToBase64Converter(eventTargetElement, targetImgElementId, targetImgBase64ElementId) {
+            if (eventTargetElement.files && eventTargetElement.files[0]) {
+                var FR= new FileReader();
+                FR.onload = function(e) {
+                    $(targetImgElementId).attr('src', e.target.result);
+                    $(targetImgBase64ElementId).val(e.target.result);
+                };
+                FR.readAsDataURL( eventTargetElement.files[0] );
+            }
+        }
 
 /***********************************************************************************************************************
  *                                          AJAX OPERATIONS
@@ -164,8 +189,22 @@
 
         $(document).on('focusout', '.fieldset-input-panel>input' , function (event) {
             $(event.target).attr('value',$(event.target).val());
+            $(event.target).attr('disabled',true);
         });
 
+        // -- File to base64
+        $(document).on('change' , '#temp_img_loader' , function (event) {
+            fileToBase64Converter(event.target ,'#img_viewer', '#profile_image_base64');
+        });
+
+        $(document).on('click', '#temp_img_loader_trigger' , function(){
+            $('#temp_img_loader').trigger('click');
+        });
+
+        // -- Form post edilmeden önce disabled kaldırılması gerekiyor
+        $(document).on('click','#form-confirm',function(){
+            $('fieldset .fa-pencil-square-o').parentsUntil('.profile-content-body').last().parent().find('.fieldset-input-panel>input').attr('disabled',false);
+        });
 
 /***********************************************************************************************************************
  *                                          DOCUMENT ON READY

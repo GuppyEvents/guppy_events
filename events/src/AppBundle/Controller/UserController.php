@@ -50,6 +50,7 @@ class UserController extends Controller
                 $user_name = $request->get('uname');
                 $user_surname = $request->get('usurname');
                 $user_uphone = $request->get('uphone');
+                $user_image = $request->get('profile_image_base64');
 
                 // --1.2-- check that user exist
                 $user = $this->getUser();
@@ -57,6 +58,7 @@ class UserController extends Controller
                     $user->setName($user_name);
                     $user->setSurname($user_surname);
                     $user->setPhone($user_uphone);
+                    $user->setImageBase64($user_image);
 
                     $em->persist($user);
                     $em->flush();

@@ -82,6 +82,13 @@ class User extends Base implements UserInterface, \Serializable
     private $role;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="image_base64", type="text", nullable=true)
+     */
+    private $imageBase64;
+
+    /**
      * @var \AppBundle\Entity\Address
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Address")
@@ -303,6 +310,22 @@ class User extends Base implements UserInterface, \Serializable
     public function getAddress()
     {
         return $this->address;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImageBase64()
+    {
+        return $this->imageBase64;
+    }
+
+    /**
+     * @param string $imageBase64
+     */
+    public function setImageBase64($imageBase64)
+    {
+        $this->imageBase64 = $imageBase64;
     }
 
 
