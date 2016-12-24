@@ -49,8 +49,10 @@ class UserController extends Controller
                 // --1.1-- Get post parameter
                 $user_name = $request->get('uname');
                 $user_surname = $request->get('usurname');
+                $user_sex = intval($request->get('usex'));
                 $user_uphone = $request->get('uphone');
                 $user_image = $request->get('profile_image_base64');
+                $user_birthdate = \DateTime::createFromFormat('m/d/Y', $request->get('ubirthdate'));
 
                 // --1.2-- check that user exist
                 $user = $this->getUser();
@@ -59,6 +61,10 @@ class UserController extends Controller
                     $user->setSurname($user_surname);
                     $user->setPhone($user_uphone);
                     $user->setImageBase64($user_image);
+                    $user->setSex($user_sex);
+
+                    if($user_birthdate)
+                        $user->setBirthDate($user_birthdate);
 
                     $em->persist($user);
                     $em->flush();

@@ -15,7 +15,7 @@
 
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 
-        <title>{% block title %}Guppy Home Page{% endblock %}</title>
+        <title>{% block title %}Guppy - Anasayfa{% endblock %}</title>
 
         {% stylesheets
                 'theme/assets/css/custom-animations.css'
@@ -23,6 +23,9 @@
                 'theme/assets/css/guppy-ui.css' filter='cssrewrite' %}
             <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
         {% endstylesheets %}
+
+            <!-- jquery ui -->
+            <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
         {% block stylesheets %}{% endblock %}
 
@@ -144,6 +147,10 @@
                 'theme/assets/js/guppy.js' %}
             <script src="{{ asset_url }}"></script>
         {% endjavascripts %}
+
+            <!-- jquery ui -->
+            <!-- datepicker used -->
+            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
         {% block javascriptcontent %}{% endblock %}
 

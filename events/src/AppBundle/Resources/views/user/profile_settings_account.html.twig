@@ -75,6 +75,24 @@
                                             </div>
                                         </fieldset>
 
+                                        <fieldset>
+                                            <label for="ubirthdate">Doğum Tarihi</label>
+                                            <div class="fieldset-input-panel">
+                                                <input id="ubirthdate" name="ubirthdate" type="text" {% if app.user.birthDate %}value="{{ app.user.birthDate.format('m/d/Y') }}"{% endif %} disabled/>
+                                            </div>
+                                            <div class="fieldset-edit-panel">
+                                                <i class="fa fa-calendar-o" aria-hidden="true"></i>
+                                            </div>
+                                        </fieldset>
+
+                                        <fieldset>
+                                            <label for="usex">Cinsiyetiniz</label>
+                                            <div class="fieldset-input-panel">
+                                                <input id="usex" name="usex" type="radio" value="1" {% if app.user.sex and app.user.sex==1 %}checked{% endif %}/> Kadın <br/>
+                                                <input id="usex" name="usex" type="radio" value="2" {% if app.user.sex and app.user.sex==2 %}checked{% endif %}/> Erkek
+                                            </div>
+                                        </fieldset>
+
                                         <!-- Hidden Parameters -->
                                         <fieldset style="display: none">
                                             <input type="text" id="profile_image_base64" name="profile_image_base64" value="{{ app.user.imageBase64 }}">
@@ -82,7 +100,7 @@
 
                                     </div>
 
-                                    <fieldset class="col-sm-12">
+                                    <fieldset class="col-sm-12" style="padding-top: 20px;">
                                         <input id="form-confirm" type="submit" class="btn btn-rounded btn-sm" value="Kaydet">
                                     </fieldset>
                                 </form>
@@ -187,6 +205,12 @@
             $inputElement.trigger( "focus" );
         });
 
+        $(document).on('click' , 'fieldset .fa-calendar-o' , function (event){
+            $inputElement = $(event.target).parentsUntil('fieldset').last().parent().find('.fieldset-input-panel>input');
+            $inputElement.attr('disabled',false);
+            $inputElement.trigger( "focus" );
+        });
+
         $(document).on('focusout', '.fieldset-input-panel>input' , function (event) {
             $(event.target).attr('value',$(event.target).val());
             $(event.target).attr('disabled',true);
@@ -204,11 +228,22 @@
         // -- Form post edilmeden önce disabled kaldırılması gerekiyor
         $(document).on('click','#form-confirm',function(){
             $('fieldset .fa-pencil-square-o').parentsUntil('.profile-content-body').last().parent().find('.fieldset-input-panel>input').attr('disabled',false);
+            $('fieldset .fa-calendar-o').parentsUntil('.profile-content-body').last().parent().find('.fieldset-input-panel>input').attr('disabled',false);
         });
 
 /***********************************************************************************************************************
  *                                          DOCUMENT ON READY
  **********************************************************************************************************************/
+
+        // -- jquery date picker
+        $( "#ubirthdate" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dayNames:[ "pazar", "pazartesi", "salı", "çarşamba", "perşembe", "cuma", "cumartesi" ],
+            dayNamesMin: [ "pa", "pzt", "sa", "çar", "per", "cum", "cmt" ],
+            monthNamesShort: [ "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık" ],
+            yearRange: '1975:'+(new Date).getFullYear(),
+        });
 
         // -- Operation Result Message
         if(success_msg){

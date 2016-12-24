@@ -68,11 +68,25 @@ class User extends Base implements UserInterface, \Serializable
     private $surname;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="sex", type="integer", nullable=true)
+     */
+    private $sex;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="phone", type="string", length=45, nullable=true)
      */
     private $phone;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="birth_date", type="datetime", nullable=true)
+     */
+    private $birthDate;
 
     /**
      * @var string
@@ -241,6 +255,22 @@ class User extends Base implements UserInterface, \Serializable
     }
 
     /**
+     * @return int
+     */
+    public function getSex()
+    {
+        return $this->sex;
+    }
+
+    /**
+     * @param int $sex
+     */
+    public function setSex($sex)
+    {
+        $this->sex = $sex;
+    }
+
+    /**
      * Set phone
      *
      * @param string $phone
@@ -261,6 +291,22 @@ class User extends Base implements UserInterface, \Serializable
     public function getPhone()
     {
         return $this->phone;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getBirthDate()
+    {
+        return $this->birthDate;
+    }
+
+    /**
+     * @param \DateTime $birthDate
+     */
+    public function setBirthDate($birthDate)
+    {
+        $this->birthDate = $birthDate;
     }
 
     /**
