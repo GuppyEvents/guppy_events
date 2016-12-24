@@ -1,6 +1,6 @@
 {% extends 'AppBundle::main_base.html.twig' %}
 
-{% block title %}Guppy - Community Home{% endblock %}
+{% block title %}Guppy - Topluluk Anasayfa{% endblock %}
 
 {% block stylesheets %}
 
@@ -50,6 +50,7 @@
             <div class="community-content col-md-10">
 
                 <div class="community-content-header">
+
                     {#{% if community.imageBackgroundBase64 %}#}
                         {#<img src="{{ community.imageBackgroundBase64 }}" alt="{{ community.name }}" class="img-responsive" />#}
                     {#{% else %}#}
@@ -59,10 +60,9 @@
                     {#{% endif %}#}
 
                     <div class="img-preview preview-lg"></div>
+                    <span id="community-background-image-edit" class="community-content-header-edit" data-modal-link="community-background-image"><i class="fa fa-cog" aria-hidden="true"></i></span>
 
-                    <span class="community-content-header-edit" data-modal-link="gallery-1"><i class="fa fa-cog" aria-hidden="true"></i></span>
-
-                    <div class="modal-window" data-modal="gallery-1">
+                    <div class="modal-window" data-modal="community-background-image">
                         <div class="modal-box medium animated" data-animation="zoomIn" data-duration="100">
                             <span class="close-btn icon icon-office-52"></span>
 
@@ -71,7 +71,7 @@
                                     <!-- <h3 class="page-header">Demo:</h3> -->
                                     <div class="img-container">
                                         {% if community.imageBackgroundBase64 %}
-                                                <img src="{{ community.imageBackgroundBase64 }}" alt="{{ community.name }}" class="img-responsive" />
+                                            <img src="{{ community.imageBackgroundBase64 }}" alt="{{ community.name }}" class="img-responsive" />
                                         {% else %}
                                             {% image 'theme/assets/img/guppy_bilkent_banner_01.jpg' %}
                                                 <img src="{{ asset_url }}" class="img-responsive" alt="{{ community.name }}" />
@@ -101,7 +101,7 @@
                             </div>
 
                         </div>
-                    </div>
+                    </div> <!-- modal end -->
                 </div>
 
                 <div class="community-content-body">
@@ -149,7 +149,6 @@
  **********************************************************************************************************************/
         var debugMode = true;
 
-
 /***********************************************************************************************************************
  *                                          UTIL FUNCTIONS
  **********************************************************************************************************************/
@@ -163,6 +162,13 @@
 /***********************************************************************************************************************
  *                                          EVENTS
  **********************************************************************************************************************/
+
+/***********************************************************************************************************************
+ *                                          BEFORE DOCUMENT ON READY
+ **********************************************************************************************************************/
+        // we should get modal size before document ready
+        $( "#community-background-image-edit" ).trigger( "click" );
+        $('.close-btn').trigger( "click" );
 
 
 /***********************************************************************************************************************

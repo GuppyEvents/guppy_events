@@ -1,6 +1,6 @@
 {% extends 'AppBundle::main_base.html.twig' %}
 
-{% block title %}Guppy - Profile{% endblock %}
+{% block title %}Bilgilerim{% endblock %}
 
 
 {% block content %}
@@ -19,13 +19,102 @@
             <!-- -------------- CONTENT -------------- -->
             <div class="community-content col-md-10">
 
-                <div class="community-content-header"></div>
+                <div class="profile-content-header"></div>
 
-                <div class="community-content-body">
+                <div class="profile-content-body">
                     <div class="fade active in">
-                        <div class="col-sm-12 align-left">
-                            <h6>Kullanıcı hesap ayarları</h6>
-                            <p>Kullanıcının isim, soyisim, cinsiyeti gibi değişiklikleri içerir </p>
+
+                        <div class="col-sm-8 align-left">
+                            <h6>Hesap İşlemleri</h6>
+
+                            <div>
+                                <form action="{{ path('user_profile_password') }}" method="post">
+
+                                    <div class="col-sm-6 col-md-5 align-left">
+                                        <fieldset>
+                                            <label for="username">Kullanıcı adı</label>
+                                            <div class="fieldset-input-panel">
+                                                <input id="username" name="username" type="text" value="{{ app.user.username }}" disabled>
+                                            </div>
+                                        </fieldset>
+
+                                        <fieldset>
+                                            <label for="email">Birincil Mail Adresi</label>
+                                            <div class="fieldset-input-panel">
+                                                <input id="email" name="email" type="email" value="{{ app.user.email }}" disabled>
+                                            </div>
+                                        </fieldset>
+
+                                        <fieldset>
+                                            <label for="uname" >İsminiz</label>
+                                            <div class="fieldset-input-panel">
+                                                <input id="uname" name="uname" type="text" value="{{ app.user.name }}" disabled >
+                                            </div>
+                                            <div class="fieldset-edit-panel">
+                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                            </div>
+                                        </fieldset>
+
+                                        <fieldset>
+                                            <label for="usurname">Soyisminiz</label>
+                                            <div class="fieldset-input-panel">
+                                                <input id="usurname" name="usurname" type="text" value="{{ app.user.surname }}" disabled>
+                                            </div>
+                                            <div class="fieldset-edit-panel">
+                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                            </div>
+                                        </fieldset>
+
+                                        <fieldset>
+                                            <label for="uphone">Cep Numaranız</label>
+                                            <div class="fieldset-input-panel">
+                                                <input id="uphone" name="uphone" type="tel" value="{{ app.user.phone }}" disabled>
+                                            </div>
+                                            <div class="fieldset-edit-panel">
+                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                            </div>
+                                        </fieldset>
+
+                                    </div>
+
+                                    <fieldset class="col-sm-12">
+                                        <input type="submit" class="btn btn-rounded btn-sm" value="Kaydet">
+                                    </fieldset>
+                                </form>
+                            </div>
+
+                        </div>
+
+                        <div class="col-sm-4 align-left">
+                            <h6>&nbsp;</h6>
+
+                            {#<div>#}
+                                {#<form action="{{ path('user_profile_password') }}" method="post">#}
+
+                                    {#<div class="col-sm-6 col-md-5 align-left">#}
+                                        {#<fieldset>#}
+                                            {#<label for="cc">Eski Şifreniz</label>#}
+                                            {#<input id="cc" name="cc" type="password">#}
+                                        {#</fieldset>#}
+
+                                        {#<fieldset>#}
+                                            {#<label for="bb">Yeni Şifreniz</label>#}
+                                            {#<input id="bb" name="bb" type="password">#}
+                                        {#</fieldset>#}
+
+                                        {#<fieldset>#}
+                                            {#<label for="aa">Yeni Şifreniz Tekrar</label>#}
+                                            {#<input id="aa" name="aa" type="password">#}
+                                        {#</fieldset>#}
+
+                                    {#</div>#}
+
+                                    {#<fieldset class="col-sm-12">#}
+                                        {#<input type="submit" class="btn btn-rounded btn-sm" value="Kaydet">#}
+                                    {#</fieldset>#}
+                                {#</form>#}
+                            {#</div>#}
+
                         </div>
 
                     </div>
@@ -50,22 +139,13 @@
  *                                          LOCAL VARIABLE
  **********************************************************************************************************************/
         var debugMode = true;
-
+        var error_msg = '{% if error_msg is defined %}{{ error_msg|json_encode|raw }}{% endif %}';
+        var success_msg = '{% if success_msg is defined %}{{ success_msg|json_encode|raw }}{% endif %}';
 
 /***********************************************************************************************************************
  *                                          UTIL FUNCTIONS
  **********************************************************************************************************************/
 
-        function fileToBase64Converter() {
-            if (this.files && this.files[0]) {
-                var FR= new FileReader();
-                FR.onload = function(e) {
-                    $('#img_viewer').attr('src', e.target.result);
-                    $('#university_image_base64').val(e.target.result);
-                };
-                FR.readAsDataURL( this.files[0] );
-            }
-        }
 
 /***********************************************************************************************************************
  *                                          AJAX OPERATIONS
@@ -76,14 +156,26 @@
  *                                          EVENTS
  **********************************************************************************************************************/
 
+        $(document).on('click' , 'fieldset .fa-pencil-square-o' , function (event){
+            $inputElement = $(event.target).parentsUntil('fieldset').last().parent().find('.fieldset-input-panel>input');
+            $inputElement.attr('disabled',false);
+            $inputElement.trigger( "focus" );
+        });
+
+        $(document).on('focusout', '.fieldset-input-panel>input' , function (event) {
+            $(event.target).attr('disabled',true);
+        });
 
 /***********************************************************************************************************************
  *                                          DOCUMENT ON READY
  **********************************************************************************************************************/
 
-        // -- File to base64
-        //document.getElementById("temp_img_loader").addEventListener("change", fileToBase64Converter, false);
-
+        // -- Operation Result Message
+        if(success_msg){
+            toastr.success(success_msg);
+        }else if(error_msg){
+            toastr.error(error_msg);
+        }
 
     </script>
 

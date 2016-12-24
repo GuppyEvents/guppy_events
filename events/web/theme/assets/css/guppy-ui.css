@@ -441,3 +441,22 @@ h6{
     border-color: transparent;
     cursor: pointer;
 }
+
+.profile-content-body fieldset {
+    width: 200%;
+}
+
+.profile-content-body fieldset label{
+    display: block;
+}
+
+.profile-content-body fieldset .fieldset-input-panel{
+    float: left;
+    width: 80%
+}
+
+.profile-content-body fieldset .fieldset-edit-panel{
+    width: 40px;
+    float: left;
+    padding: 10px;
+}

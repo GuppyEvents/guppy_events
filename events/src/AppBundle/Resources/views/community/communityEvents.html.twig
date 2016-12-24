@@ -1,7 +1,16 @@
 {% extends 'AppBundle::main_base.html.twig' %}
 
-{% block title %}Guppy - Community Events{% endblock %}
+{% block title %}Guppy - Topluluk Etkinlikleri{% endblock %}
 
+{% block stylesheets %}
+
+    {% stylesheets
+            'theme/assets/css/cropper.css'
+            'theme/assets/css/cropper-main.css' filter='cssrewrite' %}
+        <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+    {% endstylesheets %}
+
+{% endblock %}
 
 {% block content %}
 
@@ -36,20 +45,63 @@
                 </div>
             </div>
 
+
             <!-- -------------- CONTENT -------------- -->
             <div class="community-content col-md-10">
 
                 <div class="community-content-header">
 
-                    {% if community.imageBackgroundBase64 %}
-                        <img src="{{ community.imageBackgroundBase64 }}" alt="{{ community.name }}" class="img-responsive" />
-                    {% else %}
-                        {% image 'theme/assets/img/guppy_bilkent_banner_01.jpg' %}
-                            <img src="{{ asset_url }}" class="img-responsive" alt="{{ community.name }}" />
-                        {% endimage %}
-                    {% endif %}
+                    {#{% if community.imageBackgroundBase64 %}#}
+                        {#<img src="{{ community.imageBackgroundBase64 }}" alt="{{ community.name }}" class="img-responsive" />#}
+                    {#{% else %}#}
+                        {#{% image 'theme/assets/img/guppy_bilkent_banner_01.jpg' %}#}
+                            {#<img src="{{ asset_url }}" class="img-responsive" alt="{{ community.name }}" />#}
+                        {#{% endimage %}#}
+                    {#{% endif %}#}
 
-                    <span class="community-content-header-edit"><i class="fa fa-cog" aria-hidden="true"></i></span>
+                    <div class="img-preview preview-lg"></div>
+                    <span id="community-background-image-edit" class="community-content-header-edit" data-modal-link="community-background-image"><i class="fa fa-cog" aria-hidden="true"></i></span>
+
+                    <div class="modal-window" data-modal="community-background-image">
+                        <div class="modal-box medium animated" data-animation="zoomIn" data-duration="100">
+                            <span class="close-btn icon icon-office-52"></span>
+
+                            <div class="row">
+                                <div id="img-container-modal" class="col-md-12">
+                                    <!-- <h3 class="page-header">Demo:</h3> -->
+                                    <div class="img-container">
+                                        {% if community.imageBackgroundBase64 %}
+                                            <img src="{{ community.imageBackgroundBase64 }}" alt="{{ community.name }}" class="img-responsive" />
+                                        {% else %}
+                                            {% image 'theme/assets/img/guppy_bilkent_banner_01.jpg' %}
+                                                <img src="{{ asset_url }}" class="img-responsive" alt="{{ community.name }}" />
+                                            {% endimage %}
+
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- <h3 class="page-header">Data:</h3> -->
+                                    <div class="docs-data">
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" class="form-control" id="dataX" style="display:none;" placeholder="x">
+                                        </div>
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" class="form-control" id="dataY" style="display:none;" placeholder="y">
+                                        </div>
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" class="form-control" id="dataWidth" style="display:none;" placeholder="width">
+                                        </div>
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" class="form-control" id="dataHeight" style="display:none;" placeholder="height">
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div> <!-- modal end -->
                 </div>
 
 
@@ -104,6 +156,13 @@
 
 
 {% block javascriptcontent %}
+
+    {% javascripts
+            'theme/assets/js/cropper.js'
+            'theme/assets/js/cropper-main.js' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
     <script>
 
 /***********************************************************************************************************************
@@ -176,6 +235,13 @@
         $(document).on('click', '.community-event-save' , function (event) {
             ajaxSocialSaveEvent(event.target);
         });
+
+/***********************************************************************************************************************
+ *                                          BEFORE DOCUMENT ON READY
+ **********************************************************************************************************************/
+        // we should get modal size before document ready
+        $( "#community-background-image-edit" ).trigger( "click" );
+        $('.close-btn').trigger( "click" );
 
 /***********************************************************************************************************************
  *                                          DOCUMENT ON READY

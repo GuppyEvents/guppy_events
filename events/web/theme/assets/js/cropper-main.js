@@ -20,8 +20,6 @@ window.onload = function () {
         autoCropArea: 1.0,
         preview: '.img-preview',
         viewMode: 2,
-        minContainerWidth: 860,
-        minContainerHeight: 469,
         responsive: false,
         ready: function (e) {
           console.log(e.type);
@@ -66,7 +64,7 @@ window.onload = function () {
     $('button[data-method="rotate"]').prop('disabled', true);
     $('button[data-method="scale"]').prop('disabled', true);
   }
-    
+
 
   document.body.onkeydown = function (event) {
     var e = event || window.event;
