@@ -40,7 +40,37 @@ class UserController extends Controller
     public function userProfileAction(Request $request)
     {
         $data = array();
-        $data['a'] = 'a';
+        $em = $this->getDoctrine()->getManager();
+
+        // 1) POST OPERATION
+        if($request->getMethod() == 'POST'){
+
+            try{
+                // --1.1-- Get post parameter
+                $user_name = $request->get('uname');
+                $user_surname = $request->get('usurname');
+                $user_uphone = $request->get('uphone');
+
+                // --1.2-- check that user exist
+                $user = $this->getUser();
+                if($user){
+                    $user->setName($user_name);
+                    $user->setSurname($user_surname);
+                    $user->setPhone($user_uphone);
+
+                    $em->persist($user);
+                    $em->flush();
+
+                    $data['success_msg'] = 'Kullanıcı bilgileri güncellendi';
+
+                }else {
+                    $data['error_msg'] = 'Lütfen öncelikle giriş yapınız';
+                }
+
+
+            } catch (Exception $e){}
+        }
+
         return $this->render('AppBundle:user:profile_settings_account.html.twig', $data);
     }
 

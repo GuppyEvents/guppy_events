@@ -28,7 +28,7 @@
                             <h6>Hesap İşlemleri</h6>
 
                             <div>
-                                <form action="{{ path('user_profile_password') }}" method="post">
+                                <form action="{{ path('user_profile_account') }}" method="post">
 
                                     <div class="col-sm-6 col-md-5 align-left">
                                         <fieldset>
@@ -78,7 +78,7 @@
                                     </div>
 
                                     <fieldset class="col-sm-12">
-                                        <input type="submit" class="btn btn-rounded btn-sm" value="Kaydet">
+                                        <input id="form-confirm" type="submit" class="btn btn-rounded btn-sm" value="Kaydet">
                                     </fieldset>
                                 </form>
                             </div>
@@ -89,12 +89,12 @@
                             <h6>&nbsp;</h6>
 
                             {#<div>#}
-                                {#<form action="{{ path('user_profile_password') }}" method="post">#}
+                                {#<form action="{{ path('user_profile_account') }}" method="post">#}
 
                                     {#<div class="col-sm-6 col-md-5 align-left">#}
                                         {#<fieldset>#}
                                             {#<label for="cc">Eski Şifreniz</label>#}
-                                            {#<input id="cc" name="cc" type="password">#}
+                                            {#<input id="cc" name="cc" type="password" disabled>#}
                                         {#</fieldset>#}
 
                                         {#<fieldset>#}
@@ -163,8 +163,9 @@
         });
 
         $(document).on('focusout', '.fieldset-input-panel>input' , function (event) {
-            $(event.target).attr('disabled',true);
+            $(event.target).attr('value',$(event.target).val());
         });
+
 
 /***********************************************************************************************************************
  *                                          DOCUMENT ON READY
