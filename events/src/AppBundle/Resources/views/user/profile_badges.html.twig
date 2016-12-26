@@ -1,0 +1,87 @@
+{% extends 'AppBundle::main_base.html.twig' %}
+
+{% block title %}Mail Ayarları{% endblock %}
+
+
+{% block content %}
+
+    <!-- --------------------------------------------- -->
+    <!-- ------------------ CONTENT ------------------ -->
+    <!-- --------------------------------------------- -->
+
+    <section class="guppy-section align-center">
+        <div class="container">
+
+
+            <!-- -------------- SIDEBAR -------------- -->
+            {{ include('AppBundle:user:profile_sidebar.html.twig') }}
+
+
+            <!-- -------------- CONTENT -------------- -->
+            <div class="profile-content col-md-10">
+
+                <!-- MAIL PANEL HEADER -->
+                <div class="profile-content-header"></div>
+
+                <!-- MAIL PANEL BODY -->
+                <div class="profile-content-body">
+                    <div class="fade active in">
+                        <div class="col-sm-12 align-left">
+                            <h6>Bu sayfada rozetler görüntülenecek</h6>
+                            <p>Sahip olduklarım</p>
+
+                        </div>
+                    </div>
+
+                </div> <!-- .profile-content-body ends -->
+            </div> <!-- .profile-content -->
+
+        </div> <!-- .container ends -->
+    </section>
+
+{% endblock %}
+
+
+
+{% block javascriptcontent %}
+    <script>
+
+/***********************************************************************************************************************
+ *                                          LOCAL VARIABLE
+ **********************************************************************************************************************/
+        var debugMode = true;
+        var error_msg = '{% if error_msg is defined %}{{ error_msg|json_encode|raw }}{% endif %}';
+        var success_msg = '{% if success_msg is defined %}{{ success_msg|json_encode|raw }}{% endif %}';
+
+
+/***********************************************************************************************************************
+ *                                          UTIL FUNCTIONS
+ **********************************************************************************************************************/
+
+
+/***********************************************************************************************************************
+ *                                          AJAX OPERATIONS
+ **********************************************************************************************************************/
+
+
+/***********************************************************************************************************************
+ *                                          EVENTS
+ **********************************************************************************************************************/
+
+
+/***********************************************************************************************************************
+ *                                          DOCUMENT ON READY
+ **********************************************************************************************************************/
+
+        // -- Operation Result Message
+        if(success_msg){
+            toastr.success(success_msg);
+        }else if(error_msg){
+            toastr.error(error_msg);
+        }
+
+
+    </script>
+
+{% endblock %}
+

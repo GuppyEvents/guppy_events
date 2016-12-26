@@ -406,7 +406,7 @@ h6{
     Profile Page
 ---------------------------------------------------------------------------- */
 .profile-content {
-    min-height: 600px;
+    /*min-height: 600px;*/
 }
 
 .profile-content-header {

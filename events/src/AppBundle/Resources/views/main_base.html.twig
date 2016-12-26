@@ -98,8 +98,9 @@
             </div>
         </header>
 
-        {% block content %}{% endblock %}
-
+        <div class="guppy-container">
+            {% block content %}{% endblock %}
+        </div>
 
         <!-- ------------ FOOTER ------------ -->
         <section class="footer">
@@ -153,6 +154,20 @@
             <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
         {% block javascriptcontent %}{% endblock %}
+
+
+        <!-- ------------ GUPPY MAIN JS ------------ -->
+        <script>
+
+            // -1- setting footer posisition
+            $('.guppy-container').css('min-height' , $( window ).height() - $('.header').height() - $('.footer').height() -50 );
+
+            $(window).on('resize',function(event){
+                $('.guppy-container').css('min-height' , $( window ).height() - $('.header').height() - $('.footer').height() -50 );
+            });
+
+        </script>
+
 
     </body>
 </html>

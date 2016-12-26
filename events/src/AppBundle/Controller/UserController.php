@@ -186,4 +186,18 @@ class UserController extends Controller
 
         return $this->render('AppBundle:user:profile_settings_password.html.twig', $data);
     }
+
+
+    /**
+     * @Route("/profile/badges", name="user_profile_badges")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function userProfileBadgesAction(Request $request)
+    {
+
+        $data = array();
+        $em = $this->getDoctrine()->getManager();
+
+        return $this->render('AppBundle:user:profile_badges.html.twig', $data);
+    }
 }
