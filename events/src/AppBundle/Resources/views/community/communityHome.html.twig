@@ -115,9 +115,21 @@
                         <div class="col-sm-6 align-left" style="padding-top: 20px;">
                             <h6>İletişim Bilgileri</h6>
                             <ul class="list">
-                                {% if community.link_facebook %}<li><i class="fa fa-facebook "></i><a href="{{ community.link_facebook }}" target="_blank">{{ community.link_facebook }}</a></li>{% endif %}
-                                {% if community.link_twitter %}<li><i class="fa fa-twitter "></i><a href="{{ community.link_twitter }}" target="_blank">{{ community.link_twitter }}</a></li>{% endif %}
-                                {% if community.link_instagram %}<li><i class="fa fa-instagram "></i><a href="{{ community.link_instagram }}" target="_blank">{{ community.link_instagram }}</a></li>{% endif %}
+                                {% if community.link_facebook %}<li>
+                                    <div class="community-social-icon"><i class="fa fa-facebook "></i></div>
+                                    <a href="{{ community.link_facebook }}" target="_blank">{{ community.link_facebook }}</a></li>
+                                {% endif %}
+
+                                {% if community.link_twitter %}<li>
+                                    <div class="community-social-icon"><i class="fa fa-twitter "></i></div>
+                                    <a href="{{ community.link_twitter }}" target="_blank">{{ community.link_twitter }}</a></li>
+                                {% endif %}
+
+                                {% if community.link_instagram %}
+                                    <div class="community-social-icon"><li><i class="fa fa-instagram "></i></div>
+                                    <a href="{{ community.link_instagram }}" target="_blank">{{ community.link_instagram }}</a></li>
+                                {% endif %}
+
                             </ul>
                         </div>
                     </div>

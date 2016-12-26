@@ -85,6 +85,11 @@
     padding-bottom: 30px;
 }
 
+.community-content-body ul .community-social-icon {
+    width: 30px;
+    float: left;
+}
+
 .guppy-section {
     position: relative;
 }
