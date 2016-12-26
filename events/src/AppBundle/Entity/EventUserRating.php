@@ -22,9 +22,9 @@ class EventUserRating
     /**
      * @var boolean
      *
-     * @ORM\Column(name="is_attend", type="boolean", nullable=true)
+     * @ORM\Column(name="is_saved", type="boolean", nullable=true)
      */
-    private $isAttend;
+    private $isSaved;
 
     /**
      * @var integer
@@ -81,26 +81,19 @@ class EventUserRating
     }
 
     /**
-     * Set isAttend
-     *
-     * @param boolean $isAttend
-     * @return EventUserRating
+     * @return boolean
      */
-    public function setIsAttend($isAttend)
+    public function getIsSaved()
     {
-        $this->isAttend = $isAttend;
-
-        return $this;
+        return $this->isSaved;
     }
 
     /**
-     * Get isAttend
-     *
-     * @return boolean 
+     * @param boolean $isSaved
      */
-    public function getIsAttend()
+    public function setIsSaved($isSaved)
     {
-        return $this->isAttend;
+        $this->isSaved = $isSaved;
     }
 
     /**

@@ -46,10 +46,10 @@ class EventUserRatingController extends Controller
             $eventUser = $em->getRepository('AppBundle:EventUserRating')->findOneBy(array('user'=>$this->getUser()->getId() , 'event'=>$eventId));
 
             if($eventUser){
-                $eventUser->setIsAttend(!$eventSave);
+                $eventUser->setIsSaved(!$eventSave);
             }else{
                 $eventUser = new EventUserRating();
-                $eventUser->setIsAttend(!$eventSave);
+                $eventUser->setIsSaved(!$eventSave);
                 $eventUser->setUser($this->getUser());
 
                 $event = $em->getRepository('AppBundle:Event')->find($eventId);
@@ -59,7 +59,7 @@ class EventUserRatingController extends Controller
             $this->getDoctrine()->getManager()->persist($eventUser);
             $this->getDoctrine()->getManager()->flush();
 
-            $data['saved'] = $eventUser->getIsAttend();
+            $data['saved'] = $eventUser->getIsSaved();
 
             // -- 2.2 -- Return Result
             $response->setContent(json_encode(Result::$SUCCESS->setContent( $data )));

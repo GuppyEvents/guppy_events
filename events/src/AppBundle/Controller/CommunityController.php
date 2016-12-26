@@ -69,7 +69,7 @@ class CommunityController extends Controller
         if($this->getUser()){
             foreach ($eventList as $event){
                 $eventUser = $this->getDoctrine()->getRepository('AppBundle:EventUserRating')->findOneBy(array('user'=>$this->getUser()->getId() , 'event'=>$event->getId()));
-                $event->is_saved = $eventUser ? $eventUser->getIsAttend() : false;
+                $event->is_saved = $eventUser ? $eventUser->getIsSaved() : false;
             }
         }
 
