@@ -42,8 +42,24 @@ In some cases the default shared folder implementations (such as VirtualBox shar
 
 1. First you should find "config.yaml" file.
 
-
 2. Second, you must change following setting to _**sync_type: nfs**_ from _**sync_type: default**_.
 
 3. Third, you should restart your vagrant vm.
  * ```vagrant reload```
+ 
+ 
+<br /><br />
+### How do you update your database after pull project?
+In some cases you need to update your local database schema. To do it,
+
+1. First you should go to "YOUR_PROJECT_DIRECTORY/guppy_events/events" directory.
+ * ```cd YOUR_PROJECT_DIRECTORY/guppy_events/events```
+
+2. Second, you can check that your database is sync or not by executing following command.
+ * ```php app/console doctrine:schema:update```
+
+3. If you need to update your database then call previous command with --force parameter.
+ * ```php app/console doctrine:schema:update --force```
+ 
+4. Additionally, you can see sql which executed to update database.
+ * ```php app/console doctrine:schema:update --dump-sql```
