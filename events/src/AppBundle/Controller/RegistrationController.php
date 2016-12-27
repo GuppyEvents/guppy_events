@@ -71,7 +71,7 @@ class RegistrationController extends Controller
                     'No product found for id '.$uid
                 );
             }
-            
+
             $user->setEmailValidated(true);
             $em->persist($user);
             $em->flush();
