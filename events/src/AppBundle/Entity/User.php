@@ -49,9 +49,16 @@ class User extends Base implements UserInterface, \Serializable
     /**
      * @var boolean
      *
+     * @ORM\Column(name="email_validated", type="boolean" , )
+     */
+    private $emailValidated = false;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="is_active", type="boolean")
      */
-    private $isActive;
+    private $isActive = true;
 
     /**
      * @var string
@@ -189,6 +196,22 @@ class User extends Base implements UserInterface, \Serializable
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getEmailValidated()
+    {
+        return $this->emailValidated;
+    }
+
+    /**
+     * @param boolean $emailValidated
+     */
+    public function setEmailValidated($emailValidated)
+    {
+        $this->emailValidated = $emailValidated;
     }
 
     /**
