@@ -71,18 +71,14 @@ class RegistrationController extends Controller
                     'No product found for id '.$uid
                 );
             }
-
-
+            
             $user->setEmailValidated(true);
             $em->persist($user);
             $em->flush();
 
-            $data['success_msg'] = 'Mailiniz Onaylandı...';
-
         } catch (Exception $e){}
 
-        return $this->render('AppBundle:user:profile_settings_account.html.twig', $data );
-
+        return $this->redirectToRoute('user_profile_account');
     }
     
 }
