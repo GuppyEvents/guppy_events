@@ -51,5 +51,38 @@ class RegistrationController extends Controller
         return $this->render('AppBundle:registration:register.html.twig', $data );
 
     }
+
+
+
+    /**
+     * @Route("/activation/{uid}", name="user_register_activation")
+     */
+    public function registerActivationAction($uid)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $data = array();
+
+        try{
+
+            $user = $em->getRepository('AppBundle:User')->find($uid);
+            if (!$uid) {
+                throw $this->createNotFoundException(
+                    'No product found for id '.$uid
+                );
+            }
+
+
+            $user->setEmailValidated(true);
+            $em->persist($user);
+            $em->flush();
+
+            $data['success_msg'] = 'Mailiniz Onaylandı...';
+
+        } catch (Exception $e){}
+
+        return $this->render('AppBundle:user:profile_settings_account.html.twig', $data );
+
+    }
     
 }
