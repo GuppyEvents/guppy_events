@@ -21,29 +21,7 @@
         <div class="container">
 
             <!-- -------------- SIDEBAR -------------- -->
-            <div class="community-sidebar col-md-2">
-                <div class="community-sidebar-photo" >
-                    <div class="society">
-                        <div class="photo-wrapper rounded">
-                            <img src="{{ community.imageBase64 }}" alt="{{ community.name }}" class="img-responsive"/>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="community-sidebar-name">
-
-                    <h7><span class="highlight">{{ community.name }}</span></h7>
-                </div>
-
-                <hr>
-                <div class="community-sidebar-navigation">
-                    <ul class="community-dropdown-menu">
-                        <li class="community-navigation-item"><a href="{{ path('user_community_homepage', {'communityId': community.id}) }}" class="navigation-link active">Genel Bilgi</a></li>
-                        <li class="community-navigation-item"><a href="{{ path('user_community_events_homepage', {'communityId': community.id}) }}" class="navigation-link">Etkinlikler</a></li>
-                        <li class="community-navigation-item"><a href="community-home-people.html" class="navigation-link">Üyeler</a></li>
-                    </ul>
-                </div>
-            </div>
+            {{ include('AppBundle:community:community_sidebar.html.twig') }}
 
 
             <!-- -------------- CONTENT -------------- -->

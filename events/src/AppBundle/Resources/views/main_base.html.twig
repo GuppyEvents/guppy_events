@@ -66,7 +66,6 @@
                     <div class="col-sm-10 col-xs-12 navigation-container">
                         <div id="navigation" class="navbar-collapse collapse">
                             <ul class="navigation-list pull-left light-text">
-                                <li class="navigation-item"><a href="{{ path("home_about") }}" class="navigation-link">Hakkında</a></li>
                                 <li class="navigation-item"><a href="{{ path("home_communities") }}" class="navigation-link">Kulüpler</a></li>
                                 <li class="navigation-item"><a href="{{ path("home_events") }}" class="navigation-link">Etkinlikler</a></li>
                                 {#<li class="navigation-item"><a href="{{ path("login") }}" class="navigation-link">Yönetici Sayfasına Git</a></li>#}
@@ -110,8 +109,9 @@
 
                     <div class="col-md-6">
                         <ul class="footer-nav">
-                            <li class="footer-nav-item"><a href="#">Contact</a></li>
-                            <li class="footer-nav-item"><a href="#">Privacy policy</a></li>
+                            <li class="footer-nav-item"><a href="{{ path("home_about") }}">Hakkımızda</a></li>
+                            <li class="footer-nav-item"><a href="#">S.S.S</a></li>
+                            {#<li class="footer-nav-item"><a href="#">Privacy policy</a></li>#}
                             {#<li class="footer-nav-item"><a href="#">Press</a></li>#}
                         </ul>
                     </div>

@@ -79,6 +79,19 @@ class CommunityController extends Controller
     }
 
 
+    /**
+     * @Route("/users/{communityId}", name="user_community_users_homepage")
+     */
+    public function communityUsersAction($communityId)
+    {
+        $data = array();
+        $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
+
+        $data['community'] = $community;
+        return $this->render('AppBundle:community:communityUserList.html.twig' , $data);
+    }
+
+
 
     /**
      * @Route("/list", name="community_list")
