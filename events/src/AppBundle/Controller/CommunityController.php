@@ -49,8 +49,11 @@ class CommunityController extends Controller
             }
         }
 
+        $communityUser = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findOneBy(array('community'=>$community , 'user'=>$this->getUser()));
+
         $data['community'] = $community;
         $data['eventList'] = $eventList;
+        $data['communityUser'] = $communityUser;
 
         return $this->render('AppBundle:community:communityHome.html.twig' , $data);
     }

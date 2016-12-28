@@ -13,11 +13,11 @@ use Doctrine\ORM\Mapping as ORM;
 class CommunityUser
 {
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="status", type="string", length=45, nullable=true)
+     * @ORM\Column(name="status", type="integer", nullable=true)
      */
-    private $status;
+    private $status=10;
 
     /**
      * @var \DateTime
@@ -60,7 +60,7 @@ class CommunityUser
     /**
      * Set status
      *
-     * @param string $status
+     * @param integer $status
      * @return CommunityUser
      */
     public function setStatus($status)
@@ -73,7 +73,7 @@ class CommunityUser
     /**
      * Get status
      *
-     * @return string 
+     * @return integer
      */
     public function getStatus()
     {

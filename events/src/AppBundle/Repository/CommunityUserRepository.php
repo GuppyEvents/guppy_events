@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\CommunityUser;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -11,4 +12,18 @@ use Doctrine\ORM\EntityRepository;
  */
 class CommunityUserRepository extends EntityRepository
 {
+
+    /**
+     *
+     * @return CommunityUser|null
+     */
+    public function findAllExceptAdmin()
+    {
+        return $this->createQueryBuilder('communityUser')
+            ->where('communityUser.user != :adminId')
+            ->setParameter('adminId', 18)
+            ->getQuery()
+            ->getResult();
+    }
+
 }

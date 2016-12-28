@@ -73,7 +73,6 @@
                                             <input type="text" class="form-control" id="dataHeight" style="display:none;" placeholder="height">
                                         </div>
                                     </div>
-                                
 
                                 </div>
                             </div>
@@ -85,7 +84,14 @@
                 <div class="community-content-body">
 
                     <div class="fade active in">
-                        <div class="col-sm-12 align-left">
+
+                        {% if app.user and app.user.emailValidated %}
+                            <div id="join_community_panel" class-="col-sm-2 align-right" style="padding-top: 20px;">
+                                <a id="join_community" class="btn btn-rounded btn-sm" data-community-id="{{ community.id }}">Topluluğa katıl</a>
+                            </div>
+                        {% endif %}
+
+                        <div class="col-sm-12 align-left" style="padding-top: 20px;">
                             <h6>Hakkında</h6>
                             <p>{{ community.description }}</p>
                         </div>
@@ -148,10 +154,46 @@
  *                                          AJAX OPERATIONS
  **********************************************************************************************************************/
 
+        function ajaxRequestJoinCommunity(eventTarget){
+
+            // -- 1 --
+
+
+            // -- 2 --
+            // ajax call
+            $.post("{{ path('service_community_user_add') }}" ,{
+                cid : $(eventTarget).attr('data-community-id'),
+            }).always(function(){
+
+            }).done(function(data){
+
+                // -- 2.1 -- CONSOLE
+                if(debugMode)
+                    console.log(data);
+
+                // -- 2.2 -- sonuc düzenlenir
+                if(data.resultText == 'SUCCESS'){
+
+                    $('#join_community_panel').slideUp();
+                    toastr.success('Başvurunuz alınmıştır.');
+
+                }else if(data.resultText == 'SUCCESS_EMPTY'){
+                    toastr.error('Beklenmeyen hata ile karşılaşıldı');
+                }else if(data.resultText == 'FAILURE_PERMISSION'){
+                    toastr.error('Bu işlem için izniniz bulunmamaktadır');
+                }else{
+                    toastr.error('Beklenmeyen hata ile karşılaşıldı');
+                }
+            });
+        }
 
 /***********************************************************************************************************************
  *                                          EVENTS
  **********************************************************************************************************************/
+
+        $(document).on('click','#join_community',function(event){
+            ajaxRequestJoinCommunity(event.target);
+        });
 
 /***********************************************************************************************************************
  *                                          BEFORE DOCUMENT ON READY
@@ -164,7 +206,6 @@
 /***********************************************************************************************************************
  *                                          DOCUMENT ON READY
  **********************************************************************************************************************/
-
 
     </script>
 

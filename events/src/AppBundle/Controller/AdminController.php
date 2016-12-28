@@ -29,5 +29,20 @@ class AdminController extends Controller
             'event_count'=>count($eventList)
         ));
     }
+
+
+    /**
+     * @Route("/community-user-list", name="admin_community_user_list")
+     */
+    public function communityUserListAction(Request $request)
+    {
+        $data = array();
+
+        $communityUserList = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findAllExceptAdmin();
+
+        $data['communityUserList'] = $communityUserList;
+
+        return $this->render('AppBundle:admin:communityUserList.html.twig', $data);
+    }
     
 }
