@@ -86,9 +86,19 @@
                     <div class="fade active in">
 
                         {% if app.user and app.user.emailValidated %}
-                            <div id="join_community_panel" class-="col-sm-2 align-right" style="padding-top: 20px;">
-                                <a id="join_community" class="btn btn-rounded btn-sm" data-community-id="{{ community.id }}">Topluluğa katıl</a>
-                            </div>
+
+                            {% if communityUser and communityUser.status == 10 %}
+                                <div id="join_community_panel" class-="col-sm-2 align-right" style="padding-top: 20px;">
+                                    Topluluk rolünüz yönetici tarafından araştırılmaktadır.
+                                </div>
+                            {% elseif communityUser and communityUser.status == 1%}
+                                <!-- Kullanıcı bu durumda  topluluk yöneticisidir -->
+                            {% else %}
+                                <div id="join_community_panel" class-="col-sm-2 align-right" style="padding-top: 20px;">
+                                    <a id="join_community" class="btn btn-rounded btn-sm" data-community-id="{{ community.id }}">Topluluğa katıl</a>
+                                </div>
+                            {% endif %}
+
                         {% endif %}
 
                         <div class="col-sm-12 align-left" style="padding-top: 20px;">

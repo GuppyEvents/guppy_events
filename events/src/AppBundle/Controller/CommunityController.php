@@ -90,6 +90,11 @@ class CommunityController extends Controller
         $data = array();
         $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
 
+        if($community){
+            $communityUser = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findBy(array('community'=>$community));
+            $data['communityUserList'] = $communityUser;
+        }
+
         $data['community'] = $community;
         return $this->render('AppBundle:community:communityUserList.html.twig' , $data);
     }

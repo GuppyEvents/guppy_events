@@ -85,7 +85,81 @@
 
                 <div class="community-content-body">
 
-                    Bu sayfada topluluk kullanıcı listesi bulunacak...
+                    {% if communityUserList is defined and communityUserList|length > 0 %}
+                        <div class="row co-admin">
+                            <div class="col-sm-12">
+                                <p class="text-left"><strong>YÖNETİCİ LİSTESİ</strong></p>
+                            </div>
+                            {% for communityUser in communityUserList %}
+                                {% if communityUser.user and communityUser.status == 1 %}
+                                    <div class="col-sm-6">
+                                        <div class="testimonial">
+                                            <div class="author-block">
+                                                <div class="photo-container">
+                                                    {% if communityUser.user.imageBase64 %}
+                                                        <img src="{{ communityUser.user.imageBase64 }}" alt="{{ communityUser.user.name }}" class="img-responsive" />
+                                                    {% else %}
+                                                        {% image 'theme/assets/img/guppy_avatar_001.png' %}
+                                                            <img src="{{ asset_url }}" class="img-responsive" alt="{{ communityUser.user.name }}" />
+                                                        {% endimage %}
+                                                    {% endif %}
+                                                </div>
+
+                                                <strong class="name">{{ communityUser.user.name }} {{ communityUser.user.surname }}</strong>
+                                                <small class="text-alt company">Admin @ {{ communityUser.community.name }}</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+
+                        <div class="row co-member" style="padding-top: 20px;">
+                            <div class="col-sm-12">
+                                <p class="text-left"><strong>ÜYE LİSTESİ</strong></p>
+                            </div>
+                            {% for communityUser in communityUserList %}
+                                {% if communityUser.user and communityUser.status == 2 %}
+                                    <div class="col-sm-6">
+                                        <div class="testimonial">
+                                            <div class="author-block">
+                                                <div class="photo-container">
+                                                    {% if communityUser.user.imageBase64 %}
+                                                        <img src="{{ communityUser.user.imageBase64 }}" alt="{{ communityUser.user.name }}" class="img-responsive" />
+                                                    {% else %}
+                                                        {% image 'theme/assets/img/guppy_avatar_001.png' %}
+                                                        <img src="{{ asset_url }}" class="img-responsive" alt="{{ communityUser.user.name }}" />
+                                                        {% endimage %}
+                                                    {% endif %}
+                                                </div>
+
+                                                <strong class="name">{{ communityUser.user.name }} {{ communityUser.user.surname }}</strong>
+                                                <small class="text-alt company">Member @ {{ communityUser.community.name }}</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                    <!-- Topluluğun hiç üyesi olmaması durumu -->
+                    {% else %}
+
+                        <div class="row co-no-member">
+                            Olamaz :( Bu topluluğun üyesi bulunmamakta...
+                            <br>
+
+                            {% if app.user and app.user.emailValidated %}
+                                <div id="join_community_panel" class-="col-sm-2 align-right" style="padding-top: 20px;">
+                                    <a id="join_community" class="btn btn-rounded btn-sm" data-community-id="{{ community.id }}">Topluluğa katıl</a>
+                                </div>
+                            {% else %}
+                                Topluluğun ilk üyesi olmak için giriş yapabilirsin ;)
+                            {% endif %}
+                        </div>
+
+                    {% endif %}
 
                 </div><!-- community-content-body end -->
 
@@ -123,11 +197,45 @@
  *                                          AJAX OPERATIONS
  **********************************************************************************************************************/
 
+        function ajaxRequestJoinCommunity(eventTarget){
+
+            // -- 1 --
+
+
+            // -- 2 --
+            // ajax call
+            $.post("{{ path('service_community_user_add') }}" ,{
+                cid : $(eventTarget).attr('data-community-id'),
+            }).always(function(){
+
+            }).done(function(data){
+
+                // -- 2.1 -- CONSOLE
+                if(debugMode)
+                    console.log(data);
+
+                // -- 2.2 -- sonuc düzenlenir
+                if(data.resultText == 'SUCCESS'){
+
+                    $('#join_community_panel').slideUp();
+                    toastr.success('Başvurunuz alınmıştır.');
+
+                }else if(data.resultText == 'SUCCESS_EMPTY'){
+                    toastr.error('Beklenmeyen hata ile karşılaşıldı');
+                }else if(data.resultText == 'FAILURE_PERMISSION'){
+                    toastr.error('Bu işlem için izniniz bulunmamaktadır');
+                }else{
+                    toastr.error('Beklenmeyen hata ile karşılaşıldı');
+                }
+            });
+        }
 
 /***********************************************************************************************************************
  *                                          EVENTS
  **********************************************************************************************************************/
-
+        $(document).on('click','#join_community',function(event){
+            ajaxRequestJoinCommunity(event.target);
+        });
 
 /***********************************************************************************************************************
  *                                          BEFORE DOCUMENT ON READY

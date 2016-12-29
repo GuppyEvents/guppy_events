@@ -26,4 +26,49 @@ class CommunityUserRepository extends EntityRepository
             ->getResult();
     }
 
+
+    /**
+     *
+     * @return integer|0
+     */
+    public function findCommunityAdminCount()
+    {
+        return $this->createQueryBuilder('communityUser')
+            ->where('communityUser.status = :statusVal')
+            ->setParameter('statusVal', 1)
+            ->distinct()
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    /**
+     *
+     * @return integer|0
+     */
+    public function findCommunityMembersCount()
+    {
+        return $this->createQueryBuilder('communityUser')
+            ->where('communityUser.status = :statusVal')
+            ->setParameter('statusVal', 2)
+            ->distinct()
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    /**
+     *
+     * @return integer|0
+     */
+    public function findCommunityUserRequestCount()
+    {
+        return $this->createQueryBuilder('communityUser')
+            ->where('communityUser.status = :statusVal')
+            ->setParameter('statusVal', 10)
+            ->distinct()
+            ->getQuery()
+            ->getResult();
+    }
+
 }
