@@ -8,7 +8,7 @@ There are a few pre-requisites before you can begin guppy event web application 
 2. Second, you must find vagrant directory which includes _**Vagrantfile**_ & _**puphpet**_ folder then you must call following commands in vagrant directory. (vagrant needs _**vagrant-bindfs**_ plugin for shared folder configuration which is set to nfs)
   * ```vagrant plugin install vagrant-bindfs```
   * ```vagrant up```
-
+  
 3. Third, you must add the following hostname to your hosts file (**/etc/hosts**)
   * ```192.168.56.101  local.guppy.com.tr  www.local.guppy.com.tr```
 
@@ -46,8 +46,12 @@ In some cases the default shared folder implementations (such as VirtualBox shar
 
 3. Third, you should restart your vagrant vm.
  * ```vagrant reload```
- 
- 
+
+Ubuntu user may need to run the following command if vagrant returns nfs is not supported error. [See details](https://github.com/mitchellh/vagrant/issues/1941#issuecomment-36072095)
+* ```sudo apt-get install nfs-common nfs-kernel-server```
+
+
+
 <br /><br />
 ### How do you update your database after pull project?
 In some cases you need to update your local database schema. To do it,
