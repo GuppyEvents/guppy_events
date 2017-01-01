@@ -51,6 +51,10 @@ class CommunityController extends Controller
 
         $communityUser = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findOneBy(array('community'=>$community , 'user'=>$this->getUser()));
 
+        // İlgili kullanıcının topluluğun yöneticisi olup olunmadığına bakılır
+        $isUserAdmin = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findBy(array('community'=>$community , 'user'=>$this->getUser() , 'status'=>1));
+        $data['userIsAdmin'] = $isUserAdmin and count($isUserAdmin)>0 ? true : false;
+
         $data['community'] = $community;
         $data['eventList'] = $eventList;
         $data['communityUser'] = $communityUser;
@@ -76,6 +80,10 @@ class CommunityController extends Controller
             }
         }
 
+        // İlgili kullanıcının topluluğun yöneticisi olup olunmadığına bakılır
+        $isUserAdmin = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findBy(array('community'=>$community , 'user'=>$this->getUser() , 'status'=>1));
+        $data['userIsAdmin'] = $isUserAdmin and count($isUserAdmin)>0 ? true : false;
+
         $data['community'] = $community;
         $data['eventList'] = $eventList;
         return $this->render('AppBundle:community:communityEvents.html.twig' , $data);
@@ -93,12 +101,40 @@ class CommunityController extends Controller
         if($community){
             $communityUser = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findBy(array('community'=>$community));
             $data['communityUserList'] = $communityUser;
+
+            // İlgili kullanıcının topluluğun yöneticisi olup olunmadığına bakılır
+            $isUserAdmin = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findBy(array('community'=>$community , 'user'=>$this->getUser() , 'status'=>1));
+            $data['userIsAdmin'] = $isUserAdmin and count($isUserAdmin)>0 ? true : false;
         }
 
         $data['community'] = $community;
         return $this->render('AppBundle:community:communityUserList.html.twig' , $data);
     }
 
+
+    /**
+     * @Route("/membership-applications/{communityId}", name="user_community_membership_applications_homepage")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function communityMembershipApplicationsAction($communityId)
+    {
+        $data = array();
+        $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
+
+        if($community){
+
+            // İlgili kullanıcının topluluğun yöneticisi olup olunmadığına bakılır
+            $isUserAdmin = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findBy(array('community'=>$community , 'user'=>$this->getUser() , 'status'=>1));
+            $data['userIsAdmin'] = $isUserAdmin and count($isUserAdmin)>0 ? true : false;
+
+            // Topluluğun üyelik başvurusu yapanların listesi alınır
+            $communityMembershipApplications = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findBy(array('community'=>$community , 'status'=>10 ));
+            $data['communityMembershipApplications'] = $communityMembershipApplications;
+        }
+
+        $data['community'] = $community;
+        return $this->render('AppBundle:community:communityMembershipApplicationList.html.twig' , $data);
+    }
 
 
     /**
@@ -276,6 +312,81 @@ class CommunityController extends Controller
     //                                          APPLICATION/JSON SERVICES
     // -----------------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * @Route("/applications/confirm", name="user_community_membership_applications_confirm")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function communityMembershipApplicationsConfirmAction(Request $request)
+    {
+        // -- 1 -- Initialization
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+
+        $data = array();
+
+        // -- 2 -- Try to Add New Mail Server
+        try{
+
+            // -- 2.1 -- Get parameters
+            $operation = $request->get('operation');
+            $communityUserId = $request->get('communityUserId');
+            $communityUser = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->find($communityUserId);
+
+            // İlgili kullanıcının topluluğun yöneticisi olup olunmadığına bakılır
+            $communityAdminUser = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findBy(array('community'=>$communityUser->getCommunity() , 'user'=>$this->getUser() , 'status'=>1));
+            $IsCommunityUserAdmin = $communityAdminUser && count($communityAdminUser)>0 ? true : false;
+
+            // -- 2.2 -- Checkers
+            if (!$IsCommunityUserAdmin) {
+                $response->setContent(json_encode(Result::$FAILURE_PERMISSION->setContent('Yetki yok')));
+                return $response;
+            }
+
+            if (!$communityUser) {
+                $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent('Community User bulunamadi')));
+                return $response;
+            }
+
+            if ($communityUser->getStatus() != 10) {
+                $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent('Uye durumu uygun degil')));
+                return $response;
+            }
+
+
+            switch ($operation){
+                case 'confirm':
+                    $communityUser->setStatus(2);
+                    $data['success_msg'] = 'Üye başarıyla onaylandı';
+                    break;
+                case 'reject':
+                    $communityUser->setStatus(11);
+                    $data['success_msg'] = 'Üye başarıyla reddedildi';
+                    break;
+                default:
+                    break;
+            }
+
+            $this->getDoctrine()->getManager()->persist($communityUser);
+            $this->getDoctrine()->getManager()->flush();
+
+
+            // -- 2.2 -- Return Result
+            $response->setContent(json_encode(Result::$SUCCESS->setContent($data)));
+            return $response;
+
+        }catch (\Exception $ex){
+            // content == "Unexpected Error"
+            $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent($ex)));
+            return $response;
+        }
+
+        // -- 3 -- Set & Return value
+        $response->setContent(json_encode(Result::$SUCCESS_EMPTY));
+        return $response;
+    }
+
+
     /**
      * @Route("/add-event-from-fb", name="community_add_event_from_facebook")
      */

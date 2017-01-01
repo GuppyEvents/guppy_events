@@ -1,0 +1,279 @@
+{% extends 'AppBundle::main_base.html.twig' %}
+
+{% block title %}Guppy - Topluluk Üye Başvuruları{% endblock %}
+
+{% block stylesheets %}
+
+    {% stylesheets
+            'theme/assets/css/cropper.css'
+            'theme/assets/css/cropper-main.css' filter='cssrewrite' %}
+        <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+    {% endstylesheets %}
+
+{% endblock %}
+
+{% block content %}
+
+    <!-- --------------------------------------------- -->
+    <!-- ------------------ CONTENT ------------------ -->
+    <!-- --------------------------------------------- -->
+    <section id="community-home" class="guppy-section align-center">
+        <div class="container">
+
+            <!-- -------------- SIDEBAR -------------- -->
+            {{ include('AppBundle:community:community_sidebar.html.twig') }}
+
+
+            <!-- -------------- CONTENT -------------- -->
+            <div class="community-content col-md-10">
+
+                <div class="community-content-header">
+
+                    {#{% if community.imageBackgroundBase64 %}#}
+                        {#<img src="{{ community.imageBackgroundBase64 }}" alt="{{ community.name }}" class="img-responsive" />#}
+                    {#{% else %}#}
+                        {#{% image 'theme/assets/img/guppy_bilkent_banner_01.jpg' %}#}
+                            {#<img src="{{ asset_url }}" class="img-responsive" alt="{{ community.name }}" />#}
+                        {#{% endimage %}#}
+                    {#{% endif %}#}
+
+                    <div class="img-preview preview-lg"></div>
+                    <span id="community-background-image-edit" class="community-content-header-edit" data-modal-link="community-background-image"><i class="fa fa-cog" aria-hidden="true"></i></span>
+
+                    <div class="modal-window" data-modal="community-background-image">
+                        <div class="modal-box medium animated" data-animation="zoomIn" data-duration="100">
+                            <span class="close-btn icon icon-office-52"></span>
+
+                            <div class="row">
+                                <div id="img-container-modal" class="col-md-12">
+                                    <!-- <h3 class="page-header">Demo:</h3> -->
+                                    <div class="img-container">
+                                        {% if community.imageBackgroundBase64 %}
+                                            <img src="{{ community.imageBackgroundBase64 }}" alt="{{ community.name }}" class="img-responsive" />
+                                        {% else %}
+                                            {% image 'theme/assets/img/guppy_bilkent_banner_01.jpg' %}
+                                                <img src="{{ asset_url }}" class="img-responsive" alt="{{ community.name }}" />
+                                            {% endimage %}
+
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- <h3 class="page-header">Data:</h3> -->
+                                    <div class="docs-data">
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" class="form-control" id="dataX" style="display:none;" placeholder="x">
+                                        </div>
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" class="form-control" id="dataY" style="display:none;" placeholder="y">
+                                        </div>
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" class="form-control" id="dataWidth" style="display:none;" placeholder="width">
+                                        </div>
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" class="form-control" id="dataHeight" style="display:none;" placeholder="height">
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div> <!-- modal end -->
+                </div>
+
+                <div class="community-content-body">
+                    <div class="fade active in">
+
+                        <div class="col-sm-12 align-left" style="padding-top: 40px;">
+
+                            {% if communityMembershipApplications is defined and communityMembershipApplications|length > 0 %}
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Adı Soyadı</th>
+                                            <th>Başvuru tarihi</th>
+                                            <th>İşlem Linkleri</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {% for communityUser in communityMembershipApplications %}
+                                            <tr data-community-user-id="{{ communityUser.id }}">
+                                                <td>{{ communityUser.user.name }} {{ communityUser.user.surname }}</td>
+                                                <td>{{ communityUser.date|date('d/m/Y') }}</td>
+                                                <td>
+                                                    {#<form id="mail_setting" action="{{ path('user_profile_mail') }}" method="post">#}
+                                                        <li class="membership-application-operation dropdown">
+                                                            <a class="application-operation-link dropdown-toggle" data-toggle="dropdown">İşlem</a>
+                                                            <ul class="dropdown-menu">
+                                                                <li class="application-operation"><a class="navigation-link" id="op_application_confirm">Onayla</a></li>
+                                                                <li class="application-operation"><a class="navigation-link" id="op_application_profile">Profil</a></li>
+                                                                <li class="application-operation"><a class="navigation-link" id="op_application_reject">Reddet</a></li>
+                                                            </ul>
+                                                        </li>
+
+                                                        <!-- TODO: Form yapısı kaldırılabilir  -->
+                                                        <input type="text" class="form-control" name="mail_id" style="display: none;">
+                                                        <button type="submit" class="btn btn-rounded btn-sm" style="display: none;"></button>
+                                                    {#</form>#}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+
+                                    </tbody>
+                                </table>
+
+                            {% else %}
+                                Bu topluluk için hiçbir başvuru bulunmamaktadır...
+                            {% endif %}
+
+                        </div><!-- .col-sm-12 .align-left end -->
+
+                    </div><!-- .fade .active .in end -->
+                </div><!-- community-content-body end -->
+
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+
+
+
+
+{% block javascriptcontent %}
+
+    {% javascripts
+            'theme/assets/js/cropper.js'
+            'theme/assets/js/cropper-main.js' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script>
+
+/***********************************************************************************************************************
+ *                                          GLOBAL VARIABLE
+ **********************************************************************************************************************/
+        var debugMode = true;
+
+/***********************************************************************************************************************
+ *                                          UTIL FUNCTIONS
+ **********************************************************************************************************************/
+
+
+/***********************************************************************************************************************
+ *                                          AJAX OPERATIONS
+ **********************************************************************************************************************/
+
+        function ajaxRequestJoinCommunity(eventTarget){
+
+            // -- 1 --
+
+
+            // -- 2 --
+            // ajax call
+            $.post("{{ path('service_community_user_add') }}" ,{
+                cid : $(eventTarget).attr('data-community-id'),
+            }).always(function(){
+
+            }).done(function(data){
+
+                // -- 2.1 -- CONSOLE
+                if(debugMode)
+                    console.log(data);
+
+                // -- 2.2 -- sonuc düzenlenir
+                if(data.resultText == 'SUCCESS'){
+
+                    $('#join_community_panel').slideUp();
+                    toastr.success('Başvurunuz alınmıştır.');
+
+                }else if(data.resultText == 'SUCCESS_EMPTY'){
+                    toastr.error('Beklenmeyen hata ile karşılaşıldı');
+                }else if(data.resultText == 'FAILURE_PERMISSION'){
+                    toastr.error('Bu işlem için izniniz bulunmamaktadır');
+                }else{
+                    toastr.error('Beklenmeyen hata ile karşılaşıldı');
+                }
+            });
+        }
+
+
+        function ajaxConfirmCommunityUser(eventTarget , operation ){
+
+            // -- 2 --
+            // ajax call
+            $.post("{{ path('user_community_membership_applications_confirm') }}" ,{
+                operation : operation,
+                communityUserId : $(eventTarget).parentsUntil('tr').last().parent().attr('data-community-user-id'),
+            }).always(function(){
+
+            }).done(function(data){
+
+                // -- 2.1 -- CONSOLE
+                if(debugMode)
+                    console.log(data);
+
+                // -- 2.2 -- sonuc düzenlenir
+                if(data.resultText == 'SUCCESS'){
+
+                    // calculate number of rows
+                    if($(eventTarget).parentsUntil('tbody').last().parent().children().length==1){
+                        $(eventTarget).parentsUntil('table').last().parent().remove();
+
+                    }else{
+                        $(eventTarget).parentsUntil('tr').last().parent().remove()
+                    }
+
+                    toastr.success(data.content['success_msg']);
+
+                }else if(data.resultText == 'SUCCESS_EMPTY'){
+                    toastr.error('Beklenmeyen hata ile karşılaşıldı');
+                }else if(data.resultText == 'FAILURE_PERMISSION'){
+                    toastr.error('Bu işlem için izniniz bulunmamaktadır');
+                }else{
+                    toastr.error('Beklenmeyen hata ile karşılaşıldı');
+                }
+            });
+        }
+
+
+
+/***********************************************************************************************************************
+ *                                          EVENTS
+ **********************************************************************************************************************/
+
+        $(document).on('click','#join_community',function(event){
+            ajaxRequestJoinCommunity(event.target);
+        });
+
+        $(document).on('click' , '#op_application_confirm' , function(event){
+            ajaxConfirmCommunityUser(event.target,'confirm');
+        });
+
+        $(document).on('click' , '#op_application_reject' , function(){
+            ajaxConfirmCommunityUser(event.target,'reject');
+        });
+
+        $(document).on('click' , '#op_application_profile' , function(){
+            toastr.warning('Kişinin Profil sayfasına yönlendirilecek ...', 'YAPIM AŞAMASINDA');
+        });
+
+
+/***********************************************************************************************************************
+ *                                          BEFORE DOCUMENT ON READY
+ **********************************************************************************************************************/
+        // we should get modal size before document ready
+        $( "#community-background-image-edit" ).trigger( "click" );
+        $('.close-btn').trigger( "click" );
+
+
+/***********************************************************************************************************************
+ *                                          DOCUMENT ON READY
+ **********************************************************************************************************************/
+
+    </script>
+
+{% endblock %}
+
