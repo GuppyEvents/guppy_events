@@ -322,10 +322,9 @@ class CommunityController extends Controller
         // -- 1 -- Initialization
         $response = new Response();
         $response->headers->set('Content-Type', 'application/json');
-
         $data = array();
 
-        // -- 2 -- Try to Add New Mail Server
+        // -- 2 --
         try{
 
             // -- 2.1 -- Get parameters
@@ -386,6 +385,56 @@ class CommunityController extends Controller
         return $response;
     }
 
+
+    /**
+     * @Route("/applications/leave", name="user_community_membership_leave")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function communityLeaveAction(Request $request)
+    {
+        // -- 1 -- Initialization
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+        $data = array();
+
+        // -- 2 --
+        try{
+
+            // -- 2.1 -- Get parameters
+            $communityUserId = $request->get('communityUserId');
+            $communityUser = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->find($communityUserId);
+
+            // -- 2.2 -- Checkers
+            if (!$communityUser) {
+                $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent('Community User bulunamadi')));
+                return $response;
+            }
+
+            if ($communityUser->getUser()->getId() != $this->getUser()->getId()) {
+                $response->setContent(json_encode(Result::$FAILURE_PERMISSION->setContent('Yetkiniz bulunmamaktadır')));
+                return $response;
+            }
+
+            $communityUser->setStatus($communityUser->getStatus() + 1000);
+
+            $this->getDoctrine()->getManager()->persist($communityUser);
+            $this->getDoctrine()->getManager()->flush();
+            $data['success_msg'] = 'Gruptan başarılı bir şekilde ayrıldınız';
+
+            // -- 2.2 -- Return Result
+            $response->setContent(json_encode(Result::$SUCCESS->setContent($data)));
+            return $response;
+
+        }catch (\Exception $ex){
+            // content == "Unexpected Error"
+            $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent($ex)));
+            return $response;
+        }
+
+        // -- 3 -- Set & Return value
+        $response->setContent(json_encode(Result::$SUCCESS_EMPTY));
+        return $response;
+    }
 
     
     

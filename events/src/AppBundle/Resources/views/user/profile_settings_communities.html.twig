@@ -35,7 +35,7 @@
                                     {% for communityUser in communityUserAdminCommunities %}
                                         {% if communityUser.community %}
                                             <div class="col-sm-6">
-                                                <div class="testimonial">
+                                                <div class="testimonial profile-community-body" data-co-user-id="{{ communityUser.id }}" data-community-name="{{ communityUser.community.name }}" style="border: 1px solid #ccc!important;">
                                                     <div class="author-block">
                                                         <div class="photo-container">
                                                             {% if communityUser.community.imageBase64 %}
@@ -50,6 +50,8 @@
                                                         <strong class="name"><a href="{{ path('user_community_users_homepage' , {'communityId':communityUser.community.id}) }}">{{ communityUser.community.name }} </a></strong>
                                                         <small class="text-alt company">Yönetici @ {{ communityUser.community.name }}</small>
                                                     </div>
+
+                                                    <div class="profile-community-box-edit-parent"><span class="profile-community-box-edit" data-modal-link="community-background-image"><i class="fa fa-times" aria-hidden="true"></i></span></div>
                                                 </div>
                                             </div>
                                         {% endif %}
@@ -67,7 +69,7 @@
                                     {% for communityUser in communityUserMemberCommunities %}
                                         {% if communityUser.community %}
                                             <div class="col-sm-6">
-                                                <div class="testimonial">
+                                                <div class="testimonial profile-community-body" data-co-user-id="{{ communityUser.id }}" data-community-name="{{ communityUser.community.name }}" style="border: 1px solid #ccc!important;">
                                                     <div class="author-block">
                                                         <div class="photo-container">
                                                             {% if communityUser.community.imageBase64 %}
@@ -82,6 +84,8 @@
                                                         <strong class="name"><a href="{{ path('user_community_users_homepage' , {'communityId':communityUser.community.id}) }}">{{ communityUser.community.name }} </a></strong>
                                                         <small class="text-alt company">Üye @ {{ communityUser.community.name }}</small>
                                                     </div>
+
+                                                    <div class="profile-community-box-edit-parent"><span class="profile-community-box-edit" data-modal-link="community-background-image"><i class="fa fa-times" aria-hidden="true"></i></span></div>
                                                 </div>
                                             </div>
                                         {% endif %}
@@ -96,10 +100,10 @@
                                     <div class="col-sm-12">
                                         <p class="text-left"><strong>Başvuru Yapılan Topluluklar</strong></p>
                                     </div>
-                                    {% for communityUser in communityUserMemberCommunities %}
+                                    {% for communityUser in communityUserApplicationsCommunities %}
                                         {% if communityUser.community %}
                                             <div class="col-sm-6">
-                                                <div class="testimonial">
+                                                <div class="testimonial profile-community-body" data-co-user-id="{{ communityUser.id }}" data-community-name="{{ communityUser.community.name }}" style="border: 1px solid #ccc!important;">
                                                     <div class="author-block">
                                                         <div class="photo-container">
                                                             {% if communityUser.community.imageBase64 %}
@@ -110,10 +114,12 @@
                                                                 {% endimage %}
                                                             {% endif %}
                                                         </div>
-                                                        
+
                                                         <strong class="name"><a href="{{ path('user_community_users_homepage' , {'communityId':communityUser.community.id}) }}">{{ communityUser.community.name }} </a></strong>
                                                         <small class="text-alt company">Başvurulmuş @ {{ communityUser.community.name }}</small>
                                                     </div>
+
+                                                    <div class="profile-community-box-edit-parent"><span class="profile-community-box-edit" data-modal-link="community-background-image"><i class="fa fa-times" aria-hidden="true"></i></span></div>
                                                 </div>
                                             </div>
                                         {% endif %}
@@ -130,6 +136,10 @@
         </div>
     </section>
 
+
+    <div id="profile-community-box-edit-confirm" style="display: none;">
+        <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span><div id="modal-alert-text">These items will be permanently deleted and cannot be recovered. Are you sure?</div></p>
+    </div>
 
 {% endblock %}
 
@@ -167,10 +177,81 @@
  *                                          AJAX OPERATIONS
  **********************************************************************************************************************/
 
+        function ajaxLeaveFromCommunity(eventTarget,communityUserId){
+
+            // -- 2 --
+            $.post("{{ path('user_community_membership_leave') }}" ,{
+                communityUserId : communityUserId,
+            }).always(function(){
+
+            }).done(function(data){
+
+                // -- 2.1 -- CONSOLE
+                if(debugMode)
+                    console.log(data);
+
+                // -- 2.2 -- sonuc düzenlenir
+                if(data.resultText == 'SUCCESS'){
+
+                    communityBoxParent = $(eventTarget).parentsUntil('.profile-community-body').last().parent().parent();
+                    communityBoxParent.children().remove();
+                    communityBoxParent.append(
+                            '<div style="border: 1px solid #ccc!important; height: 70px;">' +
+                                '<div class="author-block" style="width: inherit; height: inherit;">' +
+                                    '<small class="text-alt company" style="width: 100%; height: 100%; text-align: center; line-height: 70px;">Topluluktan ayrıldınız...</small>' +
+                                '</div>' +
+                            '</div>');
+
+                    // box yerine ayrıldığını belirten bir yazı konulacak
+                    toastr.success(data.content['success_msg']);
+
+                }else if(data.resultText == 'SUCCESS_EMPTY'){
+                    toastr.error('Beklenmeyen hata ile karşılaşıldı');
+                }else if(data.resultText == 'FAILURE_PERMISSION'){
+                    toastr.error('Bu işlem için izniniz bulunmamaktadır');
+                }else{
+                    toastr.error('Beklenmeyen hata ile karşılaşıldı');
+                }
+            });
+        }
 
 /***********************************************************************************************************************
  *                                          EVENTS
  **********************************************************************************************************************/
+
+        // community box hover event
+        $( ".profile-community-body" ).hover(function() {
+            $( this ).find('.profile-community-box-edit').show();
+        },function() {
+            $( this ).find('.profile-community-box-edit').hide();
+        });
+
+        // topluluktan ayrılma işlemi
+        $(document).on('click' , '.profile-community-box-edit' , function (event) {
+
+            communityUserId = $(event.target).parentsUntil('.profile-community-body').last().parent().attr('data-co-user-id');
+            communityName = $(event.target).parentsUntil('.profile-community-body').last().parent().attr('data-community-name');
+
+            $('#modal-alert-text').html(communityName + ' topluluğundan ayrılmak istediğinize emin misiniz?');
+            $( "#profile-community-box-edit-confirm" ).dialog({
+                resizable: false,
+                height: "auto",
+                width: 400,
+                modal: true,
+                title: "Bu gruptan ayrıl?",
+                buttons: {
+                    "Ayrıl": function() {
+                        ajaxLeaveFromCommunity(event.target , communityUserId)
+                        $( this ).dialog( "close" );
+                    },
+                    "İptal": function() {
+                        $( this ).dialog( "close" );
+                    }
+                }
+            });
+
+        });
+
 
 
 /***********************************************************************************************************************
