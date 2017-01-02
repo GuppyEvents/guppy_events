@@ -387,6 +387,8 @@ class CommunityController extends Controller
     }
 
 
+    
+    
     /**
      * @Route("/add-event-from-fb", name="community_add_event_from_facebook")
      */

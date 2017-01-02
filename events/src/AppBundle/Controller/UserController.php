@@ -204,4 +204,22 @@ class UserController extends Controller
 
         return $this->render('AppBundle:user:profile_badges.html.twig', $data);
     }
+
+
+    /**
+     * @Route("/profile/communities", name="user_profile_communities")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function userProfileCommunitiesAction(Request $request)
+    {
+
+        $data = array();
+        $em = $this->getDoctrine()->getManager();
+
+        $data['communityUserAdminCommunities'] = $em->getRepository('AppBundle:CommunityUser')->findBy(array('status'=>1 , 'user'=>$this->getUser()));
+        $data['communityUserMemberCommunities'] = $em->getRepository('AppBundle:CommunityUser')->findBy(array('status'=>2 , 'user'=>$this->getUser()));
+        $data['communityUserApplicationsCommunities'] = $em->getRepository('AppBundle:CommunityUser')->findBy(array('status'=>10 , 'user'=>$this->getUser()));
+
+        return $this->render('AppBundle:user:profile_settings_communities.html.twig', $data);
+    }
 }

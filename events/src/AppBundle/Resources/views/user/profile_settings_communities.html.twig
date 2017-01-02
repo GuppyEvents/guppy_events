@@ -1,0 +1,192 @@
+{% extends 'AppBundle::main_base.html.twig' %}
+
+{% block title %}Topluluklarım{% endblock %}
+
+
+{% block content %}
+
+    <!-- --------------------------------------------- -->
+    <!-- ------------------ CONTENT ------------------ -->
+    <!-- --------------------------------------------- -->
+
+    <section class="guppy-section align-center">
+        <div class="container">
+
+            <!-- -------------- SIDEBAR -------------- -->
+            {{ include('AppBundle:user:profile_sidebar.html.twig') }}
+
+
+            <!-- -------------- CONTENT -------------- -->
+            <div class="community-content col-md-10">
+
+                <div class="profile-content-header"></div>
+
+                <div class="profile-content-body">
+                    <div class="fade active in">
+
+                        <div class="col-sm-12 align-left">
+
+                            <!-- Yönetici olunan topluluklar -->
+                            {% if communityUserAdminCommunities is defined and communityUserAdminCommunities|length > 0 %}
+                                <div class="row co-admin">
+                                    <div class="col-sm-12">
+                                        <p class="text-left"><strong>YÖNETİCİ TOPLULUKLARI</strong></p>
+                                    </div>
+                                    {% for communityUser in communityUserAdminCommunities %}
+                                        {% if communityUser.community %}
+                                            <div class="col-sm-6">
+                                                <div class="testimonial">
+                                                    <div class="author-block">
+                                                        <div class="photo-container">
+                                                            {% if communityUser.community.imageBase64 %}
+                                                                <img src="{{ communityUser.community.imageBase64 }}" alt="{{ communityUser.community.name }}" class="img-responsive" />
+                                                            {% else %}
+                                                                {% image 'theme/assets/img/guppy_avatar_001.png' %}
+                                                                    <img src="{{ asset_url }}" class="img-responsive" alt="{{ communityUser.community.name }}" />
+                                                                {% endimage %}
+                                                            {% endif %}
+                                                        </div>
+
+                                                        <strong class="name"><a href="{{ path('user_community_users_homepage' , {'communityId':communityUser.community.id}) }}">{{ communityUser.community.name }} </a></strong>
+                                                        <small class="text-alt company">Yönetici @ {{ communityUser.community.name }}</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+
+
+                            <!-- Üye olunan topluluklar -->
+                            {% if communityUserMemberCommunities is defined and communityUserMemberCommunities|length > 0 %}
+                                <div class="row co-member" style="padding-top: 20px;">
+                                    <div class="col-sm-12">
+                                        <p class="text-left"><strong>ÜYE TOPLULUKLARI</strong></p>
+                                    </div>
+                                    {% for communityUser in communityUserMemberCommunities %}
+                                        {% if communityUser.community %}
+                                            <div class="col-sm-6">
+                                                <div class="testimonial">
+                                                    <div class="author-block">
+                                                        <div class="photo-container">
+                                                            {% if communityUser.community.imageBase64 %}
+                                                                <img src="{{ communityUser.community.imageBase64 }}" alt="{{ communityUser.community.name }}" class="img-responsive" />
+                                                            {% else %}
+                                                                {% image 'theme/assets/img/guppy_avatar_001.png' %}
+                                                                <img src="{{ asset_url }}" class="img-responsive" alt="{{ communityUser.community.name }}" />
+                                                                {% endimage %}
+                                                            {% endif %}
+                                                        </div>
+
+                                                        <strong class="name"><a href="{{ path('user_community_users_homepage' , {'communityId':communityUser.community.id}) }}">{{ communityUser.community.name }} </a></strong>
+                                                        <small class="text-alt company">Üye @ {{ communityUser.community.name }}</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+
+
+                            <!-- Yönetici olunan topluluklar -->
+                            {% if communityUserApplicationsCommunities is defined and communityUserApplicationsCommunities|length > 0 %}
+                                <div class="row co-member" style="padding-top: 20px;">
+                                    <div class="col-sm-12">
+                                        <p class="text-left"><strong>Başvuru Yapılan Topluluklar</strong></p>
+                                    </div>
+                                    {% for communityUser in communityUserMemberCommunities %}
+                                        {% if communityUser.community %}
+                                            <div class="col-sm-6">
+                                                <div class="testimonial">
+                                                    <div class="author-block">
+                                                        <div class="photo-container">
+                                                            {% if communityUser.community.imageBase64 %}
+                                                                <img src="{{ communityUser.community.imageBase64 }}" alt="{{ communityUser.community.name }}" class="img-responsive" />
+                                                            {% else %}
+                                                                {% image 'theme/assets/img/guppy_avatar_001.png' %}
+                                                                <img src="{{ asset_url }}" class="img-responsive" alt="{{ communityUser.community.name }}" />
+                                                                {% endimage %}
+                                                            {% endif %}
+                                                        </div>
+                                                        
+                                                        <strong class="name"><a href="{{ path('user_community_users_homepage' , {'communityId':communityUser.community.id}) }}">{{ communityUser.community.name }} </a></strong>
+                                                        <small class="text-alt company">Başvurulmuş @ {{ communityUser.community.name }}</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+
+                        </div><!-- .col-sm-12 .align-left end -->
+
+                    </div><!-- .fade .active .in end -->
+                </div><!-- profil-content-body end -->
+
+            </div><!-- .community-content -->
+        </div>
+    </section>
+
+
+{% endblock %}
+
+
+
+
+
+{% block javascriptcontent %}
+    <script>
+
+/***********************************************************************************************************************
+ *                                          LOCAL VARIABLE
+ **********************************************************************************************************************/
+        var debugMode = true;
+        var error_msg = '{% if error_msg is defined %}{{ error_msg|json_encode|raw }}{% endif %}';
+        var success_msg = '{% if success_msg is defined %}{{ success_msg|json_encode|raw }}{% endif %}';
+        var warning_msg = '{% if warning_msg is defined %}{{ warning_msg|json_encode|raw }}{% endif %}';
+
+
+/***************************************************************************************************************
+ *                                          UTIL FUNCTIONS
+ ********************************************************************-******************************************/
+        function fileToBase64Converter(eventTargetElement, targetImgElementId, targetImgBase64ElementId) {
+            if (eventTargetElement.files && eventTargetElement.files[0]) {
+                var FR= new FileReader();
+                FR.onload = function(e) {
+                    $(targetImgElementId).attr('src', e.target.result);
+                    $(targetImgBase64ElementId).val(e.target.result);
+                };
+                FR.readAsDataURL( eventTargetElement.files[0] );
+            }
+        }
+
+/***********************************************************************************************************************
+ *                                          AJAX OPERATIONS
+ **********************************************************************************************************************/
+
+
+/***********************************************************************************************************************
+ *                                          EVENTS
+ **********************************************************************************************************************/
+
+
+/***********************************************************************************************************************
+ *                                          DOCUMENT ON READY
+ **********************************************************************************************************************/
+
+        // -- Operation Result Message
+        if(success_msg){
+            toastr.success(success_msg);
+        }else if(error_msg){
+            toastr.error(error_msg);
+        }else if(warning_msg){
+            toastr.warning(warning_msg);
+        }
+
+    </script>
+
+{% endblock %}
+
