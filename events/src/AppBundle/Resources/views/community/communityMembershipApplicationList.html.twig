@@ -107,7 +107,7 @@
                                                             <a class="application-operation-link dropdown-toggle" data-toggle="dropdown">İşlem</a>
                                                             <ul class="dropdown-menu">
                                                                 <li class="application-operation"><a class="navigation-link" id="op_application_confirm">Onayla</a></li>
-                                                                <li class="application-operation"><a class="navigation-link" id="op_application_profile">Profil</a></li>
+                                                                <li class="application-operation"><a href="{{ path('user_profile_with_id' , {'userId':communityUser.user.id}) }}" class="navigation-link" id="op_application_profile">Profil</a></li>
                                                                 <li class="application-operation"><a class="navigation-link" id="op_application_reject">Reddet</a></li>
                                                             </ul>
                                                         </li>
@@ -254,10 +254,6 @@
 
         $(document).on('click' , '#op_application_reject' , function(){
             ajaxConfirmCommunityUser(event.target,'reject');
-        });
-
-        $(document).on('click' , '#op_application_profile' , function(){
-            toastr.warning('Kişinin Profil sayfasına yönlendirilecek ...', 'YAPIM AŞAMASINDA');
         });
 
 

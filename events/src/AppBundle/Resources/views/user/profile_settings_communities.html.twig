@@ -51,7 +51,9 @@
                                                         <small class="text-alt company">Yönetici @ {{ communityUser.community.name }}</small>
                                                     </div>
 
-                                                    <div class="profile-community-box-edit-parent"><span class="profile-community-box-edit" data-modal-link="community-background-image"><i class="fa fa-times" aria-hidden="true"></i></span></div>
+                                                    {% if isProfileOwner is defined and isProfileOwner==true %}
+                                                        <div class="profile-community-box-edit-parent"><span class="profile-community-box-edit" data-modal-link="community-background-image"><i class="fa fa-times" aria-hidden="true"></i></span></div>
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         {% endif %}
@@ -85,7 +87,9 @@
                                                         <small class="text-alt company">Üye @ {{ communityUser.community.name }}</small>
                                                     </div>
 
-                                                    <div class="profile-community-box-edit-parent"><span class="profile-community-box-edit" data-modal-link="community-background-image"><i class="fa fa-times" aria-hidden="true"></i></span></div>
+                                                    {% if isProfileOwner is defined and isProfileOwner==true %}
+                                                        <div class="profile-community-box-edit-parent"><span class="profile-community-box-edit" data-modal-link="community-background-image"><i class="fa fa-times" aria-hidden="true"></i></span></div>
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         {% endif %}
@@ -119,7 +123,9 @@
                                                         <small class="text-alt company">Başvurulmuş @ {{ communityUser.community.name }}</small>
                                                     </div>
 
-                                                    <div class="profile-community-box-edit-parent"><span class="profile-community-box-edit" data-modal-link="community-background-image"><i class="fa fa-times" aria-hidden="true"></i></span></div>
+                                                    {% if isProfileOwner is defined and isProfileOwner==true %}
+                                                        <div class="profile-community-box-edit-parent"><span class="profile-community-box-edit" data-modal-link="community-background-image"><i class="fa fa-times" aria-hidden="true"></i></span></div>
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         {% endif %}
@@ -177,6 +183,8 @@
  *                                          AJAX OPERATIONS
  **********************************************************************************************************************/
 
+    {% if isProfileOwner is defined and isProfileOwner==true %}
+
         function ajaxLeaveFromCommunity(eventTarget,communityUserId){
 
             // -- 2 --
@@ -215,9 +223,13 @@
             });
         }
 
+    {% endif %}
+
 /***********************************************************************************************************************
  *                                          EVENTS
  **********************************************************************************************************************/
+
+    {% if isProfileOwner is defined and isProfileOwner==true %}
 
         // community box hover event
         $( ".profile-community-body" ).hover(function() {
@@ -251,7 +263,7 @@
             });
 
         });
-
+    {% endif %}
 
 
 /***********************************************************************************************************************

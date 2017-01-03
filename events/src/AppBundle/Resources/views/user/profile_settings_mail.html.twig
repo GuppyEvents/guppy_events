@@ -27,8 +27,7 @@
                 <div class="profile-content-body">
                     <div class="fade active in">
                         <div class="col-sm-12 align-left">
-                            <h6>Mail Adresi İşlemleri</h6>
-                            <p>Mail listem </p>
+                            <h6>Mail Adresleri </h6>
                             <div>
                                 <table class="table">
                                     <thead>
@@ -36,7 +35,9 @@
                                         <th>Durum</th>
                                         <th>Mail Adresi</th>
                                         <th>Geçerlilik Tarihi</th>
-                                        <th>İşlem</th>
+                                        {% if isProfileOwner is defined and isProfileOwner==true %}
+                                            <th>İşlem</th>
+                                        {% endif %}
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -45,22 +46,24 @@
                                                 <td>{% if userUniversityMail.isValidated %}Aktif{% else %}Pasif{% endif %}</td>
                                                 <td>{{ userUniversityMail.email }}</td>
                                                 <td>{{ userUniversityMail.updateDate|date_modify("+2 year")|date('d/m/Y') }}</td>
-                                                <td>
-                                                    <form id="mail_setting" action="{{ path('user_profile_mail') }}" method="post">
-                                                        <li class="mail-operation dropdown">
-                                                            <a class="mail-operation-link dropdown-toggle" data-toggle="dropdown">İşlem</a>
-                                                            <ul class="dropdown-menu">
-                                                                <li class="mail-operation"><a class="navigation-link" id="op_mail_save">Kaydet</a></li>
-                                                                <li class="mail-operation"><a class="navigation-link" id="op_mail_send_activation">Aktivasyon Linki</a></li>
-                                                                <li class="mail-operation"><a class="navigation-link" id="op_mail_remove">Sil</a></li>
-                                                            </ul>
-                                                        </li>
+                                                {% if isProfileOwner is defined and isProfileOwner==true %}
+                                                    <td>
+                                                        <form id="mail_setting" action="{{ path('user_profile_mail') }}" method="post">
+                                                            <li class="mail-operation dropdown">
+                                                                <a class="mail-operation-link dropdown-toggle" data-toggle="dropdown">İşlem</a>
+                                                                <ul class="dropdown-menu">
+                                                                    <li class="mail-operation"><a class="navigation-link" id="op_mail_save">Kaydet</a></li>
+                                                                    <li class="mail-operation"><a class="navigation-link" id="op_mail_send_activation">Aktivasyon Linki</a></li>
+                                                                    <li class="mail-operation"><a class="navigation-link" id="op_mail_remove">Sil</a></li>
+                                                                </ul>
+                                                            </li>
 
-                                                        <!-- TODO: Form yapısı kaldırılabilir  -->
-                                                        <input type="text" class="form-control" name="mail_id" style="display: none;">
-                                                        <button type="submit" class="btn btn-rounded btn-sm" style="display: none;"></button>
-                                                    </form>
-                                                </td>
+                                                            <!-- TODO: Form yapısı kaldırılabilir  -->
+                                                            <input type="text" class="form-control" name="mail_id" style="display: none;">
+                                                            <button type="submit" class="btn btn-rounded btn-sm" style="display: none;"></button>
+                                                        </form>
+                                                    </td>
+                                                {% endif %}
                                             </tr>
                                         {% endfor %}
                                     </tbody>
@@ -68,18 +71,20 @@
                             </div>
 
 
-                            <div style="padding-top: 40px;">
-                                <form id="add_new_mail_submit" action="{{ path('user_profile_mail') }}" method="post">
+                            {% if isProfileOwner is defined and isProfileOwner==true %}
+                                <div style="padding-top: 40px;">
+                                    <form id="add_new_mail_submit" action="{{ path('user_profile_mail') }}" method="post">
 
-                                    <!-- mail address -->
-                                    <div class="form-group">
-                                        <h6>Mail adresi ekle</h6>
-                                        <input type="text" class="form-control" name="mail_address" placeholder="Yeni mail adresinizi girebilirsiniz">
-                                    </div>
+                                        <!-- mail address -->
+                                        <div class="form-group">
+                                            <h6>Mail adresi ekle</h6>
+                                            <input type="text" class="form-control" name="mail_address" placeholder="Yeni mail adresinizi girebilirsiniz">
+                                        </div>
 
-                                    <button type="submit" class="btn btn-rounded btn-sm">Ekle!</button>
-                                </form>
-                            </div> <!-- new mail form ends -->
+                                        <button type="submit" class="btn btn-rounded btn-sm">Ekle!</button>
+                                    </form>
+                                </div> <!-- new mail form ends -->
+                            {% endif %}
 
                         </div>
                     </div>

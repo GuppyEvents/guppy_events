@@ -9,13 +9,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Form\Model\ChangePassword;
 use AppBundle\Form\ChangePasswordType;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 
 /**
  * @Route("/user", name="user")
- * @Security("has_role('ROLE_USER')")
  */
 class UserController extends Controller
 {
@@ -34,7 +32,7 @@ class UserController extends Controller
 
 
     /**
-     * @Route("/profile", name="user_profile_account")
+     * @Route("/profile/about", name="user_profile_account")
      * @Security("has_role('ROLE_USER')")
      */
     public function userProfileAction(Request $request)
@@ -78,13 +76,43 @@ class UserController extends Controller
 
             } catch (Exception $e){}
         }
+
         
         if(!$this->getUser()->getEmailValidated()){
             $data['warning_msg'] = 'Mail adresinizi onaylayınız';
         }
 
+        $data['user'] = $this->getUser();
+        $data['isProfileOwner'] = true;
         return $this->render('AppBundle:user:profile_settings_account.html.twig', $data);
     }
+
+
+    /**
+     * @Route("/profile/about/{userId}", name="user_profile_with_id")
+     */
+    public function userProfileWithIdAction($userId)
+    {
+        $data = array();
+        $em = $this->getDoctrine()->getManager();
+        $data['isProfileOwner'] = false;
+
+        $user = $this->getDoctrine()->getRepository('AppBundle:User')->find($userId);
+        if($user){
+            
+            // Profil sayfasına dışarıdan erişim istenirse
+            if($this->getUser() && $this->getUser()->getId()){
+                $data['isProfileOwner'] = $userId ? $userId==$this->getUser()->getId() : true;
+            }else{
+                $data['isProfileOwner'] = false;
+            }
+        }
+
+        $data['user'] = $user;
+        $data['urlContinueWithId'] = true;
+        return $this->render('AppBundle:user:profile_settings_account.html.twig', $data);
+    }
+
 
 
 
@@ -136,10 +164,40 @@ class UserController extends Controller
 
         $userUniversityMailList = $em->getRepository('AppBundle:UniversityUser')->findBy(array('user'=>$this->getUser()->getId()));
         $data['userUniversityMailList'] = $userUniversityMailList;
-
+        $data['user'] = $this->getUser();
+        $data['isProfileOwner'] = true;
         return $this->render('AppBundle:user:profile_settings_mail.html.twig', $data);
     }
 
+
+
+    /**
+     * @Route("/profile/mail/{userId}", name="user_profile_mail_with_id")
+     */
+    public function userProfileMailWithIdAction($userId)
+    {
+        $data = array();
+        $em = $this->getDoctrine()->getManager();
+
+        $data['isProfileOwner'] = false;
+        $user = $this->getDoctrine()->getRepository('AppBundle:User')->find($userId);
+        if($user){
+
+            // Profil sayfasına dışarıdan erişim istenirse
+            if($this->getUser() && $this->getUser()->getId()){
+                $data['isProfileOwner'] = $userId ? $userId==$this->getUser()->getId() : true;
+            }else{
+                $data['isProfileOwner'] = false;
+            }
+
+            $userUniversityMailList = $em->getRepository('AppBundle:UniversityUser')->findBy(array('user'=>$user->getId()));
+            $data['userUniversityMailList'] = $userUniversityMailList;
+            $data['user'] = $user;
+        }
+
+        $data['urlContinueWithId'] = true;
+        return $this->render('AppBundle:user:profile_settings_mail.html.twig', $data);
+    }
 
 
     /**
@@ -188,6 +246,8 @@ class UserController extends Controller
             } catch (Exception $e){}
         }
 
+        $data['user'] = $this->getUser();
+        $data['isProfileOwner'] = true;
         return $this->render('AppBundle:user:profile_settings_password.html.twig', $data);
     }
 
@@ -202,6 +262,36 @@ class UserController extends Controller
         $data = array();
         $em = $this->getDoctrine()->getManager();
 
+        $data['user'] = $this->getUser();
+        $data['isProfileOwner'] = true;
+        return $this->render('AppBundle:user:profile_badges.html.twig', $data);
+    }
+
+
+    /**
+     * @Route("/profile/badges/{userId}", name="user_profile_badges_with_id")
+     */
+    public function userProfileBadgesWithIdAction($userId)
+    {
+
+        $data = array();
+        $em = $this->getDoctrine()->getManager();
+
+        $data['isProfileOwner'] = false;
+        $user = $this->getDoctrine()->getRepository('AppBundle:User')->find($userId);
+        if($user){
+
+            // Profil sayfasına dışarıdan erişim istenirse
+            if($this->getUser() && $this->getUser()->getId()){
+                $data['isProfileOwner'] = $userId ? $userId==$this->getUser()->getId() : true;
+            }else{
+                $data['isProfileOwner'] = false;
+            }
+
+            $data['user'] = $user;
+        }
+
+        $data['urlContinueWithId'] = true;
         return $this->render('AppBundle:user:profile_badges.html.twig', $data);
     }
 
@@ -219,7 +309,39 @@ class UserController extends Controller
         $data['communityUserAdminCommunities'] = $em->getRepository('AppBundle:CommunityUser')->findBy(array('status'=>1 , 'user'=>$this->getUser()));
         $data['communityUserMemberCommunities'] = $em->getRepository('AppBundle:CommunityUser')->findBy(array('status'=>2 , 'user'=>$this->getUser()));
         $data['communityUserApplicationsCommunities'] = $em->getRepository('AppBundle:CommunityUser')->findBy(array('status'=>10 , 'user'=>$this->getUser()));
+        $data['user'] = $this->getUser();
+        $data['isProfileOwner'] = true;
+        return $this->render('AppBundle:user:profile_settings_communities.html.twig', $data);
+    }
 
+
+    /**
+     * @Route("/profile/communities/{userId}", name="user_profile_communities_with_id")
+     */
+    public function userProfileCommunitiesWithIdAction($userId)
+    {
+
+        $data = array();
+        $em = $this->getDoctrine()->getManager();
+
+        $data['isProfileOwner'] = false;
+        $user = $this->getDoctrine()->getRepository('AppBundle:User')->find($userId);
+        if($user){
+
+            // Profil sayfasına dışarıdan erişim istenirse
+            if($this->getUser() && $this->getUser()->getId()){
+                $data['isProfileOwner'] = $userId ? $userId==$this->getUser()->getId() : true;
+            }else{
+                $data['isProfileOwner'] = false;
+            }
+
+            $data['communityUserAdminCommunities'] = $em->getRepository('AppBundle:CommunityUser')->findBy(array('status'=>1 , 'user'=>$user));
+            $data['communityUserMemberCommunities'] = $em->getRepository('AppBundle:CommunityUser')->findBy(array('status'=>2 , 'user'=>$user));
+            $data['communityUserApplicationsCommunities'] = $em->getRepository('AppBundle:CommunityUser')->findBy(array('status'=>10 , 'user'=>$user));
+            $data['user'] = $user;
+        }
+
+        $data['urlContinueWithId'] = true;
         return $this->render('AppBundle:user:profile_settings_communities.html.twig', $data);
     }
 }
