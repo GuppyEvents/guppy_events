@@ -7,10 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CommunityUser
  *
- * @ORM\Table(name="community_user", uniqueConstraints={@ORM\UniqueConstraint(name="id_UNIQUE", columns={"id"})}, indexes={@ORM\Index(name="community_user_user_idx", columns={"user_id"}), @ORM\Index(name="community_user_community_idx", columns={"community_id"})})
+ * @ORM\Table(name="community_user", uniqueConstraints={@ORM\UniqueConstraint(name="id_UNIQUE", columns={"id"})}, indexes={@ORM\Index(name="community_user_user_idx", columns={"user_id"}), @ORM\Index(name="community_user_community_idx", columns={"community_id"}), @ORM\Index(name="community_user_perform_byx", columns={"perform_by"})})
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CommunityUserRepository")
  */
-class CommunityUser
+class CommunityUser extends Base
 {
     /**
      * @var integer
@@ -18,13 +18,6 @@ class CommunityUser
      * @ORM\Column(name="status", type="integer", nullable=true)
      */
     private $status=10;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date", type="datetime", nullable=false)
-     */
-    private $date;
 
     /**
      * @var integer
@@ -55,6 +48,15 @@ class CommunityUser
      */
     private $community;
 
+    /**
+     * @var \AppBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="perform_by", referencedColumnName="id", nullable=true)
+     * })
+     */
+    private $performBy;
 
 
     /**
@@ -157,5 +159,21 @@ class CommunityUser
     public function getCommunity()
     {
         return $this->community;
+    }
+
+    /**
+     * @return User
+     */
+    public function getPerformBy()
+    {
+        return $this->performBy;
+    }
+
+    /**
+     * @param User $performBy
+     */
+    public function setPerformBy($performBy)
+    {
+        $this->performBy = $performBy;
     }
 }

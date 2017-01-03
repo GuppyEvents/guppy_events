@@ -100,7 +100,7 @@
                                         {% for communityUser in communityMembershipApplications %}
                                             <tr data-community-user-id="{{ communityUser.id }}">
                                                 <td>{{ communityUser.user.name }} {{ communityUser.user.surname }}</td>
-                                                <td>{{ communityUser.date|date('d/m/Y') }}</td>
+                                                <td>{{ communityUser.registerDate|date('d/m/Y') }}</td>
                                                 <td>
                                                     {#<form id="mail_setting" action="{{ path('user_profile_mail') }}" method="post">#}
                                                         <li class="membership-application-operation dropdown">

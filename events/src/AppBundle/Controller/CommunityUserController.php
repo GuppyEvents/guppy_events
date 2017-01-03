@@ -53,7 +53,7 @@ class CommunityUserController extends Controller
                 $communityUser = new CommunityUser();
                 $communityUser->setUser($this->getUser());
                 $communityUser->setCommunity($community);
-                $communityUser->setDate(new \DateTime('now'));
+                $communityUser->setRegisterDate(new \DateTime('now'));
 
                 $em->persist($communityUser);
                 $em->flush();
@@ -110,8 +110,7 @@ class CommunityUserController extends Controller
             }
 
             // --3.1-- Update operation
-            // TODO: updated date değeri eklenmesi ya da update edilmesi gerekiyor
-            //$communityUser->setDate(new \DateTime('now'));
+            $communityUser->setUpdateDate(new \DateTime('now'));
 
             $prevStatus = $communityUser->getStatus();
             $communityUser->setStatus(intval($status));
