@@ -366,6 +366,9 @@ class CommunityController extends Controller
                     break;
             }
 
+            $communityUser->setUpdateDate(new \DateTime('now'));
+            $communityUser->setPerformBy($this->getUser());
+
             $this->getDoctrine()->getManager()->persist($communityUser);
             $this->getDoctrine()->getManager()->flush();
 
