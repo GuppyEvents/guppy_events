@@ -1,0 +1,154 @@
+{% extends 'AppBundle::main_base.html.twig' %}
+
+{% block title %}Guppy - Community Home{% endblock %}
+
+
+{% block content %}
+
+    <!-- --------------------------------------------- -->
+    <!-- ------------------ CONTENT ------------------ -->
+    <!-- --------------------------------------------- -->
+
+    <section class="guppy-section align-center">
+        <div class="container">
+            <div class="align-left col-sm-12">
+                <form action="{{ path("event_add_post") }}" method="POST" class="form form-mail-us" novalidate="novalidate" _lpchecked="1">
+                    <div class="col-sm-12">
+                        <h5 class="highlight">Etkinlik Ekle</h5>
+                        <br>
+                    </div>
+
+                    <fieldset class="col-sm-12 col-md-12">
+                        <fieldset>
+                            <label for="name">Düzenleyen:</label>
+                            <select id="community_id" name="community_id" type="text">
+                                {% for communityUser in communityUserList %}
+                                    <option value="{{ communityUser.id }}">{{ communityUser.community.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </fieldset>
+                        <fieldset>
+                            <label for="name">Adı:</label>
+                            <input type="text" class="form-control" rows="3" name="event_title">
+                        </fieldset>
+
+                        <fieldset>
+                            <label for="date">Tarihi:</label><p></p>
+                            <input id="event_date" name="event_date" type="text">
+                        </fieldset>
+                        <fieldset>
+                            <label for="name">Açıklaması:</label>
+                            <textarea id="event_description" name="event_description"></textarea>
+                        </fieldset>
+                        <fieldset>
+                            <label>Görünürlüğü:</label>
+                            <select id="event_permission" class="form-control" name="event_permission">
+                                <option value="PUBLIC">Herkese Açık</option>
+                                <option value="UNIVERSITY">Üniversite Öğrencileri</option>
+                                <option value="COMMUNITY">Topluluk Üyeleri</option>
+                            </select>
+                        </fieldset>
+                        <fieldset>
+                            <label for="name">Bilet Fiyatı:</label>
+                            <input id="event_price" name="event_price" type="text">
+                        </fieldset>
+                        <fieldset>
+                            <label for="name">Katılımcı Sayısı Limiti:</label>
+                            <input type="text" class="form-control" name="event_participant_count">
+                        </fieldset>
+                        <fieldset>
+                            <label>Kapak Fotoğrafı</label>
+                            <input id="temp_img_loader" type="file">
+                            <img id="img_viewer" name="img_viewer" height="150">
+                            <input type="text" hidden class="form-control" id="event_image_base64" name="event_image_base64">
+                        </fieldset>
+                        <fieldset>
+                            <label for="name">Konumu:</label>
+                            <input id="event_location_lat" name="event_location_lat" value="39.873441" style="display: none;"/>
+                            <input id="event_location_lng" name="event_location_lng" value="32.747669" style="display: none;"/>
+                            <div id="event_location" style="height: 400px;"></div>
+                        </fieldset>
+
+                    </div>
+
+                    <fieldset class="col-sm-12">
+                        <input type="submit" class="btn btn-solid" value="Submit">
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+
+{% block javascriptcontent %}
+    <script>
+
+/***********************************************************************************************************************
+ *                                          GLOBAL VARIABLE
+ **********************************************************************************************************************/
+        var debugMode = true;
+
+
+/***********************************************************************************************************************
+ *                                          UTIL FUNCTIONS
+ **********************************************************************************************************************/
+        function initMap() {
+            $("#event_date").datetimepicker();
+            document.getElementById("temp_img_loader").addEventListener("change", fileToBase64Converter, false);
+            var event_gps_location = {lat: parseFloat($('#event_location_lat').val()), lng: parseFloat($('#event_location_lng').val()) };
+            var map = new google.maps.Map(document.getElementById('event_location'), {
+                zoom: 11,
+                scrollwheel:  false,
+                draggable: true,
+                center: event_gps_location,
+            });
+
+            marker = new google.maps.Marker({
+                position: event_gps_location,
+                map: map
+            });
+            google.maps.event.addListener(map, 'click', function( event ){
+                $("#event_location_lat").val(event.latLng.lat());
+                $("#event_location_lng").val(event.latLng.lng());
+                marker.setPosition(event.latLng);
+            });
+        }
+
+        function fileToBase64Converter() {
+            if (this.files && this.files[0]) {
+                var FR= new FileReader();
+                FR.onload = function(e) {
+                    $('#img_viewer').attr('src', e.target.result);
+                    $('#event_image_base64').val(e.target.result);
+                };
+                FR.readAsDataURL( this.files[0] );
+            }
+        }
+
+/***********************************************************************************************************************
+ *                                          AJAX OPERATIONS
+ **********************************************************************************************************************/
+
+
+/***********************************************************************************************************************
+ *                                          EVENTS
+ **********************************************************************************************************************/
+
+
+/***********************************************************************************************************************
+ *                                          DOCUMENT ON READY
+ **********************************************************************************************************************/
+
+    </script>
+
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDLqDBN5nlLAbTBnSrkI0gwft2v6SWFjh8&callback=initMap">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.css" >
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+
+{% endblock %}
+

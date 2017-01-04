@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use AppBundle\Entity\Ticket;
 
 /**
  * @Route("/event", name="event")
@@ -35,6 +36,19 @@ class EventController extends Controller
         $data['event'] = $event;
 
         return $this->render('AppBundle:event:eventMain.html.twig' , $data);
+    }
+
+    /**
+     * @Route("/add", name="event_add_page")
+     */
+    public function eventAddPageAction()
+    {
+        $data = array();
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        $communityUserList = $em->getRepository('AppBundle:CommunityUser')->findBy(array('user'=>$user->getId(), 'status'=>1));
+        $data["communityUserList"] = $communityUserList;
+        return $this->render('AppBundle:event:eventAdd.html.twig' , $data);
     }
 
 
@@ -97,6 +111,70 @@ class EventController extends Controller
         );
     }
 
+
+    /**
+     * @Route("/addEvent", name="event_add_post")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function addPostAction(Request $request)
+    {
+        // 1) POST OPERATION
+        if($request->getMethod() == 'POST'){
+
+            $em = $this->getDoctrine()->getManager();
+
+            try{
+
+                // --1.1-- Event have to added by user
+                // --1.1.1-- Eğer kullanıcı admin ise izin ver
+                // --1.2-- Event may contains community
+                $user = $this->getUser();
+                $community = $em->getRepository('AppBundle:Community')->find($request->get('community_id'));
+                $communityUser = $em->getRepository('AppBundle:CommunityUser')->findBy(array('user'=>$user->getId() , 'community'=>$community->getId()));
+
+                // --2.1-- Eğer böyle bir topluluk kullanıcısı varsa o kullanıcı ile işlem yap
+                if(count($communityUser)>0){
+                    $communityUser = $communityUser[0];
+                }else{
+                    return $this->redirectToRoute('event_add_page');
+                }
+
+                $request_date = \DateTime::createFromFormat('m/d/Y H:i A', $request->get('event_date'));
+                $request_permission = $request->get('event_permission') ? $request->get('event_permission') : 'PUBLIC';
+
+                $event = new Event();
+                $event->setTitle( $request->get('event_title') );
+                $event->setDescription( $request->get('event_description') );
+                $event->setPermission($request_permission);
+                $event->setStartDate( $request_date );
+                $event->setMaxParticipantNum( $request->get('event_participant_count') );
+                $event->setImageBase64($request->get('event_image_base64'));
+                $event->setGpsLocationLat($request->get('event_location_lat'));
+                $event->setGpsLocationLng($request->get('event_location_lng'));
+                $event->setCommunityUser( $communityUser );
+
+                $ticket = new Ticket();
+                $ticket->setPrice(intval($request->get('event_price')));
+                $ticket->setEvent($event);
+                $em->persist($event);
+                $em->persist($ticket);
+                $em->flush();
+                return $this->redirectToRoute('user_event_mainpage', array('eventId' => $event->getId()));
+            } catch (Exception $e){
+                return $this->redirectToRoute('event_add_page');
+            }
+
+        }
+
+
+        // 2) DEFAULT CASE
+        $universities = $this->getDoctrine()->getRepository('AppBundle:University')->findAll();
+
+        return $this->render('AppBundle:event:eventRegister.html.twig', array(
+                'universities'=>$universities
+            )
+        );
+    }
 
 
     /**
