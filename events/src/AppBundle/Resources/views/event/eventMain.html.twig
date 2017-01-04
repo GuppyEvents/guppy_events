@@ -57,7 +57,12 @@
                             <a href="{{ path('user_community_homepage',{'communityId': event.communityUser.community.id}) }}">{{ event.communityUser.community.name }}</a>
                         </div>
                         <div class="event-content-header-price">
-                            Free
+                            {% if tickets|length >0 %}
+                            {{ tickets[0].price }} {{ tickets[0].priceType ? tickets[0].priceType : "TL" }}
+                            {% else %}
+                                ÜCRETSİZ
+                            {% endif %}
+
                         </div>
                     </div>
                 </div>

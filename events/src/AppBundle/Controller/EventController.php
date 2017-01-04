@@ -33,7 +33,10 @@ class EventController extends Controller
 
         $event = $this->getDoctrine()->getRepository('AppBundle:Event')->find($eventId);
 
+        $tickets = $this->getDoctrine()->getRepository('AppBundle:Ticket')->findBy(array('event'=>$eventId));
+
         $data['event'] = $event;
+        $data['tickets'] = $tickets;
 
         return $this->render('AppBundle:event:eventMain.html.twig' , $data);
     }
