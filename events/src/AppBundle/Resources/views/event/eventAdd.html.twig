@@ -64,6 +64,7 @@
                         </fieldset>
                         <fieldset>
                             <label for="name">Konumu:</label>
+                            <input id="search_event_location" name="search_event_location" type="text" size="150">
                             <input id="event_location_lat" name="event_location_lat" value="39.873441" style="display: none;"/>
                             <input id="event_location_lng" name="event_location_lng" value="32.747669" style="display: none;"/>
                             <div id="event_location" style="height: 400px;"></div>
@@ -89,16 +90,38 @@
  *                                          GLOBAL VARIABLE
  **********************************************************************************************************************/
         var debugMode = true;
+        var autocomplete;
+        var map;
 
 
 /***********************************************************************************************************************
  *                                          UTIL FUNCTIONS
  **********************************************************************************************************************/
+function fillInAddress(e) {
+    // Get the place details from the autocomplete object.
+    var place = autocomplete.getPlace();
+
+    $("#event_location_lat").val(place.geometry.location.lat());
+    $("#event_location_lng").val(place.geometry.location.lng());
+    marker.setPosition(place.geometry.location);
+    map.setCenter(place.geometry.location);
+    map.setZoom(16);
+    $('#search_event_location').val(place.name);
+
+
+
+
+}
         function initMap() {
             $("#event_date").datetimepicker();
             document.getElementById("temp_img_loader").addEventListener("change", fileToBase64Converter, false);
+
+            var input = document.getElementById('search_event_location');
+            autocomplete = new google.maps.places.Autocomplete(input);
+            autocomplete.addListener('place_changed', fillInAddress);
+
             var event_gps_location = {lat: parseFloat($('#event_location_lat').val()), lng: parseFloat($('#event_location_lng').val()) };
-            var map = new google.maps.Map(document.getElementById('event_location'), {
+            map = new google.maps.Map(document.getElementById('event_location'), {
                 zoom: 11,
                 scrollwheel:  false,
                 draggable: true,
@@ -144,7 +167,7 @@
     </script>
 
     <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDLqDBN5nlLAbTBnSrkI0gwft2v6SWFjh8&callback=initMap">
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDLqDBN5nlLAbTBnSrkI0gwft2v6SWFjh8&callback=initMap&libraries=places">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.css" >

@@ -141,8 +141,10 @@
                         <div class="col-sm-10 align-left" style="height: 1px; background: gray; margin-top: 30px; margin-bottom: 30px;"></div>
                         <div class="col-sm-12 event-content-body-map">
                             <div style="text-align: center; padding-bottom: 25px;">
-                                <h6>Lokasyon</h6>
+                                <h6>Konum</h6>
+                                <p>{{ event.locationName }}</p>
                             </div>
+
 
                             <input id="event_location_lat" name="event_location_lat" value="{{ event.gpsLocationLat }}" style="display: none;"/>
                             <input id="event_location_lng" name="event_location_lng" value="{{ event.gpsLocationLng }}" style="display: none;"/>
@@ -181,7 +183,7 @@
             var event_gps_location = {lat: parseFloat($('#event_location_lat').val()), lng: parseFloat($('#event_location_lng').val()) };
 
             var map = new google.maps.Map(document.getElementById('event_location'), {
-                zoom: 11,
+                zoom: 12,
                 scrollwheel:  false,
                 draggable: false,
                 center: event_gps_location,

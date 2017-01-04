@@ -155,6 +155,7 @@ class EventController extends Controller
                 $event->setGpsLocationLat($request->get('event_location_lat'));
                 $event->setGpsLocationLng($request->get('event_location_lng'));
                 $event->setCommunityUser( $communityUser );
+                $event->setLocationName($request->get('search_event_location'));
 
                 $ticket = new Ticket();
                 $ticket->setPrice(intval($request->get('event_price')));

@@ -78,6 +78,13 @@ class Event
     /**
      * @var string
      *
+     * @ORM\Column(name="location_name", type="string", length=150 , nullable=true)
+     */
+    private $locationName;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="boarding_point", type="string", length=45, nullable=true)
      */
     private $boardingPoint;
@@ -366,5 +373,21 @@ class Event
     public function getCommunityUser()
     {
         return $this->communityUser;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocationName()
+    {
+        return $this->locationName;
+    }
+
+    /**
+     * @param string $locationName
+     */
+    public function setLocationName($locationName)
+    {
+        $this->locationName = $locationName;
     }
 }
