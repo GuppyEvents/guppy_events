@@ -12,7 +12,7 @@
     <section class="guppy-section align-center">
         <div class="container">
             <div class="align-left col-sm-12">
-                <form action="{{ path("event_add_post") }}" method="POST" class="form form-mail-us" novalidate="novalidate" _lpchecked="1">
+                <form id="add_event_form" action="{{ path("event_add_post") }}" method="POST" class="form form-mail-us" novalidate="novalidate" _lpchecked="1">
                     <div class="col-sm-12">
                         <h5 class="highlight">Etkinlik Ekle</h5>
                         <br>
@@ -58,9 +58,16 @@
                         </fieldset>
                         <fieldset>
                             <label>Kapak Fotoğrafı</label>
-                            <input id="temp_img_loader" type="file">
-                            <img id="img_viewer" name="img_viewer" height="150">
-                            <input type="text" hidden class="form-control" id="event_image_base64" name="event_image_base64">
+                            <input type="text" style="display: none;" class="form-control" id="event_image_base64" name="event_image_base64">
+
+                            <div class="image-editor">
+                                <input type="file" class="cropit-image-input">
+                                <div class="cropit-preview"></div>
+                                <div class="image-size-label">
+                                    Kapak fotoğrafını ayarla
+                                </div>
+                                <input type="range" class="cropit-image-zoom-input">
+                            </div>
                         </fieldset>
                         <fieldset>
                             <label for="name">Konumu:</label>
@@ -84,6 +91,36 @@
 
 
 {% block javascriptcontent %}
+    {% javascripts 'theme/assets/cropit/jquery.cropit.js'%}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <style>
+        .cropit-preview {
+            background-color: #f8f8f8;
+            background-size: cover;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            margin-top: 7px;
+            width: 600px;
+            height: 400px;
+        }
+
+        .cropit-preview-image-container {
+            cursor: move;
+        }
+
+        .image-size-label {
+            margin-top: 10px;
+        }
+
+        input, .export {
+            display: block;
+        }
+
+        button {
+            margin-top: 10px;
+        }
+    </style>
     <script>
 
 /***********************************************************************************************************************
@@ -112,9 +149,22 @@ function fillInAddress(e) {
 
 
 }
+
+$('#add_event_form').submit(function() {
+    var imageData = $('.image-editor').cropit('export');
+    $('#event_image_base64').val(imageData);
+    return true; // return false to cancel form action
+});
+
         function initMap() {
+
+            $('.image-editor').cropit({
+                imageState: {
+                    src: '',
+                },
+            });
+
             $("#event_date").datetimepicker();
-            document.getElementById("temp_img_loader").addEventListener("change", fileToBase64Converter, false);
 
             var input = document.getElementById('search_event_location');
             autocomplete = new google.maps.places.Autocomplete(input);
@@ -150,6 +200,8 @@ function fillInAddress(e) {
             }
         }
 
+
+
 /***********************************************************************************************************************
  *                                          AJAX OPERATIONS
  **********************************************************************************************************************/
@@ -174,4 +226,3 @@ function fillInAddress(e) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
 
 {% endblock %}
-
