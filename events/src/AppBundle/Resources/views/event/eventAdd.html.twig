@@ -23,7 +23,7 @@
                             <label for="name">Düzenleyen:</label>
                             <select id="community_id" name="community_id" type="text">
                                 {% for communityUser in communityUserList %}
-                                    <option value="{{ communityUser.id }}">{{ communityUser.community.name }}</option>
+                                    <option value="{{ communityUser.community.id }}">{{ communityUser.community.name }}</option>
                                 {% endfor %}
                             </select>
                         </fieldset>
