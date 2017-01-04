@@ -15,7 +15,7 @@ class DefaultController extends Controller
      */
     public function homeAction(Request $request)
     {
-        return $this->redirectToRoute('home_about');
+        return $this->redirectToRoute('home_communities');
     }
 
     /**
