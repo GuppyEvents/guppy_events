@@ -12,22 +12,35 @@
         <meta name="description" content="Guppy Events">
         <meta name="keywords" content="Events">
         <meta name="author" content="Kemal Sami KARACA">
-
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-
         <title>{% block title %}Guppy - Anasayfa{% endblock %}</title>
 
+
         {% stylesheets
-                'theme/assets/css/custom-animations.css'
+                'theme/assets/css/lib/animate.css'
+                'theme/assets/css/custom-animations.css' filter='cssrewrite' %}
+            <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+        {% endstylesheets %}
+
+        <!-- font links -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,500,300,300italic,400italic,500italic&subset=latin,latin-ext">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans+Caption:400,700">
+
+        {% stylesheets
+                'theme/assets/css/lib/font-lineicons.css'
+                'theme/assets/css/lib/toastr.min.css'
+                'theme/assets/css/lib/bootstrap.min.css'
+                'theme/assets/css/style_media.css'
                 'theme/assets/css/style.css'
                 'theme/assets/css/guppy-ui.css' filter='cssrewrite' %}
             <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
         {% endstylesheets %}
 
-            <!-- jquery ui -->
-            <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <!-- jquery ui -->
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
         {% block stylesheets %}{% endblock %}
+
 
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>

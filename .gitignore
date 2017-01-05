@@ -18,6 +18,12 @@ events/app/logs/*
 !app/cache/.gitkeep
 !app/logs/.gitkeep
 
+#Prod environment (GUPPY)
+events/web/css/*
+events/web/js/*
+events/web/images/*
+events/web/bundles/*
+
 # Email spool folder
 events/app/spool/*
 
