@@ -81,7 +81,11 @@
                             <ul class="navigation-list pull-left light-text">
                                 <li class="navigation-item"><a href="{{ path("home_communities") }}" class="navigation-link">Kulüpler</a></li>
                                 <li class="navigation-item"><a href="{{ path("home_events") }}" class="navigation-link">Etkinlikler</a></li>
-                                {#<li class="navigation-item"><a href="{{ path("login") }}" class="navigation-link">Yönetici Sayfasına Git</a></li>#}
+                                <li class="navigation-item">
+                                    <a class="navigation-link" style="width: 320px; position: relative; top: -10px;">
+                                        <input id="guppy-search" type="text" placeholder="Etkinlikleri, toplulukları ve diğer şeyleri ara">
+                                    </a>
+                                </li>
                             </ul>
 
                             <ul class="navigation-list pull-right light-text">
@@ -110,13 +114,27 @@
             </div>
         </header>
 
+
+
+        <!-- ------------ CONTENT ------------ -->
         <div class="guppy-container">
+
+            <!-- This search form called after press enter key -->
+            <form action="{{ path('search_all') }}" method="post" style="display: none;">
+                <div class="form-group">
+                    <label>Search Key</label>
+                    <input id="guppy-search-hidden" type="text" class="form-control" name="search_key">
+                </div>
+                <button id="guppy-search-submit-hidden" type="submit">Search</button>
+            </form>
+
             {% block content %}{% endblock %}
         </div>
 
+
+
         <!-- ------------ FOOTER ------------ -->
         <section class="footer">
-
             <div class="footer-base">
                 <div class="container">
 
@@ -124,8 +142,6 @@
                         <ul class="footer-nav">
                             <li class="footer-nav-item"><a href="{{ path("home_about") }}">Hakkımızda</a></li>
                             <li class="footer-nav-item"><a href="#">S.S.S</a></li>
-                            {#<li class="footer-nav-item"><a href="#">Privacy policy</a></li>#}
-                            {#<li class="footer-nav-item"><a href="#">Press</a></li>#}
                         </ul>
                     </div>
 
@@ -136,7 +152,6 @@
                             <li class="socials-nav-item"><a href="#"><span class="fa fa-twitter"></span></a></li>
                             <li class="socials-nav-item"><a href="#"><span class="fa fa-facebook"></span></a></li>
                             <li class="socials-nav-item"><a href="#"><span class="fa fa-instagram"></span></a></li>
-                            {#<li class="socials-nav-item"><a href="#"><span class="fa fa-vimeo-square"></span></a></li>#}
                         </ul>
 
                         <p class="text-alt"><small>All Rights Reserved © 2016</small></p>
@@ -162,9 +177,9 @@
             <script src="{{ asset_url }}"></script>
         {% endjavascripts %}
 
-            <!-- jquery ui -->
-            <!-- datepicker used -->
-            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <!-- jquery ui -->
+        <!-- datepicker used -->
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
         {% block javascriptcontent %}{% endblock %}
 
@@ -172,6 +187,21 @@
         <!-- ------------ GUPPY MAIN JS ------------ -->
         <script>
 
+        /***************************************************************************************************************
+         *                                          EVENTS
+         ***************************************************************************************************************/
+            $('#guppy-search').on('keypress', function (event) {
+                if(event.which === 13){
+                    $(this).attr("disabled", "disabled");
+
+                    $('#guppy-search-hidden').val($(this).val());
+                    $('#guppy-search-submit-hidden').trigger( "click" );
+                }
+            });
+
+        /***************************************************************************************************************
+         *                                          ON READY
+         ***************************************************************************************************************/
             // -1- setting footer posisition
             $('.guppy-container').css('min-height' , $( window ).height() - $('.header').height() - $('.footer').height() -50 );
 
@@ -180,7 +210,6 @@
             });
 
         </script>
-
 
     </body>
 </html>

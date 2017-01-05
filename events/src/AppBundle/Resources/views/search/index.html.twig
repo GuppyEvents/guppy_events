@@ -1,0 +1,102 @@
+{% extends 'AppBundle::main_base.html.twig' %}
+
+{% block title %}Arama Sonuçları{% endblock %}
+
+{% block content %}
+
+    <div class="preloader-mask">
+        <div class="preloader"></div>
+    </div>
+
+    <section class="section align-center">
+        <div class="container">
+
+            <h6 class="heading-alt">Arama Sonuçları Etkinlikler</h6>
+
+            <div class="col-md-10 col-md-offset-1">
+
+                <!-- Search Results start -->
+                <div class="row schedule schedule-light">
+
+                    <!-- Search Result Navigation -->
+                    <ul class="nav nav-schedule">
+                        <li class="active" style="width: 35%;"><a href="#search_result_communities" data-toggle="tab">Topluluklar</a></li>
+                        <li style="width: 35%;"><a href="#search_result_events" data-toggle="tab">Etkinlikler</a></li>
+                        <li style="width: 30%;"><a href="#search_result_others" data-toggle="tab">Diğer</a></li>
+                    </ul>
+                    <!-- Navigation end -->
+
+                    <div class="tab-content">
+
+                        <!-- Topluluk Listesi -->
+                        <div id="search_result_communities" class="tab-pane fade active in">
+                            {% for community in communityList %}
+                                <div class="col-sm-12">
+                                    <div class="testimonial profile-community-body" style="border: 1px solid #ccc!important;">
+                                        <div class="author-block">
+                                            <div class="photo-container">
+                                                {% if community.imageBase64 %}
+                                                    <img src="{{ community.imageBase64 }}" alt="{{ community.name }}" class="img-responsive" />
+                                                {% else %}
+                                                    {% image 'theme/assets/img/guppy_avatar_001.png' %}
+                                                        <img src="{{ asset_url }}" class="img-responsive" alt="{{ community.name }}" />
+                                                    {% endimage %}
+                                                {% endif %}
+                                            </div>
+
+                                            <strong class="name"><a href="{{ path('user_community_users_homepage' , {'communityId':community.id}) }}">{{ community.name }} </a></strong>
+                                            <small class="text-alt company"> {{ community.university.name }}</small>
+                                        </div>
+
+                                        {#{% if isProfileOwner is defined and isProfileOwner==true %}#}
+                                            {#<div class="profile-community-box-edit-parent"><span class="profile-community-box-edit" data-modal-link="community-background-image"><i class="fa fa-times" aria-hidden="true"></i></span></div>#}
+                                        {#{% endif %}#}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Etkinlik Listesi -->
+                        <div id="search_result_events" class="tab-pane fade in">
+                            {% for event in eventList %}
+                                <div class="col-sm-12">
+                                    <div class="testimonial profile-community-body" style="border: 1px solid #ccc!important;">
+                                        <div class="author-block">
+                                            <div class="photo-container">
+                                                {% if event.imageBase64 %}
+                                                    <img src="{{ event.imageBase64 }}" alt="{{ event.title }}" class="img-responsive" style="width: inherit; height: inherit;"/>
+                                                {% else %}
+                                                    {% image 'theme/assets/img/guppy_avatar_001.png' %}
+                                                        <img src="{{ asset_url }}" class="img-responsive" alt="{{ event.title }}" style="width: inherit; height: inherit;"/>
+                                                    {% endimage %}
+                                                {% endif %}
+                                            </div>
+
+                                            <strong class="name"><a href="">{{ event.title }} </a></strong>
+                                            <small class="text-alt company"> Etkinlik Topluluğu</small>
+                                        </div>
+
+                                        {#{% if isProfileOwner is defined and isProfileOwner==true %}#}
+                                        {#<div class="profile-community-box-edit-parent"><span class="profile-community-box-edit" data-modal-link="community-background-image"><i class="fa fa-times" aria-hidden="true"></i></span></div>#}
+                                        {#{% endif %}#}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Kullanıcılar Listesi -->
+                        <div id="search_result_others" class="tab-pane fade in">
+                            Bu alanda kullanıcı sonuçları yer alacak ...
+                        </div>
+                    </div>
+
+                </div>
+                <!-- Search Results end -->
+
+            </div>
+
+
+        </div>
+    </section>
+
+{% endblock %}

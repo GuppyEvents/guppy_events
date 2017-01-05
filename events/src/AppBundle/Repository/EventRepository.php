@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\Event;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -58,6 +59,24 @@ class EventRepository extends EntityRepository
             ->where('event.startDate BETWEEN :targetDate AND :targetNextDate')
             ->setParameter('targetDate', $firstDate)
             ->setParameter('targetNextDate', $lastDate)
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    /**
+     *
+     * @param string $keyValue The event title key value
+     * @return Event|null
+     */
+    public function findEventListByName($keyValue)
+    {
+        /**
+         * Etkinlikler public dönmektedir (Eğer kullanıcı login olmuş ise universite içindekiler de gelmelidir)
+         */
+        return $this->createQueryBuilder('event')
+            ->where('event.title LIKE :titleKeyValue')
+            ->setParameter('titleKeyValue', '%'.$keyValue.'%')
             ->getQuery()
             ->getResult();
     }
