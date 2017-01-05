@@ -12,7 +12,7 @@
     <section class="guppy-section align-center">
         <div class="container">
             <div class="align-left col-sm-12">
-                <form id="add_event_form" action="{{ path("event_add_post") }}" method="POST" class="form form-mail-us" novalidate="novalidate" _lpchecked="1">
+                <form id="add_event_form" action="{{ path("event_edit_post") }}" method="POST" class="form form-mail-us" novalidate="novalidate" _lpchecked="1">
                     <div class="col-sm-12">
                         <h5 class="highlight">Etkinlik Ekle</h5>
                         <br>
@@ -23,13 +23,18 @@
                             <label for="name">Düzenleyen:</label>
                             <select id="community_id" name="community_id" type="text">
                                 {% for communityUser in communityUserList %}
-                                    <option value="{{ communityUser.community.id }}">{{ communityUser.community.name }}</option>
+                                    {% if event.communityUser.community.id == communityUser.community.id %}
+                                        <option selected value="{{ communityUser.community.id }}">{{ communityUser.community.name }}</option>
+                                    {% else %}
+                                        <option value="{{ communityUser.community.id }}">{{ communityUser.community.name }}</option>
+                                    {% endif %}
                                 {% endfor %}
                             </select>
                         </fieldset>
                         <fieldset>
                             <label for="name">Adı:</label>
-                            <input type="text" class="form-control" rows="3" name="event_title">
+                            <input type="text" class="form-control" rows="3" name="event_title" value="{{ event.title }}">
+                            <input type="text" style="display:none" name="event_id" value="{{ event.id }}">
                         </fieldset>
 
                         <fieldset>
@@ -38,31 +43,33 @@
                         </fieldset>
                         <fieldset>
                             <label for="name">Açıklaması:</label>
-                            <textarea id="event_description" name="event_description"></textarea>
+                            <textarea id="event_description" name="event_description">{{ event.description }}</textarea>
                         </fieldset>
                         <fieldset>
                             <label>Görünürlüğü:</label>
                             <select id="event_permission" class="form-control" name="event_permission">
-                                <option value="PUBLIC">Herkese Açık</option>
-                                <option value="UNIVERSITY">Üniversite Öğrencileri</option>
-                                <option value="COMMUNITY">Topluluk Üyeleri</option>
+                                <option selected="{{ event.permission == "PUBLIC" ? "true":"false" }}" value="PUBLIC">Herkese Açık</option>
+                                <option selected="{{ event.permission == "UNIVERSITY" ? "true":"false" }}" value="UNIVERSITY">Üniversite Öğrencileri</option>
+                                <option selected="{{ event.permission == "COMMUNITY" ? "true":"false" }}" value="COMMUNITY">Topluluk Üyeleri</option>
                             </select>
                         </fieldset>
                         <fieldset>
                             <label for="name">Bilet Fiyatı:</label>
-                            <input id="event_price" name="event_price" type="text">
+                            <input id="event_price" name="event_price" type="text" value="{{ tickets|length > 0 ? tickets[0].price : 0 }}">
+                            <input id="ticket_id" style="display: none;" name="ticket_id" type="text" value="{{ tickets|length > 0 ? tickets[0].id : 0 }}">
                         </fieldset>
                         <fieldset>
                             <label for="name">Katılımcı Sayısı Limiti:</label>
-                            <input type="text" class="form-control" name="event_participant_count">
+                            <input type="text" class="form-control" name="event_participant_count" value="{{ event.maxParticipantNum }}">
                         </fieldset>
                         <fieldset>
                             <label>Kapak Fotoğrafı</label>
-                            <input type="text" style="display: none;" class="form-control" id="event_image_base64" name="event_image_base64">
+                            <input type="text" style="display: none;" class="form-control" id="event_image_base64" name="event_image_base64" value="{{ event.imageBase64 }}">
 
                             <div class="image-editor">
                                 <input type="file" class="cropit-image-input">
-                                <div class="cropit-preview"></div>
+                                <div class="cropit-preview">
+                                </div>
                                 <div class="image-size-label">
                                     Kapak fotoğrafını ayarla
                                 </div>
@@ -72,18 +79,18 @@
                         <fieldset>
                             <label for="name">Konumu:</label>
                             <input id="search_event_location" name="search_event_location" type="text" size="150">
-                            <input id="event_location_lat" name="event_location_lat" value="39.873441" style="display: none;"/>
-                            <input id="event_location_lng" name="event_location_lng" value="32.747669" style="display: none;"/>
+                            <input id="event_location_lat" name="event_location_lat" value="{{ event.gpsLocationLat }}" style="display: none;"/>
+                            <input id="event_location_lng" name="event_location_lng" value="{{ event.gpsLocationLng }}" style="display: none;"/>
                             <div id="event_location" style="height: 400px;"></div>
                         </fieldset>
 
-                    </div>
-
-                    <fieldset class="col-sm-12">
-                        <input type="submit" class="btn btn-solid" value="Submit">
-                    </fieldset>
-                </form>
             </div>
+
+            <fieldset class="col-sm-12">
+                <input type="submit" class="btn btn-solid" value="Submit">
+            </fieldset>
+            </form>
+        </div>
         </div>
     </section>
 
@@ -123,48 +130,61 @@
     </style>
     <script>
 
-/***********************************************************************************************************************
- *                                          GLOBAL VARIABLE
- **********************************************************************************************************************/
+        /***********************************************************************************************************************
+         *                                          GLOBAL VARIABLE
+         **********************************************************************************************************************/
         var debugMode = true;
         var autocomplete;
         var map;
 
 
-/***********************************************************************************************************************
- *                                          UTIL FUNCTIONS
- **********************************************************************************************************************/
-function fillInAddress(e) {
-    // Get the place details from the autocomplete object.
-    var place = autocomplete.getPlace();
+        /***********************************************************************************************************************
+         *                                          UTIL FUNCTIONS
+         **********************************************************************************************************************/
+        function fillInAddress(e) {
+            // Get the place details from the autocomplete object.
+            var place = autocomplete.getPlace();
 
-    $("#event_location_lat").val(place.geometry.location.lat());
-    $("#event_location_lng").val(place.geometry.location.lng());
-    marker.setPosition(place.geometry.location);
-    map.setCenter(place.geometry.location);
-    map.setZoom(16);
-    $('#search_event_location').val(place.name);
-
-
+            $("#event_location_lat").val(place.geometry.location.lat());
+            $("#event_location_lng").val(place.geometry.location.lng());
+            marker.setPosition(place.geometry.location);
+            map.setCenter(place.geometry.location);
+            map.setZoom(16);
+            $('#search_event_location').val(place.name);
 
 
-}
 
-$('#add_event_form').submit(function() {
-    var imageData = $('.image-editor').cropit('export');
-    $('#event_image_base64').val(imageData);
-    return true; // return false to cancel form action
-});
+
+        }
+
+        $('#add_event_form').submit(function() {
+            var imageData = $('.image-editor').cropit('export');
+            $('#event_image_base64').val(imageData);
+            return true; // return false to cancel form action
+        });
 
         function initMap() {
 
-            $('.image-editor').cropit({
-                imageState: {
-                    src: ''
-                },
-            });
+            if({{ event.imageBase64 is not null }}) {
+                $('.image-editor').cropit({
+                    imageState: {
+                        src: '{{ event.imageBase64 }}'
+                    },
+                });
+            }else{
+                $('.image-editor').cropit({
+                    imageState: {
+                        src: ''
+                    },
+                });
+            }
 
             $("#event_date").datetimepicker();
+
+            if({{ event.startDate is not null }}) {
+                $("#event_date").data("DateTimePicker").date("{{ event.startDate.format('m/d/Y H:i') }}");
+            }
+
 
             var input = document.getElementById('search_event_location');
             autocomplete = new google.maps.places.Autocomplete(input);
@@ -202,19 +222,19 @@ $('#add_event_form').submit(function() {
 
 
 
-/***********************************************************************************************************************
- *                                          AJAX OPERATIONS
- **********************************************************************************************************************/
+        /***********************************************************************************************************************
+         *                                          AJAX OPERATIONS
+         **********************************************************************************************************************/
 
 
-/***********************************************************************************************************************
- *                                          EVENTS
- **********************************************************************************************************************/
+        /***********************************************************************************************************************
+         *                                          EVENTS
+         **********************************************************************************************************************/
 
 
-/***********************************************************************************************************************
- *                                          DOCUMENT ON READY
- **********************************************************************************************************************/
+        /***********************************************************************************************************************
+         *                                          DOCUMENT ON READY
+         **********************************************************************************************************************/
 
     </script>
 
