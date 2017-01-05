@@ -33,7 +33,7 @@
                         </fieldset>
                         <fieldset>
                             <label for="name">Adı:</label>
-                            <input type="text" class="form-control" rows="3" name="event_title" value="{{ event.title }}">
+                            <input type="text" class="form-control" rows="3" name="event_title" id="event_title" value="{{ event.title }}">
                             <input type="text" style="display:none" name="event_id" value="{{ event.id }}">
                         </fieldset>
 
@@ -178,6 +178,8 @@
                     },
                 });
             }
+            $('.image-editor').cropit('maxZoom', 2);
+            $('.image-editor').cropit('minZoom', 'fit');
 
             $("#event_date").datetimepicker();
 
