@@ -55,6 +55,7 @@ class SearchController extends Controller
                 $more = $request->get('more');
 
                 switch ($more){
+
                     case 'community':
                         $page = intval($request->get('page'));
                         $key = $request->get('key');
@@ -68,11 +69,23 @@ class SearchController extends Controller
                             $communityObj['image'] = $community->getImageBase64();
                             array_push($data['communityList'], $communityObj);
                         }
-
                         break;
 
                     case 'event':
+                        $page = intval($request->get('page'));
+                        $key = $request->get('key');
+                        $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventListByName($key,$page);
+
+                        $data['eventList'] = array();
+                        foreach ($eventList as $event) {
+                            $eventObj = array();
+                            $eventObj['id'] = $event->getId();
+                            $eventObj['title'] = $event->getTitle();
+                            $eventObj['image'] = $event->getImageBase64();
+                            array_push($data['eventList'], $eventObj);
+                        }
                         break;
+
                     default:
                         break;
                 }

@@ -28,7 +28,7 @@
 
                     <div class="tab-content">
 
-                        <!-- Topluluk Listesi -->
+                        <!-- Topluluk Listesi width=50%-->
                         <div id="search_result_communities" class="tab-pane fade active in">
                             {% for community in communityList %}
                                 <div class="col-sm-12">
@@ -48,16 +48,13 @@
                                             <small class="text-alt company"> {{ community.university.name }}</small>
                                         </div>
 
-                                        {#{% if isProfileOwner is defined and isProfileOwner==true %}#}
-                                            {#<div class="profile-community-box-edit-parent"><span class="profile-community-box-edit" data-modal-link="community-background-image"><i class="fa fa-times" aria-hidden="true"></i></span></div>#}
-                                        {#{% endif %}#}
                                     </div>
                                 </div>
                             {% endfor %}
                         </div>
 
 
-                        <!-- Etkinlik Listesi -->
+                        <!-- Etkinlik Listesi width=50%-->
                         <div id="search_result_events" class="tab-pane fade in">
                             {% for event in eventList %}
                                 <div class="col-sm-12">
@@ -77,15 +74,12 @@
                                             <small class="text-alt company"> Etkinlik Topluluğu</small>
                                         </div>
 
-                                        {#{% if isProfileOwner is defined and isProfileOwner==true %}#}
-                                        {#<div class="profile-community-box-edit-parent"><span class="profile-community-box-edit" data-modal-link="community-background-image"><i class="fa fa-times" aria-hidden="true"></i></span></div>#}
-                                        {#{% endif %}#}
                                     </div>
                                 </div>
                             {% endfor %}
                         </div>
 
-                        <!-- Kullanıcılar Listesi -->
+                        <!-- Kullanıcılar Listesi width=0%-->
                         <div id="search_result_others" class="tab-pane fade in">
                             Bu alanda kullanıcı sonuçları yer alacak ...
                         </div>
@@ -141,24 +135,43 @@
 
                     // -- 2.2.2 -- insert new options
                     if(data.content){
-                        data.content.communityList.forEach(function(community) {
-                            console.log(community['name']);
 
-                            $('#search_result_communities').append(
-                                '<div class="col-sm-12">' +
-                                    '<div class="testimonial profile-community-body" style="border: 1px solid #ccc!important;">' +
-                                        '<div class="author-block">' +
-                                            '<div class="photo-container">' +
-                                                '<img src="' + community['image']+'" alt="'+community['name']+'" class="img-responsive" />'+
+                        if(searchFrom=='community'){
+                            data.content.communityList.forEach(function(community) {
+                                $('#search_result_communities').append(
+                                    '<div class="col-sm-12">' +
+                                        '<div class="testimonial profile-community-body" style="border: 1px solid #ccc!important;">' +
+                                            '<div class="author-block">' +
+                                                '<div class="photo-container">' +
+                                                    '<img src="' + community['image']+'" alt="'+community['name']+'" class="img-responsive" />'+
+                                                '</div>' +
+
+                                            '<strong class="name"><a href="">'+community['name']+'</a></strong>' +
+                                            '<small class="text-alt company">' + 'universite ismi' + '</small>' +
                                             '</div>' +
-
-                                        '<strong class="name"><a href="">'+community['name']+'</a></strong>' +
-                                        '<small class="text-alt company">' + 'universite ismi' + '</small>' +
                                         '</div>' +
-                                    '</div>' +
-                                '</div>'
-                            );
-                        });
+                                    '</div>'
+                                );
+                            });
+                        }else if(searchFrom=='event'){
+
+                            data.content.eventList.forEach(function(event) {
+                                $('#search_result_events').append(
+                                    '<div class="col-sm-12">' +
+                                        '<div class="testimonial profile-community-body" style="border: 1px solid #ccc!important;">' +
+                                            '<div class="author-block">' +
+                                                '<div class="photo-container">' +
+                                                    '<img src="' + event['image']+'" alt="'+event['title']+'" class="img-responsive" style="width: inherit; height: inherit;"/>'+
+                                                '</div>' +
+                                            '<strong class="name"><a href="">'+event['title']+'</a></strong>' +
+                                            '<small class="text-alt company">' + 'topluluk ismi @ universite ismi' + '</small>' +
+                                            '</div>' +
+                                        '</div>' +
+                                    '</div>'
+                                );
+                            });
+
+                        }
                     }
 
 
@@ -186,7 +199,7 @@
                     ajaxGetMoreSearchResult('community',search_key,communityPage)
                 }else if($('#search_result_events').hasClass('active')){
                     ++eventPage;
-                    //ajaxGetMoreSearchResult('event',search_key,communityPage)
+                    ajaxGetMoreSearchResult('event',search_key,eventPage)
                 }
             }
         });
