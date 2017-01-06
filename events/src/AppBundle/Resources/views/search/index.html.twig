@@ -20,9 +20,9 @@
 
                     <!-- Search Result Navigation -->
                     <ul class="nav nav-schedule">
-                        <li class="active" style="width: 35%;"><a href="#search_result_communities" data-toggle="tab">Topluluklar</a></li>
-                        <li style="width: 35%;"><a href="#search_result_events" data-toggle="tab">Etkinlikler</a></li>
-                        <li style="width: 30%;"><a href="#search_result_others" data-toggle="tab">Diğer</a></li>
+                        <li class="active" style="width: 50%;"><a href="#search_result_communities" data-toggle="tab">Topluluklar</a></li>
+                        <li style="width: 50%;"><a href="#search_result_events" data-toggle="tab">Etkinlikler</a></li>
+                        {#<li style="width: 30%;"><a href="#search_result_others" data-toggle="tab">Diğer</a></li>#}
                     </ul>
                     <!-- Navigation end -->
 
@@ -56,6 +56,7 @@
                             {% endfor %}
                         </div>
 
+
                         <!-- Etkinlik Listesi -->
                         <div id="search_result_events" class="tab-pane fade in">
                             {% for event in eventList %}
@@ -72,7 +73,7 @@
                                                 {% endif %}
                                             </div>
 
-                                            <strong class="name"><a href="">{{ event.title }} </a></strong>
+                                            <strong class="name"><a href="{{ path('user_event_mainpage' , {'eventId':event.id}) }}">{{ event.title }} </a></strong>
                                             <small class="text-alt company"> Etkinlik Topluluğu</small>
                                         </div>
 
@@ -95,8 +96,100 @@
 
             </div>
 
-
         </div>
     </section>
 
+{% endblock %}
+
+
+
+
+{% block javascriptcontent %}
+    <script>
+
+    /*******************************************************************************************************************
+     *                                          GLOBAL VARIABLE
+     ******************************************************************************************************************/
+        var debugMode = true;
+        var search_key = '{% if search_key is defined %}{{ search_key }}{% endif %}';
+        var communityPage=1, eventPage=1
+
+
+    /*******************************************************************************************************************
+     *                                          AJAX OPERATIONS
+     ******************************************************************************************************************/
+
+        // searchFrom değeri "community" ya da "event" olabilir. Paging nereden devam edeceği belirlenir
+        function ajaxGetMoreSearchResult(searchFrom , searchKey ,page){
+
+            // -- 2 --
+            $.post("{{ path('search_more') }}" , {
+                more : searchFrom,
+                page : page,
+                key : searchKey
+            }).always(function(){
+            }).done(function(data){
+
+                // -- 2.1 -- CONSOLE
+                if(debugMode)
+                    console.log(data);
+
+                // -- 2.2 -- sonuc düzenlenir
+                if(data.resultText == 'SUCCESS'){
+
+                    // -- 2.2.1 -- remove options
+
+                    // -- 2.2.2 -- insert new options
+                    if(data.content){
+                        data.content.communityList.forEach(function(community) {
+                            console.log(community['name']);
+
+                            $('#search_result_communities').append(
+                                '<div class="col-sm-12">' +
+                                    '<div class="testimonial profile-community-body" style="border: 1px solid #ccc!important;">' +
+                                        '<div class="author-block">' +
+                                            '<div class="photo-container">' +
+                                                '<img src="' + community['image']+'" alt="'+community['name']+'" class="img-responsive" />'+
+                                            '</div>' +
+
+                                        '<strong class="name"><a href="">'+community['name']+'</a></strong>' +
+                                        '<small class="text-alt company">' + 'universite ismi' + '</small>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>'
+                            );
+                        });
+                    }
+
+
+                }else if(data.resultText == 'SUCCESS_EMPTY'){
+                    alert('Warning -- ' + ' could not found any borough');
+                }else if(data.resultText == 'FAILURE_PERMISSION'){
+                    alert('Warning -- ' + ' you are not authorization for this operation');
+                }else{
+                    alert('Warning -- ' + ' error occured while getting borough list');
+                }
+            });
+        }
+
+
+    /*******************************************************************************************************************
+     *                                          EVENTS
+     ******************************************************************************************************************/
+
+        $(window).scroll(function(){
+            if($(document).height()==$(window).scrollTop()+$(window).height()){
+                // calculate page
+
+                if($('#search_result_communities').hasClass('active')){
+                    ++communityPage;
+                    ajaxGetMoreSearchResult('community',search_key,communityPage)
+                }else if($('#search_result_events').hasClass('active')){
+                    ++eventPage;
+                    //ajaxGetMoreSearchResult('event',search_key,communityPage)
+                }
+            }
+        });
+
+    </script>
 {% endblock %}

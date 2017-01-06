@@ -17,13 +17,15 @@ class CommunityRepository extends EntityRepository
      * @param string $keyValue The community name key value
      * @return Community|null
      */
-    public function findCommunityListByName($keyValue)
+    public function findCommunityListByName($keyValue , $page=1 ,$pageSize=10)
     {
         return $this->createQueryBuilder('community')
             ->join('community.university', 'university')
             ->where('community.name LIKE :nameKeyValue AND university.id = :universityId')
             ->setParameter('nameKeyValue', '%'.$keyValue.'%')
             ->setParameter('universityId', 5)
+            ->setFirstResult($pageSize * ($page - 1))
+            ->setMaxResults( $pageSize )
             ->getQuery()
             ->getResult();
     }

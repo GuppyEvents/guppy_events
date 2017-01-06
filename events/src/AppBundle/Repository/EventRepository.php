@@ -69,7 +69,7 @@ class EventRepository extends EntityRepository
      * @param string $keyValue The event title key value
      * @return Event|null
      */
-    public function findEventListByName($keyValue)
+    public function findEventListByName($keyValue , $page=1 , $pageSize=10)
     {
         /**
          * Etkinlikler public dönmektedir (Eğer kullanıcı login olmuş ise universite içindekiler de gelmelidir)
@@ -77,6 +77,8 @@ class EventRepository extends EntityRepository
         return $this->createQueryBuilder('event')
             ->where('event.title LIKE :titleKeyValue')
             ->setParameter('titleKeyValue', '%'.$keyValue.'%')
+            ->setFirstResult($pageSize * ($page - 1))
+            ->setMaxResults( $pageSize )
             ->getQuery()
             ->getResult();
     }
