@@ -24,6 +24,7 @@ class CommunityRepository extends EntityRepository
             ->where('community.name LIKE :nameKeyValue AND university.id = :universityId')
             ->setParameter('nameKeyValue', '%'.$keyValue.'%')
             ->setParameter('universityId', 5)
+            ->orderBy('community.name', 'ASC')
             ->setFirstResult($pageSize * ($page - 1))
             ->setMaxResults( $pageSize )
             ->getQuery()

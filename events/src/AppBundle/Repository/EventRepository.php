@@ -75,8 +75,10 @@ class EventRepository extends EntityRepository
          * Etkinlikler public dönmektedir (Eğer kullanıcı login olmuş ise universite içindekiler de gelmelidir)
          */
         return $this->createQueryBuilder('event')
-            ->where('event.title LIKE :titleKeyValue')
+            ->where('event.title LIKE :titleKeyValue AND event.startDate > :now')
             ->setParameter('titleKeyValue', '%'.$keyValue.'%')
+            ->setParameter('now', new \DateTime())
+            ->orderBy('event.startDate', 'ASC')
             ->setFirstResult($pageSize * ($page - 1))
             ->setMaxResults( $pageSize )
             ->getQuery()
