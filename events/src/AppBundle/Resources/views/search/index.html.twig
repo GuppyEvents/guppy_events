@@ -58,7 +58,7 @@
                         <div id="search_result_events" class="tab-pane fade in">
                             {% for event in eventList %}
                                 <div class="col-sm-12">
-                                    <div class="testimonial profile-community-body" style="border: 1px solid #ccc!important;">
+                                    <div class="testimonial profile-community-body" data-event-id="{{ event.id }}" style="border: 1px solid #ccc!important;">
                                         <div class="author-block">
                                             <div class="photo-container">
                                                 {% if event.imageBase64 %}
@@ -74,6 +74,7 @@
                                             <small class="text-alt company"> Etkinlik Topluluğu</small>
                                         </div>
 
+                                        <div class="profile-community-box-edit-parent"><span class="search-box-edit search-event-box" data-modal-link="community-background-image"><i class="fa fa-circle-o" aria-hidden="true"></i> Kaydet</span></div>
                                     </div>
                                 </div>
                             {% endfor %}
@@ -174,7 +175,6 @@
                         }
                     }
 
-
                 }else if(data.resultText == 'SUCCESS_EMPTY'){
                     alert('Warning -- ' + ' could not found any borough');
                 }else if(data.resultText == 'FAILURE_PERMISSION'){
@@ -186,13 +186,56 @@
         }
 
 
+        /*
+         * Kullanıcıların etkinliği kaydetmesini sağlar
+         */
+        function ajaxSocialSaveEvent(eventTarget){
+
+            // -- 1 --
+            eventId = $(eventTarget).parentsUntil('.profile-community-body').last().parent().attr('data-event-id');
+            isSaved = $(eventTarget).find('.fa-check-circle-o').length>0;
+
+            // -- 2 --
+            $.post("{{ path('social_event_rating') }}" ,{
+                eid : eventId,
+                is_saved : isSaved
+            }).always(function(){
+
+            }).done(function(data){
+
+                // -- 2.1 -- CONSOLE
+                if(debugMode)
+                    console.log(data);
+
+                // -- 2.2 -- sonuc düzenlenir
+                if(data.resultText == 'SUCCESS'){
+
+                    if(data.content['saved']){
+                        $(eventTarget).find('.fa-circle-o').addClass('fa-check-circle-o').removeClass('fa-circle-o');
+                        toastr.success('Etkinlik takipte');
+                    }else{
+                        $(eventTarget).find('.fa-check-circle-o').addClass('fa-circle-o').removeClass('fa-check-circle-o');
+                        toastr.success('Etkinlik takibi bırakıldı');
+                    }
+
+                }else if(data.resultText == 'SUCCESS_EMPTY'){
+                    toastr.error('Beklenmeyen hata ile karşılaşıldı');
+                }else if(data.resultText == 'FAILURE_PERMISSION'){
+                    toastr.error('Bu işlem için izniniz bulunmamaktadır');
+                }else{
+                    toastr.error('Beklenmeyen hata ile karşılaşıldı');
+                }
+            });
+        }
+
+
     /*******************************************************************************************************************
      *                                          EVENTS
      ******************************************************************************************************************/
 
+        // ekranda aşağıya gidildikçe bir sonraki sayfaların gelmesi işlemidir
         $(window).scroll(function(){
             if($(document).height()==$(window).scrollTop()+$(window).height()){
-                // calculate page
 
                 if($('#search_result_communities').hasClass('active')){
                     ++communityPage;
@@ -202,6 +245,11 @@
                     ajaxGetMoreSearchResult('event',search_key,eventPage)
                 }
             }
+        });
+    
+        // Etkinlikte kaydet tıklanması durumudur
+        $(document).on('click' , '.search-event-box' , function (event) {
+            ajaxSocialSaveEvent(event.target);
         });
 
     </script>
