@@ -211,10 +211,10 @@
                 if(data.resultText == 'SUCCESS'){
 
                     if(data.content['saved']){
-                        $(eventTarget).find('.fa-circle-o').addClass('fa-check-circle-o').removeClass('fa-circle-o');
+                        $(eventTarget).parent().find('.fa-circle-o').addClass('fa-check-circle-o').removeClass('fa-circle-o');
                         toastr.success('Etkinlik takipte');
                     }else{
-                        $(eventTarget).find('.fa-check-circle-o').addClass('fa-circle-o').removeClass('fa-check-circle-o');
+                        $(eventTarget).parent().find('.fa-check-circle-o').addClass('fa-circle-o').removeClass('fa-check-circle-o');
                         toastr.success('Etkinlik takibi bırakıldı');
                     }
 
