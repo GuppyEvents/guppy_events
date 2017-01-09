@@ -81,9 +81,13 @@
                         </div>
                     </div> <!-- modal end -->
                 </div>
-                <div class="event-share-register align-right" style="padding-top: 5px; padding-bottom: 5px; border-bottom: 1px solid; border-bottom-color: #fe4918;">
-                    <a href="/event/add" class="btn" ><span>Etkinlik Ekle</span></a>
-                </div>
+
+                <!-- Kullanıcı topluluk yöneticisi ise etkinlik ekle butonu yerleştirilir -->
+                {% if userIsAdmin %}
+                    <div class="event-share-register align-right" style="padding-top: 5px; padding-bottom: 5px; border-bottom: 1px solid; border-bottom-color: #fe4918;">
+                        <a href="{{ path('event_add_page') }}" class="btn" ><span>Etkinlik Ekle</span></a>
+                    </div>
+                {% endif %}
 
                 <div class="community-content-body">
 

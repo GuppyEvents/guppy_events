@@ -32,8 +32,18 @@ class EventController extends Controller
         $data = array();
 
         $event = $this->getDoctrine()->getRepository('AppBundle:Event')->find($eventId);
-
         $tickets = $this->getDoctrine()->getRepository('AppBundle:Ticket')->findBy(array('event'=>$eventId));
+
+
+        // --1-- kullanıcı varsa ve topluluk yöneticisi ise userIsAdmin true döner
+        // --2-- kullanıcı varsa ve topluluk yöneticisi değilse userIsAdmin false döner
+        // --3-- eğer kullanıcı yoksa null döner ve register butonu da kaldırılır
+        if($event){
+            if($event->getCommunityUser()->getCommunity() && $this->getUser()){
+                $isUserAdmin = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findBy(array('community'=>$event->getCommunityUser()->getCommunity() , 'user'=>$this->getUser() , 'status'=>1));
+                $data['userIsAdmin'] = $isUserAdmin and count($isUserAdmin)>0 ? true : false;
+            }
+        }
 
         $data['event'] = $event;
         $data['tickets'] = $tickets;

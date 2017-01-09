@@ -69,7 +69,11 @@
 
                 <div class="event-share-register align-right" style="padding-top: 5px; padding-bottom: 5px; border-bottom: 1px solid; border-top: 1px solid; border-bottom-color: #AAA; border-top-color: #AAA;">
                     <a href="#" class="btn" ><span>REGISTER</span></a>
-                    <a href="{{ path("event_edit_page", {'eventId': event.id }) }}" style="background-color: #fe4918" class="btn" ><span>EDIT EVENT</span></a>
+                    {% if userIsAdmin is defined %}
+                        {% if userIsAdmin==true %}
+                            <a href="{{ path("event_edit_page", {'eventId': event.id }) }}" style="background-color: #fe4918" class="btn" ><span>EDIT EVENT</span></a>
+                        {% endif %}
+                    {% endif %}
                 </div>
 
                 <div class="event-content-body">
