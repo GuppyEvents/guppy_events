@@ -2463,7 +2463,7 @@ li {
 }
 .section {
   position: relative;
-  padding: 50px 0;
+  padding: 10px 0;
 }
 .section .container-header-button{
   position: absolute;
@@ -6620,7 +6620,7 @@ button[type="submit"] .loading {
   -moz-box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.18);
   box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.18);
   zoom: 1;
-  height: 100px;
+  height: 60px;
   padding: 0 0;
   background-color: #ffffff;
 }
@@ -6635,7 +6635,7 @@ button[type="submit"] .loading {
 .navigation-header {
   zoom: 1;
   display: inline-block;
-  padding: 29px 0 0;
+  padding: 10px 0 0;
 }
 .navigation-header:before,
 .navigation-header:after {
@@ -6677,7 +6677,7 @@ button[type="submit"] .loading {
 .navigation-item {
   margin-left: 21px;
   display: inline-block;
-  padding: 34px 0 16px;
+  padding: 16px 0 16px;
 }
 .navigation-item:first-child {
   margin-left: 0;
@@ -6976,7 +6976,7 @@ button[type="submit"] .loading {
   /* background-color: #262627; */
 }
 .footer-base {
-  padding: 40px 0 30px;
+  padding: 15px 0 10px;
   background-color: #1f2125;
   text-align: left;
 }
