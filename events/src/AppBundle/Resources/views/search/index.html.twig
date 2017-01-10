@@ -73,8 +73,15 @@
                                             <strong class="name"><a href="{{ path('user_event_mainpage' , {'eventId':event.id}) }}">{{ event.title }} </a></strong>
                                             <small class="text-alt company"> Etkinlik Topluluğu</small>
                                         </div>
-
-                                        <div class="profile-community-box-edit-parent"><span class="search-box-edit search-event-box" data-modal-link="community-background-image"><i class="fa fa-circle-o" aria-hidden="true"></i> Kaydet</span></div>
+                                        {% if event.isSaved is defined %}
+                                            {% if event.isSaved==true %}
+                                                <div class="profile-community-box-edit-parent"><span class="search-box-edit search-event-box" data-modal-link="community-background-image"><i class="fa fa-check-circle-o" aria-hidden="true"></i> Kaydet</span></div>
+                                            {% else %}
+                                                <div class="profile-community-box-edit-parent"><span class="search-box-edit search-event-box" data-modal-link="community-background-image"><i class="fa fa-circle-o" aria-hidden="true"></i> Kaydet</span></div>
+                                            {% endif %}
+                                        {% else %}
+                                            <div class="profile-community-box-edit-parent"><span class="search-box-edit search-event-box" data-modal-link="community-background-image"><i class="fa fa-circle-o" aria-hidden="true"></i> Kaydet</span></div>
+                                        {% endif %}
                                     </div>
                                 </div>
                             {% endfor %}

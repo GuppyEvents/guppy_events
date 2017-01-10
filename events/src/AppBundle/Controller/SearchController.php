@@ -25,7 +25,20 @@ class SearchController extends Controller
 
         $data['search_key'] = $searchKey;
         $data['communityList'] = $this->getDoctrine()->getRepository('AppBundle:Community')->findCommunityListByName($searchKey);
-        $data['eventList'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventListByName($searchKey);
+        $data['eventList'] = array();
+
+        $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventListByName($searchKey);
+        if($this->getUser()){
+            foreach ($eventList as $event){
+                $eventUser = $this->getDoctrine()->getRepository('AppBundle:EventUserRating')->findOneBy(array('user'=>$this->getUser(),'event'=>$event));
+                if($eventUser){
+                    $event->isSaved = $eventUser->getIsSaved();
+                }
+                array_push($data['eventList'], $event);
+            }
+        }else{
+            $data['eventList'] = $eventList;
+        }
 
         return $this->render('AppBundle:search:index.html.twig', $data);
     }
