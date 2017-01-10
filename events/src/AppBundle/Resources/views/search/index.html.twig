@@ -71,7 +71,9 @@
                                             </div>
 
                                             <strong class="name"><a href="{{ path('user_event_mainpage' , {'eventId':event.id}) }}">{{ event.title }} </a></strong>
-                                            <small class="text-alt company"> Etkinlik Topluluğu</small>
+                                            <small class="text-alt company">{{ event.communityName }}</small>
+                                            <br/>
+                                            <small class="text-alt company">{{ event.userSaveCount }} kişi gelmeyi düşünüyor</small>
                                         </div>
                                         {% if event.isSaved is defined %}
                                             {% if event.isSaved==true %}
@@ -164,21 +166,30 @@
                         }else if(searchFrom=='event'){
 
                             data.content.eventList.forEach(function(event) {
-                                $('#search_result_events').append(
-                                    '<div class="col-sm-12">' +
-                                        '<div class="testimonial profile-community-body" style="border: 1px solid #ccc!important;">' +
-                                            '<div class="author-block">' +
-                                                '<div class="photo-container">' +
-                                                    '<img src="' + event['image']+'" alt="'+event['title']+'" class="img-responsive" style="width: inherit; height: inherit;"/>'+
-                                                '</div>' +
-                                            '<strong class="name"><a href="/event/h/'+event['id']+'">'+event['title']+'</a></strong>' +
-                                            '<small class="text-alt company">' + 'topluluk ismi @ universite ismi' + '</small>' +
-                                            '</div>' +
-                                        '</div>' +
-                                    '</div>'
-                                );
-                            });
 
+                                saveButtonElem = '';
+                                if(event['isSaved']){
+                                    saveButtonElem = '<div class="profile-community-box-edit-parent"><span class="search-box-edit search-event-box" data-modal-link="community-background-image"><i class="fa fa-check-circle-o" aria-hidden="true"></i> Kaydet</span></div>';
+                                }else{
+                                    saveButtonElem = '<div class="profile-community-box-edit-parent"><span class="search-box-edit search-event-box" data-modal-link="community-background-image"><i class="fa fa-circle-o" aria-hidden="true"></i> Kaydet</span></div>';
+                                }
+
+                                eventDivElem =  '<div class="col-sm-12">' +
+                                                    '<div class="testimonial profile-community-body" data-event-id="'+event['id']+'" style="border: 1px solid #ccc!important;">' +
+                                                        '<div class="author-block">' +
+                                                            '<div class="photo-container">' +
+                                                                '<img src="' + event['imageBase64']+'" alt="'+event['title']+'" class="img-responsive" style="width: inherit; height: inherit;"/>' +
+                                                            '</div>' +
+                                                        '<strong class="name"><a href="/event/h/'+event['id']+'">'+event['title']+'</a></strong>' +
+                                                        '<small class="text-alt company">' + 'topluluk ismi @ universite ismi' + '</small><br/>' +
+                                                        '<small class="text-alt company">' + event['userSaveCount'] + ' kişi gelmeyi düşünüyor</small>'+
+                                                        '</div>' +
+                                                        saveButtonElem +
+                                                    '</div>' +
+                                                '</div>';
+
+                                $('#search_result_events').append(eventDivElem);
+                            });
                         }
                     }
 

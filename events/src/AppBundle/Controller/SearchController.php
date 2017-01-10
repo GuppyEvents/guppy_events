@@ -15,6 +15,54 @@ use Symfony\Component\HttpFoundation\Response;
 class SearchController extends Controller
 {
 
+    // -----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    //                                          COMMON FUNCTIONS
+    // -----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    public function getSearchEvents($searchKey,$page=1){
+
+        $eventListArray = array();
+        $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventListByName($searchKey,$page);
+
+        foreach ($eventList as $event){
+
+            $eventTemp = array();
+            $eventTemp['id'] = $event->getId();
+            $eventTemp['title'] = $event->getTitle();
+            $eventTemp['imageBase64'] = $event->getImageBase64();
+
+            if($this->getUser()){
+                $eventUser = $this->getDoctrine()->getRepository('AppBundle:EventUserRating')->findOneBy(array('user'=>$this->getUser(),'event'=>$event));
+                if($eventUser){
+                    $eventTemp['isSaved'] = $eventUser->getIsSaved();
+                }
+            }
+
+            if($event->getCommunityUser()){
+                if($event->getCommunityUser()->getCommunity()){
+                    $eventTemp['communityId'] = $event->getCommunityUser()->getCommunity()->getId();
+                    $eventTemp['communityName'] = $event->getCommunityUser()->getCommunity()->getName();
+                }
+            }
+
+            $eventTemp['userSaveCount'] = count($this->getDoctrine()->getRepository('AppBundle:EventUserRating')->findBy(array('event'=>$event, 'isSaved'=>true)));
+
+            array_push($eventListArray, $eventTemp);
+        }
+
+        return $eventListArray;
+
+    }
+
+
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    //
+    // -----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * @Route("/", name="search_all")
      */
@@ -25,20 +73,7 @@ class SearchController extends Controller
 
         $data['search_key'] = $searchKey;
         $data['communityList'] = $this->getDoctrine()->getRepository('AppBundle:Community')->findCommunityListByName($searchKey);
-        $data['eventList'] = array();
-
-        $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventListByName($searchKey);
-        if($this->getUser()){
-            foreach ($eventList as $event){
-                $eventUser = $this->getDoctrine()->getRepository('AppBundle:EventUserRating')->findOneBy(array('user'=>$this->getUser(),'event'=>$event));
-                if($eventUser){
-                    $event->isSaved = $eventUser->getIsSaved();
-                }
-                array_push($data['eventList'], $event);
-            }
-        }else{
-            $data['eventList'] = $eventList;
-        }
+        $data['eventList'] = $this->getSearchEvents($searchKey);
 
         return $this->render('AppBundle:search:index.html.twig', $data);
     }
@@ -87,16 +122,7 @@ class SearchController extends Controller
                     case 'event':
                         $page = intval($request->get('page'));
                         $key = $request->get('key');
-                        $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventListByName($key,$page);
-
-                        $data['eventList'] = array();
-                        foreach ($eventList as $event) {
-                            $eventObj = array();
-                            $eventObj['id'] = $event->getId();
-                            $eventObj['title'] = $event->getTitle();
-                            $eventObj['image'] = $event->getImageBase64();
-                            array_push($data['eventList'], $eventObj);
-                        }
+                        $data['eventList'] = $this->getSearchEvents($key,$page);
                         break;
 
                     default:
