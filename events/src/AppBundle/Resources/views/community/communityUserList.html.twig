@@ -87,6 +87,7 @@
 
                     {% if communityUserList is defined and communityUserList|length > 0 %}
                         <div class="row co-admin">
+                            <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                             <div class="col-sm-12">
                                 <p class="text-left"><strong>YÖNETİCİ LİSTESİ</strong></p>
                             </div>
@@ -176,10 +177,13 @@
 
     {% javascripts
             'theme/assets/js/cropper.js'
-            'theme/assets/js/cropper-main.js' %}
+            'theme/assets/js/cropper-main.js'
+            'theme/assets/js/canvasjs/canvasjs.min.js'
+            'theme/assets/js/canvasjs/jquery.canvasjs.min.js'%}
         <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
-
+    <script src="http://code.highcharts.com/stock/highstock.js"></script>
+    <script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
     <script>
 
 /***********************************************************************************************************************
@@ -196,6 +200,133 @@
 /***********************************************************************************************************************
  *                                          AJAX OPERATIONS
  **********************************************************************************************************************/
+
+        $(window).on("load", function(){
+            /*
+            Highcharts.chart('container', {
+                exporting: false,
+                credits: false,
+                title: {
+                    text: 'Aylık Üye Kayıt Grafiği',
+                    x: -20 //center
+                },
+                xAxis: {
+                    categories: ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz',
+                        'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara']
+                },
+                yAxis: {
+                    title: {
+                        text: 'Üye Sayısı'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {
+                    valueSuffix: ' Kişi'
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle',
+                    borderWidth: 0
+                },
+                series: [{
+                    name: 'Üyeler',
+                    data: [[Date.UTC(1970, 9, 21), 0],
+                        [Date.UTC(1970, 10, 4), 28],
+                    [Date.UTC(1970, 10, 9), 25],
+                    [Date.UTC(1970, 10, 27), 20],
+                    [Date.UTC(1970, 11, 2), 23],
+                    [Date.UTC(1970, 11, 26), 82],
+                    [Date.UTC(1970, 11, 29), 47],
+                    [Date.UTC(1971, 0, 11), 79],
+                    [Date.UTC(1971, 0, 26), 72],
+                    [Date.UTC(1971, 1, 3), 12],
+                    [Date.UTC(1971, 1, 11), 52],
+                    [Date.UTC(1971, 1, 25), 22],
+                    [Date.UTC(1971, 2, 11), 48],
+                    [Date.UTC(1971, 3, 11), 59],
+                    [Date.UTC(1971, 4, 1), 85],
+                    [Date.UTC(1971, 4, 5), 22],
+                    [Date.UTC(1971, 4, 19), 15],
+                    [Date.UTC(1971, 5, 3), 0]]
+                }]
+            });
+            */
+
+
+            var data2 = [];
+
+            {% for key,val in registerDates %}
+                data2.push([{{ key }},{{ val }}]);
+            {% endfor %}
+
+            /*
+            console.log(JSON.stringify(data));
+
+                // Create the chart
+            $('#container').highcharts('StockChart', {
+                rangeSelector : {
+                    enabled : true
+                },
+
+                title : {
+                    text : 'AAPL Stock Price'
+                },
+
+                series : [{
+                    name : 'AAPL',
+                    data : "[ [1263254400000,29.67], [1263340800000,30.09], [1263427200000,29.92], [1263513600000,29.42], [1263859200000,30.72], [1263945600000,30.25], [1264032000000,29.72], [1264118400000,28.25], [1264377600000,29.01], [1264464000000,29.42], [1264550400000,29.70], [1264636800000,28.47], [1264723200000,27.44]]",
+                    tooltip: {
+                        valueDecimals: 2
+                    },
+                    dataGrouping: {
+                        approximation: "sum",
+                        enabled: true,
+                        forced: true,
+                        units: [['month',[1]]],
+
+                    }
+                }]
+            });
+            */
+
+            $.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=aapl-c.json&callback=?', function(data) {
+                // Create the chart
+                console.log(data);
+                $('#container').highcharts('StockChart', {
+
+
+                    rangeSelector : {
+                        selected : 1
+                    },
+
+                    title : {
+                        text : 'Kullanıcı Kayıt Grafiği'
+                    },
+
+                    series : [{
+                        name : 'Kişi',
+                        data : data2,
+                        tooltip: {
+                            valueDecimals: 0
+                        },
+                        dataGrouping: {
+                            approximation: "sum",
+                            enabled: true,
+                            forced: true,
+                            units: [['month',[1]]],
+
+                        }
+                    }]
+                });
+            });
+
+        });
+
 
         function ajaxRequestJoinCommunity(eventTarget){
 
