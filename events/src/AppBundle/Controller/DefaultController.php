@@ -2,9 +2,11 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Result;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
@@ -24,10 +26,8 @@ class DefaultController extends Controller
     public function communitiesAction(Request $request)
     {
 
-        // TODO: Şuan için sadece bilkent üniversitesi etkinliklerini getirir
-        $universityId = 5;
-
-        $communityList = $this->getDoctrine()->getRepository('AppBundle:Community')->findBy(array('university'=>$universityId) , array('name'=>'ASC'));
+        // TODO: Şuan için sadece BİLKENT ÜNİVERSİTESİ toplulukları getirilmekte
+        $communityList = $this->getDoctrine()->getRepository('AppBundle:Community')->findCommunityListByUniversity();
 
         for($i=0; $i<count($communityList);$i++){
 
@@ -54,7 +54,6 @@ class DefaultController extends Controller
 
         $data['communities'] = $communityList;
         return $this->render('AppBundle:default:main_community_list.html.twig' , $data);
-
     }
 
 
@@ -88,6 +87,83 @@ class DefaultController extends Controller
     {
         $data = array();
         return $this->render('AppBundle:default:main_about.html.twig' , $data);
+
+    }
+
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    //                                          APPLICATION/JSON SERVICES
+    // -----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    /**
+     * @Route("/s/community-list", name="service_community_list")
+     */
+    public function getMoreSearchResult(Request $request){
+
+        // -- 1 -- Initialization
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+        $data = array();
+
+        // -- 2 -- Try to Get More Community Result
+        try{
+
+            // -- 2.1 -- Get parameter list
+            $page = intval($request->get('page'));
+            $pageSize = $request->get('pageSize') ? intval($request->get('pageSize')) : 12;
+
+            $communityList = $this->getDoctrine()->getRepository('AppBundle:Community')->findCommunityListByUniversity($page,$pageSize);
+
+            $data['communityList'] = array();
+            foreach ($communityList as $community) {
+                $communityObj = array();
+                $communityObj['id'] = $community->getId();
+                $communityObj['name'] = $community->getName();
+                $communityObj['image'] = $community->getImageBase64();
+                $communityObj['universityName'] = $community->getUniversity()->getName();
+
+
+                $communityObj['link_facebook'] = null;
+                $communityObj['link_twitter'] = null;
+                $communityObj['link_instagram'] = null;
+                $communityLinks = $this->getDoctrine()->getRepository('AppBundle:CommunityLink')->findCommunitySocialNetworksByCommunityId($community->getId());
+                foreach ($communityLinks as $communityLink){
+                    switch ($communityLink->getSocialNetwork()->getId()){
+                        case 5001:
+                            $communityObj['link_facebook'] = $communityLink->getSocialNetwork()->getName() . $communityLink->getLink();
+                            break;
+                        case 5002:
+                            $communityObj['link_twitter'] = $communityLink->getSocialNetwork()->getName() . $communityLink->getLink();
+                            break;
+                        case 5003:
+                            $communityObj['link_instagram'] = $communityLink->getSocialNetwork()->getName() . $communityLink->getLink();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                $communityObj['homepagelink'] = $this->get('router')->generate('user_community_homepage' , array(
+                    'communityId' => $community->getId(),
+                ));
+                
+                array_push($data['communityList'], $communityObj);
+            }
+
+            // -- 2.2 -- Return Result
+            $response->setContent(json_encode(Result::$SUCCESS->setContent( $data )));
+            return $response;
+
+        }catch (\Exception $ex){
+            // content == "Unexpected Error"
+            $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent($ex)));
+            return $response;
+        }
+
+        // -- 3 -- Set & Return value
+        $response->setContent(json_encode(Result::$SUCCESS_EMPTY));
+        return $response;
 
     }
 

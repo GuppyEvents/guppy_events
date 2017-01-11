@@ -20,6 +20,7 @@
                 <br>
             </div>
 
+            <div id="container-body">
             {% for community in communities %}
                 <div class="col-sm-2 guppy-main-page-community-box">
                     <div class="society guppy-main-page-community-box-content">
@@ -46,8 +47,95 @@
                     </div>
                 </div>
             {% endfor %}
+            </div>
 
         </div>
     </section>
 
+{% endblock %}
+
+
+
+
+{% block javascriptcontent %}
+    <script>
+
+        /*******************************************************************************************************************
+         *                                          GLOBAL VARIABLE
+         ******************************************************************************************************************/
+        var debugMode = true;
+        var communityPage=2;    // ilk sayfa 24 topluluk getirdiğinde 12lik topluluk 3.sayfadan başlayacak
+
+
+        /*******************************************************************************************************************
+         *                                          AJAX OPERATIONS
+         ******************************************************************************************************************/
+
+        // searchFrom değeri "community" ya da "event" olabilir. Paging nereden devam edeceği belirlenir
+        function ajaxGetMoreCommunities(page){
+
+            // -- 2 --
+            $.post("{{ path('service_community_list') }}" , {
+                page : page
+            }).always(function(){
+            }).done(function(data){
+
+                // -- 2.1 -- CONSOLE
+                if(debugMode)
+                    console.log(data);
+
+                // -- 2.2 -- sonuc düzenlenir
+                if(data.resultText == 'SUCCESS'){
+
+                    // -- 2.2.1 --
+
+                    // -- 2.2.2 --
+                    if(data.content){
+                        data.content.communityList.forEach(function(community) {
+
+                            communityElem =  '<div class="col-sm-2 guppy-main-page-community-box">' +
+                                                '<div class="society guppy-main-page-community-box-content">' +
+                                                    '<div class="photo-wrapper rounded">' +
+                                                        '<img src="'+community['image']+'" alt="Community" class="img-responsive" />' +
+                                                    '</div>' +
+                                                    '<h3 class="name"><a href="'+community['homepagelink']+'">'+community['name']+'</a></h3>' +
+                                                    '<p class="text-alt"><small>'+community['universityName']+'</small></p>' +
+
+                                                    '<ul class="speaker-socials">' +
+                                                        '<li><a href="'+community['link_facebook']+'" target="_blank"><span class="fa fa-facebook" aria-hidden="true"></span></a></li>' +
+                                                        '<li><a href="'+community['link_twitter']+'" target="_blank"><span class="fa fa-twitter"></span></a></li>' +
+                                                        '<li><a href="'+community['link_instagram']+'" target="_blank"><span class="fa fa-instagram"></span></a></li>' +
+                                                    '</ul>' +
+                                                '</div>' +
+                                            '</div>';
+
+                            $('#container-body').append(communityElem);
+                        });
+                    }
+
+                }else if(data.resultText == 'SUCCESS_EMPTY'){
+                    alert('Warning -- ' + ' could not found any borough');
+                }else if(data.resultText == 'FAILURE_PERMISSION'){
+                    alert('Warning -- ' + ' you are not authorization for this operation');
+                }else{
+                    alert('Warning -- ' + ' error occured while getting borough list');
+                }
+            });
+        }
+
+
+
+        /*******************************************************************************************************************
+         *                                          EVENTS
+         ******************************************************************************************************************/
+
+        // ekranda aşağıya gidildikçe bir sonraki sayfaların gelmesi işlemidir
+        $(window).scroll(function(){
+            if($(document).height()==$(window).scrollTop()+$(window).height()){
+                ++communityPage;
+                ajaxGetMoreCommunities(communityPage)
+            }
+        });
+
+    </script>
 {% endblock %}
