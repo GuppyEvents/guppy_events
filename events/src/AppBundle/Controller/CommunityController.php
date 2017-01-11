@@ -103,8 +103,9 @@ class CommunityController extends Controller
             $data['communityUserList'] = $communityUser;
             $dates= array();
             foreach($communityUser as $comm){
-
-                $dates[(string)$comm->getRegisterDate()->getTimestamp()*1000] = 1;
+                if($comm->getStatus() == 1 || $comm->getStatus() == 2) {
+                    $dates[(string)$comm->getRegisterDate()->getTimestamp() * 1000] = 1;
+                }
             }
 
             $data['registerDates'] = $dates;
