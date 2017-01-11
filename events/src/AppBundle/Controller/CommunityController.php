@@ -101,6 +101,14 @@ class CommunityController extends Controller
         if($community){
             $communityUser = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findBy(array('community'=>$community));
             $data['communityUserList'] = $communityUser;
+            $dates= array();
+            foreach($communityUser as $comm){
+                if($comm->getStatus() == 1 || $comm->getStatus() == 2) {
+                    $dates[(string)$comm->getRegisterDate()->getTimestamp() * 1000] = 1;
+                }
+            }
+
+            $data['registerDates'] = $dates;
 
             // İlgili kullanıcının topluluğun yöneticisi olup olunmadığına bakılır
             $isUserAdmin = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findBy(array('community'=>$community , 'user'=>$this->getUser() , 'status'=>1));

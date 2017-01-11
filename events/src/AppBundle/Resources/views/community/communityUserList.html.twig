@@ -141,6 +141,9 @@
                                     </div>
                                 {% endif %}
                             {% endfor %}
+                            <div class="col-sm-12">
+                                <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto;"></div>
+                            </div>
                         </div>
 
                     <!-- Topluluğun hiç üyesi olmaması durumu -->
@@ -176,10 +179,13 @@
 
     {% javascripts
             'theme/assets/js/cropper.js'
-            'theme/assets/js/cropper-main.js' %}
+            'theme/assets/js/cropper-main.js'
+            'theme/assets/js/canvasjs/canvasjs.min.js'
+            'theme/assets/js/canvasjs/jquery.canvasjs.min.js'%}
         <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
-
+    <script src="http://code.highcharts.com/stock/highstock.js"></script>
+    <script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
     <script>
 
 /***********************************************************************************************************************
@@ -196,6 +202,47 @@
 /***********************************************************************************************************************
  *                                          AJAX OPERATIONS
  **********************************************************************************************************************/
+
+        $(window).on("load", function(){
+            var data2 = [];
+
+            {% for key,val in registerDates %}
+                data2.push([{{ key }},{{ val }}]);
+            {% endfor %}
+            console.log(data2);
+
+                // Create the chart
+            $('#container').highcharts('StockChart', {
+                navigator: false,
+                scrollbar: false,
+                rangeSelector : false,
+                credits: false,
+                exporting: false,
+                yAxis:{
+                    allowDecimals: false
+                },
+                title : {
+                    text : 'Kullanıcı Kayıt Grafiği'
+                },
+
+                series : [{
+                    name : 'Kişi',
+                    data : data2,
+                    tooltip: {
+                        valueDecimals: 0
+                    },
+                    dataGrouping: {
+                        approximation: "sum",
+                        enabled: true,
+                        forced: true,
+                        units: [['month',[1]]],
+
+                    }
+                }]
+            });
+
+        });
+
 
         function ajaxRequestJoinCommunity(eventTarget){
 
