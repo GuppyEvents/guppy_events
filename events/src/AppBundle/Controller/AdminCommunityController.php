@@ -45,7 +45,7 @@ class AdminCommunityController extends Controller
             } catch (Exception $e){}
 
             // Redirect route to community list page
-            return $this->redirectToRoute('community_list');
+            return $this->redirectToRoute('admin_community_list');
         }
 
         // --3-- DEFAULT CASE
@@ -94,16 +94,85 @@ class AdminCommunityController extends Controller
             } catch (Exception $e){}
 
             // Redirect route to community list page
-            return $this->redirectToRoute('community_list');
+            return $this->redirectToRoute('admin_community_list');
         }
 
         // --3-- DEFAULT CASE
-        $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
-        $data['communityLinkList'] = $this->getDoctrine()->getRepository('AppBundle:CommunityLink')->findCommunitySocialNetworksByCommunityId($community->getId());
-        $data['community'] = $community;
+        $data['community'] = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
+        $data['communityLinkList'] = $this->getDoctrine()->getRepository('AppBundle:CommunityLink')->findCommunitySocialNetworksByCommunityId($communityId);
 
         // --4-- RENDERING
         return $this->render('AppBundle:community:communityUpdate.html.twig', $data);
+    }
+
+
+
+
+    /**
+     * @Route("/list", name="admin_community_list")
+     */
+    public function listAction(Request $request)
+    {
+        // --1-- Init
+        $data = array();
+        $selectedUniversityId = null;
+        $communityList = $this->getDoctrine()->getRepository('AppBundle:Community')->findAll();
+        $universityList = $this->getDoctrine()->getRepository('AppBundle:University')->findAll();
+
+        // --2-- POST OPERATION
+        if($request->getMethod() == 'POST'){
+            $em = $this->getDoctrine()->getManager();
+
+            try{
+                $selectedUniversityId = $request->get('university_id');
+
+                // eğer universite id değeri varsa o universitenin topluluk listesi getir
+                if($selectedUniversityId && $this->getDoctrine()->getRepository('AppBundle:University')->find($request->get('university_id'))){
+                    $communityList = $this->getDoctrine()->getRepository('AppBundle:Community')->findBy(array('university'=>$request->get('university_id')));
+                    $communityIdList = array();
+                    for($i=0; $i<count($communityList);$i++){
+                        array_push($communityIdList ,$communityList[$i]->getId());
+                    }
+                }
+
+            } catch (Exception $e){}
+        }
+
+        $data['communityList'] = $communityList;
+        $data['universityList'] = $universityList;
+        $data['selectedUniversityId'] = $selectedUniversityId;
+
+        // --3-- RENDERING
+        return $this->render('AppBundle:community:communityList.html.twig', $data);
+    }
+
+
+
+
+    /**
+     * @Route("/delete/{communityId}", name="admin_community_delete")
+     */
+    public function deleteAction($communityId)
+    {
+
+        // --1-- POST OPERATION
+        try{
+            $em = $this->getDoctrine()->getManager();
+
+            $community = $em->getRepository('AppBundle:Community')->find($communityId);
+            if (!$community) {
+                throw $this->createNotFoundException(
+                    'No product found for id '.$communityId
+                );
+            }
+
+            $em->remove($community);
+            $em->flush();
+
+        } catch (Exception $e){}
+
+        // Redirect route to community list page
+        return $this->redirectToRoute('admin_community_list');
     }
 
     
