@@ -11,7 +11,7 @@
             </h1>
             <ol class="breadcrumb">
                 <li><a href="{{ path('admin_homepage') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="{{ path('university_get') }}"> University </a></li>
+                <li><a href="{{ path('admin_university_list') }}"> University </a></li>
                 <li><a href="{{ path('community_list') }}"> Community </a></li>
             </ol>
         </section>
@@ -96,7 +96,7 @@
                                                     <span class="sr-only">Toggle Dropdown</span>
                                                 </button>
                                                 <ul class="dropdown-menu" role="menu">
-                                                    <li><a href="{{ path('community_put', {'communityId': community.id}) }}">Edit</a></li>
+                                                    <li><a href="{{ path('admin_community_update', {'communityId': community.id}) }}">Edit</a></li>
                                                     <li><a href="{{ path('community_delete' , {'communityId': community.id}) }}">Delete</a></li>
                                                     <li class="divider"></li>
                                                     <li><a href="{{ path('admin_community_user_list' , {'communityId': community.id}) }}">Assign Admin</a></li>

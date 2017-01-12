@@ -144,7 +144,7 @@
                         <div class="box-body">
 
                             {#{{ form_start(form, {'attr': {'role': 'form'}}) }}#}
-                            <form action="{{ path('community_put' , {'communityId': community.id}) }}" method="post">
+                            <form action="{{ path('admin_community_update' , {'communityId': community.id}) }}" method="post">
 
                                 <!-- text input -->
                                 <div class="form-group">

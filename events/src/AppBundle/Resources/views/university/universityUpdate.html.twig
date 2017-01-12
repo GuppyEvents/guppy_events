@@ -53,7 +53,7 @@
                         <div class="box-body">
 
                             {#{{ form_start(form, {'attr': {'role': 'form'}}) }}#}
-                            <form action="{{ path('university_put' , {'universityId': university.id}) }}" method="post">
+                            <form action="{{ path('admin_university_update' , {'universityId': university.id}) }}" method="post">
 
                                 <!-- text input -->
                                 <div class="form-group">
