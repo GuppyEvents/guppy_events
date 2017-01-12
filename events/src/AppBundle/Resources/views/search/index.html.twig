@@ -112,9 +112,8 @@
     <script>
 
     /*******************************************************************************************************************
-     *                                          GLOBAL VARIABLE
+     *                                          LOCAL VARIABLE
      ******************************************************************************************************************/
-        var debugMode = true;
         var search_key = '{% if search_key is defined %}{{ search_key }}{% endif %}';
         var communityPage=1, eventPage=1
 
@@ -135,7 +134,7 @@
             }).done(function(data){
 
                 // -- 2.1 -- CONSOLE
-                if(debugMode)
+                if(Guppy.responseDebugMode)
                     console.log(data);
 
                 // -- 2.2 -- sonuc düzenlenir
@@ -222,7 +221,7 @@
             }).done(function(data){
 
                 // -- 2.1 -- CONSOLE
-                if(debugMode)
+                if(Guppy.responseDebugMode)
                     console.log(data);
 
                 // -- 2.2 -- sonuc düzenlenir

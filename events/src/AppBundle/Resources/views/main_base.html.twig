@@ -173,6 +173,7 @@
                 'theme/assets/js/jquery.countdown.js'
                 'theme/assets/js/masonry.pkgd.min.js'
                 'theme/assets/js/modal-box.js'
+                'theme/assets/js/guppy-theme.js'
                 'theme/assets/js/guppy.js' %}
             <script src="{{ asset_url }}"></script>
         {% endjavascripts %}
@@ -184,12 +185,20 @@
         <script src="https://cdn.ckeditor.com/4.6.1/standard/ckeditor.js"></script>
 
 
+
+        <script>
+        /***************************************************************************************************************
+         *                                          GLOBAL VARIABLE
+         **************************************************************************************************************/
+            // Global değişkenler Guppy objesine yerleştirilmelidir (orn. Guppy.responseDebugMode)
+            // var debugMode = true;
+        </script>
+
+
         {% block javascriptcontent %}{% endblock %}
 
 
-        <!-- ------------ GUPPY MAIN JS ------------ -->
         <script>
-
         /***************************************************************************************************************
          *                                          EVENTS
          ***************************************************************************************************************/

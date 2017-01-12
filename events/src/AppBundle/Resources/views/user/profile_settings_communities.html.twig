@@ -159,7 +159,6 @@
 /***********************************************************************************************************************
  *                                          LOCAL VARIABLE
  **********************************************************************************************************************/
-        var debugMode = true;
         var error_msg = '{% if error_msg is defined %}{{ error_msg|json_encode|raw }}{% endif %}';
         var success_msg = '{% if success_msg is defined %}{{ success_msg|json_encode|raw }}{% endif %}';
         var warning_msg = '{% if warning_msg is defined %}{{ warning_msg|json_encode|raw }}{% endif %}';
@@ -195,7 +194,7 @@
             }).done(function(data){
 
                 // -- 2.1 -- CONSOLE
-                if(debugMode)
+                if(Guppy.responseDebugMode)
                     console.log(data);
 
                 // -- 2.2 -- sonuc düzenlenir

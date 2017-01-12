@@ -153,9 +153,9 @@
     <script>
 
 /***********************************************************************************************************************
- *                                          GLOBAL VARIABLE
+ *                                          LOCAL VARIABLE
  **********************************************************************************************************************/
-        var debugMode = true;
+
 
 /***********************************************************************************************************************
  *                                          UTIL FUNCTIONS
@@ -180,7 +180,7 @@
             }).done(function(data){
 
                 // -- 2.1 -- CONSOLE
-                if(debugMode)
+                if(Guppy.responseDebugMode)
                     console.log(data);
 
                 // -- 2.2 -- sonuc düzenlenir
@@ -212,7 +212,7 @@
             }).done(function(data){
 
                 // -- 2.1 -- CONSOLE
-                if(debugMode)
+                if(Guppy.responseDebugMode)
                     console.log(data);
 
                 // -- 2.2 -- sonuc düzenlenir

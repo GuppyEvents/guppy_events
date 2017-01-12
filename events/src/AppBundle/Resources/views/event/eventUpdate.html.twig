@@ -260,9 +260,8 @@
     <script>
 
 /***********************************************************************************************************************
- *                                          GLOBAL VARIABLE
+ *                                          LOCAL VARIABLE
  **********************************************************************************************************************/
-        var debugMode = true;
         var eventCommunityId = null;
         {% if event %}
             eventCommunityId = {{ event.communityUser.community.id }}
@@ -290,7 +289,7 @@
             }).done(function(data){
 
                 // -- 2.1 -- CONSOLE
-                if(debugMode)
+                if(Guppy.responseDebugMode)
                     console.log(data);
 
                 // -- 2.2 -- sonuc düzenlenir
@@ -336,7 +335,7 @@
             }).done(function(data){
 
                 // -- 2.1 -- CONSOLE
-                if(debugMode)
+                if(Guppy.responseDebugMode)
                     console.log(data);
 
                 // -- 2.2 -- sonuc düzenlenir
@@ -385,7 +384,7 @@
             }).done(function(data){
 
                 // -- 2.1 -- CONSOLE
-                if(debugMode)
+                if(Guppy.responseDebugMode)
                     console.log(data);
 
                 // -- 2.2 -- sonuc düzenlenir
