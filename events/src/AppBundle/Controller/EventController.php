@@ -206,76 +206,7 @@ class EventController extends Controller
             )
         );
     }
-
-
-    /**
-     * @Route("/post", name="event_post")
-     * @Security("has_role('ROLE_USER')")
-     */
-    public function postAction(Request $request)
-    {
-        // 1) POST OPERATION
-        if($request->getMethod() == 'POST'){
-
-            $em = $this->getDoctrine()->getManager();
-
-            try{
-
-                // --1.1-- Event have to added by user
-                // --1.1.1-- Eğer kullanıcı admin ise izin ver
-                // --1.2-- Event may contains community
-                $user = $this->getUser();
-                $community = $em->getRepository('AppBundle:Community')->find($request->get('community_id'));
-                $communityUser = $em->getRepository('AppBundle:CommunityUser')->findBy(array('user'=>$user->getId() , 'community'=>$community->getId()));
-
-                // --2.1-- Eğer böyle bir topluluk kullanıcısı varsa o kullanıcı ile işlem yap
-                if(count($communityUser)>0){
-
-                    $communityUser = $communityUser[0];
-
-                // --2.2-- Eğer böyle bir topluluk kullanıcısı yoksa kullanıcıyı kulüp ile ilişkilendir
-                }else{
-                    $communityUser = new CommunityUser();
-                    $communityUser->setCommunity($community);
-                    $communityUser->setUser($user);
-                    $communityUser->setDate(new \DateTime());
-
-                    $em->persist($communityUser);
-                    $em->flush();
-                }
-                
-                $request_date = \DateTime::createFromFormat('m/d/Y H:i A', $request->get('event_date'));
-                $request_permission = $request->get('event_permission') ? $request->get('event_permission') : 'PUBLIC';
-
-                $event = new Event();
-                $event->setTitle( $request->get('event_title') );
-                $event->setDescription( $request->get('event_description') );
-                $event->setPermission($request_permission);
-                $event->setStartDate( $request_date );
-                $event->setMaxParticipantNum( $request->get('event_participant_count') );
-                $event->setImageBase64($request->get('event_image_base64'));
-                $event->setGpsLocationLat($request->get('event_location_lat'));
-                $event->setGpsLocationLng($request->get('event_location_lng'));
-                $event->setCommunityUser( $communityUser );
-
-                $em->persist($event);
-                $em->flush();
-
-            } catch (Exception $e){}
-
-            // Redirect route to university list page
-            return $this->redirectToRoute('admin_event_list');
-        }
-
-
-        // 2) DEFAULT CASE
-        $universities = $this->getDoctrine()->getRepository('AppBundle:University')->findAll();
-
-        return $this->render('AppBundle:event:eventRegister.html.twig', array(
-                'universities'=>$universities
-            )
-        );
-    }
+    
 
     /**
      * @Route("/post/{eventId}", name="event_post_to_id")
