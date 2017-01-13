@@ -97,7 +97,7 @@
                                                 </button>
                                                 <ul class="dropdown-menu" role="menu">
                                                     <li><a href="{{ path('admin_community_update', {'communityId': community.id}) }}">Edit</a></li>
-                                                    <li><a href="{{ path('admin_community_delete' , {'communityId': community.id}) }}">Delete</a></li>
+                                                    <li><a data-href="{{ path('admin_community_delete' , {'communityId': community.id}) }}" id="admin_delete_button" data-toggle="modal" data-target="#alert_modal" >Delete</a></li>
                                                     <li class="divider"></li>
                                                     <li><a href="{{ path('admin_community_user_list' , {'communityId': community.id}) }}">Assign Admin</a></li>
                                                 </ul>
@@ -130,6 +130,29 @@
         </section>
         <!-- /.content -->
     </div>
+
+    {#--- --- ALERT DIALOG --- ---#}
+    <div class="modal modal-warning" id="alert_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Default Modal</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure to remove community?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+                    {#<a type="button" class="btn btn-outline">Sure</a>#}
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 
 {% endblock %}
 
@@ -201,12 +224,17 @@
 
         $( "#community_submit" ).submit(function( event ) {
 
-
             if(!checkCommunity()){
                 alert( "Form not valid" );
                 event.preventDefault();
             }
 
+        });
+
+        $(document).on('click', '#admin_delete_button', function (event) {
+            // create submit form before modal open
+            $('.modal-footer').find('a').remove();
+            $('.modal-footer').append('<a href="'+$(event.target).attr('data-href')+'" type="button" class="btn btn-outline">Sure</a>');
         });
 
     </script>

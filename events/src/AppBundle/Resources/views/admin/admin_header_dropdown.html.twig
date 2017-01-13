@@ -58,17 +58,25 @@
         <!-- User Account: style can be found in dropdown.less -->
         <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                {% image 'dist/img/user2-160x160.jpg' %}
-                <img src="{{ asset_url }}" class="user-image" alt="User Image" />
-                {% endimage %}
+                {% if app.user.imageBase64 %}
+                    <img src="{{ app.user.imageBase64 }}" class="user-image" alt="{{ app.user.name }}" />
+                {% else %}
+                    {% image 'dist/img/user2-160x160.jpg' %}
+                        <img src="{{ asset_url }}" class="user-image" alt="{{ app.user.name }}" />
+                    {% endimage %}
+                {% endif %}
                 <span class="hidden-xs">{{ app.user.username }}</span>
             </a>
             <ul class="dropdown-menu">
                 <!-- User image -->
                 <li class="user-header">
-                    {% image 'dist/img/user2-160x160.jpg' %}
-                    <img src="{{ asset_url }}" class="img-circle" alt="User Image" />
-                    {% endimage %}
+                    {% if app.user.imageBase64 %}
+                        <img src="{{ app.user.imageBase64 }}" class="img-circle" alt="User Image" />
+                    {% else %}
+                        {% image 'dist/img/user2-160x160.jpg' %}
+                            <img src="{{ asset_url }}" class="img-circle" alt="User Image" />
+                        {% endimage %}
+                    {% endif %}
 
                     <p>
                         {{ app.user.name }} {{ app.user.surname }} - ADMIN
