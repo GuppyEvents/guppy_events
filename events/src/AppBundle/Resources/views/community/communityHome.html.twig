@@ -91,7 +91,7 @@
                                 <div id="join_community_panel" class-="col-sm-2 align-right" style="padding-top: 20px;">
                                     Topluluk rolünüz yönetici tarafından araştırılmaktadır.
                                 </div>
-                            {% elseif communityUser and communityUser.status == 1%}
+                            {% elseif communityUser and (communityUser.status == 1 or communityUser.status == 2) %}
                                 <!-- Kullanıcı bu durumda  topluluk yöneticisidir -->
                             {% else %}
                                 <div id="join_community_panel" class-="col-sm-2 align-right" style="padding-top: 20px;">
