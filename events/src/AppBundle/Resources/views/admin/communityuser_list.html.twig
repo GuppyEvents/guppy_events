@@ -1,4 +1,4 @@
-{% extends 'AppBundle::admin_base.html.twig' %}
+{% extends 'AppBundle:admin:admin_base.html.twig' %}
 
 {% block content %}
 
@@ -70,7 +70,7 @@
                                                     <span class="sr-only">Toggle Dropdown</span>
                                                 </button>
                                                 <ul id='op-list' class="dropdown-menu" role="menu">
-                                                    {#<li><a href="{{ path('event_post_to_id', {'eventId': event.id }) }}">Edit</a></li>#}
+                                                    {#<li><a href="{{ path('admin_event_update', {'eventId': event.id }) }}">Edit</a></li>#}
                                                     <li><a data-op-status="1">Community Admin</a></li>
                                                     <li><a data-op-status="2">Community Member</a></li>
                                                     <li class="divider"></li>
@@ -130,7 +130,7 @@
 
             // -- 2 --
             // ajax call
-            $.post("{{ path('service_community_user_confirm') }}" ,{
+            $.post("{{ path('admin_service_community_user_confirm') }}" ,{
                 cid : dataParent.attr('data-cid'),
                 uid : dataParent.attr('data-uid'),
                 status : $(eventtarget).attr('data-op-status')

@@ -75,12 +75,59 @@ class AdminEventController extends Controller
             return $this->redirectToRoute('admin_event_list');
         }
 
-
         // --3-- DEFAULT CASE
         $data['universities'] = $this->getDoctrine()->getRepository('AppBundle:University')->findAll();
 
         // --4-- RENDERING
-        return $this->render('AppBundle:event:eventRegister.html.twig', $data);
+        return $this->render('AppBundle:admin:event_register.html.twig', $data);
+    }
+
+
+
+
+    /**
+     * @Route("/post/{eventId}", name="admin_event_update")
+     */
+    public function updateAction(Request $request , $eventId)
+    {
+        // --1-- Init
+        $data = array();
+
+        // --2-- POST OPERATION
+        if($request->getMethod() == 'POST'){
+
+            $em = $this->getDoctrine()->getManager();
+
+            try{
+                $event = $em->getRepository('AppBundle:Event')->find($eventId);
+                if (!$event) {
+                    throw $this->createNotFoundException(
+                        'No product found for id '.$event
+                    );
+                }else{
+                    $date = \DateTime::createFromFormat('m/d/Y H:i A', $request->get('event_date'));
+
+                    $event->setTitle( $request->get('event_title') );
+                    $event->setDescription( $request->get('event_description') );
+                    $event->setStartDate( $date );
+                    $event->setMaxParticipantNum( $request->get('event_participant_count') );
+                    $event->setImageBase64($request->get('event_image_base64'));
+                    $em->persist($event);
+                    $em->flush();
+                }
+
+            } catch (Exception $e){}
+
+            // Redirect route to university list page
+            return $this->redirectToRoute('admin_event_list');
+        }
+
+        // --3-- DEFAULT CASEE
+        $data['event'] = $this->getDoctrine()->getRepository('AppBundle:Event')->find($eventId);
+        $data['eventTicketList'] = $this->getDoctrine()->getRepository('AppBundle:Ticket')->findBy(array('event'=>$eventId));
+
+        // --4-- RENDERING
+        return $this->render('AppBundle:admin:event_update.html.twig', $data);
     }
 
 
@@ -139,8 +186,36 @@ class AdminEventController extends Controller
         $data['selectedUniversityId'] = $selectedUniversityId;
 
         // --3-- RENDERING
-        return $this->render( 'AppBundle:event:eventList.html.twig', $data);
+        return $this->render( 'AppBundle:admin:event_list.html.twig', $data);
     }
+    
+    
+    
+    
+    /**
+     * @Route("/delete/{eventId}", name="admin_event_delete")
+     */
+    public function deleteAction($eventId)
+    {
+        // --1-- POST OPERATION
+        try{
+            $em = $this->getDoctrine()->getManager();
+            $event = $em->getRepository('AppBundle:Event')->find($eventId);
+            if (!$event) {
+                throw $this->createNotFoundException(
+                    'No product found for id '.$event
+                );
+            }
 
+            $em->remove($event);
+            $em->flush();
+
+        } catch (Exception $e){}
+
+        // Redirect route to community list page
+        return $this->redirectToRoute('admin_event_list');
+
+    }
+    
     
 }

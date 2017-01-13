@@ -1,4 +1,4 @@
-{% extends 'AppBundle::admin_base.html.twig' %}
+{% extends 'AppBundle:admin:admin_base.html.twig' %}
 
 {% block content %}
 
@@ -109,8 +109,8 @@
                                                     <span class="sr-only">Toggle Dropdown</span>
                                                 </button>
                                                 <ul class="dropdown-menu" role="menu">
-                                                    <li><a href="{{ path('event_post_to_id', {'eventId': event.id }) }}">Edit</a></li>
-                                                    <li><a href="{{ path('event_delete' , {'eventId': event.id }) }}">Delete</a></li>
+                                                    <li><a href="{{ path('admin_event_update', {'eventId': event.id }) }}">Edit</a></li>
+                                                    <li><a href="{{ path('admin_event_delete' , {'eventId': event.id }) }}">Delete</a></li>
                                                 </ul>
                                             </div>
                                         </td>

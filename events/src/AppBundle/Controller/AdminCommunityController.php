@@ -52,7 +52,7 @@ class AdminCommunityController extends Controller
         $data['universities'] = $this->getDoctrine()->getRepository('AppBundle:University')->findAll();
 
         // --4-- RENDERING
-        return $this->render('AppBundle:community:communityRegister.html.twig', $data);
+        return $this->render('AppBundle:admin:community_register.html.twig', $data);
     }
 
 
@@ -102,7 +102,7 @@ class AdminCommunityController extends Controller
         $data['communityLinkList'] = $this->getDoctrine()->getRepository('AppBundle:CommunityLink')->findCommunitySocialNetworksByCommunityId($communityId);
 
         // --4-- RENDERING
-        return $this->render('AppBundle:community:communityUpdate.html.twig', $data);
+        return $this->render('AppBundle:admin:community_update.html.twig', $data);
     }
 
 
@@ -143,7 +143,7 @@ class AdminCommunityController extends Controller
         $data['selectedUniversityId'] = $selectedUniversityId;
 
         // --3-- RENDERING
-        return $this->render('AppBundle:community:communityList.html.twig', $data);
+        return $this->render('AppBundle:admin:community_list.html.twig', $data);
     }
 
 

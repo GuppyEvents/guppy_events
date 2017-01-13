@@ -18,9 +18,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 class CommunityUserController extends Controller
 {
 
-
-
-
     // -----------------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     //                                          APPLICATION/JSON SERVICES (ALL)
@@ -65,67 +62,6 @@ class CommunityUserController extends Controller
             }
 
         } catch (Exception $ex){
-            // content == "Unexpected Error"
-            $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent($ex)));
-            return $response;
-        }
-
-        // -- 3 -- Set & Return value
-        $response->setContent(json_encode(Result::$SUCCESS_EMPTY));
-        return $response;
-    }
-
-
-    // -----------------------------------------------------------------------------------------------------------------
-    //                                          APPLICATION/JSON SERVICES (ADMIN)
-    // -----------------------------------------------------------------------------------------------------------------
-    /**
-     * @Route("/s/confirm", name="service_community_user_confirm")
-     * @Security("has_role('ROLE_ADMIN')")
-     */
-    public function communityUserConfirmAction(Request $request)
-    {
-
-        // -- 1 -- Initialization
-        $response = new Response();
-        $response->headers->set('Content-Type', 'application/json');
-        $em = $this->getDoctrine()->getManager();
-        $data = array();
-
-        try {
-            // --1.1-- Get post parameter
-            $communityId = $request->get('cid');
-            $userId = $request->get('uid');
-            $status = $request->get('status');
-
-            // --1.2-- try to get community user
-            $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
-            $user = $em->getRepository('AppBundle:User')->find($userId);
-            $communityUser = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findOneBy(array('community'=>$community , 'user'=>$user));
-
-            // --2.1-- Checker
-            if(!$community || !$user || !$status || !$communityUser){
-                $response->setContent(json_encode(Result::$FAILURE_PARAM_MISMATCH->setContent('NULL error')));
-                return $response;
-            }
-
-            // --3.1-- Update operation
-            $communityUser->setUpdateDate(new \DateTime('now'));
-
-            $prevStatus = $communityUser->getStatus();
-            $communityUser->setStatus(intval($status));
-
-            $em->persist($communityUser);
-            $em->flush();
-
-            $data['msg'] = $user->getName() . ' role updated from ' . strval($prevStatus) . ' to ' . strval($status) . ' at ' . $community->getName();
-            $data['status'] = $communityUser->getStatus();
-
-            $response->setContent(json_encode(Result::$SUCCESS->setContent($data)));
-            return $response;
-
-
-        } catch (\Exception $ex){
             // content == "Unexpected Error"
             $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent($ex)));
             return $response;

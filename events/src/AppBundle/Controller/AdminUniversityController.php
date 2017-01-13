@@ -63,7 +63,7 @@ class AdminUniversityController extends Controller
         $data['cities'] = $this->getDoctrine()->getRepository('AppBundle:City')->findAll();
 
         // --4-- RENDERING
-        return $this->render('AppBundle:university:universityRegister.html.twig', $data);
+        return $this->render('AppBundle:admin:university_register.html.twig', $data);
     }
 
 
@@ -116,7 +116,7 @@ class AdminUniversityController extends Controller
         $data['borough'] = $borough;
 
         // --4-- RENDERING
-        return $this->render('AppBundle:university:universityUpdate.html.twig', $data);
+        return $this->render('AppBundle:admin:university_update.html.twig', $data);
     }
     
     
@@ -144,7 +144,7 @@ class AdminUniversityController extends Controller
         }
 
         // --3-- RENDERING
-        return $this->render('AppBundle:admin:university.html.twig', $data);
+        return $this->render('AppBundle:admin:university_list.html.twig', $data);
     }
 
 

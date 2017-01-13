@@ -12,6 +12,7 @@ use AppBundle\Entity\University;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -196,105 +197,7 @@ class EventController extends Controller
             }
 
         }
-
-
-        // 2) DEFAULT CASE
-        $universities = $this->getDoctrine()->getRepository('AppBundle:University')->findAll();
-
-        return $this->render('AppBundle:event:eventRegister.html.twig', array(
-                'universities'=>$universities
-            )
-        );
     }
     
-
-    /**
-     * @Route("/post/{eventId}", name="event_post_to_id")
-     * @Security("has_role('ROLE_USER')")
-     */
-    public function postToIdAction(Request $request , $eventId)
-    {
-
-        // 1) POST OPERATION
-        if($request->getMethod() == 'POST'){
-
-            // 1.1) try to update community
-            try{
-                $em = $this->getDoctrine()->getManager();
-                $event = $em->getRepository('AppBundle:Event')->find($eventId);
-                if (!$event) {
-                    throw $this->createNotFoundException(
-                        'No product found for id '.$event
-                    );
-                }else{
-                    $date = \DateTime::createFromFormat('m/d/Y H:i A', $request->get('event_date'));
-
-                    $event->setTitle( $request->get('event_title') );
-                    $event->setDescription( $request->get('event_description') );
-                    $event->setStartDate( $date );
-                    $event->setMaxParticipantNum( $request->get('event_participant_count') );
-                    $event->setImageBase64($request->get('event_image_base64'));
-                    $em->persist($event);
-                    $em->flush();
-                }
-
-            } catch (Exception $e){}
-
-            // 1.2) Redirect route to university list page
-            return $this->redirectToRoute('admin_event_list');
-        }
-
-        // 2) DEFAULT CASE
-        $event = $this->getDoctrine()->getRepository('AppBundle:Event')->find($eventId);
-        $ticketList = $this->getDoctrine()->getRepository('AppBundle:Ticket')->findBy(array('event'=>$event->getId()));
-
-        return $this->render('AppBundle:event:eventUpdate.html.twig', array(
-                'event'=>$event,
-                'eventTicketList'=>$ticketList
-            )
-        );
-    }
-
-
-
-    /**
-     * @Route("/delete/{eventId}", name="event_delete")
-     * @Security("has_role('ROLE_USER')")
-     */
-    public function deleteAction($eventId)
-    {
-
-        // 1) POST OPERATION
-        // 1.1) try to delete community
-        try{
-            $em = $this->getDoctrine()->getManager();
-
-            $event = $em->getRepository('AppBundle:Event')->find($eventId);
-            if (!$event) {
-                throw $this->createNotFoundException(
-                    'No product found for id '.$event
-                );
-            }
-
-            $em->remove($event);
-            $em->flush();
-
-        } catch (Exception $e){}
-
-        // 1.2) Redirect route to community list page
-        return $this->redirectToRoute('admin_event_list');
-
-    }
-
-
-    /*******************************************************************************************************************
-     *******************************************************************************************************************
-                                                    UTIL FUNCTIONS
-     *******************************************************************************************************************
-     *******************************************************************************************************************
-     */
-
-    // checker functions will be here ...
-
 
 }
