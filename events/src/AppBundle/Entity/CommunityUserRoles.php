@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CommunityUserRoles
  *
- * @ORM\Table(name="community_user_roles", uniqueConstraints={@ORM\UniqueConstraint(name="id_UNIQUE", columns={"id"})}, indexes={@ORM\Index(name="community_user_roles_community_user_idx", columns={"community_user_id"}), @ORM\Index(name="community_user_roles_community_role_idx", columns={"community_role_id"}), @ORM\Index(name="community_user_roles_state_idx", columns={"state"}), @ORM\Index(name="community_user_roles_perform_byx", columns={"perform_by"}) })
+ * @ORM\Table(name="community_user_roles", uniqueConstraints={@ORM\UniqueConstraint(name="id_UNIQUE", columns={"id"}) , @ORM\UniqueConstraint(name="community_user_role_UNIQUE", columns={"community_user_id","community_role_id"})}, indexes={@ORM\Index(name="community_user_roles_community_user_idx", columns={"community_user_id"}), @ORM\Index(name="community_user_roles_community_role_idx", columns={"community_role_id"}), @ORM\Index(name="community_user_roles_state_idx", columns={"state"}), @ORM\Index(name="community_user_roles_perform_byx", columns={"perform_by"}) })
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CommunityUserRolesRepository")
  */
 class CommunityUserRoles extends Base
