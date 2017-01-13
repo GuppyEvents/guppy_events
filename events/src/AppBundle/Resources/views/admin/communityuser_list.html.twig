@@ -1,0 +1,182 @@
+{% extends 'AppBundle:admin:admin_base.html.twig' %}
+
+{% block content %}
+
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Community User
+                <small>admin Panel</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="{{ path('admin_homepage') }}"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Community Users</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+            <!-- /.row -->
+            <div class="row">
+
+                <div class="col-md-12">
+                    <div class="box box-info">
+
+                        <!-- /.box-header -->
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Admin User List</h3>
+                        </div>
+                        <!-- /.box-header -->
+
+                        <!-- /.box-body -->
+                        <div class="box-body">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>User email</th>
+                                    <th>University</th>
+                                    <th>Community</th>
+                                    <th>Status</th>
+                                    <th>Operation</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                {% for communityUser in communityUserList %}
+                                    <tr data-cid="{{ communityUser.community.id }}" data-uid="{{ communityUser.user.id }}">
+                                        <td>{{ communityUser.user.username }}</td>
+                                        <td>{{ communityUser.user.email }}</td>
+                                        <td> University name </td>
+                                        <td>{{ communityUser.community.name }}</td>
+                                        {% if communityUser.status == 1 %}
+                                            <td><span class="label label-success">Co-Admin</span></td>
+                                        {% elseif communityUser.status == 2 %}
+                                            <td><span class="label label-success">Co-Member</span></td>
+                                        {% elseif communityUser.status == 10 %}
+                                            <td><span class="label label-warning">Pending</span></td>
+                                        {% elseif communityUser.status == 11 %}
+                                            <td><span class="label label-danger">Rejected</span></td>
+                                        {% else %}
+                                            <td><span class="label label-danger">Unknown state</span></td>
+                                        {% endif %}
+                                        <td>
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-info">Choose Role</button>
+                                                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                                                    <span class="caret"></span>
+                                                    <span class="sr-only">Toggle Dropdown</span>
+                                                </button>
+                                                <ul id='op-list' class="dropdown-menu" role="menu">
+                                                    {#<li><a href="{{ path('admin_event_update', {'eventId': event.id }) }}">Edit</a></li>#}
+                                                    <li><a data-op-status="1">Community Admin</a></li>
+                                                    <li><a data-op-status="2">Community Member</a></li>
+                                                    <li class="divider"></li>
+                                                    <li><a data-op-status="11">Reject </a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>User email</th>
+                                    <th>User University email</th>
+                                    <th>Status</th>
+                                    <th>User Role</th>
+                                    <th>Operation</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.column -->
+            </div>
+            <!-- /.row -->
+
+        </section>
+        <!-- /.content -->
+    </div>
+
+{% endblock %}
+
+
+{% block javascriptcontent %}
+    <script>
+
+/***********************************************************************************************************************
+ *                                          LOCAL VARIABLE
+ **********************************************************************************************************************/
+
+
+/***********************************************************************************************************************
+ *                                          AJAX OPERATIONS
+ **********************************************************************************************************************/
+
+        function ajaxUpdateCommunityUserStatus(eventtarget){
+
+            // -- 1 --
+            // open alert box to inform user
+            dataParent = $(eventtarget).parentsUntil('tr').last().parent();
+
+            // -- 2 --
+            // ajax call
+            $.post("{{ path('admin_service_community_user_confirm') }}" ,{
+                cid : dataParent.attr('data-cid'),
+                uid : dataParent.attr('data-uid'),
+                status : $(eventtarget).attr('data-op-status')
+            }).always(function(){
+
+            }).done(function(data){
+
+                // -- 2.1 -- CONSOLE
+                if(Guppy.responseDebugMode)
+                    console.log(data);
+
+                // -- 2.2 -- sonuc düzenlenir
+                if(data.resultText == 'SUCCESS'){
+
+                    labelSpan = $(eventtarget).parentsUntil('tr').last().parent().find('td .label');
+                    labelSpan.removeAttr('class');
+                    if(data.content['status']==1){
+                        labelSpan.attr('class' , 'label label-success').html('Co-Admin');
+                    }else if(data.content['status']==2){
+                        labelSpan.attr('class' , 'label label-success').html('Co-Member');
+                    }else if(data.content['status']==11){
+                        labelSpan.attr('class' , 'label label-danger').html('Rejected');
+                    }
+
+                }else if(data.resultText == 'SUCCESS_EMPTY'){
+                    alert('Warning -- ' + ' SUCCESS_EMPTY');
+                }else if(data.resultText == 'FAILURE_PERMISSION'){
+                    alert('Warning -- ' + ' you are not authorization for this operation');
+                }else{
+                    alert('Warning -- ' + ' error occured while getting social network list');
+                }
+            });
+        }
+
+/***********************************************************************************************************************
+ *                                          CHECKER FUNCTIONS
+ **********************************************************************************************************************/
+
+
+/***********************************************************************************************************************
+ *                                          EVENTS
+ **********************************************************************************************************************/
+
+        $(document).on('click', '#op-list a', function(event){
+            ajaxUpdateCommunityUserStatus(event.target);
+        });
+
+    </script>
+{% endblock %}

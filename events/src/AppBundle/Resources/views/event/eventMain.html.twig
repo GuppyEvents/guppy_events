@@ -80,18 +80,9 @@
                     <div class="fade active in">
                         <div class="col-sm-1 align-left event-content-body-description"></div>
                         <div class="col-sm-6 align-left event-content-body-description">
-                            <h6>ETKİNLİK HAKKINDA</h6>
-
-                            <p>{{ event.description }}</p>
-
-                            {#<p><strong>Yaratıcılığınıza güveniyor musunuz? Sosyal medyada içerik paylaşmaktan keyif mi alıyorsunuz? Aktif sosyal medya kullanıcısı mısınız?</strong></p>#}
-                            {#<p>Influencer Talks sosyal medya influencer’larindan ilham almak ve onlarla bağlantı kurabilmek amacıyla oluşturulmuş bir organizasyondur. Bu hareketin temel felsefesi, sosyal medya kullanımıyla ilgili sorular sorarak kullanım alanının daha verimli bir şekilde değerlendirilmesini sağlamak.</p>#}
-                            {#<p><strong>Sizi Neler Bekliyor?</strong></p>#}
-                            {#<p>Üç ya da daha fazla influencer ile kişisel markanızı nasıl geliştireceğiniz, müşteri kitlenizi nasıl geliştirebileceğiniz ve onların hatalarından öğrenecekleriniz hakkında sohbet edebiliceksiniz!</p>#}
-                            {#<p><strong>Neden Bunu Yapıyoruz?</strong></p>#}
-                            {#<p>Çünkü sosyal medya, reklam kültürünün en önemli parçası olma yolunda. Bu yüzden, onu kullanırken hayal kırıklıkları yaşamamak için önce hayatımızı nasıl şekillendirdiğini anlamalıyız.</p>#}
-                            {#<p><br></p>#}
+                            <p>{{ event.description|raw }}</p>
                         </div>
+
                         <div class="col-sm-5 align-left event-content-body-description-date">
                             <h6>Tarih & Saat</h6>
                             {#<p>Sat, December 17, 2016</p>#}
@@ -108,7 +99,6 @@
                             {#<p>Ankara, 06101</p>#}
                             {#<a>View Map</a>#}
                         {#</div>#}
-
 
                         <div class="col-sm-12 align-left"></div>
                         <div class="col-sm-1 align-left"></div>
@@ -170,15 +160,13 @@
 
 
 
-
-
 {% block javascriptcontent %}
     <script>
 
 /***********************************************************************************************************************
- *                                          GLOBAL VARIABLE
+ *                                          LOCAL VARIABLE
  **********************************************************************************************************************/
-        var debugMode = true;
+
 
 
 /***********************************************************************************************************************

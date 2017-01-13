@@ -31,4 +31,23 @@ class CommunityRepository extends EntityRepository
             ->getResult();
     }
 
+
+    /**
+     *
+     * @param string $keyValue The community name key value
+     * @return Community|null
+     */
+    public function findCommunityListByUniversity($page=1 ,$pageSize=24,$universityId=5)
+    {
+        return $this->createQueryBuilder('community')
+            ->join('community.university', 'university')
+            ->where('university.id = :universityId')
+            ->setParameter('universityId', $universityId)
+            ->orderBy('community.name', 'ASC')
+            ->setFirstResult($pageSize * ($page - 1))
+            ->setMaxResults( $pageSize )
+            ->getQuery()
+            ->getResult();
+    }
+
 }

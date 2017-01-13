@@ -1,4 +1,4 @@
-{% extends 'AppBundle::admin_base.html.twig' %}
+{% extends 'AppBundle:admin:admin_base.html.twig' %}
 
 {% block content %}
 
@@ -30,7 +30,7 @@
                         <div class="icon">
                             <i class="ion ion-university"></i>
                         </div>
-                        <a href="{{ path('university_get') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        <a href="{{ path('admin_university_list') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
 
@@ -62,7 +62,7 @@
                         <div class="icon">
                             <i class="ion ion-person-stalker"></i>
                         </div>
-                        <a href="{{ path('community_list') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        <a href="{{ path('admin_community_list') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -78,7 +78,7 @@
                         <div class="icon">
                             <i class="ion ion-map"></i>
                         </div>
-                        <a href="{{ path('event_list') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        <a href="{{ path('admin_event_list') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->

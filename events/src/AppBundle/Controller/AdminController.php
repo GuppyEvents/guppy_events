@@ -52,7 +52,7 @@ class AdminController extends Controller
 
         $data['communityUserList'] = $communityUserList;
 
-        return $this->render('AppBundle:admin:communityUserList.html.twig', $data);
+        return $this->render('AppBundle:admin:communityuser_list.html.twig', $data);
     }
     
 }
