@@ -231,6 +231,8 @@ function applyToRole() {
             } else if (data.resultCode == 'result.Guppy.601') {
                 dialog.dialog("close");
                 toastr.error("Bu pozisyona daha önce başvurmuş olduğunuz için işleminiz gerçekleştirilemedi.");
+            }else{
+                toastr.error("Beklenmeyen bir hata oluştu.");
             }
         });
     }else{

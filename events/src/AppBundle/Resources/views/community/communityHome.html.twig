@@ -165,34 +165,18 @@
  **********************************************************************************************************************/
 
         function ajaxRequestJoinCommunity(eventTarget){
-
-            // -- 1 --
-
-
-            // -- 2 --
-            // ajax call
-            $.post("{{ path('service_community_user_add') }}" ,{
-                cid : $(eventTarget).attr('data-community-id'),
-            }).always(function(){
-
-            }).done(function(data){
-
-                // -- 2.1 -- CONSOLE
-                if(Guppy.responseDebugMode)
-                    console.log(data);
-
-                // -- 2.2 -- sonuc düzenlenir
-                if(data.resultText == 'SUCCESS'){
-
+            $.post("{{ path('service_apply_role') }}", {
+                roleId: 200,
+                communityId: {{ community.id }}
+            }).always(function () {
+            }).done(function (data) {
+                if (data.resultCode == 'result.Guppy.001') {
                     $('#join_community_panel').slideUp();
-                    toastr.success('Başvurunuz alınmıştır.');
-
-                }else if(data.resultText == 'SUCCESS_EMPTY'){
-                    toastr.error('Beklenmeyen hata ile karşılaşıldı');
-                }else if(data.resultText == 'FAILURE_PERMISSION'){
-                    toastr.error('Bu işlem için izniniz bulunmamaktadır');
+                    toastr.success("Başvurunuz kaydedildi.");
+                } else if (data.resultCode == 'result.Guppy.601') {
+                    toastr.error("Bu pozisyona daha önce başvurmuş olduğunuz için işleminiz gerçekleştirilemedi.");
                 }else{
-                    toastr.error('Beklenmeyen hata ile karşılaşıldı');
+                    toastr.error("Beklenmeyen bir hata oluştu.");
                 }
             });
         }
