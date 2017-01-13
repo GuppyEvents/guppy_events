@@ -82,11 +82,23 @@
                     </div> <!-- modal end -->
                 </div>
 
+                <div id="dialog-form" title="Rol seçimi">
+                    <p class="validateTips">Başvurmak istediğiniz rolü seçiniz.</p>
+
+                    <form id="roleForm">
+                        <fieldset>
+                            {% for role in userRoles %}
+                                <input type="radio" name="role" value="{{ role.id }}"> {{ role.name }}<br>
+                            {% endfor %}
+                        </fieldset>
+                    </form>
+                </div>
 
                 <div class="community-content-body">
                     <div class="event-share-register align-right" style="padding-top: 5px; padding-bottom: 5px; border-bottom: 1px solid; border-bottom-color: #fe4918;">
                         <a id="admin_apply" class="btn" ><span>YÖNETİCİ OL</span></a>
                     </div>
+
 
                     {% if communityUserList is defined and communityUserList|length > 0 %}
                         <div class="row co-admin">
@@ -204,8 +216,59 @@
 /***********************************************************************************************************************
  *                                          AJAX OPERATIONS
  **********************************************************************************************************************/
+var dialog,form;
+function applyToRole() {
+    if($('input[name=role]:checked', '#roleForm').val()) {
 
-        $(window).on("load", function(){
+        $.post("{{ path('service_apply_role') }}", {
+            roleId: $('input[name=role]:checked', '#roleForm').val(),
+            communityId: {{ community.id }}
+        }).always(function () {
+        }).done(function (data) {
+            if (data.resultCode == 'result.Guppy.001') {
+                dialog.dialog("close");
+                toastr.success("Başvurunuz kaydedildi.");
+            } else if (data.resultCode == 'result.Guppy.601') {
+                dialog.dialog("close");
+                toastr.error("Bu pozisyona daha önce başvurmuş olduğunuz için işleminiz gerçekleştirilemedi.");
+            }
+        });
+    }else{
+        toastr.warning("Lütfen bir rol seçiniz.");
+    }
+    return "";
+}
+
+$( "#admin_apply" ).button().on( "click", function() {
+    dialog.dialog( "open" );
+});
+
+
+$(window).on("load", function(){
+
+
+            dialog = $( "#dialog-form" ).dialog({
+                autoOpen: false,
+                height: 300,
+                width: 350,
+                modal: true,
+                buttons: {
+                    "Başvur": applyToRole,
+                    "İptal": function() {
+                        dialog.dialog( "close" );
+                    }
+                },
+                close: function() {
+                    form[ 0 ].reset();
+                }
+            });
+
+    form = dialog.find( "form" ).on( "submit", function( event ) {
+        event.preventDefault();
+        addUser();
+    });
+
+
             var data2 = [];
 
             {% for key,val in registerDates %}

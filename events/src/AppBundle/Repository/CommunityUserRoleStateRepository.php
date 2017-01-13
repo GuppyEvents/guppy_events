@@ -11,4 +11,27 @@ use Doctrine\ORM\EntityRepository;
  */
 class CommunityUserRoleStateRepository extends EntityRepository
 {
+    /**
+     *
+     * @return CommunityUserRoleState|null
+     */
+    public function findPendingState()
+    {
+        return $this->createQueryBuilder('state')
+            ->where('state.id=3000')
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
+     *
+     * @return CommunityUserRoleState|null
+     */
+    public function findRejectState()
+    {
+        return $this->createQueryBuilder('state')
+            ->where('state.id=2000')
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

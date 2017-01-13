@@ -107,9 +107,11 @@ class CommunityController extends Controller
                     $dates[(string)$comm->getRegisterDate()->getTimestamp() * 1000] = 1;
                 }
             }
-
             $data['registerDates'] = $dates;
 
+            //BAŞVURULABİLECEK ROLLERİ GETİR
+            $communityUserRoles = $this->getDoctrine()->getRepository('AppBundle:CommunityRole')->findAll();
+            $data["userRoles"] = $communityUserRoles;
             // İlgili kullanıcının topluluğun yöneticisi olup olunmadığına bakılır
             $isUserAdmin = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findBy(array('community'=>$community , 'user'=>$this->getUser() , 'status'=>1));
             $data['userIsAdmin'] = $isUserAdmin and count($isUserAdmin)>0 ? true : false;

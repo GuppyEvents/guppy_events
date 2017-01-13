@@ -21,6 +21,7 @@ class Result
     public static $FAILURE_EXCEPTION;
     public static $FAILURE_REPORT;
     public static $FAILURE_PERMISSION;
+    public static $FAILURE_DATABASE_DUPLICATE;
 
     public $resultText;
     public $resultCode;
@@ -69,6 +70,7 @@ class Result
         Result::$FAILURE_EXCEPTION          = Result::$FAILURE_EXCEPTION ? Result::$FAILURE_EXCEPTION->setContent(null) : Result::constructor_default(ResultConst::ResultGuppy521Code , ResultConst::ResultGuppy521Status);
         Result::$FAILURE_REPORT             = Result::$FAILURE_REPORT ? Result::$FAILURE_REPORT->setContent(null) : Result::constructor_default(ResultConst::ResultGuppy522Code , ResultConst::ResultGuppy522Status);
         Result::$FAILURE_PERMISSION         = Result::$FAILURE_PERMISSION ? Result::$FAILURE_PERMISSION->setContent(null) : Result::constructor_default(ResultConst::ResultGuppy531Code , ResultConst::ResultGuppy531Status);
+        Result::$FAILURE_DATABASE_DUPLICATE = Result::$FAILURE_DATABASE_DUPLICATE ? Result::$FAILURE_DATABASE_DUPLICATE->setContent(null) : Result::constructor_default(ResultConst::ResultGuppy601Code , ResultConst::ResultGuppy601Status);
     }
 
 

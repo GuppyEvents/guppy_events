@@ -19,6 +19,7 @@ final class ResultConst{
     const ResultGuppy521Code = 'result.Guppy.521';
     const ResultGuppy522Code = 'result.Guppy.522';
     const ResultGuppy531Code = 'result.Guppy.531';
+    const ResultGuppy601Code = 'result.Guppy.601';
 
     const ResultGuppy001Status = 'SUCCESS';
     const ResultGuppy010Status = 'SUCCESS_EMPTY';
@@ -27,5 +28,6 @@ final class ResultConst{
     const ResultGuppy521Status = 'FAILURE_EXCEPTION';
     const ResultGuppy522Status = 'FAILURE_REPORT';
     const ResultGuppy531Status = 'FAILURE_PERMISSION';
+    const ResultGuppy601Status = 'FAILURE_DATABASE_DUPLICATE';
 
 }

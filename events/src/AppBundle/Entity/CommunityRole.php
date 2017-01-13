@@ -54,5 +54,13 @@ class CommunityRole
     {
         $this->name = $name;
     }
+
+    /**
+     * @param string $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
     
 }
