@@ -97,17 +97,17 @@
                                     </thead>
 
                                     <tbody>
-                                        {% for communityUser in communityMembershipApplications %}
-                                            <tr data-community-user-id="{{ communityUser.id }}">
-                                                <td>{{ communityUser.user.name }} {{ communityUser.user.surname }}</td>
-                                                <td>{{ communityUser.registerDate|date('d/m/Y') }}</td>
+                                        {% for communityUserRole in communityMembershipApplications %}
+                                            <tr data-community-user-id="{{ communityUserRole.id }}">
+                                                <td>{{ communityUserRole.communityUser.user.name }} {{ communityUserRole.communityUser.user.surname }}</td>
+                                                <td>{{ communityUserRole.communityUser.registerDate|date('d/m/Y') }}</td>
                                                 <td>
                                                     {#<form id="mail_setting" action="{{ path('user_profile_mail') }}" method="post">#}
                                                         <li class="membership-application-operation dropdown">
                                                             <a class="application-operation-link dropdown-toggle" data-toggle="dropdown">İşlem</a>
                                                             <ul class="dropdown-menu">
                                                                 <li class="application-operation"><a class="navigation-link" id="op_application_confirm">Onayla</a></li>
-                                                                <li class="application-operation"><a href="{{ path('user_profile_with_id' , {'userId':communityUser.user.id}) }}" class="navigation-link" id="op_application_profile">Profil</a></li>
+                                                                <li class="application-operation"><a href="{{ path('user_profile_with_id' , {'userId':communityUserRole.communityUser.user.id}) }}" class="navigation-link" id="op_application_profile">Profil</a></li>
                                                                 <li class="application-operation"><a class="navigation-link" id="op_application_reject">Reddet</a></li>
                                                             </ul>
                                                         </li>
@@ -206,7 +206,7 @@
             // ajax call
             $.post("{{ path('user_community_membership_applications_confirm') }}" ,{
                 operation : operation,
-                communityUserId : $(eventTarget).parentsUntil('tr').last().parent().attr('data-community-user-id'),
+                communityUserRoleId : $(eventTarget).parentsUntil('tr').last().parent().attr('data-community-user-id'),
             }).always(function(){
 
             }).done(function(data){

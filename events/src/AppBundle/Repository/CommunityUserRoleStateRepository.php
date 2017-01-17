@@ -34,4 +34,16 @@ class CommunityUserRoleStateRepository extends EntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    /**
+     *
+     * @return CommunityUserRoleState|null
+     */
+    public function findAcceptState()
+    {
+        return $this->createQueryBuilder('state')
+            ->where('state.id=1000')
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }
