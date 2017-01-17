@@ -106,22 +106,22 @@
                                 <p class="text-left"><strong>YÖNETİCİ LİSTESİ</strong></p>
                             </div>
                             {% for communityUser in communityUserList %}
-                                {% if communityUser.user and communityUser.status == 1 %}
+                                {% if communityUser.communityRole.id == 100 %}
                                     <div class="col-sm-6">
                                         <div class="testimonial">
                                             <div class="author-block">
                                                 <div class="photo-container">
-                                                    {% if communityUser.user.imageBase64 %}
-                                                        <img src="{{ communityUser.user.imageBase64 }}" alt="{{ communityUser.user.name }}" class="img-responsive" />
+                                                    {% if communityUser.communityUser.user.imageBase64 %}
+                                                        <img src="{{ communityUser.communityUser.user.imageBase64 }}" alt="{{ communityUser.communityUser.user.name }}" class="img-responsive" />
                                                     {% else %}
                                                         {% image 'theme/assets/img/guppy_avatar_001.png' %}
-                                                            <img src="{{ asset_url }}" class="img-responsive" alt="{{ communityUser.user.name }}" />
+                                                            <img src="{{ asset_url }}" class="img-responsive" alt="{{ communityUser.communityUser.user.name }}" />
                                                         {% endimage %}
                                                     {% endif %}
                                                 </div>
 
-                                                <strong class="name">{{ communityUser.user.name }} {{ communityUser.user.surname }}</strong>
-                                                <small class="text-alt company">Yönetici @ {{ communityUser.community.name }}</small>
+                                                <strong class="name">{{ communityUser.communityUser.user.name }} {{ communityUser.communityUser.user.surname }}</strong>
+                                                <small class="text-alt company">Yönetici @ {{ communityUser.communityUser.community.name }}</small>
                                             </div>
                                         </div>
                                     </div>
@@ -135,7 +135,7 @@
                                 <p class="text-left"><strong>ÜYE LİSTESİ</strong></p>
                             </div>
                             {% for communityUser in communityUserList %}
-                                {% if communityUser.user and communityUser.status == 2 %}
+                                {% if communityUser.communityUser.user and communityUser.communityUser.status == 200 %}
                                     <div class="col-sm-6">
                                         <div class="testimonial">
                                             <div class="author-block">
@@ -302,7 +302,7 @@ $(window).on("load", function(){
                         approximation: "sum",
                         enabled: true,
                         forced: true,
-                        units: [['month',[1]]],
+                        units: [['month',[1]]]
 
                     }
                 }]
