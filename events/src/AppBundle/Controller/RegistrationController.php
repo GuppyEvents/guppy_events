@@ -44,7 +44,7 @@ class RegistrationController extends Controller
                 return $this->redirectToRoute('homepage');
 
             }else{
-                $data['error_msg'] = "Bilkent mail adresini girmeniz gerekiyor.";
+                $data['error_msg'] = "Bilkent mail adresi ile kayıt olmanız gerekiyor. (@ug.bilkent.edu.tr)";
             }
         }
 
