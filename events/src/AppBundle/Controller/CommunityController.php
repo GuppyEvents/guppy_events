@@ -130,15 +130,18 @@ class CommunityController extends Controller
     {
         $data = array();
         $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
-
         if($community){
-
             // İlgili kullanıcının topluluğun yöneticisi olup olunmadığına bakılır
-            $isUserAdmin = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findBy(array('community'=>$community , 'user'=>$this->getUser() , 'status'=>1));
-            $data['userIsAdmin'] = $isUserAdmin and count($isUserAdmin)>0 ? true : false;
+            $isUserAdmin = $this->getDoctrine()->getRepository('AppBundle:User')->isUserAdmin($this->getUser(), $community, $this);
+
+            $data['userIsAdmin'] = $isUserAdmin;
+
+
+            $pendingState = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoleState')->findPendingState();
+            $communityUsers = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findBy(array('community'=>$community));
 
             // Topluluğun üyelik başvurusu yapanların listesi alınır
-            $communityMembershipApplications = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findBy(array('community'=>$community , 'status'=>10 ));
+            $communityMembershipApplications = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoles')->findBy(array('communityUser'=>$communityUsers , 'state'=>$pendingState ));
             $data['communityMembershipApplications'] = $communityMembershipApplications;
         }
 
@@ -170,12 +173,13 @@ class CommunityController extends Controller
 
             // -- 2.1 -- Get parameters
             $operation = $request->get('operation');
-            $communityUserId = $request->get('communityUserId');
-            $communityUser = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->find($communityUserId);
+            $communityUserRoleId = $request->get('communityUserRoleId');
+
+            $communityUserRole = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoles')->find($communityUserRoleId);
+
 
             // İlgili kullanıcının topluluğun yöneticisi olup olunmadığına bakılır
-            $communityAdminUser = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findBy(array('community'=>$communityUser->getCommunity() , 'user'=>$this->getUser() , 'status'=>1));
-            $IsCommunityUserAdmin = $communityAdminUser && count($communityAdminUser)>0 ? true : false;
+            $IsCommunityUserAdmin = $this->getDoctrine()->getRepository('AppBundle:User')->isUserAdmin($this->getUser(), $communityUserRole->getCommunityUser()->getCommunity(), $this);
 
             // -- 2.2 -- Checkers
             if (!$IsCommunityUserAdmin) {
@@ -183,34 +187,35 @@ class CommunityController extends Controller
                 return $response;
             }
 
-            if (!$communityUser) {
-                $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent('Community User bulunamadi')));
+            if (!$communityUserRole) {
+                $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent('Community User Role bulunamadi')));
                 return $response;
             }
-
-            if ($communityUser->getStatus() != 10) {
+            $pendingState = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoleState')->findPendingState();
+            if ($communityUserRole->getState() != $pendingState) {
                 $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent('Uye durumu uygun degil')));
                 return $response;
             }
 
-
+            $acceptState = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoleState')->findAcceptState();
+            $rejectState = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoleState')->findRejectState();
             switch ($operation){
                 case 'confirm':
-                    $communityUser->setStatus(2);
+                    $communityUserRole->setState($acceptState);
                     $data['success_msg'] = 'Üye başarıyla onaylandı';
                     break;
                 case 'reject':
-                    $communityUser->setStatus(11);
+                    $communityUserRole->setState($rejectState);
                     $data['success_msg'] = 'Üye başarıyla reddedildi';
                     break;
                 default:
                     break;
             }
 
-            $communityUser->setUpdateDate(new \DateTime('now'));
-            $communityUser->setPerformBy($this->getUser());
+            $communityUserRole->setUpdateDate(new \DateTime('now'));
+            $communityUserRole->setPerformBy($this->getUser());
 
-            $this->getDoctrine()->getManager()->persist($communityUser);
+            $this->getDoctrine()->getManager()->persist($communityUserRole);
             $this->getDoctrine()->getManager()->flush();
 
 
@@ -220,7 +225,7 @@ class CommunityController extends Controller
 
         }catch (\Exception $ex){
             // content == "Unexpected Error"
-            $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent($ex)));
+            $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent($ex->getMessage())));
             return $response;
         }
 

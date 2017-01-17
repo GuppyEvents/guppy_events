@@ -30,4 +30,29 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    /**
+     * Loads the user for the given username.
+     * This method must return null if the user is not found.
+     *
+     * @param User $user The user
+     * @return true | false
+     */
+    public function isUserAdmin($user, $community, $em)
+    {
+        if($community){
+            $communityUser = $em->getDoctrine()->getRepository('AppBundle:CommunityUser')->findOneBy(array('community'=>$community , 'user'=>$user));
+
+            $acceptState = $em->getDoctrine()->getRepository('AppBundle:CommunityUserRoleState')->findAcceptState();
+            $communityUserRoles = $em->getDoctrine()->getRepository('AppBundle:CommunityUserRoles')->findBy(array('communityUser'=>$communityUser, 'communityRole'=>100, 'state'=>$acceptState));
+
+            if($communityUserRoles){
+                return true;
+            }
+
+        }
+        return false;
+    }
+
+
 }
