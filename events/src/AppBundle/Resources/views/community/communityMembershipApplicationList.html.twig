@@ -85,7 +85,17 @@
                     <div class="fade active in">
 
                         <div class="col-sm-12 align-left" style="padding-top: 40px;">
+                            <div id="dialog-form" title="Rol seçimi">
+                                <p class="validateTips">Reddetme sebebini yazınız.</p>
 
+                                <form id="reasonForm">
+                                    <fieldset>
+
+                                            <textarea type="text" name="reason"></textarea><br>
+
+                                    </fieldset>
+                                </form>
+                            </div>
                             {% if communityMembershipApplications is defined and communityMembershipApplications|length > 0 %}
                                 <table class="table">
                                     <thead>
@@ -155,7 +165,7 @@
 /***********************************************************************************************************************
  *                                          LOCAL VARIABLE
  **********************************************************************************************************************/
-
+var dialog, form;
 
 /***********************************************************************************************************************
  *                                          UTIL FUNCTIONS
@@ -166,8 +176,8 @@
  *                                          AJAX OPERATIONS
  **********************************************************************************************************************/
 
-        function ajaxRequestJoinCommunity(eventTarget){
 
+        function ajaxRequestJoinCommunity(eventTarget){
             // -- 1 --
 
 
@@ -199,8 +209,60 @@
             });
         }
 
+        function ajaxRejectReasonCommunityUser(eventTarget , operation ){
+            //Burada kullanıcıya sebep girmesi için dialog gösterilir
+            if(operation=='reject'){
+                dialog.data('eventTarget', eventTarget).dialog( "open" );
+            }
+        }
+
+        function ajaxRejectCommunityUser(){
+            var eventTarget = $("#dialog-form").data('eventTarget');
+            // -- 2 --
+            // ajax call
+            $.post("{{ path('user_community_membership_applications_confirm') }}" ,{
+                operation : "reject",
+                communityUserRoleId : $(eventTarget).parentsUntil('tr').last().parent().attr('data-community-user-id'),
+                reason: $('input[name=reason]', '#reasonForm').val()
+            }).always(function(){
+
+            }).done(function(data){
+
+                // -- 2.1 -- CONSOLE
+                if(Guppy.responseDebugMode)
+                    console.log(data);
+
+                // -- 2.2 -- sonuc düzenlenir
+                if(data.resultText == 'SUCCESS'){
+                    //close dialog
+                    dialog.dialog("close");
+
+                    // calculate number of rows
+                    if($(eventTarget).parentsUntil('tbody').last().parent().children().length==1){
+                        $(eventTarget).parentsUntil('table').last().parent().remove();
+                    }else{
+                        $(eventTarget).parentsUntil('tr').last().parent().remove()
+                    }
+
+                    toastr.success(data.content['success_msg']);
+
+                }else if(data.resultText == 'SUCCESS_EMPTY'){
+                    toastr.error('Beklenmeyen hata ile karşılaşıldı');
+                }else if(data.resultText == 'FAILURE_PERMISSION'){
+                    toastr.error('Bu işlem için izniniz bulunmamaktadır');
+                }else{
+                    toastr.error('Beklenmeyen hata ile karşılaşıldı');
+                }
+            });
+        }
 
         function ajaxConfirmCommunityUser(eventTarget , operation ){
+
+            if(operation=='reject'){
+                dialog.dialog( "open" );
+
+
+            }
 
             // -- 2 --
             // ajax call
@@ -253,7 +315,25 @@
         });
 
         $(document).on('click' , '#op_application_reject' , function(){
-            ajaxConfirmCommunityUser(event.target,'reject');
+            ajaxRejectReasonCommunityUser(event.target,'reject');
+        });
+
+        $(window).on('load', function(){
+            dialog = $( "#dialog-form" ).dialog({
+                autoOpen: false,
+                height: 300,
+                width: 350,
+                modal: true,
+                buttons: {
+                    "Reddet": ajaxRejectCommunityUser,
+                    "İptal": function() {
+                        dialog.dialog( "close" );
+                    }
+                },
+                close: function() {
+                    form[ 0 ].reset();
+                }
+            });
         });
 
 
