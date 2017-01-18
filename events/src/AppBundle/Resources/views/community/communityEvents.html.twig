@@ -83,7 +83,7 @@
                 </div>
 
                 <!-- Kullanıcı topluluk yöneticisi ise etkinlik ekle butonu yerleştirilir -->
-                {% if userIsAdmin %}
+                {% if isUserCommunityAdmin %}
                     <div class="event-share-register align-right" style="padding-top: 5px; padding-bottom: 5px; border-bottom: 1px solid; border-bottom-color: #fe4918;">
                         <a href="{{ path('event_add_page') }}" class="btn" ><span>Etkinlik Ekle</span></a>
                     </div>

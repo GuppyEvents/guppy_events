@@ -22,7 +22,7 @@
                     <li class="community-navigation-item"><a href="{{ path('user_community_events_homepage', {'communityId': community.id}) }}" class="navigation-link {% if app.request.get('_route') == 'user_community_events_homepage'%}active{% endif %}">Etkinlikler</a></li>
                     <li class="community-navigation-item"><a href="{{ path('user_community_users_homepage', {'communityId': community.id}) }}" class="navigation-link {% if app.request.get('_route') == 'user_community_users_homepage'%}active{% endif %}">Üyeler</a></li>
 
-                    {% if userIsAdmin is defined and userIsAdmin == true %}
+                    {% if isUserCommunityAdmin is defined and isUserCommunityAdmin %}
                         <li class="community-navigation-item"><a href="{{ path('user_community_membership_applications_homepage', {'communityId': community.id}) }}" class="navigation-link {% if app.request.get('_route') == 'user_community_membership_applications_homepage'%}active{% endif %}">Başvuru Listesi</a></li>
                     {% endif %}
 
