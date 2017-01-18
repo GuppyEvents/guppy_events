@@ -174,6 +174,7 @@ class CommunityController extends Controller
 
             // -- 2.1 -- Get parameters
             $operation = $request->get('operation');
+            $reason = $request->get('reason');
             $communityUserRoleId = $request->get('communityUserRoleId');
 
             $communityUserRole = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoles')->find($communityUserRoleId);
@@ -207,6 +208,7 @@ class CommunityController extends Controller
                     break;
                 case 'reject':
                     $communityUserRole->setState($rejectState);
+                    $communityUserRole->setDescription($reason);
                     $data['success_msg'] = 'Üye başarıyla reddedildi';
                     break;
                 default:

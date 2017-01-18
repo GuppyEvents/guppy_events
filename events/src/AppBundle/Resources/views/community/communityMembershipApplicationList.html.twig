@@ -91,7 +91,7 @@
                                 <form id="reasonForm">
                                     <fieldset>
 
-                                            <textarea type="text" name="reason"></textarea><br>
+                                            <textarea type="text" id="rejectReason"></textarea><br>
 
                                     </fieldset>
                                 </form>
@@ -217,13 +217,14 @@ var dialog, form;
         }
 
         function ajaxRejectCommunityUser(){
+            console.log($('#rejectReason').val());
             var eventTarget = $("#dialog-form").data('eventTarget');
             // -- 2 --
             // ajax call
             $.post("{{ path('user_community_membership_applications_confirm') }}" ,{
                 operation : "reject",
                 communityUserRoleId : $(eventTarget).parentsUntil('tr').last().parent().attr('data-community-user-id'),
-                reason: $('input[name=reason]', '#reasonForm').val()
+                reason: $('#rejectReason').val()
             }).always(function(){
 
             }).done(function(data){
