@@ -100,12 +100,13 @@ class CommunityController extends Controller
 
         if($community){
             $communityUser = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findBy(array('community'=>$community));
-            $data['communityUserList'] = $communityUser;
+            $acceptState = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoleState')->findAcceptState();
+            $communityUserRole = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoles')->findBy(array('communityUser'=>$communityUser, 'state' => $acceptState));
+            $data['communityUserList'] = $communityUserRole;
             $dates= array();
-            foreach($communityUser as $comm){
-                if($comm->getStatus() == 1 || $comm->getStatus() == 2) {
-                    $dates[(string)$comm->getRegisterDate()->getTimestamp() * 1000] = 1;
-                }
+
+            foreach($communityUserRole as $comm){
+                $dates[(string)$comm->getRegisterDate()->getTimestamp() * 1000] = 1;
             }
             $data['registerDates'] = $dates;
 
@@ -113,8 +114,8 @@ class CommunityController extends Controller
             $communityUserRoles = $this->getDoctrine()->getRepository('AppBundle:CommunityRole')->findAll();
             $data["userRoles"] = $communityUserRoles;
             // İlgili kullanıcının topluluğun yöneticisi olup olunmadığına bakılır
-            $isUserAdmin = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findBy(array('community'=>$community , 'user'=>$this->getUser() , 'status'=>1));
-            $data['userIsAdmin'] = $isUserAdmin and count($isUserAdmin)>0 ? true : false;
+            $isUserAdmin = $this->getDoctrine()->getRepository('AppBundle:User')->isUserAdmin($this->getUser(), $community, $this);
+            $data['userIsAdmin'] = $isUserAdmin;
         }
 
         $data['community'] = $community;
