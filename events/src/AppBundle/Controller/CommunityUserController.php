@@ -119,17 +119,24 @@ class CommunityUserController extends Controller
             //daha önce başvurmuş mu kontrol et
             $communityUserRoles = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoles')->findBy(array('communityUser'=>$communityUser, 'communityRole'=>$roleId));
             $deniedState = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoleState')->findRejectState();
+            $pendingState = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoleState')->findPendingState();
 
             foreach($communityUserRoles as $role){
+
                 if($role->getState()->getId() != $deniedState->getId()){
                     //bekleyen veya onaylanmış istek oldugu için hata dön
                     $response->setContent(json_encode(Result::$FAILURE_DATABASE_DUPLICATE));
                     return $response;
+                }else{
+                    $role->setState($pendingState);
+                    $em->persist($role);
+                    $em->flush();
+                    $response->setContent(json_encode(Result::$SUCCESS));
+                    return $response;
                 }
-                $response->setContent(json_encode(Result::$SUCCESS->setContent( "av" )));
-                return $response;
+
             }
-            $pendingState = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoleState')->findPendingState();
+
 
             $communityUserRole = new CommunityUserRoles();
             $communityUserRole->setCommunityUser($communityUser);
