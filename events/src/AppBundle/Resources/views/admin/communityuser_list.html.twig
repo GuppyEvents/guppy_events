@@ -39,42 +39,42 @@
                                     <th>User email</th>
                                     <th>University</th>
                                     <th>Community</th>
+                                    <th>Role</th>
                                     <th>Status</th>
                                     <th>Operation</th>
                                 </tr>
                                 </thead>
                                 <tbody>
 
-                                {% for communityUser in communityUserList %}
-                                    <tr data-cid="{{ communityUser.community.id }}" data-uid="{{ communityUser.user.id }}">
-                                        <td>{{ communityUser.user.username }}</td>
-                                        <td>{{ communityUser.user.email }}</td>
+                                {% for communityUserRole in communityUserRoles %}
+                                    <tr data-community-user-id="{{ communityUserRole.id }}" data-cid="{{ communityUserRole.communityUser.community.id }}" data-uid="{{ communityUserRole.communityUser.user.id }}">
+                                        <td>{{ communityUserRole.communityUser.user.username }}</td>
+                                        <td>{{ communityUserRole.communityUser.user.email }}</td>
                                         <td> University name </td>
-                                        <td>{{ communityUser.community.name }}</td>
-                                        {% if communityUser.status == 1 %}
-                                            <td><span class="label label-success">Co-Admin</span></td>
-                                        {% elseif communityUser.status == 2 %}
-                                            <td><span class="label label-success">Co-Member</span></td>
-                                        {% elseif communityUser.status == 10 %}
+                                        <td>{{ communityUserRole.communityUser.community.name }}</td>
+                                        <td style="text-transform: uppercase;">{{ communityUserRole.communityRole.name }}</td>
+
+                                        {% if communityUserRole.state.id == statePending.id %}
                                             <td><span class="label label-warning">Pending</span></td>
-                                        {% elseif communityUser.status == 11 %}
+                                        {% elseif communityUserRole.state.id == stateAccept.id %}
+                                            <td><span class="label label-success">Accepted</span></td>
+                                        {% elseif communityUserRole.state.id == stateReject.id %}
                                             <td><span class="label label-danger">Rejected</span></td>
                                         {% else %}
-                                            <td><span class="label label-danger">Unknown state</span></td>
+                                            <td><span class="label label-danger">Unknown</span></td>
                                         {% endif %}
+
                                         <td>
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-info">Choose Role</button>
+                                                <button type="button" class="btn btn-info">Confirm/Reject</button>
                                                 <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
                                                     <span class="caret"></span>
                                                     <span class="sr-only">Toggle Dropdown</span>
                                                 </button>
                                                 <ul id='op-list' class="dropdown-menu" role="menu">
-                                                    {#<li><a href="{{ path('admin_event_update', {'eventId': event.id }) }}">Edit</a></li>#}
-                                                    <li><a data-op-status="1">Community Admin</a></li>
-                                                    <li><a data-op-status="2">Community Member</a></li>
+                                                    <li><a data-op-status="confirm">Confirm</a></li>
                                                     <li class="divider"></li>
-                                                    <li><a data-op-status="11">Reject </a></li>
+                                                    <li><a data-op-status="reject">Reject </a></li>
                                                 </ul>
                                             </div>
                                         </td>
@@ -88,6 +88,7 @@
                                     <th>User email</th>
                                     <th>User University email</th>
                                     <th>Status</th>
+                                    <th>Role</th>
                                     <th>User Role</th>
                                     <th>Operation</th>
                                 </tr>
@@ -122,6 +123,9 @@
  *                                          AJAX OPERATIONS
  **********************************************************************************************************************/
 
+        /**
+         * FUNCTION DEPRECIATED
+         */
         function ajaxUpdateCommunityUserStatus(eventtarget){
 
             // -- 1 --
@@ -165,6 +169,45 @@
             });
         }
 
+
+        function ajaxConfirmCommunityUser(eventTarget){
+
+            // -- 2 --
+            // ajax call
+            $.post("{{ path('admin_user_community_membership_applications_confirm') }}" ,{
+                operation : $(eventTarget).attr('data-op-status'),
+                communityUserRoleId : $(eventTarget).parentsUntil('tr').last().parent().attr('data-community-user-id'),
+            }).always(function(){
+
+            }).done(function(data){
+
+                // -- 2.1 -- CONSOLE
+                if(Guppy.responseDebugMode)
+                    console.log(data);
+
+                // -- 2.2 -- sonuc düzenlenir
+                if(data.resultText == 'SUCCESS'){
+
+                    $(eventTarget).parentsUntil('td').last().parent().prev().find('span').removeAttr('class');
+                    if(data.content['roleState']=='accepted'){
+                        $(eventTarget).parentsUntil('td').last().parent().prev().find('span').addClass('label label-success').html('Accepted');
+                    }else if(data.content['roleState']=='rejected'){
+                        $(eventTarget).parentsUntil('td').last().parent().prev().find('span').addClass('label label-danger').html('Rejected');
+                    }
+                    //toastr.success(data.content['success_msg']);
+                }else if(data.resultText == 'SUCCESS_EMPTY'){
+                    //toastr.error('Beklenmeyen hata ile karşılaşıldı');
+                    alert('Beklenmeyen hata ile karşılaşıldı');
+                }else if(data.resultText == 'FAILURE_PERMISSION'){
+                    //toastr.error('Bu işlem için izniniz bulunmamaktadır');
+                    alert('Bu işlem için izniniz bulunmamaktadır');
+                }else{
+                    //toastr.error('Beklenmeyen hata ile karşılaşıldı');
+                    alert('Beklenmeyen hata ile karşılaşıldı');
+                }
+            });
+        }
+
 /***********************************************************************************************************************
  *                                          CHECKER FUNCTIONS
  **********************************************************************************************************************/
@@ -175,7 +218,7 @@
  **********************************************************************************************************************/
 
         $(document).on('click', '#op-list a', function(event){
-            ajaxUpdateCommunityUserStatus(event.target);
+            ajaxConfirmCommunityUser(event.target);
         });
 
     </script>
