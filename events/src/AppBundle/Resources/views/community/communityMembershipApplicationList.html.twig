@@ -109,7 +109,11 @@
                                     <tbody>
                                         {% for communityUserRole in communityMembershipApplications %}
                                             <tr data-community-user-id="{{ communityUserRole.id }}">
-                                                <td>{{ communityUserRole.communityUser.user.name }} {{ communityUserRole.communityUser.user.surname }}</td>
+                                                <td>
+                                                    {% if communityUserRole.description %}
+                                                        <i class="fa fa-exclamation-triangle" data-toggle="tooltip" title="Bu kullanıcı daha önce reddedilmiş. Sebebi: {{ communityUserRole.description }}" aria-hidden="true"></i>
+                                                    {% endif %}
+                                                    {{ communityUserRole.communityUser.user.name }} {{ communityUserRole.communityUser.user.surname }}</td>
                                                 <td>{{ communityUserRole.communityUser.registerDate|date('d/m/Y') }}</td>
                                                 <td>
                                                     {#<form id="mail_setting" action="{{ path('user_profile_mail') }}" method="post">#}
@@ -339,6 +343,7 @@ var dialog, form;
             form = dialog.find( "form" ).on( "submit", function( event ) {
 
             });
+
 
         });
 
