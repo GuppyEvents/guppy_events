@@ -23,6 +23,13 @@ class CommunityUserRoles extends Base
     private $id;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=1000, nullable=true)
+     */
+    private $description;
+
+    /**
      * @var \AppBundle\Entity\CommunityUserRoleState
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CommunityUserRoleState")
@@ -70,6 +77,22 @@ class CommunityUserRoles extends Base
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
     }
 
     /**
