@@ -21,7 +21,7 @@ class CommunityRepository extends EntityRepository
     {
         return $this->createQueryBuilder('community')
             ->join('community.university', 'university')
-            ->where('community.name LIKE :nameKeyValue AND university.id = :universityId')
+            ->where('community.name LIKE :nameKeyValue AND university.id = :universityId AND community.isApproved = true')
             ->setParameter('nameKeyValue', '%'.$keyValue.'%')
             ->setParameter('universityId', 5)
             ->orderBy('community.name', 'ASC')
@@ -41,7 +41,7 @@ class CommunityRepository extends EntityRepository
     {
         return $this->createQueryBuilder('community')
             ->join('community.university', 'university')
-            ->where('university.id = :universityId')
+            ->where('university.id = :universityId AND community.isApproved = true')
             ->setParameter('universityId', $universityId)
             ->orderBy('community.name', 'ASC')
             ->setFirstResult($pageSize * ($page - 1))

@@ -78,16 +78,16 @@
                                 <tbody>
 
                                 {% for community in communityList %}
-                                    <tr>
+                                    <tr data-community-id="{{ community.id }}">
                                         <td>{{ community.university.name }}</td>
                                         <td>{{ community.name }} </td>
-                                        <td>
-                                            {% if community.isApproved %}
-                                                Approved
-                                            {% else %}
-                                                Not Approved
-                                            {% endif %}
-                                        </td>
+
+                                        {% if community.isApproved %}
+                                            <td><span class="label label-success">Approved</span></td>
+                                        {% else %}
+                                            <td><span class="label label-warning">Not Approved</span></td>
+                                        {% endif %}
+
                                         <td>
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-info">Action</button>
@@ -95,9 +95,12 @@
                                                     <span class="caret"></span>
                                                     <span class="sr-only">Toggle Dropdown</span>
                                                 </button>
-                                                <ul class="dropdown-menu" role="menu">
+                                                <ul id='op-list' class="dropdown-menu" role="menu">
                                                     <li><a href="{{ path('admin_community_update', {'communityId': community.id}) }}">Edit</a></li>
                                                     <li><a data-href="{{ path('admin_community_delete' , {'communityId': community.id}) }}" id="admin_delete_button" data-toggle="modal" data-target="#alert_modal" >Delete</a></li>
+                                                    <li class="divider"></li>
+                                                    <li><a data-href="{{ path('admin_community_delete' , {'communityId': community.id}) }}" data-toggle="modal" data-op-name="publish" >Publish</a></li>
+                                                    <li><a data-href="{{ path('admin_community_delete' , {'communityId': community.id}) }}" data-toggle="modal" data-op-name="unpublish" >Unpublish</a></li>
                                                     <li class="divider"></li>
                                                     <li><a href="{{ path('admin_community_user_list' , {'communityId': community.id}) }}">Assign Admin</a></li>
                                                 </ul>
@@ -168,18 +171,14 @@
 /***********************************************************************************************************************
  *                                          AJAX OPERATIONS
  **********************************************************************************************************************/
-        function ajaxGetBoroughListByCity(cityId){
-
-            // -- 1 --
-            // open alert box to inform user
+        function ajaxPublishCommunity(eventTarget){
 
             // -- 2 --
             // ajax call
-            $.post("{{ path('university_borough_list') }}" , {
-                cid : cityId
-
+            $.post("{{ path('admin_community_publish_service') }}" ,{
+                operation : $(eventTarget).attr('data-op-name'),
+                cid : $(eventTarget).parentsUntil('tr').last().parent().attr('data-community-id'),
             }).always(function(){
-
 
             }).done(function(data){
 
@@ -190,23 +189,27 @@
                 // -- 2.2 -- sonuc düzenlenir
                 if(data.resultText == 'SUCCESS'){
 
-                    // -- 2.2.1 -- remove options
-                    $('#address_borough_id').children().remove();
+                    if(data.content['publishState']){
+                        $(eventTarget).parentsUntil('td').last().parent().prev().find('span').removeAttr('class');
+                        if(data.content['publishState']=='accepted'){
+                            $(eventTarget).parentsUntil('td').last().parent().prev().find('span').addClass('label label-success').html('Accepted');
+                        }else if(data.content['publishState']=='rejected'){
+                            $(eventTarget).parentsUntil('td').last().parent().prev().find('span').addClass('label label-danger').html('Rejected');
+                        }else{
+                            $(eventTarget).parentsUntil('td').last().parent().prev().find('span').addClass('label label-danger').html('Unknown state');
+                        }
+                    }
 
-                    // -- 2.2.2 -- insert new options
-                    data.content.forEach(function(borough) {
-                        $('#address_borough_id').append($('<option>', {
-                            value: borough['borough_id'],
-                            text: borough['borough_name']
-                        }));
-                    });
-
+                    //toastr.success(data.content['success_msg']);
                 }else if(data.resultText == 'SUCCESS_EMPTY'){
-                    alert('Warning -- ' + ' could not found any borough');
+                    //toastr.error('Beklenmeyen hata ile karşılaşıldı');
+                    alert('Beklenmeyen hata ile karşılaşıldı');
                 }else if(data.resultText == 'FAILURE_PERMISSION'){
-                    alert('Warning -- ' + ' you are not authorization for this operation');
+                    //toastr.error('Bu işlem için izniniz bulunmamaktadır');
+                    alert('Bu işlem için izniniz bulunmamaktadır');
                 }else{
-                    alert('Warning -- ' + ' error occured while getting borough list');
+                    //toastr.error('Beklenmeyen hata ile karşılaşıldı');
+                    alert('Beklenmeyen hata ile karşılaşıldı');
                 }
             });
         }
@@ -235,6 +238,13 @@
             // create submit form before modal open
             $('.modal-footer').find('a').remove();
             $('.modal-footer').append('<a href="'+$(event.target).attr('data-href')+'" type="button" class="btn btn-outline">Sure</a>');
+        });
+
+        $(document).on('click', '#op-list a', function(event){
+            if($(event.target).attr('data-op-name')=='publish'){
+                ajaxPublishCommunity(event.target);
+            }
+
         });
 
     </script>

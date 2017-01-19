@@ -22,7 +22,6 @@
 
             <div id="container-body">
             {% for community in communities %}
-                {% if community.isApproved == 1 %}
                 <div class="col-sm-2 guppy-main-page-community-box">
                     <div class="society guppy-main-page-community-box-content">
                         <div class="photo-wrapper rounded">
@@ -36,18 +35,13 @@
                         </div>
                         <h3 class="name"><a href="{{ path("user_community_homepage" , {'communityId': community.id}) }}">{{ community.name }}</a></h3>
                         <p class="text-alt"><small>{{ community.university.name }}</small></p>
-                        {#<p class="about">{{ community.description }}</p>#}
                         <ul class="speaker-socials">
-
                             <li><a href="{% if community.link_facebook %}{{ community.link_facebook }}{% endif %}" target="_blank"><span class="fa fa-facebook" aria-hidden="true"></span></a></li>
                             <li><a href="{% if community.link_twitter %}{{ community.link_twitter }}{% endif %}" target="_blank"><span class="fa fa-twitter"></span></a></li>
                             <li><a href="{% if community.link_instagram %}{{ community.link_instagram }}{% endif %}" target="_blank"><span class="fa fa-instagram"></span></a></li>
-                            {#<li><a href="#"><span class="fa fa-google-plus"></span></a></li>#}
-
                         </ul>
                     </div>
                 </div>
-                {% endif %}
             {% endfor %}
             </div>
 

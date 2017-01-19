@@ -91,12 +91,12 @@ class AdminController extends Controller
             $communityUserRole = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoles')->find($communityUserRoleId);
 
             if (!$communityUserRole) {
-                $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent('Community User Role bulunamadi')));
+                $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent('Community User Role not found')));
                 return $response;
             }
             $pendingState = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoleState')->findPendingState();
             if ($communityUserRole->getState() != $pendingState) {
-                $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent('Uye durumu uygun degil')));
+                $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent('Member state not proper')));
                 return $response;
             }
 
@@ -105,12 +105,12 @@ class AdminController extends Controller
             switch ($operation){
                 case 'confirm':
                     $communityUserRole->setState($acceptState);
-                    $data['success_msg'] = 'Üye başarıyla onaylandı';
+                    $data['success_msg'] = 'Role succefully accepted';
                     $data['roleState'] = 'accepted';
                     break;
                 case 'reject':
                     $communityUserRole->setState($rejectState);
-                    $data['success_msg'] = 'Üye başarıyla reddedildi';
+                    $data['success_msg'] = 'Role succefully rejected';
                     $data['roleState'] = 'rejected';
                     break;
                 default:
@@ -123,6 +123,61 @@ class AdminController extends Controller
             $this->getDoctrine()->getManager()->persist($communityUserRole);
             $this->getDoctrine()->getManager()->flush();
 
+
+            // -- 2.2 -- Return Result
+            $response->setContent(json_encode(Result::$SUCCESS->setContent($data)));
+            return $response;
+
+        }catch (\Exception $ex){
+            // content == "Unexpected Error"
+            $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent($ex->getMessage())));
+            return $response;
+        }
+
+        // -- 3 -- Set & Return value
+        $response->setContent(json_encode(Result::$SUCCESS_EMPTY));
+        return $response;
+    }
+
+
+    /**
+     * @Route("community/publish", name="admin_community_publish_service")
+     */
+    public function communityPublishAction(Request $request)
+    {
+        // -- 1 -- Initialization
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+        $data = array();
+
+        // -- 2 --
+        try{
+
+            // -- 2.1 -- Get parameters
+            $operation = $request->get('operation');
+            $communityId = $request->get('cid');
+
+            $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
+            if (!$community) {
+                $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent('Community not found')));
+                return $response;
+            }
+
+            switch ($operation){
+                case 'publish':
+                    $community->setIsApproved(true);
+                    $community->setUpdateDate((new \DateTime('now')));
+                    //işlemi kimin gerçekleştirdiği loglanmalı ya da veri tabanında tutulmalı
+                    //$community->setPerformBy($this->getUser());
+                    $data['success_msg'] = 'Community state changed to publish';
+                    $data['publishState'] = 'accepted';
+                    break;
+                default:
+                    break;
+            }
+
+            $this->getDoctrine()->getManager()->persist($community);
+            $this->getDoctrine()->getManager()->flush();
 
             // -- 2.2 -- Return Result
             $response->setContent(json_encode(Result::$SUCCESS->setContent($data)));
