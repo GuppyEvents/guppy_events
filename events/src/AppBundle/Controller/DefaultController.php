@@ -29,6 +29,7 @@ class DefaultController extends Controller
         // TODO: Şuan için sadece BİLKENT ÜNİVERSİTESİ toplulukları getirilmekte
         $communityList = $this->getDoctrine()->getRepository('AppBundle:Community')->findCommunityListByUniversity();
 
+
         for($i=0; $i<count($communityList);$i++){
 
             $communityList[$i]->link_facebook = null;
@@ -51,7 +52,6 @@ class DefaultController extends Controller
                 }
             }
         }
-
         $data['communities'] = $communityList;
         return $this->render('AppBundle:default:main_community_list.html.twig' , $data);
     }

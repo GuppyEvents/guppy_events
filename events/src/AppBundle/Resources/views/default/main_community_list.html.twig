@@ -22,6 +22,7 @@
 
             <div id="container-body">
             {% for community in communities %}
+                {% if community.isApproved == 1 %}
                 <div class="col-sm-2 guppy-main-page-community-box">
                     <div class="society guppy-main-page-community-box-content">
                         <div class="photo-wrapper rounded">
@@ -46,6 +47,7 @@
                         </ul>
                     </div>
                 </div>
+                {% endif %}
             {% endfor %}
             </div>
 
@@ -91,24 +93,26 @@
                     // -- 2.2.2 --
                     if(data.content){
                         data.content.communityList.forEach(function(community) {
+                            if(community['isApproved']) {
 
-                            communityElem =  '<div class="col-sm-2 guppy-main-page-community-box">' +
-                                                '<div class="society guppy-main-page-community-box-content">' +
-                                                    '<div class="photo-wrapper rounded">' +
-                                                        '<img src="'+community['image']+'" alt="Community" class="img-responsive" />' +
-                                                    '</div>' +
-                                                    '<h3 class="name"><a href="'+community['homepagelink']+'">'+community['name']+'</a></h3>' +
-                                                    '<p class="text-alt"><small>'+community['universityName']+'</small></p>' +
+                                communityElem = '<div class="col-sm-2 guppy-main-page-community-box">' +
+                                        '<div class="society guppy-main-page-community-box-content">' +
+                                        '<div class="photo-wrapper rounded">' +
+                                        '<img src="' + community['image'] + '" alt="Community" class="img-responsive" />' +
+                                        '</div>' +
+                                        '<h3 class="name"><a href="' + community['homepagelink'] + '">' + community['name'] + '</a></h3>' +
+                                        '<p class="text-alt"><small>' + community['universityName'] + '</small></p>' +
 
-                                                    '<ul class="speaker-socials">' +
-                                                        '<li><a href="'+community['link_facebook']+'" target="_blank"><span class="fa fa-facebook" aria-hidden="true"></span></a></li>' +
-                                                        '<li><a href="'+community['link_twitter']+'" target="_blank"><span class="fa fa-twitter"></span></a></li>' +
-                                                        '<li><a href="'+community['link_instagram']+'" target="_blank"><span class="fa fa-instagram"></span></a></li>' +
-                                                    '</ul>' +
-                                                '</div>' +
-                                            '</div>';
+                                        '<ul class="speaker-socials">' +
+                                        '<li><a href="' + community['link_facebook'] + '" target="_blank"><span class="fa fa-facebook" aria-hidden="true"></span></a></li>' +
+                                        '<li><a href="' + community['link_twitter'] + '" target="_blank"><span class="fa fa-twitter"></span></a></li>' +
+                                        '<li><a href="' + community['link_instagram'] + '" target="_blank"><span class="fa fa-instagram"></span></a></li>' +
+                                        '</ul>' +
+                                        '</div>' +
+                                        '</div>';
 
-                            $('#container-body').append(communityElem);
+                                $('#container-body').append(communityElem);
+                            }
                         });
                     }
 
