@@ -55,4 +55,25 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
     }
 
 
+    /**
+     *
+     * @param User $user The user
+     * @return true | false
+     */
+    public function isUserCommunityAdmin($user, $community)
+    {
+
+        if($community){
+            $communityUser = $this->getEntityManager()->getRepository('AppBundle:CommunityUser')->findOneBy(array('community'=>$community , 'user'=>$user));
+
+            $acceptState = $this->getEntityManager()->getRepository('AppBundle:CommunityUserRoleState')->findAcceptState();
+            $communityUserRoles = $this->getEntityManager()->getRepository('AppBundle:CommunityUserRoles')->findBy(array('communityUser'=>$communityUser, 'communityRole'=>100, 'state'=>$acceptState));
+
+            if($communityUserRoles){
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

@@ -52,8 +52,7 @@ class CommunityController extends Controller
         $communityUser = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findOneBy(array('community'=>$community , 'user'=>$this->getUser()));
 
         // İlgili kullanıcının topluluğun yöneticisi olup olunmadığına bakılır
-        $isUserAdmin = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findBy(array('community'=>$community , 'user'=>$this->getUser() , 'status'=>1));
-        $data['userIsAdmin'] = $isUserAdmin and count($isUserAdmin)>0 ? true : false;
+        $data['isUserCommunityAdmin'] = $this->getUser() ? $this->getDoctrine()->getRepository('AppBundle:User')->isUserCommunityAdmin($this->getUser(),$community) : false;
 
         $data['community'] = $community;
         $data['eventList'] = $eventList;
@@ -80,12 +79,10 @@ class CommunityController extends Controller
             }
         }
 
-        // İlgili kullanıcının topluluğun yöneticisi olup olunmadığına bakılır
-        $isUserAdmin = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findBy(array('community'=>$community , 'user'=>$this->getUser() , 'status'=>1));
-        $data['userIsAdmin'] = $isUserAdmin and count($isUserAdmin)>0 ? true : false;
-
         $data['community'] = $community;
         $data['eventList'] = $eventList;
+        $data['isUserCommunityAdmin'] = $this->getUser() ? $this->getDoctrine()->getRepository('AppBundle:User')->isUserCommunityAdmin($this->getUser(),$community) : false;
+        
         return $this->render('AppBundle:community:communityEvents.html.twig' , $data);
     }
 
@@ -113,9 +110,9 @@ class CommunityController extends Controller
             //BAŞVURULABİLECEK ROLLERİ GETİR
             $communityUserRoles = $this->getDoctrine()->getRepository('AppBundle:CommunityRole')->findAll();
             $data["userRoles"] = $communityUserRoles;
+
             // İlgili kullanıcının topluluğun yöneticisi olup olunmadığına bakılır
-            $isUserAdmin = $this->getDoctrine()->getRepository('AppBundle:User')->isUserAdmin($this->getUser(), $community, $this);
-            $data['userIsAdmin'] = $isUserAdmin;
+            $data['isUserCommunityAdmin'] = $this->getUser() ? $this->getDoctrine()->getRepository('AppBundle:User')->isUserCommunityAdmin($this->getUser(),$community) : false;
         }
 
         $data['community'] = $community;
@@ -133,10 +130,7 @@ class CommunityController extends Controller
         $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
         if($community){
             // İlgili kullanıcının topluluğun yöneticisi olup olunmadığına bakılır
-            $isUserAdmin = $this->getDoctrine()->getRepository('AppBundle:User')->isUserAdmin($this->getUser(), $community, $this);
-
-            $data['userIsAdmin'] = $isUserAdmin;
-
+            $data['isUserCommunityAdmin'] = $this->getUser() ? $this->getDoctrine()->getRepository('AppBundle:User')->isUserCommunityAdmin($this->getUser(),$community) : false;
 
             $pendingState = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoleState')->findPendingState();
             $communityUsers = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findBy(array('community'=>$community));
