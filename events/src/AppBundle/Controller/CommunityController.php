@@ -111,6 +111,12 @@ class CommunityController extends Controller
             $communityUserRoles = $this->getDoctrine()->getRepository('AppBundle:CommunityRole')->findAll();
             $data["userRoles"] = $communityUserRoles;
 
+            if($this->getUser()){
+                $userRole = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findBy(array('community'=>$community , 'user'=>$this->getUser()));
+                $communityUserRole = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoles')->findOneBy(array('communityUser'=>$userRole, 'state' => $acceptState));
+                $data['userRole'] = $communityUserRole;
+            }
+
             // İlgili kullanıcının topluluğun yöneticisi olup olunmadığına bakılır
             $data['isUserCommunityAdmin'] = $this->getUser() ? $this->getDoctrine()->getRepository('AppBundle:User')->isUserCommunityAdmin($this->getUser(),$community) : false;
         }

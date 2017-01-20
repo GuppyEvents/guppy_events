@@ -95,9 +95,11 @@
                 </div>
 
                 <div class="community-content-body">
-                    <div class="event-share-register align-right" style="padding-top: 5px; padding-bottom: 5px; border-bottom: 1px solid; border-bottom-color: #fe4918;">
-                        <a id="admin_apply" class="btn" ><span>YÖNETİCİ OL</span></a>
-                    </div>
+                    {% if userRole is defined and userRole %}
+                        <div class="event-share-register align-right" style="padding-top: 5px; padding-bottom: 5px; border-bottom: 1px solid; border-bottom-color: #fe4918;">
+                            <a id="admin_apply" class="btn" ><span>YÖNETİCİ OL</span></a>
+                        </div>
+                    {% endif %}
 
 
                     {% if communityUserList is defined and communityUserList|length > 0 %}
