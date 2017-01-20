@@ -43,27 +43,33 @@ class EventUserRatingController extends Controller
             $eventSave = $request->get('is_saved') === 'true' ? true : false;
 
             // -- 2.2 --
-            $eventUser = $em->getRepository('AppBundle:EventUserRating')->findOneBy(array('user'=>$this->getUser()->getId() , 'event'=>$eventId));
+            if($this->getUser()){
+                $eventUser = $em->getRepository('AppBundle:EventUserRating')->findOneBy(array('user'=>$this->getUser()->getId() , 'event'=>$eventId));
 
-            if($eventUser){
-                $eventUser->setIsSaved(!$eventSave);
+                if($eventUser){
+                    $eventUser->setIsSaved(!$eventSave);
+                }else{
+                    $eventUser = new EventUserRating();
+                    $eventUser->setIsSaved(!$eventSave);
+                    $eventUser->setUser($this->getUser());
+
+                    $event = $em->getRepository('AppBundle:Event')->find($eventId);
+                    $eventUser->setEvent($event);
+                }
+
+                $this->getDoctrine()->getManager()->persist($eventUser);
+                $this->getDoctrine()->getManager()->flush();
+
+                $data['saved'] = $eventUser->getIsSaved();
+
+                // -- 2.2.1 -- Return Result
+                $response->setContent(json_encode(Result::$SUCCESS->setContent( $data )));
+                return $response;
             }else{
-                $eventUser = new EventUserRating();
-                $eventUser->setIsSaved(!$eventSave);
-                $eventUser->setUser($this->getUser());
-
-                $event = $em->getRepository('AppBundle:Event')->find($eventId);
-                $eventUser->setEvent($event);
+                // -- 2.2.2 -- Return Result
+                $response->setContent(json_encode(Result::$FAILURE_AUTH));
+                return $response;
             }
-
-            $this->getDoctrine()->getManager()->persist($eventUser);
-            $this->getDoctrine()->getManager()->flush();
-
-            $data['saved'] = $eventUser->getIsSaved();
-
-            // -- 2.2 -- Return Result
-            $response->setContent(json_encode(Result::$SUCCESS->setContent( $data )));
-            return $response;
 
         }catch (\Exception $ex){
             // content == "Unexpected Error"
