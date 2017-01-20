@@ -102,7 +102,11 @@
                                             <img src="{{ event.imageBase64 }}" alt="Event Name">
                                         </div>
 
-                                        <span class="community-event-card-ticket">Ücretsiz</span>
+                                        {% if event.ticket_price is defined and event.ticket_price %}
+                                            <span class="community-event-card-ticket">{{ event.ticket_price }}</span>
+                                        {% else %}
+                                            <span class="community-event-card-ticket">Ücretsiz</span>
+                                        {% endif %}
                                         <!--<span class="community-event-card-hourglass"><i class="fa fa-clock-o" aria-hidden="true"></i></span>-->
                                     </div>
                                     <div class="community-event-card-main-body">

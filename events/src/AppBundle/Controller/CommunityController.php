@@ -72,11 +72,13 @@ class CommunityController extends Controller
         $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
         $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByCommunityId($communityId);
 
-        if($this->getUser()){
-            foreach ($eventList as $event){
+        foreach ($eventList as $event){
+            $ticket = $this->getDoctrine()->getRepository('AppBundle:Ticket')->findLowestPriceTicketByEventId($event->getId());
+            if($this->getUser()) {
                 $eventUser = $this->getDoctrine()->getRepository('AppBundle:EventUserRating')->findOneBy(array('user'=>$this->getUser()->getId() , 'event'=>$event->getId()));
                 $event->is_saved = $eventUser ? $eventUser->getIsSaved() : false;
             }
+            $event->ticket_price = $ticket && $ticket->getPrice()>0 ? $ticket->getPrice() . ' TL' : null;
         }
 
         $data['community'] = $community;

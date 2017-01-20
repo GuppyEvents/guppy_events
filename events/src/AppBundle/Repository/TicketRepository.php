@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\Ticket;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -11,4 +12,20 @@ use Doctrine\ORM\EntityRepository;
  */
 class TicketRepository extends EntityRepository
 {
+
+    /**
+     *
+     * @param array $eventId The event id
+     * @return Ticket|null
+     */
+    public function findLowestPriceTicketByEventId($eventId)
+    {
+        return $this->createQueryBuilder('ticket')
+            ->where('ticket.event =:eventId')
+            ->setParameter('eventId', $eventId)
+            ->orderBy('ticket.price', 'ASC')
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
 }
