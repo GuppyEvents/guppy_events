@@ -188,13 +188,12 @@
 
                 // -- 2.2 -- sonuc düzenlenir
                 if(data.resultText == 'SUCCESS'){
-
-                    if(data.content['publishState']){
+                    if(data.content['approvedState']!=null){
                         $(eventTarget).parentsUntil('td').last().parent().prev().find('span').removeAttr('class');
-                        if(data.content['publishState']=='accepted'){
-                            $(eventTarget).parentsUntil('td').last().parent().prev().find('span').addClass('label label-success').html('Accepted');
-                        }else if(data.content['publishState']=='rejected'){
-                            $(eventTarget).parentsUntil('td').last().parent().prev().find('span').addClass('label label-danger').html('Rejected');
+                        if(data.content['approvedState']==true){
+                            $(eventTarget).parentsUntil('td').last().parent().prev().find('span').addClass('label label-success').html('Approved');
+                        }else if(data.content['approvedState']==false){
+                            $(eventTarget).parentsUntil('td').last().parent().prev().find('span').addClass('label label-warning').html('Not Approves');
                         }else{
                             $(eventTarget).parentsUntil('td').last().parent().prev().find('span').addClass('label label-danger').html('Unknown state');
                         }
@@ -241,7 +240,7 @@
         });
 
         $(document).on('click', '#op-list a', function(event){
-            if($(event.target).attr('data-op-name')=='publish'){
+            if($(event.target).attr('data-op-name')=='publish' || $(event.target).attr('data-op-name')=='unpublish'){
                 ajaxPublishCommunity(event.target);
             }
 

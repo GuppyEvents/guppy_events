@@ -170,7 +170,15 @@ class AdminController extends Controller
                     //işlemi kimin gerçekleştirdiği loglanmalı ya da veri tabanında tutulmalı
                     //$community->setPerformBy($this->getUser());
                     $data['success_msg'] = 'Community state changed to publish';
-                    $data['publishState'] = 'accepted';
+                    $data['approvedState'] = true;
+                    break;
+                case 'unpublish':
+                    $community->setIsApproved(false);
+                    $community->setUpdateDate((new \DateTime('now')));
+                    //işlemi kimin gerçekleştirdiği loglanmalı ya da veri tabanında tutulmalı
+                    //$community->setPerformBy($this->getUser());
+                    $data['success_msg'] = 'Community state changed to unpublish';
+                    $data['approvedState'] = false;
                     break;
                 default:
                     break;
