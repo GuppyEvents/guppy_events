@@ -1,0 +1,212 @@
+{% extends 'AppBundle::main_base.html.twig' %}
+
+{% block title %}Guppy - About{% endblock %}
+
+
+{% block content %}
+
+    <!-- --------------------------------------------- -->
+    <!-- ------------------ CONTENT ------------------ -->
+    <!-- --------------------------------------------- -->
+
+
+
+<div class="container">
+    <br />
+
+    <div class="alert alert-warning alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        Sık sorulan sorular aşağıda listelenmiştir. Yanıtını burada bulamadığınız sorular lütfen bizimle iletişime geçin.
+    </div>
+
+    <br />
+
+    <div class="panel-group" id="accordion">
+        <div class="faqHeader">Genel Sorular</div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Guppy Nedir?</a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    Guppy, üniversitelerdeki çeşitli toplulukların düzenlediği etkinlinlikerin daha çok kişiye ulaştırılmasına imkan sağlayan
+                    yeni bir sosyal ağ projesidir. Kullanıcılar Guppy üzerinde etkinliklerini oluşturur ve etkinliğin tüm detaylarını paylaşır. Guppy üzerinden 
+                    diğer kullanıcılar bu etkinliği görebilir ve takvimlerine ekleyebilir. İlgilendikleri toplulukları takip ederek, etkinliklerden anında haberdar
+                    olabilir. Kısacası, Guppy insanların etkinliklerden haberdar olmasını sağlayıp, etkinliklere katılımı arttırmayı amaçlar.                  
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTen">Guppy ücretli midir?</a>
+                </h4>
+            </div>
+            <div id="collapseTen" class="panel-collapse collapse">
+                <div class="panel-body">
+                    Hayır.
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseEleven">Etkinlik oluşturmak için herhangi bir önkoşul var mı?</a>
+                </h4>
+            </div>
+            <div id="collapseEleven" class="panel-collapse collapse">
+                <div class="panel-body">
+                    Bir toplulukta yönetici yetkisine sahipseniz etkinlik oluşturabilirsiniz.
+                </div>
+            </div>
+        </div>
+
+        <div class="faqHeader">Topluluklar</div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Etkinlik oluşturmak istiyorum. Adımlar nelerdir?</a>
+                </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <ul>
+                        <li>Etkinlik düzenlemek istediğin topluluk sayfasına gir.</li>
+                        <li>Ekinlik oluştura bas.</li>
+                        <li>Formu doldur ve onayla.</li>
+                    </ul>
+                </div>
+            </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Üniversitemde bir topluluk üyesiyim. Topuluk adımızı Guppy üzerinde başkası kullanıyor. Ne yapmalıyım?</a>
+                </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse">
+                <div class="panel-body">
+                    Bazı kulüpler bizim tarafımızdan oluşturulmuş durumda. Onlar için sahiplik talep edebilirsiniz. Başkası tarafından sahiplenilmiş kulüpler için bizimle iletişime geçin.
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFive">Güzel bir öğrenci topluluğumuz var. Bize sponsor olmak ister misiniz?</a>
+                </h4>
+            </div>
+            <div id="collapseFive" class="panel-collapse collapse">
+                <div class="panel-body">
+                    Belki. Bizimle iletişime geçin.
+                    <br />
+                </div>
+            </div>
+        </div>
+
+        <div class="faqHeader">Kişiler</div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">Etkinliğe nasıl kayıt olabilirim?</a>
+                </h4>
+            </div>
+            <div id="collapseFour" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <ul>
+                        <li>Katılmak istediğin etkinliği bul.</li>
+                        <li>Detay sayfasına gir.</li>
+                        <li>Kaydol tuşuna bas.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .faqHeader {
+        font-size: 27px;
+        margin: 20px;
+    }
+
+    .panel-heading [data-toggle="collapse"]:after {
+        font-family: 'Glyphicons Halflings';
+        float: right;
+        color: #F58723;
+        font-size: 18px;
+        line-height: 22px;
+        /* rotate "play" icon from > (right arrow) to down arrow */
+        -webkit-transform: rotate(-90deg);
+        -moz-transform: rotate(-90deg);
+        -ms-transform: rotate(-90deg);
+        -o-transform: rotate(-90deg);
+        transform: rotate(-90deg);
+    }
+
+    .panel-heading [data-toggle="collapse"].collapsed:after {
+        /* rotate "play" icon from > (right arrow) to ^ (up arrow) */
+        -webkit-transform: rotate(90deg);
+        -moz-transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
+        -o-transform: rotate(90deg);
+        transform: rotate(90deg);
+        color: #454444;
+    }
+</style>
+
+{% endblock %}
+
+
+
+
+
+{% block javascriptcontent %}
+    <script>
+
+/***********************************************************************************************************************
+ *                                          LOCAL VARIABLE
+ **********************************************************************************************************************/
+
+
+/***********************************************************************************************************************
+ *                                          UTIL FUNCTIONS
+ **********************************************************************************************************************/
+
+        function fileToBase64Converter() {
+            if (this.files && this.files[0]) {
+                var FR= new FileReader();
+                FR.onload = function(e) {
+                    $('#img_viewer').attr('src', e.target.result);
+                    $('#university_image_base64').val(e.target.result);
+                };
+                FR.readAsDataURL( this.files[0] );
+            }
+        }
+
+/***********************************************************************************************************************
+ *                                          AJAX OPERATIONS
+ **********************************************************************************************************************/
+
+
+/***********************************************************************************************************************
+ *                                          EVENTS
+ **********************************************************************************************************************/
+
+
+/***********************************************************************************************************************
+ *                                          DOCUMENT ON READY
+ **********************************************************************************************************************/
+
+        // -- File to base64
+        //document.getElementById("temp_img_loader").addEventListener("change", fileToBase64Converter, false);
+
+
+    </script>
+
+{% endblock %}
+
+
+

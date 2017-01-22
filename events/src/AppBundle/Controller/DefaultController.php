@@ -91,6 +91,18 @@ class DefaultController extends Controller
     }
 
 
+    /**
+     * @Route("/home/faq", name="faq")
+     */
+    public function faqAction(Request $request)
+    {
+        $data = array();
+        return $this->render('AppBundle:default:faq.html.twig' , $data);
+
+    }
+
+
+
     // -----------------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     //                                          APPLICATION/JSON SERVICES
