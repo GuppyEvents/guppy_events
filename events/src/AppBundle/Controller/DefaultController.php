@@ -63,18 +63,132 @@ class DefaultController extends Controller
     public function eventsAction(Request $request)
     {
 
-        $weekStartDate = new \DateTime();
-        $weekStartDate->setTime(0,0);
-        //$weekStartDate->sub(new \DateInterval("P3D"));
+        // PREVIOUS WEEK
+        // calculate first day of current week
+        $prevPrevWeekStartDay = new \DateTime();
+        $prevPrevWeekStartDay->setTime(0,0);
+        $wk_ts  = strtotime('+' . $prevPrevWeekStartDay->format('W')-3 . ' weeks', strtotime('2017' . '0101'));
+        $mon_ts = strtotime('-' . date('w', $wk_ts) + 1 . ' days', $wk_ts);
+        $prevPrevWeekStartDay->setTimestamp($mon_ts);
 
-        $weekFinishDate = new \DateTime();
-        $weekFinishDate->setTime(0,0);
-        $weekFinishDate->add(new \DateInterval("P6D"));
+        $i = 0;
+        $prevPrevWeekEventList = array();
+        $dayOne = clone $prevPrevWeekStartDay;
+        do {
+            $dayTwo = clone $dayOne;
+            $dayTwo->add(new \DateInterval("P1D"));
+            $eventMain = array();
+            $eventMain['eventDate'] = clone $dayOne;
+            $eventMain['eventList'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByDate( $dayOne,$dayTwo);
+            array_push($prevPrevWeekEventList,$eventMain);
+            $dayOne->add(new \DateInterval("P1D"));
+            $i++;
+        } while ($i < 7);
+        $data['prevPrevWeekEventDays'] = $prevPrevWeekEventList;
 
-        $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByDate( $weekStartDate,$weekFinishDate);
-        
-        $data['eventList'] = $eventList;
-        $data['weekStartDate'] = $weekStartDate;
+
+        // PREVIOUS WEEK
+        // calculate first day of current week
+        $prevWeekStartDay = new \DateTime();
+        $prevWeekStartDay->setTime(0,0);
+        $wk_ts  = strtotime('+' . $prevWeekStartDay->format('W')-2 . ' weeks', strtotime('2017' . '0101'));
+        $mon_ts = strtotime('-' . date('w', $wk_ts) + 1 . ' days', $wk_ts);
+        $prevWeekStartDay->setTimestamp($mon_ts);
+
+        $i = 0;
+        $previousWeekEventList = array();
+        $dayOne = clone $prevWeekStartDay;
+        do {
+            $dayTwo = clone $dayOne;
+            $dayTwo->add(new \DateInterval("P1D"));
+            $eventMain = array();
+            $eventMain['eventDate'] = clone $dayOne;
+            $eventMain['eventList'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByDate( $dayOne,$dayTwo);
+            array_push($previousWeekEventList,$eventMain);
+            $dayOne->add(new \DateInterval("P1D"));
+            $i++;
+        } while ($i < 7);
+        $data['previousWeekEventDays'] = $previousWeekEventList;
+
+
+        // CURRENT WEEK
+        $currentDay = new \DateTime();
+        $currentDay->setTime(0,0);
+        $weekStartDay = new \DateTime();
+        $weekStartDay->setTime(0,0);
+        // calculate first day of current week
+        $wk_ts  = strtotime('+' . $weekStartDay->format('W')-1 . ' weeks', strtotime('2017' . '0101'));
+        $mon_ts = strtotime('-' . date('w', $wk_ts) + 1 . ' days', $wk_ts);
+        $weekStartDay->setTimestamp($mon_ts);
+
+        $i = 0;
+        $currentWeekEventList = array();
+        $dayOne = clone $weekStartDay;
+        do {
+            $dayTwo = clone $dayOne;
+            $dayTwo->add(new \DateInterval("P1D"));
+            $eventMain = array();
+            $eventMain['eventDate'] = clone $dayOne;
+            $eventMain['eventList'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByDate( $dayOne,$dayTwo);
+            if($currentDay<=$dayOne){
+                $eventMain['isFuture'] = true;
+            }
+
+            if($currentDay==$dayOne){
+                $eventMain['isToday'] = true;
+            }
+            array_push($currentWeekEventList,$eventMain);
+            $dayOne->add(new \DateInterval("P1D"));
+            $i++;
+        } while ($i < 7);
+        $data['eventDays'] = $currentWeekEventList;
+
+
+        // NEXT WEEK
+        $nextWeekStartDay = new \DateTime();
+        $nextWeekStartDay->setTime(0,0);
+        $wk_ts  = strtotime('+' . $nextWeekStartDay->format('W')+0 . ' weeks', strtotime('2017' . '0101'));
+        $mon_ts = strtotime('-' . date('w', $wk_ts) + 1 . ' days', $wk_ts);
+        $nextWeekStartDay->setTimestamp($mon_ts);
+
+        $i = 0;
+        $nextWeekEventList = array();
+        $dayOne = clone $nextWeekStartDay;
+        do {
+            $dayTwo = clone $dayOne;
+            $dayTwo->add(new \DateInterval("P1D"));
+            $eventMain = array();
+            $eventMain['eventDate'] = clone $dayOne;
+            $eventMain['eventList'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByDate( $dayOne,$dayTwo);
+            array_push($nextWeekEventList,$eventMain);
+            $dayOne->add(new \DateInterval("P1D"));
+            $i++;
+        } while ($i < 7);
+        $data['nextWeekEventDays'] = $nextWeekEventList;
+
+
+        // NEXT NEXT WEEK
+        $nextNextWeekStartDay = new \DateTime();
+        $nextNextWeekStartDay->setTime(0,0);
+        $wk_ts  = strtotime('+' . $nextNextWeekStartDay->format('W')+1 . ' weeks', strtotime('2017' . '0101'));
+        $mon_ts = strtotime('-' . date('w', $wk_ts) + 1 . ' days', $wk_ts);
+        $nextNextWeekStartDay->setTimestamp($mon_ts);
+
+        $i = 0;
+        $nextNextWeekEventList = array();
+        $dayOne = clone $nextNextWeekStartDay;
+        do {
+            $dayTwo = clone $dayOne;
+            $dayTwo->add(new \DateInterval("P1D"));
+            $eventMain = array();
+            $eventMain['eventDate'] = clone $dayOne;
+            $eventMain['eventList'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByDate( $dayOne,$dayTwo);
+            array_push($nextNextWeekEventList,$eventMain);
+            $dayOne->add(new \DateInterval("P1D"));
+            $i++;
+        } while ($i < 7);
+        $data['nextNextWeekEventDays'] = $nextNextWeekEventList;
+
 
         return $this->render('AppBundle:default:main_events.html.twig' , $data);
     }

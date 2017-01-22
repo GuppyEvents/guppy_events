@@ -1,6 +1,6 @@
 {% extends 'AppBundle::main_base.html.twig' %}
 
-{% block title %}Guppy - Events Page{% endblock %}
+{% block title %}Etkinlikler{% endblock %}
 
 {% block content %}
 
@@ -8,104 +8,156 @@
         <div class="preloader"></div>
     </div>
 
-    <section class="section align-center">
+    <!-- CALENDAR MAIN -->
+    <section class="">
         <div class="container">
-            <h5 class="heading-alt">Yaklaşan Etkinlikler</h5>
-
-            <!-- Schedule start -->
-            <div class="schedule">
-
-                <!-- Navigation by day start -->
-                <div class="nav-wrapper">
-                    <ul class="nav nav-schedule">
-                        <li class="active"><a href="#schedule_{{ weekStartDate|date('Ymd') }}" data-toggle="tab"><h5 class="highlight">{{ weekStartDate|date('l') }}</h5><p class="text-alt">{{ weekStartDate|date('d/m/Y') }}</p></a></li>
-                        <li><a href="#schedule_{{ weekStartDate|date_modify('+1 day')|date('Ymd') }}" data-toggle="tab"><h5 class="highlight">{{ weekStartDate|date_modify("+1 day")|date('l') }}</h5><p class="text-alt">{{ weekStartDate|date_modify("+1 day")|date('d/m/Y') }}</p></a></li>
-                        <li><a href="#schedule_{{ weekStartDate|date_modify('+2 day')|date('Ymd') }}" data-toggle="tab"><h5 class="highlight">{{ weekStartDate|date_modify("+2 day")|date('l') }}</h5><p class="text-alt">{{ weekStartDate|date_modify("+2 day")|date('d/m/Y') }}</p></a></li>
-                        <li><a href="#schedule_{{ weekStartDate|date_modify('+3 day')|date('Ymd') }}" data-toggle="tab"><h5 class="highlight">{{ weekStartDate|date_modify("+3 day")|date('l') }}</h5><p class="text-alt">{{ weekStartDate|date_modify("+3 day")|date('d/m/Y') }}</p></a></li>
-                        <li><a href="#schedule_{{ weekStartDate|date_modify('+4 day')|date('Ymd') }}" data-toggle="tab"><h5 class="highlight">{{ weekStartDate|date_modify("+4 day")|date('l') }}</h5><p class="text-alt">{{ weekStartDate|date_modify("+4 day")|date('d/m/Y') }}</p></a></li>
-                        <li><a href="#schedule_{{ weekStartDate|date_modify('+5 day')|date('Ymd') }}" data-toggle="tab"><h5 class="highlight">{{ weekStartDate|date_modify("+5 day")|date('l') }}</h5><p class="text-alt">{{ weekStartDate|date_modify("+5 day")|date('d/m/Y') }}</p></a></li>
-                        <li><a href="#schedule_{{ weekStartDate|date_modify('+6 day')|date('Ymd') }}" data-toggle="tab"><h5 class="highlight">{{ weekStartDate|date_modify("+6 day")|date('l') }}</h5><p class="text-alt">{{ weekStartDate|date_modify("+6 day")|date('d/m/Y') }}</p></a></li>
-                    </ul>
-                </div>
-                <!-- Navigation by day end -->
-
-                <!-- First level content start -->
-                <div class="tab-content">
-
-                    {% set isFirstDayActive = 0 %}
-                    {% for weekday in range(weekStartDate|date('U'), weekStartDate|date_modify("+6 day")|date('U'), 86400 ) %}
-                        {% set eventCountInDay = 0 %}
-
-                        <div id="schedule_{{ date(weekday)|date('Ymd') }}" class="tab-pane fade in {% if isFirstDayActive==0 %}{% set isFirstDayActive=1 %}active {% endif %}">
-                            <div class="nav-wrapper"><span class="nav-current">Ankara</span>
-                                <ul class="nav nav-schedule">
-                                    <li class="active"><a href="#scheduleday_{{ date(weekday)|date('Ymd') }}" data-toggle="tab">Bilkent</a></li>
-                                </ul>
-                            </div>
-
-                            <div class="tab-content tab-content-schedule">
-                                <div id="scheduleday_{{ date(weekday)|date('Ymd') }}" class="tab-pane fade active in">
-
-                                    <!-- Accordion start -->
-                                    <div class="panel-group" id="scheduleday_timeline_{{ date(weekday)|date('Ymd') }} }}">
-
-                                        {% for event in eventList %}
-                                            {% if date(event.startDate) >= date(weekday) and date(event.startDate) < date(weekday)|date_modify("+1 day") %}
-                                                {% set eventCountInDay = eventCountInDay + 1 %}
-
-                                                <!-- Event start -->
-                                                <div class="panel schedule-item">
-                                                    <div class="lecture-icon-wrapper">
-                                                        <img src="{{ event.communityUser.community.imageBase64 }}" alt="" class="img-responsive">
-                                                    </div>
-                                                    <a data-toggle="collapse" data-parent="#scheduleday_timeline_{{ date(weekday)|date('Ymd') }}" href="#bilkent_day_time{{ event.id }}" class="schedule-item-toggle collapsed">
-                                                        <strong class="time highlight"><span class="icon icon-office-24"></span>{{  date(event.startDate).format('H:i A') }}</strong> <!-- event time -->
-                                                        <h6 class="title">{{ event.title }}</h6>
-                                                    </a>
-                                                    <div id="bilkent_day_time{{ event.id }}" class="panel-collapse collapse schedule-item-body">
-                                                        <div class="col-md-9">
-                                                            <article>
-                                                                <p class="description">{{ event.description }}</p>
-
-                                                                <div style="position: relative; bottom: 0px; right: 0px; line-height: 40px; padding-top: 40px;">
-                                                                    <div style="position: absolute; bottom: 0px; left: 0px;">
-                                                                        <a href="{{ path('user_community_events_homepage', {'communityId':event.communityUser.community.id}) }}">
-                                                                            <strong class="highlight speaker-name">{{ event.communityUser.community.name }}</strong>
-                                                                        </a>
-                                                                    </div>
-                                                                    <div style="position: absolute; bottom: 0px; right: 0px; line-height: 40px;  padding-top: 40px;">
-                                                                        <a href="{{ path('user_event_mainpage', {'eventId':event.id}) }}">
-                                                                            <strong class="highlight speaker-name">Detay</strong>
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                            </article>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- Event end -->
-
-                                            {% endif %}
-                                        {% endfor %}
-
-                                        {% if eventCountInDay == 0 %}
-                                            <!-- Event not found  -->
-                                            <div class="panel schedule-item">Bugün için herhangi bir etkinlik bulunmamaktadır :( </div>
-                                        {% endif %}
-
-                                    </div>
-                                    <!-- Accordion end -->
-
-                                </div>
+            <div class="col-sm-12">
+                <div class="ge-event-calendar-area">
+                    <div class="ge-event-calendar-action" id="ge-event-calendar-action">
+                        <div class="ge-select-month-btn pull-left">
+                            <div>
+                                <button class="btn btn-outline-clr btn-sm"><i class="fa fa-chevron-left"></i></button>
+                                <button class="btn btn-outline-clr btn-sm"><i class="fa fa-chevron-right"></i></button>
                             </div>
                         </div>
+                        <div class="ge-select-month-name pull-left">
+                            <span class="ge-select-month-name-box">
+                                OCAK
+                            </span>
+                           <span class="ge-select-month-year-box">
+                                2017
+                            </span>
+                        </div>
+                        <div class="ge-other-action pull-right">
+                            <button class="btn btn-sm btn-white-text"><i class="fa fa-calendar-plus-o"></i></button>
+                        </div>
+                    </div>
+                    <div class="ge-event-calendar" id="ge-event-calendar">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Pzt</th>
+                                    <th>Sal</th>
+                                    <th>Çar</th>
+                                    <th>Per</th>
+                                    <th>Cum</th>
+                                    <th>Cmt</th>
+                                    <th>Paz</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                    {% endfor %}
+                                <tr>
+                                    {% for eventDay in prevPrevWeekEventDays %}
+                                        <td>
+                                            <div class="ge-calendar-cell-div" id="ge-calendar-cell-div">
+                                                <span class="ge-calendar-cell-day-number ge-other-day-number">{{ date(eventDay.eventDate)|date('d') }}</span>
+                                                <ul class="list-inline">
+                                                    {% for event in eventDay.eventList %}
+                                                        <li class="ge-event-item">
+                                                            <a href="#" class="ge-event-item-link" title="{{ event.title }}" rel="tooltip">
+                                                                <img src="{{ event.communityUser.community.imageBase64 }}" alt="">
+                                                            </a>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+
+                                <tr>
+                                    {% for eventDay in previousWeekEventDays %}
+                                        <td>
+                                            <div class="ge-calendar-cell-div" id="ge-calendar-cell-div">
+                                                <span class="ge-calendar-cell-day-number ge-other-day-number">{{ date(eventDay.eventDate)|date('d') }}</span>
+                                                <ul class="list-inline">
+                                                    {% for event in eventDay.eventList %}
+                                                        <li class="ge-event-item">
+                                                            <a href="#" class="ge-event-item-link" title="{{ event.title }}" rel="tooltip">
+                                                                <img src="{{ event.communityUser.community.imageBase64 }}" alt="">
+                                                            </a>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+
+                                <tr>
+                                    {% for eventDay in eventDays %}
+                                        <td {% if eventDay.isToday is defined and eventDay.isToday %}class="active"{% endif %}>
+                                            <div class="ge-calendar-cell-div" id="ge-calendar-cell-div">
+                                                <span class="ge-calendar-cell-day-number {% if eventDay.isFuture is not defined %}ge-other-day-number{% endif %}">{{ date(eventDay.eventDate)|date('d') }}</span>
+                                                {% if eventDay.isFuture is defined and eventDay.isFuture %}
+                                                    <span class="ge-calendar-cell-add-event">
+                                                        <i class="fa fa-plus"></i><a href="#">Oluştur</a>
+                                                    </span>
+                                                {% endif %}
+                                                <ul class="list-inline">
+                                                    {% for event in eventDay.eventList %}
+                                                        <li class="ge-event-item">
+                                                            <a href="#" class="ge-event-item-link" title="{{ event.title }}" rel="tooltip">
+                                                                <img src="{{ event.communityUser.community.imageBase64 }}" alt="">
+                                                            </a>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+
+                                <tr>
+                                    {% for eventDay in nextWeekEventDays %}
+                                        <td>
+                                            <div class="ge-calendar-cell-div" id="ge-calendar-cell-div">
+                                                <span class="ge-calendar-cell-day-number">{{ date(eventDay.eventDate)|date('d') }}</span>
+                                                <span class="ge-calendar-cell-add-event">
+                                                    <i class="fa fa-plus"></i><a href="#">Oluştur</a>
+                                                </span>
+                                                <ul class="list-inline">
+                                                    {% for event in eventDay.eventList %}
+                                                        <li class="ge-event-item">
+                                                            <a href="#" class="ge-event-item-link" title="{{ event.title }}" rel="tooltip">
+                                                                <img src="{{ event.communityUser.community.imageBase64 }}" alt="">
+                                                            </a>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+
+                                <tr>
+                                    {% for eventDay in nextNextWeekEventDays %}
+                                        <td>
+                                            <div class="ge-calendar-cell-div" id="ge-calendar-cell-div">
+                                                <span class="ge-calendar-cell-day-number">{{ date(eventDay.eventDate)|date('d') }}</span>
+                                                <span class="ge-calendar-cell-add-event">
+                                                    <i class="fa fa-plus"></i><a href="#">Oluştur</a>
+                                                </span>
+                                                <ul class="list-inline">
+                                                    {% for event in eventDay.eventList %}
+                                                        <li class="ge-event-item">
+                                                            <a href="#" class="ge-event-item-link" title="{{ event.title }}" rel="tooltip">
+                                                                <img src="{{ event.communityUser.community.imageBase64 }}" alt="">
+                                                            </a>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-
             </div>
-            <!-- Schedule end -->
-
         </div>
     </section>
 
