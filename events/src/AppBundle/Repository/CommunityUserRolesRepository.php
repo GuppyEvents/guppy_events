@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\CommunityUserRoles;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -11,4 +12,69 @@ use Doctrine\ORM\EntityRepository;
  */
 class CommunityUserRolesRepository extends EntityRepository
 {
+
+    /**
+     * @param User $userId The user id
+     * @return CommunityUserRoles|null
+     */
+    public function findCommunityAdminRoles($userId)
+    {
+        return $this->createQueryBuilder('communityUserRoles')
+            ->join('communityUserRoles.communityUser', 'communityUser')
+            ->join('communityUser.community', 'community')
+            ->where('community.isApproved=true')
+            ->andWhere('communityUserRoles.state=:stateId')
+            ->andWhere('communityUserRoles.communityRole=:roleId')
+            ->andWhere('communityUser.user=:userId')
+            ->setParameter('stateId',1000)
+            ->setParameter('roleId',100)
+            ->setParameter('userId',$userId)
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    /**
+     * @param User $userId The user id
+     * @return CommunityUserRoles|null
+     */
+    public function findCommunityMemberRoles($userId)
+    {
+        return $this->createQueryBuilder('communityUserRoles')
+            ->join('communityUserRoles.communityUser', 'communityUser')
+            ->join('communityUser.community', 'community')
+            ->where('community.isApproved=true')
+            ->andWhere('communityUserRoles.state=:stateId')
+            ->andWhere('communityUserRoles.communityRole=:roleId')
+            ->andWhere('communityUserRoles.communityRole!=:adminRoleId')
+            ->andWhere('communityUser.user=:userId')
+            ->setParameter('stateId',1000)
+            ->setParameter('roleId',200)
+            ->setParameter('adminRoleId',100)
+            ->setParameter('userId',$userId)
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    /**
+     * @param User $userId The user id
+     * @return CommunityUserRoles|null
+     */
+    public function findCommunityAppyRoles($userId)
+    {
+        return $this->createQueryBuilder('communityUserRoles')
+            ->join('communityUserRoles.communityUser', 'communityUser')
+            ->join('communityUser.community', 'community')
+            ->where('community.isApproved=true')
+            ->andWhere('communityUserRoles.state=:stateId')
+            ->andWhere('communityUserRoles.communityRole=:roleId')
+            ->andWhere('communityUser.user=:userId')
+            ->setParameter('stateId',3000)
+            ->setParameter('roleId',200)
+            ->setParameter('userId',$userId)
+            ->getQuery()
+            ->getResult();
+    }
+
 }

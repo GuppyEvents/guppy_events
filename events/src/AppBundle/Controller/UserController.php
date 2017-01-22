@@ -306,9 +306,10 @@ class UserController extends Controller
         $data = array();
         $em = $this->getDoctrine()->getManager();
 
-        $data['communityUserAdminCommunities'] = $em->getRepository('AppBundle:CommunityUser')->findBy(array('status'=>1 , 'user'=>$this->getUser()));
-        $data['communityUserMemberCommunities'] = $em->getRepository('AppBundle:CommunityUser')->findBy(array('status'=>2 , 'user'=>$this->getUser()));
-        $data['communityUserApplicationsCommunities'] = $em->getRepository('AppBundle:CommunityUser')->findBy(array('status'=>10 , 'user'=>$this->getUser()));
+        $data['communityUserAdminRoles'] = $em->getRepository('AppBundle:CommunityUserRoles')->findCommunityAdminRoles($this->getUser());
+        $data['communityUserMemberRoles'] = $em->getRepository('AppBundle:CommunityUserRoles')->findCommunityMemberRoles($this->getUser());
+        $data['communityUserApplyRoles'] = $em->getRepository('AppBundle:CommunityUserRoles')->findCommunityAppyRoles($this->getUser());
+
         $data['user'] = $this->getUser();
         $data['isProfileOwner'] = true;
         return $this->render('AppBundle:user:profile_settings_communities.html.twig', $data);
