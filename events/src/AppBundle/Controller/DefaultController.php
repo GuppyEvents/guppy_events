@@ -190,6 +190,14 @@ class DefaultController extends Controller
         $data['nextNextWeekEventDays'] = $nextNextWeekEventList;
 
 
+
+        $today = new \DateTime();
+        $today->setTime(0,0);
+        $tomorrow = clone $today;
+        $tomorrow->add(new \DateInterval("P1D"));
+        $data['todayEvents'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByDate( $today,$tomorrow);
+        $data['todayDate'] = $today;
+
         return $this->render('AppBundle:default:main_events.html.twig' , $data);
     }
 

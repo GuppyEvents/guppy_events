@@ -46,7 +46,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-
                                 <tr>
                                     {% for eventDay in prevPrevWeekEventDays %}
                                         <td>
@@ -152,7 +151,6 @@
                                         </td>
                                     {% endfor %}
                                 </tr>
-
                             </tbody>
                         </table>
                     </div>
@@ -161,4 +159,60 @@
         </div>
     </section>
 
+
+
+    <section class="section ge-events-list-section">
+        <div class="container">
+            <h4 class="ge-events-list-title">{{ todayDate|date('d.m.Y') }} Etkinlikleri</h4>
+
+            {% for event in todayEvents %}
+                <div class="col-sm-4">
+                    <div class="ge-events-box" id="ge-event-box">
+                        <a href="{{ path('user_event_mainpage' , {'eventId':event.id}) }}" title="{{ event.title }}" class="ge-events-box-link">
+					    <span class="ge-events-box-img">
+					        <img src="{{ event.imageBase64 }}" alt="" class="img-responsive">
+				        </span>
+				        <span class="ge-events-box-date">
+				            {{ event.startDate|date("d.m.Y / H:i") }}
+				        </span>
+                            <h5 class="ge-events-box-title">{{ event.title }}</h5>
+                            <span class="ge-events-box-location">{{ event.communityUser.community.name }} @ {{ event.communityUser.community.university.name }} </span>
+                        </a>
+                        <div class="ge-event-box-footer">
+                            <div class="ge-event-box-footer-tags">
+                                <ul class="list-inline">
+                                    <li><a href="#" title="">#event</a></li>
+                                </ul>
+                            </div>
+                            <div class="ge-event-box-footer-btn">
+                                <ul>
+                                    <li><a href="#" title="Paylaş" rel="tooltip"><i class="fa fa-share-alt"></i></a></li>
+                                    <li><a href="#" title="Kaydet" rel="tooltip"><i class="fa fa-bookmark-o"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+            <!-- DAHA FAZLA BUTONU -->
+            {#<div class="col-sm-12">#}
+                {#<div class="ge-events-list-more align-center">#}
+                    {#<button class="btn btn-outline-clr"><span>Daha Fazla</span></button>#}
+                {#</div>#}
+            {#</div>#}
+        </div>
+    </section>
+
+{% endblock %}
+
+
+{% block javascriptcontent %}
+    <script>
+        $(document).ready(function(){
+            $( '#guppy-search' ).keyup(function(event) {
+                console.log(event.keyCode);
+            });
+        });
+    </script>
 {% endblock %}
