@@ -13,7 +13,6 @@ use AppBundle\Form\UserType;
 class DefaultController extends Controller
 {
 
-
     /**
      * @Route("/", name="homepage")
      */
@@ -37,24 +36,33 @@ class DefaultController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $acceptedMailAddress = '@ug.bilkent.edu.tr';
-            if(substr($user->getEmail(), -strlen($acceptedMailAddress)) === $acceptedMailAddress){
+            $url = "https://www.google.com/recaptcha/api/siteverify";
+            $apikey = '6LcQ_BIUAAAAAKZQf656kBuRqpB7Z3LuUpGftB8u';
+            $response=file_get_contents($url.'?secret='.$apikey.'&response='.$request->get('g-recaptcha-response'));
+            $dataResponse = json_decode($response);
 
-                // --3-- Encode the password (you could also do this via Doctrine listener)
-                $password = $this->get('security.password_encoder')
-                    ->encodePassword($user, $user->getPassword());
-                $user->setPassword($password);
+            if(isset($dataResponse->success) && $dataResponse->success==true){
+                $acceptedMailAddress = '@ug.bilkent.edu.tr';
+                if(substr($user->getEmail(), -strlen($acceptedMailAddress)) === $acceptedMailAddress){
 
-                // --4-- save the User!
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($user);
-                $em->flush();
+                    // --3-- Encode the password (you could also do this via Doctrine listener)
+                    $password = $this->get('security.password_encoder')
+                        ->encodePassword($user, $user->getPassword());
+                    $user->setPassword($password);
 
-                $data['success_msg'] = "Kaydınız başarıyla gerçekleşmiştir";
-                //return $this->redirectToRoute('homepage');
+                    // --4-- save the User!
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($user);
+                    $em->flush();
 
+                    $data['success_msg'] = "Kaydınız başarıyla gerçekleşmiştir";
+                    //return $this->redirectToRoute('homepage');
+
+                }else{
+                    $data['error_msg'] = "Bilkent mail adresi ile kayıt olmanız gerekiyor. (@ug.bilkent.edu.tr)";
+                }
             }else{
-                $data['error_msg'] = "Bilkent mail adresi ile kayıt olmanız gerekiyor. (@ug.bilkent.edu.tr)";
+                $data['error_msg'] = "Recaptcha doğrulama hatası";
             }
         }
 

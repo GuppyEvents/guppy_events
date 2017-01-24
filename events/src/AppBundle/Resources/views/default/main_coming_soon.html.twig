@@ -186,16 +186,22 @@
                     <fieldset class="col-sm-12">
                         {{ form_widget(form.termsAccepted, {'attr': {}}) }}<label for="privacy"><a href="#">Kullanım şartlarını</a> okudum, kabul ediyorum.</label>
                         <br />
+                    </fieldset>
+
+                    <fieldset class="col-sm-12">
+                        <br />
+                        <div class="g-recaptcha" data-sitekey="6LcQ_BIUAAAAAC4umj2JN3kmsyikRt9lGxCUNGds"></div>
                         <br />
                     </fieldset>
 
-                    <input id="submit" type="submit" value="Kayıt" class="btn">
+                    <input id="submit" name="submit" type="submit" value="Kayıt" class="btn">
 
                 {{ form_end(form) }}
 
             </div>
         </div>
 
+        <script src='https://www.google.com/recaptcha/api.js?hl=tr'></script>
         {% javascripts
                 'plugins/jQuery/jQuery-2.2.0.min.js'
                 'theme/assets/js/bootstrap.min.js'
