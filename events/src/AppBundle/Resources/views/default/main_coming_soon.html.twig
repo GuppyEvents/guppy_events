@@ -124,31 +124,74 @@
             <div class="modal-box small animated" data-animation="zoomIn" data-duration="700">
                 <span class="close-btn icon icon-office-52"></span>
                 <h5 class="align-center"><span class="highlight">Yeniliklerden haberdar olun!</span></h5>
-                <form class="form registration-form align-center">
 
+
+                {#<form class="form registration-form align-center">#}
+
+                    {#<fieldset class="col-sm-12">#}
+                        {#<label for="first_name">Adınız</label>#}
+                        {#<input id="first_name" name="first_name" type="text">#}
+                    {#</fieldset>#}
+
+                    {#<fieldset class="col-sm-12">#}
+                        {#<label for="last_name">Soyadınız</label>#}
+                        {#<input id="last_name" name="last_name" type="text">#}
+                    {#</fieldset>#}
+
+                    {#<fieldset class="col-sm-12">#}
+                        {#<label for="email">Eposta</label>#}
+                        {#<input id="email" name="email" type="email">#}
+                    {#</fieldset>#}
+
+                    {#<fieldset class="col-sm-12">#}
+                        {#<input id="privacy" name="privacy" type="checkbox"><label for="privacy"><a href="#">Kullanım şartlarını</a> okudum, kabul ediyorum.</label>#}
+                        {#<br />#}
+                        {#<br />#}
+                    {#</fieldset>#}
+
+                    {#<input type="submit" value="Kayıt" class="btn">#}
+                {#</form>#}
+
+                {{ form_start(form ,{'attr': {'class':'form registration-form align-center'}}) }}
                     <fieldset class="col-sm-12">
                         <label for="first_name">Adınız</label>
-                        <input id="first_name" name="first_name" type="text">
+                        {{ form_widget(form.name, {'attr': {'placeholder':'İsim' , 'oninput':'checkValidation(this , "İsim boş bırakılamaz")', 'oninvalid':'checkValidation(this , "İsim boş bırakılamaz")'}}) }}
                     </fieldset>
 
                     <fieldset class="col-sm-12">
                         <label for="last_name">Soyadınız</label>
-                        <input id="last_name" name="last_name" type="text">
+                        {{ form_widget(form.surname, {'attr': {'placeholder':'Soyadı', 'oninput':'checkValidation(this , "Soyadı boş bırakılamaz")', 'oninvalid':'checkValidation(this , "Soyadı boş bırakılamaz")' }}) }}
                     </fieldset>
 
                     <fieldset class="col-sm-12">
                         <label for="email">Eposta</label>
-                        <input id="email" name="email" type="email">
+                        {{ form_widget(form.email, {'attr': {'placeholder':'Bilkent Mail Adresiniz' , 'oninput':'checkValidation(this , "@ug.bilkent.edu.tr içermeli")', 'oninvalid':'checkValidation(this , "@ug.bilkent.edu.tr içermeli")' , 'onblur':'fillUsernameAndPasswordField(this)' }}) }}
+                    </fieldset>
+
+                    <fieldset class="col-sm-12" style="display: none;">
+                        <label for="username">Kullanıcı Adı</label>
+                        {{ form_widget(form.username, {'attr': {'placeholder':'Kullanıcı Adı', 'oninput':'checkValidation(this , "Kullanıcı adını boş bırakmayınız")', 'oninvalid':'checkValidation(this , "Kullanıcı adını boş bırakmayınız")'}}) }}
+                    </fieldset>
+
+                    <fieldset class="col-sm-12" style="display: none;">
+                        <label for="password">Şifre</label>
+                        {{ form_widget(form.password.first, {'attr': {'placeholder':'Şifre' , 'oninput':'checkValidation(this , "Şifre boş bırakılamaz")', 'oninvalid':'checkValidation(this , "Şifre boş bırakılamaz")' }}) }}
+                    </fieldset>
+
+                    <fieldset class="col-sm-12" style="display: none;">
+                        <label for="repassword">Şifre Tekrar</label>
+                        {{ form_widget(form.password.second, {'attr': {'placeholder':'Şifre Tekrar' ,'oninput':'checkValidation(this , "Şifre tekrarı boş bırakılamaz")','onchange':'checkPasswordValidation(this , "Şifreleriniz uyuşmamaktadır")' }}) }}
                     </fieldset>
 
                     <fieldset class="col-sm-12">
-                        <input id="privacy" name="privacy" type="checkbox"><label for="privacy"><a href="#">Kullanım şartlarını</a> okudum, kabul ediyorum.</label>
+                        {{ form_widget(form.termsAccepted, {'attr': {}}) }}<label for="privacy"><a href="#">Kullanım şartlarını</a> okudum, kabul ediyorum.</label>
                         <br />
                         <br />
                     </fieldset>
 
-                    <input type="submit" value="Kayıt" class="btn">
-                </form>
+                    <input id="submit" type="submit" value="Kayıt" class="btn">
+
+                {{ form_end(form) }}
 
             </div>
         </div>
@@ -169,6 +212,46 @@
                 'theme/assets/js/guppy.js'%}
             <script src="{{ asset_url }}"></script>
         {% endjavascripts %}
+
+
+        <script>
+
+            var error_msg = '{% if error_msg is defined %}{{ error_msg|json_encode|raw }}{% endif %}';
+            var success_msg = '{% if success_msg is defined %}{{ success_msg|json_encode|raw }}{% endif %}';
+
+            function checkPasswordValidation(input , message){
+                if(input.value=="" || input.value!=document.getElementById('user_password_first').value){
+                    input.setCustomValidity(message);
+                }else{
+                    input.setCustomValidity("");
+                }
+            }
+
+            function checkValidation(input , message) {
+                if(input.value==""){
+                    input.setCustomValidity(message);
+                }else{
+                    input.setCustomValidity("");
+                }
+            }
+
+            function fillUsernameAndPasswordField(input){
+                $('#user_username').val(input.value);
+                $('#user_password_first').val(input.value);
+                $('#user_password_second').val(input.value);
+            }
+
+            $(function () {
+                // -- Operation Result Message
+                if(success_msg){
+                    toastr.success(success_msg);
+                }else if(error_msg){
+                    toastr.error(error_msg);
+                }
+
+            });
+
+        </script>
 
     </body>
 </html>
