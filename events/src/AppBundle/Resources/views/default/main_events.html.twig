@@ -86,7 +86,6 @@
 
                                 <tr>
                                     {% for eventDay in eventDays %}
-                                        class="calendar-day"
                                         <td data-date="{{ date(eventDay.eventDate)|date('Y/m/d') }}" {% if eventDay.isToday is defined and eventDay.isToday %}class="active calendar-day"{% else %} class="calendar-day"{% endif %}>
                                             <div class="ge-calendar-cell-div" id="ge-calendar-cell-div">
                                                 <span class="ge-calendar-cell-day-number {% if eventDay.isFuture is not defined %}ge-other-day-number{% endif %}">{{ date(eventDay.eventDate)|date('d') }}</span>
@@ -111,7 +110,7 @@
 
                                 <tr>
                                     {% for eventDay in nextWeekEventDays %}
-                                        <td>
+                                        <td class="calendar-day" data-date="{{ date(eventDay.eventDate)|date('Y/m/d') }}">
                                             <div class="ge-calendar-cell-div" id="ge-calendar-cell-div">
                                                 <span class="ge-calendar-cell-day-number">{{ date(eventDay.eventDate)|date('d') }}</span>
                                                 <span class="ge-calendar-cell-add-event">
@@ -133,7 +132,7 @@
 
                                 <tr>
                                     {% for eventDay in nextNextWeekEventDays %}
-                                        <td>
+                                        <td class="calendar-day" data-date="{{ date(eventDay.eventDate)|date('Y/m/d') }}">
                                             <div class="ge-calendar-cell-div" id="ge-calendar-cell-div">
                                                 <span class="ge-calendar-cell-day-number">{{ date(eventDay.eventDate)|date('d') }}</span>
                                                 <span class="ge-calendar-cell-add-event">
