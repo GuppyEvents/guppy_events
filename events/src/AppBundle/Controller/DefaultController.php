@@ -17,7 +17,23 @@ class DefaultController extends Controller
      */
     public function homeAction(Request $request)
     {
-        return $this->redirectToRoute('home_communities');
+        return $this->redirectToRoute('coming_soon');
+    }
+
+    /**
+     * @Route("/cok-yakinda", name="coming_soon")
+     */
+    public function comingSoonAction(Request $request)
+    {
+        return $this->render('AppBundle:default:main_coming_soon.html.twig');
+    }
+
+    /**
+     * @Route("/dev", name="dev")
+     */
+    public function devHomePageAction(Request $request)
+    {
+        return $this->redirectToRoute('home_events');
     }
 
     /**

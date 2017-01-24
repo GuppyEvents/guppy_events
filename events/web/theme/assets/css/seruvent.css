@@ -1,0 +1,45 @@
+.ge-cs-bg{
+    background-image: url(../img/background_cs.jpg);
+}
+.heading-block{
+    padding: 110px 0;
+}
+.ge-colored-text{
+    letter-spacing: 1px;
+    color:#fe4918;
+}
+.counter-block{
+    margin: 20px 0;
+}
+.counter-box .counter-content > .count{
+    font-size: 60px;
+    line-height: 80px;
+}
+.counter-block.counter-block-no-border.has-separator .counter-content > .fa:after,
+.counter-block.counter-block-no-border.has-separator .counter-content > .count:after{
+    top: 70px;
+}
+.modal-window h5{
+    font-weight: normal;
+}
+.modal-window form{
+    padding-left: 0;
+    padding-right: 0;
+}
+
+@media (max-width: 767px) {
+    body.ge-coming-soon-page {
+        padding-top: 0;
+    }
+    .counter-block.counter-block-no-border.has-separator .counter-content > .fa:after,
+    .counter-block.counter-block-no-border.has-separator .counter-content > .count:after{
+        width: 0;
+        border: 0;
+    }
+    .counter-block{
+        margin: 0;
+    }
+    .counters-wrapper{
+        margin-bottom: 20px;
+    }
+}
