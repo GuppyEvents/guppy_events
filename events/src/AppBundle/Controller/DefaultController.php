@@ -317,4 +317,51 @@ class DefaultController extends Controller
 
     }
 
+    /**
+     * @Route("/s/daily-events-list", name="service_daily_events_list")
+     */
+    public function getEventsForDay(Request $request){
+
+        // -- 1 -- Initialization
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+        $data = array();
+
+        // -- 2 -- Try to Get More Community Result
+        try{
+
+            // -- 2.1 -- Get parameter list
+            $date = $request->get('date');
+
+            $dateTimeStart = \DateTime::createFromFormat('Y/m/d', $date);
+            $dateTimeStart->setTime(0,0);
+
+            $dateTimeEnd= \DateTime::createFromFormat('Y/m/d', $date);
+            $dateTimeEnd->setTime(23,59);
+
+            $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByDate( $dateTimeStart,$dateTimeEnd);
+
+            foreach ($eventList as $event) {
+                $evetObj =array();
+                $evetObj["id"] = $event->getId();
+            }
+
+            $data["eventList"] = $eventList;
+
+            // -- 2.2 -- Return Result
+            $response->setContent(json_encode(Result::$SUCCESS->setContent( $data )));
+            return $response;
+
+        }catch (\Exception $ex){
+            // content == "Unexpected Error"
+            $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent($ex)));
+            return $response;
+        }
+
+        // -- 3 -- Set & Return value
+        $response->setContent(json_encode(Result::$SUCCESS_EMPTY));
+        return $response;
+
+    }
+
 }

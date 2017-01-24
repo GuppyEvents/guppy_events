@@ -67,7 +67,7 @@
 
                                 <tr>
                                     {% for eventDay in previousWeekEventDays %}
-                                        <td>
+                                        <td class="calendar-day" data-date="{{ date(eventDay.eventDate)|date('Y/m/d') }}">
                                             <div class="ge-calendar-cell-div" id="ge-calendar-cell-div">
                                                 <span class="ge-calendar-cell-day-number ge-other-day-number">{{ date(eventDay.eventDate)|date('d') }}</span>
                                                 <ul class="list-inline">
@@ -86,7 +86,8 @@
 
                                 <tr>
                                     {% for eventDay in eventDays %}
-                                        <td {% if eventDay.isToday is defined and eventDay.isToday %}class="active"{% endif %}>
+                                        class="calendar-day"
+                                        <td data-date="{{ date(eventDay.eventDate)|date('Y/m/d') }}" {% if eventDay.isToday is defined and eventDay.isToday %}class="active calendar-day"{% else %} class="calendar-day"{% endif %}>
                                             <div class="ge-calendar-cell-div" id="ge-calendar-cell-div">
                                                 <span class="ge-calendar-cell-day-number {% if eventDay.isFuture is not defined %}ge-other-day-number{% endif %}">{{ date(eventDay.eventDate)|date('d') }}</span>
                                                 {% if eventDay.isFuture is defined and eventDay.isFuture %}
@@ -162,8 +163,8 @@
 
     {% if todayEvents|length>0 %}
         <section class="section ge-events-list-section">
-            <div class="container">
-                <h4 class="ge-events-list-title">{{ todayDate|date('d.m.Y') }} Etkinlikleri</h4>
+            <div id="daily-events-container" class="container">
+                <h4 id="daily-events-title" class="ge-events-list-title">{{ todayDate|date('d.m.Y') }} Etkinlikleri</h4>
 
                 {% for event in todayEvents %}
                     <div class="col-sm-4">
@@ -222,12 +223,12 @@
      *                                          AJAX OPERATIONS
      ******************************************************************************************************************/
 
-        // searchFrom değeri "community" ya da "event" olabilir. Paging nereden devam edeceği belirlenir
-        function ajaxGetMoreCommunities(page){
+
+        function ajaxGetDailyEvents(day){
 
             // -- 2 --
-            $.post("{{ path('service_community_list') }}" , {
-                page : page
+            $.post("{{ path('service_daily_events_list') }}" , {
+                date : day
             }).always(function(){
             }).done(function(data){
 
@@ -239,31 +240,44 @@
                 if(data.resultText == 'SUCCESS'){
 
                     // -- 2.2.1 --
-
+                    $("#daily-events-title").html(day + " Etkinlikleri");
+                    $("#daily-events-container div").remove();
                     // -- 2.2.2 --
                     if(data.content){
-                        data.content.communityList.forEach(function(community) {
-                            if(community['isApproved']) {
 
-                                communityElem = '<div class="col-sm-2 guppy-main-page-community-box">' +
-                                        '<div class="society guppy-main-page-community-box-content">' +
-                                        '<div class="photo-wrapper rounded">' +
-                                        '<img src="' + community['image'] + '" alt="Community" class="img-responsive" />' +
-                                        '</div>' +
-                                        '<h3 class="name"><a href="' + community['homepagelink'] + '">' + community['name'] + '</a></h3>' +
-                                        '<p class="text-alt"><small>' + community['universityName'] + '</small></p>' +
+                        data.content.eventList.forEach(function(event) {
 
-                                        '<ul class="speaker-socials">' +
-                                        '<li><a href="' + community['link_facebook'] + '" target="_blank"><span class="fa fa-facebook" aria-hidden="true"></span></a></li>' +
-                                        '<li><a href="' + community['link_twitter'] + '" target="_blank"><span class="fa fa-twitter"></span></a></li>' +
-                                        '<li><a href="' + community['link_instagram'] + '" target="_blank"><span class="fa fa-instagram"></span></a></li>' +
-                                        '</ul>' +
-                                        '</div>' +
-                                        '</div>';
 
-                                $('#container-body').append(communityElem);
-                            }
+                            communityElem = '<div class="col-sm-4">' +
+                                    '<div class="ge-events-box" id="ge-event-box">' +
+                                    '<a href="/event/h/' + event.id +'" title="' + event.title + '" class="ge-events-box-link">' +
+                                    '<span class="ge-events-box-img">' +
+                                    '<img src="'+ event.imageBase64 +'" alt="" class="img-responsive">' +
+                                    '</span>' +
+                                    '<span class="ge-events-box-date">' +
+                                        event.startDate +
+                            '</span>' +
+                            '<h5 class="ge-events-box-title">' + event.title + '</h5>' +
+                            '<span class="ge-events-box-location">'+ event.community +'</span>' +
+                            '</a>' +
+                            '<div class="ge-event-box-footer">' +
+                                '<div class="ge-event-box-footer-tags">' +
+                                '<ul class="list-inline">' +
+                                    '<li><a href="#" title="">#event</a></li>' +
+                            '</ul>' +
+                            '</div>' +
+                            '<div class="ge-event-box-footer-btn">' +
+                                '<ul>' +
+                                    '<li><a href="#" title="Paylaş" rel="tooltip"><i class="fa fa-share-alt"></i></a></li>' +
+                            '<li><a href="#" title="Kaydet" rel="tooltip"><i class="fa fa-bookmark-o"></i></a></li>' +
+                            '</ul>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>';
+                            $('#daily-events-container').append(communityElem);
                         });
+
                     }
 
                 }else if(data.resultText == 'SUCCESS_EMPTY'){
@@ -284,9 +298,10 @@
 
         // select day from calendar event
         $(document).on('click', 'td.calendar-day',function(event){
+            ajaxGetDailyEvents($(event.target).attr('data-date'));
+            $(".ge-event-calendar  table tbody tr td").removeClass("active");
+            $(event.target).addClass("active");
 
-            alert('Servis ile seçilen günün etkinlikleri alınacak..');
-            alert($(event.target).attr('data-date'));
         });
 
     </script>

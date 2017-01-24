@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 /**
  * Event
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="event", uniqueConstraints={@ORM\UniqueConstraint(name="id_UNIQUE", columns={"id"})}, indexes={@ORM\Index(name="event_community_user_idx", columns={"community_user_id"})})
  * @ORM\Entity(repositoryClass="AppBundle\Repository\EventRepository")
  */
-class Event
+class Event implements JsonSerializable
 {
     /**
      * @var string
@@ -389,5 +390,34 @@ class Event
     public function setLocationName($locationName)
     {
         $this->locationName = $locationName;
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    function jsonSerialize()
+    {
+        // TODO: Implement jsonSerialize() method.
+        return array(
+            'id' => $this->id,
+            'title'=> $this->title,
+            'description' => $this->description,
+            'community' => $this->communityUser->getCommunity()->getName() . ' @ ' . $this->communityUser->getCommunity()->getUniversity()->getName(),
+            'type' => $this->type,
+            'permission' => $this->permission,
+            'startDate' => $this->startDate->format("d.m.Y / H:i"),
+            'endDate' => $this->endDate,
+            'maxParticipantNum' => $this->maxParticipantNum,
+            'gpsLocationLat' => $this->gpsLocationLat,
+            'gpsLocationLng' => $this->gpsLocationLng,
+            'locationName' => $this->locationName,
+            'boardingPoint' => $this->boardingPoint,
+            'imageBase64' => $this->imageBase64
+
+        );
     }
 }
