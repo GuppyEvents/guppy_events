@@ -159,11 +159,11 @@
         </div>
     </section>
 
+    <section class="section ge-events-list-section">
+    <div id="daily-events-container" class="container">
+    <h4 id="daily-events-title" class="ge-events-list-title">{{ todayDate|date('d.m.Y') }} Etkinlikleri</h4>
 
     {% if todayEvents|length>0 %}
-        <section class="section ge-events-list-section">
-            <div id="daily-events-container" class="container">
-                <h4 id="daily-events-title" class="ge-events-list-title">{{ todayDate|date('d.m.Y') }} Etkinlikleri</h4>
 
                 {% for event in todayEvents %}
                     <div class="col-sm-4">
@@ -201,9 +201,9 @@
                         {#<button class="btn btn-outline-clr"><span>Daha Fazla</span></button>#}
                     {#</div>#}
                 {#</div>#}
-            </div>
-        </section>
     {% endif %}
+    </div>
+    </section>
 
 {% endblock %}
 
