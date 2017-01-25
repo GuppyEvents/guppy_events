@@ -201,5 +201,67 @@ class AdminController extends Controller
         $response->setContent(json_encode(Result::$SUCCESS_EMPTY));
         return $response;
     }
+
+    /**
+     * @Route("event/publish", name="admin_event_publish_service")
+     */
+    public function eventPublishAction(Request $request)
+    {
+        // -- 1 -- Initialization
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+        $data = array();
+
+        // -- 2 --
+        try{
+
+            // -- 2.1 -- Get parameters
+            $operation = $request->get('operation');
+            $eventId = $request->get('eid');
+
+            $event = $this->getDoctrine()->getRepository('AppBundle:Event')->find($eventId);
+            if (!$event) {
+                $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent('Event not found')));
+                return $response;
+            }
+
+            switch ($operation){
+                case 'publish':
+                    $state = $this->getDoctrine()->getRepository('AppBundle:State')->findPublishState();
+                    $event->setState($state);
+                    //işlemi kimin gerçekleştirdiği loglanmalı ya da veri tabanında tutulmalı
+                    //$event->setPerformBy($this->getUser());
+                    $data['success_msg'] = 'Event state changed to publish';
+                    $data['publishState'] = true;
+                    break;
+                case 'unpublish':
+                    $state = $this->getDoctrine()->getRepository('AppBundle:State')->findUnpublishState();
+                    $event->setState($state);
+                    //işlemi kimin gerçekleştirdiği loglanmalı ya da veri tabanında tutulmalı
+                    //$event->setPerformBy($this->getUser());
+                    $data['success_msg'] = 'Event state changed to unpublish';
+                    $data['publishState'] = false;
+                    break;
+                default:
+                    break;
+            }
+
+            $this->getDoctrine()->getManager()->persist($event);
+            $this->getDoctrine()->getManager()->flush();
+
+            // -- 2.2 -- Return Result
+            $response->setContent(json_encode(Result::$SUCCESS->setContent($data)));
+            return $response;
+
+        }catch (\Exception $ex){
+            // content == "Unexpected Error"
+            $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent($ex->getMessage())));
+            return $response;
+        }
+
+        // -- 3 -- Set & Return value
+        $response->setContent(json_encode(Result::$SUCCESS_EMPTY));
+        return $response;
+    }
     
 }

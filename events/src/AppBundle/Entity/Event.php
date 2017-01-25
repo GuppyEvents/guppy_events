@@ -8,11 +8,21 @@ use JsonSerializable;
 /**
  * Event
  *
- * @ORM\Table(name="event", uniqueConstraints={@ORM\UniqueConstraint(name="id_UNIQUE", columns={"id"})}, indexes={@ORM\Index(name="event_community_user_idx", columns={"community_user_id"})})
+ * @ORM\Table(name="event", uniqueConstraints={@ORM\UniqueConstraint(name="id_UNIQUE", columns={"id"})}, indexes={@ORM\Index(name="event_community_user_idx", columns={"community_user_id"}), @ORM\Index(name="event_state_idx", columns={"state_id"}) })
  * @ORM\Entity(repositoryClass="AppBundle\Repository\EventRepository")
  */
 class Event implements JsonSerializable
 {
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
     /**
      * @var string
      *
@@ -98,15 +108,6 @@ class Event implements JsonSerializable
     private $imageBase64;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
      * @var \AppBundle\Entity\CommunityUser
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CommunityUser")
@@ -115,6 +116,16 @@ class Event implements JsonSerializable
      * })
      */
     private $communityUser;
+
+    /**
+     * @var \AppBundle\Entity\State
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\State")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="state_id", referencedColumnName="id")
+     * })
+     */
+    private $state;
 
 
 
@@ -390,6 +401,22 @@ class Event implements JsonSerializable
     public function setLocationName($locationName)
     {
         $this->locationName = $locationName;
+    }
+
+    /**
+     * @return State
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * @param State $state
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
     }
 
     /**

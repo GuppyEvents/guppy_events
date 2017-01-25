@@ -90,17 +90,19 @@
                                 <tbody>
 
                                 {% for event in eventList %}
-                                    <tr>
+                                    <tr data-event-id="{{ event.id }}">
                                         <td>{{ event.communityUser.community.name }}</td>
                                         <td>{{ event.title }} </td>
-                                        <td>
-                                            {#{% if community.isApproved %}#}
-                                                {#Approved#}
-                                            {#{% else %}#}
-                                                {#Not Approved#}
-                                            {#{% endif %}#}
-                                            Approved
-                                        </td>
+
+
+                                        {% if event.state and event.state.id==1001 %}
+                                            <td><span class="label label-warning">Pending</span></td>
+                                        {% elseif event.state and event.state.id==1002 %}
+                                            <td><span class="label label-success">Publish</span></td>
+                                        {% elseif event.state and event.state.id==1003 %}
+                                            <td><span class="label label-warning">Unpublish</span></td>
+                                        {% endif %}
+
                                         <td>
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-info">Action</button>
@@ -108,9 +110,12 @@
                                                     <span class="caret"></span>
                                                     <span class="sr-only">Toggle Dropdown</span>
                                                 </button>
-                                                <ul class="dropdown-menu" role="menu">
+                                                <ul id='op-list' class="dropdown-menu" role="menu">
                                                     <li><a href="{{ path('admin_event_update', {'eventId': event.id }) }}">Edit</a></li>
                                                     <li><a data-href="{{ path('admin_event_delete' , {'eventId': event.id }) }}" id="admin_delete_button" data-toggle="modal" data-target="#alert_modal" >Delete</a></li>
+                                                    <li class="divider"></li>
+                                                    <li><a data-href="" data-toggle="modal" data-op-name="publish" >Publish</a></li>
+                                                    <li><a data-href="" data-toggle="modal" data-op-name="unpublish" >Unpublish</a></li>
                                                 </ul>
                                             </div>
                                         </td>
@@ -225,6 +230,48 @@
             });
         }
 
+        function ajaxPublishEvent(eventTarget){
+
+            // -- 2 --
+            // ajax call
+            $.post("{{ path('admin_event_publish_service') }}" ,{
+                operation : $(eventTarget).attr('data-op-name'),
+                eid : $(eventTarget).parentsUntil('tr').last().parent().attr('data-event-id'),
+            }).always(function(){
+
+            }).done(function(data){
+
+                // -- 2.1 -- CONSOLE
+                if(Guppy.responseDebugMode)
+                    console.log(data);
+
+                // -- 2.2 -- sonuc düzenlenir
+                if(data.resultText == 'SUCCESS'){
+                    if(data.content['publishState']!=null){
+                        $(eventTarget).parentsUntil('td').last().parent().prev().find('span').removeAttr('class');
+                        if(data.content['publishState']==true){
+                            $(eventTarget).parentsUntil('td').last().parent().prev().find('span').addClass('label label-success').html('Publish');
+                        }else if(data.content['publishState']==false){
+                            $(eventTarget).parentsUntil('td').last().parent().prev().find('span').addClass('label label-warning').html('Unpublish');
+                        }else{
+                            $(eventTarget).parentsUntil('td').last().parent().prev().find('span').addClass('label label-danger').html('Unknown state');
+                        }
+                    }
+
+                    //toastr.success(data.content['success_msg']);
+                }else if(data.resultText == 'SUCCESS_EMPTY'){
+                    //toastr.error('Beklenmeyen hata ile karşılaşıldı');
+                    alert('Beklenmeyen hata ile karşılaşıldı');
+                }else if(data.resultText == 'FAILURE_PERMISSION'){
+                    //toastr.error('Bu işlem için izniniz bulunmamaktadır');
+                    alert('Bu işlem için izniniz bulunmamaktadır');
+                }else{
+                    //toastr.error('Beklenmeyen hata ile karşılaşıldı');
+                    alert('Beklenmeyen hata ile karşılaşıldı');
+                }
+            });
+        }
+
 /***********************************************************************************************************************
  *                                          CHECKER FUNCTIONS
  **********************************************************************************************************************/
@@ -244,6 +291,13 @@
             // create submit form before modal open
             $('.modal-footer').find('a').remove();
             $('.modal-footer').append('<a href="'+$(event.target).attr('data-href')+'" type="button" class="btn btn-outline">Sure</a>');
+        });
+
+        $(document).on('click', '#op-list a', function(event){
+            if($(event.target).attr('data-op-name')=='publish' || $(event.target).attr('data-op-name')=='unpublish'){
+                ajaxPublishEvent(event.target);
+            }
+
         });
 
 /***********************************************************************************************************************
