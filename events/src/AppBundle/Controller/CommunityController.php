@@ -50,6 +50,7 @@ class CommunityController extends Controller
         }
 
         $communityUser = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findOneBy(array('community'=>$community , 'user'=>$this->getUser()));
+        $communityUserRoles = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoles')->findBy(array('communityUser'=>$communityUser));
 
         // İlgili kullanıcının topluluğun yöneticisi olup olunmadığına bakılır
         $data['isUserCommunityAdmin'] = $this->getUser() ? $this->getDoctrine()->getRepository('AppBundle:User')->isUserCommunityAdmin($this->getUser(),$community) : false;
@@ -57,6 +58,8 @@ class CommunityController extends Controller
         $data['community'] = $community;
         $data['eventList'] = $eventList;
         $data['communityUser'] = $communityUser;
+
+        $data['communityUserRoles'] = $communityUserRoles;
 
         return $this->render('AppBundle:community:communityHome.html.twig' , $data);
     }

@@ -86,13 +86,25 @@
                     <div class="fade active in">
 
                         {% if app.user and app.user.emailValidated %}
+                            {% set confirm = false %}
+                            {% set reject = false %}
+                            {% set apply = false %}
+                            {% for communityUserRole in communityUserRoles %}
+                                {% if communityUserRole.state.id == 1000 %}
+                                    {% set confirm = true %}
+                                {% elseif communityUserRole.state.id == 2000 %}
+                                    {% set reject = true %}
+                                {% elseif communityUserRole.state.id == 3000 %}
+                                    {% set apply = true %}
+                                {% endif %}
+                            {% endfor %}
 
-                            {% if communityUser and communityUser.status == 10 %}
+                            {% if confirm %}
+
+                            {% elseif apply %}
                                 <div id="join_community_panel" class-="col-sm-2 align-right" style="padding-top: 20px;">
                                     Topluluk rolünüz yönetici tarafından araştırılmaktadır.
                                 </div>
-                            {% elseif communityUser and (communityUser.status == 1 or communityUser.status == 2) %}
-                                <!-- Kullanıcı bu durumda  topluluk yöneticisidir -->
                             {% else %}
                                 <div id="join_community_panel" class-="col-sm-2 align-right" style="padding-top: 20px;">
                                     <a id="join_community" class="btn btn-rounded btn-sm" data-community-id="{{ community.id }}">Topluluğa katıl</a>
