@@ -6,203 +6,218 @@
 {% block content %}
 
     <!-- --------------------------------------------- -->
+    <!-- ------------------ ERROR -------------------- -->
+    <!-- --------------------------------------------- -->
+    {% if pageError is defined %}
+
+        <section class="guppy-section align-center">
+            <div class="error-head">{{ pageError }}</div>
+            <div class="error-body">{{ pageErrorBody }}</div>
+        </section>
+
+    <!-- --------------------------------------------- -->
     <!-- ------------------ CONTENT ------------------ -->
     <!-- --------------------------------------------- -->
-    <div class="blurred-header">
-        {% if event.imageBase64 %}
-            <img src="{{ event.imageBase64 }}" class="img-responsive" alt="{{ event.title }}" />
-        {% else %}
-            {% image 'theme/assets/img/event_header.jpeg' %}
-                <img src="{{ asset_url }}" class="img-responsive" alt="" />
-            {% endimage %}
-        {% endif %}
-    </div>
+    {% else %}
 
-    <section class="guppy-section align-center">
-        <div class="container">
-
-            <div class="col-md-1">
-            </div>
-            <!-- -------------- CONTENT -------------- -->
-            <div class="event-content col-md-12">
-
-                <div class="event-content-header">
-
-                    <!-- Event Image Panel -->
-                    <div class="col-md-8 event-content-header-image">
-                        {% if event.imageBase64 %}
-                            <img src="{{ event.imageBase64 }}" class="img-responsive" alt="{{ event.title }}" />
-                        {% else %}
-                            {% image 'theme/assets/img/event_header.jpeg' %}
-                                <img src="{{ asset_url }}" class="img-responsive" alt="" />
-                            {% endimage %}
-                        {% endif %}
-                    </div>
-
-                    <!-- Event Detail Panel -->
-                    <div class="event-content-header-detail col-md-4">
-                        <div class="event-content-header-time">
-                            {% if event.startDate %}
-                                <div class="event-content-header-time-month">{{ event.startDate.format('F') }}</div>
-                                <div class="event-content-header-time-day">{{ event.startDate.format('d') }}</div>
-                            {% else %}
-                                <div class="event-content-header-time-month">??</div>
-                                <div class="event-content-header-time-day">??</div>
-                            {% endif %}
-                        </div>
-                        <div class="event-content-header-title">
-                            {{ event.title }}
-                        </div>
-                        <div class="event-content-header-owner">
-                            <a href="{{ path('user_community_homepage',{'communityId': event.communityUser.community.id}) }}">{{ event.communityUser.community.name }}</a>
-                        </div>
-                        <div class="event-content-header-price">
-                            {% if tickets|length >0 %}
-                            {{ tickets[0].price }} {{ tickets[0].priceType ? tickets[0].priceType : "TL" }}
-                            {% else %}
-                                ÜCRETSİZ
-                            {% endif %}
-
-                        </div>
-                    </div>
-                </div>
-
-                <div class="event-share-register align-right" style="padding-top: 5px; padding-bottom: 5px; border-bottom: 1px solid; border-top: 1px solid; border-bottom-color: #AAA; border-top-color: #AAA;">
-                    <a href="#" class="btn" ><span>REGISTER</span></a>
-                    {% if userIsAdmin is defined %}
-                        {% if userIsAdmin==true %}
-                            <a href="{{ path("event_edit_page", {'eventId': event.id }) }}" style="background-color: #fe4918" class="btn" ><span>EDIT EVENT</span></a>
-                        {% endif %}
-                    {% endif %}
-                </div>
-
-                <div class="event-content-body">
-                    <div class="fade active in">
-                        <div class="col-sm-1 align-left event-content-body-description"></div>
-                        <div class="col-sm-6 align-left event-content-body-description">
-                            <p>{{ event.description|raw }}</p>
-                        </div>
-
-                        <div class="col-sm-5 align-left event-content-body-description-date">
-                            <h6>Tarih & Saat</h6>
-                            {#<p>Sat, December 17, 2016</p>#}
-                            <p>{{ event.startDate.format('D, F d, Y') }}</p>
-                            {#<p>6:00 PM – 8:30 PM Eastern European Standard Time Turkey Time</p>#}
-                            <p>{{ event.startDate.format('H:i A') }}</p>
-                            <a>Takvime ekle</a>
-                        </div>
-
-                        {#<div class="col-sm-5 align-left event-content-body-description-location">#}
-                            {#<h6>LOCATION</h6>#}
-                            {#<p>CerModern</p>#}
-                            {#<p>3 Altınsoy Cad. </p>#}
-                            {#<p>Ankara, 06101</p>#}
-                            {#<a>View Map</a>#}
-                        {#</div>#}
-
-                        <div class="col-sm-12 align-left"></div>
-                        <div class="col-sm-1 align-left"></div>
-                        <div class="col-sm-11 align-left">
-                            <h6>TAGS</h6>
-                            <section>
-								<span>
-									<a href="" class="js-d-track-link badge badge--tag l-mar-top-2" data-event-action="BreadcrumbAddress" data-event-category="listing" data-event-label="/things-to-do/turkey--ankara/" data-automation="BreadcrumbAddress" data-xd-wired="track-link">
-                                        <span>MizahKültür</span>
-                                    </a>
-								</span>
-								<span>
-									<a href="" class="js-d-track-link badge badge--tag l-mar-top-2" data-event-action="BreadcrumbFormat" data-event-category="listing" data-event-label="/d/turkey--ankara/seminars/" data-automation="BreadcrumbFormat" data-xd-wired="track-link">
-                                        <span>ge250</span>
-                                    </a>
-								</span>
-                            </section>
-                        </div>
-
-                        <div class="col-sm-1 align-left"></div>
-                        <div class="col-sm-10 align-left" style="height: 1px; background: gray; margin-top: 30px; margin-bottom: 30px;"></div>
-                        <div class="col-sm-12 align-left"></div>
-
-                        <!-- Event Tickets -->
-                        <div class="col-sm-1 align-left"></div>
-                        <div class="col-sm-12 align-left" style="padding-top: 20px; padding-bottom: 100px;">
-                            <div style="text-align: center;">
-                                <h6>Bilet Fiyatları</h6>
-                                <div>(Eğer varsa)Bilet bilgileri bu alana yerleştirilecektir</div>
-                                <a>Bilet#1</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a>Bilet#2</a>
-                            </div>
-                        </div>
-
-                        <!-- Event Location -->
-                        <div class="col-sm-1 align-left"></div>
-                        <div class="col-sm-10 align-left" style="height: 1px; background: gray; margin-top: 30px; margin-bottom: 30px;"></div>
-                        <div class="col-sm-12 event-content-body-map">
-                            <div style="text-align: center; padding-bottom: 25px;">
-                                <h6>Konum</h6>
-                                <p>{{ event.locationName }}</p>
-                            </div>
-
-
-                            <input id="event_location_lat" name="event_location_lat" value="{{ event.gpsLocationLat }}" style="display: none;"/>
-                            <input id="event_location_lng" name="event_location_lng" value="{{ event.gpsLocationLng }}" style="display: none;"/>
-                            <div id="event_location" style="height: 400px;"></div>
-                        </div>
-
-                        <div class="col-sm-12 align-left" style="height: 100px;"></div>
-                    </div>
-
-                </div><!-- community-content-body end -->
-
-            </div>
+        <div class="blurred-header">
+            {% if event.imageBase64 %}
+                <img src="{{ event.imageBase64 }}" class="img-responsive" alt="{{ event.title }}" />
+            {% else %}
+                {% image 'theme/assets/img/event_header.jpeg' %}
+                    <img src="{{ asset_url }}" class="img-responsive" alt="" />
+                {% endimage %}
+            {% endif %}
         </div>
-    </section>
+
+        <section class="guppy-section align-center">
+            <div class="container">
+
+                <div class="col-md-1">
+                </div>
+                <!-- -------------- CONTENT -------------- -->
+                <div class="event-content col-md-12">
+
+                    <div class="event-content-header">
+
+                        <!-- Event Image Panel -->
+                        <div class="col-md-8 event-content-header-image">
+                            {% if event.imageBase64 %}
+                                <img src="{{ event.imageBase64 }}" class="img-responsive" alt="{{ event.title }}" />
+                            {% else %}
+                                {% image 'theme/assets/img/event_header.jpeg' %}
+                                    <img src="{{ asset_url }}" class="img-responsive" alt="" />
+                                {% endimage %}
+                            {% endif %}
+                        </div>
+
+                        <!-- Event Detail Panel -->
+                        <div class="event-content-header-detail col-md-4">
+                            <div class="event-content-header-time">
+                                {% if event.startDate %}
+                                    <div class="event-content-header-time-month">{{ event.startDate.format('F') }}</div>
+                                    <div class="event-content-header-time-day">{{ event.startDate.format('d') }}</div>
+                                {% else %}
+                                    <div class="event-content-header-time-month">??</div>
+                                    <div class="event-content-header-time-day">??</div>
+                                {% endif %}
+                            </div>
+                            <div class="event-content-header-title">
+                                {{ event.title }}
+                            </div>
+                            <div class="event-content-header-owner">
+                                <a href="{{ path('user_community_homepage',{'communityId': event.communityUser.community.id}) }}">{{ event.communityUser.community.name }}</a>
+                            </div>
+                            <div class="event-content-header-price">
+                                {% if tickets|length >0 %}
+                                {{ tickets[0].price }} {{ tickets[0].priceType ? tickets[0].priceType : "TL" }}
+                                {% else %}
+                                    ÜCRETSİZ
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="event-share-register align-right" style="padding-top: 5px; padding-bottom: 5px; border-bottom: 1px solid; border-top: 1px solid; border-bottom-color: #AAA; border-top-color: #AAA;">
+                        <a href="#" class="btn" ><span>REGISTER</span></a>
+                        {% if userIsAdmin is defined %}
+                            {% if userIsAdmin==true %}
+                                <a href="{{ path("event_edit_page", {'eventId': event.id }) }}" style="background-color: #fe4918" class="btn" ><span>EDIT EVENT</span></a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+
+                    <div class="event-content-body">
+                        <div class="fade active in">
+                            <div class="col-sm-1 align-left event-content-body-description"></div>
+                            <div class="col-sm-6 align-left event-content-body-description">
+                                <p>{{ event.description|raw }}</p>
+                            </div>
+
+                            <div class="col-sm-5 align-left event-content-body-description-date">
+                                <h6>Tarih & Saat</h6>
+                                {#<p>Sat, December 17, 2016</p>#}
+                                <p>{{ event.startDate.format('D, F d, Y') }}</p>
+                                {#<p>6:00 PM – 8:30 PM Eastern European Standard Time Turkey Time</p>#}
+                                <p>{{ event.startDate.format('H:i A') }}</p>
+                                <a>Takvime ekle</a>
+                            </div>
+
+                            {#<div class="col-sm-5 align-left event-content-body-description-location">#}
+                                {#<h6>LOCATION</h6>#}
+                                {#<p>CerModern</p>#}
+                                {#<p>3 Altınsoy Cad. </p>#}
+                                {#<p>Ankara, 06101</p>#}
+                                {#<a>View Map</a>#}
+                            {#</div>#}
+
+                            <div class="col-sm-12 align-left"></div>
+                            <div class="col-sm-1 align-left"></div>
+                            <div class="col-sm-11 align-left">
+                                <h6>TAGS</h6>
+                                <section>
+                                    <span>
+                                        <a href="" class="js-d-track-link badge badge--tag l-mar-top-2" data-event-action="BreadcrumbAddress" data-event-category="listing" data-event-label="/things-to-do/turkey--ankara/" data-automation="BreadcrumbAddress" data-xd-wired="track-link">
+                                            <span>MizahKültür</span>
+                                        </a>
+                                    </span>
+                                    <span>
+                                        <a href="" class="js-d-track-link badge badge--tag l-mar-top-2" data-event-action="BreadcrumbFormat" data-event-category="listing" data-event-label="/d/turkey--ankara/seminars/" data-automation="BreadcrumbFormat" data-xd-wired="track-link">
+                                            <span>ge250</span>
+                                        </a>
+                                    </span>
+                                </section>
+                            </div>
+
+                            <div class="col-sm-1 align-left"></div>
+                            <div class="col-sm-10 align-left" style="height: 1px; background: gray; margin-top: 30px; margin-bottom: 30px;"></div>
+                            <div class="col-sm-12 align-left"></div>
+
+                            <!-- Event Tickets -->
+                            <div class="col-sm-1 align-left"></div>
+                            <div class="col-sm-12 align-left" style="padding-top: 20px; padding-bottom: 100px;">
+                                <div style="text-align: center;">
+                                    <h6>Bilet Fiyatları</h6>
+                                    <div>(Eğer varsa)Bilet bilgileri bu alana yerleştirilecektir</div>
+                                    <a>Bilet#1</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a>Bilet#2</a>
+                                </div>
+                            </div>
+
+                            <!-- Event Location -->
+                            <div class="col-sm-1 align-left"></div>
+                            <div class="col-sm-10 align-left" style="height: 1px; background: gray; margin-top: 30px; margin-bottom: 30px;"></div>
+                            <div class="col-sm-12 event-content-body-map">
+                                <div style="text-align: center; padding-bottom: 25px;">
+                                    <h6>Konum</h6>
+                                    <p>{{ event.locationName }}</p>
+                                </div>
+
+
+                                <input id="event_location_lat" name="event_location_lat" value="{{ event.gpsLocationLat }}" style="display: none;"/>
+                                <input id="event_location_lng" name="event_location_lng" value="{{ event.gpsLocationLng }}" style="display: none;"/>
+                                <div id="event_location" style="height: 400px;"></div>
+                            </div>
+
+                            <div class="col-sm-12 align-left" style="height: 100px;"></div>
+                        </div>
+
+                    </div><!-- community-content-body end -->
+
+                </div>
+            </div>
+        </section>
+
+    {% endif %}
 
 {% endblock %}
+
 
 
 
 {% block javascriptcontent %}
     <script>
 
-/***********************************************************************************************************************
- *                                          LOCAL VARIABLE
- **********************************************************************************************************************/
+    /***********************************************************************************************************************
+     *                                          LOCAL VARIABLE
+     **********************************************************************************************************************/
 
 
 
-/***********************************************************************************************************************
- *                                          UTIL FUNCTIONS
- **********************************************************************************************************************/
+    /***********************************************************************************************************************
+     *                                          UTIL FUNCTIONS
+     **********************************************************************************************************************/
 
-        function initMap() {
-            var event_gps_location = {lat: parseFloat($('#event_location_lat').val()), lng: parseFloat($('#event_location_lng').val()) };
+            function initMap() {
+                var event_gps_location = {lat: parseFloat($('#event_location_lat').val()), lng: parseFloat($('#event_location_lng').val()) };
 
-            var map = new google.maps.Map(document.getElementById('event_location'), {
-                zoom: 12,
-                scrollwheel:  false,
-                draggable: false,
-                center: event_gps_location,
-            });
+                var map = new google.maps.Map(document.getElementById('event_location'), {
+                    zoom: 12,
+                    scrollwheel:  false,
+                    draggable: false,
+                    center: event_gps_location,
+                });
 
-            marker = new google.maps.Marker({
-                position: event_gps_location,
-                map: map
-            });
+                marker = new google.maps.Marker({
+                    position: event_gps_location,
+                    map: map
+                });
 
-        }
+            }
 
-/***********************************************************************************************************************
- *                                          AJAX OPERATIONS
- **********************************************************************************************************************/
-
-
-/***********************************************************************************************************************
- *                                          EVENTS
- **********************************************************************************************************************/
+    /***********************************************************************************************************************
+     *                                          AJAX OPERATIONS
+     **********************************************************************************************************************/
 
 
-/***********************************************************************************************************************
- *                                          DOCUMENT ON READY
- **********************************************************************************************************************/
+    /***********************************************************************************************************************
+     *                                          EVENTS
+     **********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************
+     *                                          DOCUMENT ON READY
+     **********************************************************************************************************************/
 
     </script>
 

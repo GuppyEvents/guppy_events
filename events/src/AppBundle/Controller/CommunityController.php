@@ -27,7 +27,6 @@ class CommunityController extends Controller
     {
         $data = array();
         $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
-        $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByCommunityId($communityId);
 
         $community->link_facebook = null;
         $community->link_twitter = null;
@@ -55,7 +54,6 @@ class CommunityController extends Controller
         $data['isUserCommunityAdmin'] = $this->getUser() ? $this->getDoctrine()->getRepository('AppBundle:User')->isUserCommunityAdmin($this->getUser(),$community) : false;
 
         $data['community'] = $community;
-        $data['eventList'] = $eventList;
         $data['communityUser'] = $communityUser;
 
         return $this->render('AppBundle:community:communityHome.html.twig' , $data);
@@ -70,7 +68,7 @@ class CommunityController extends Controller
     {
         $data = array();
         $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
-        $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByCommunityId($communityId);
+        $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findPublishEventsByCommunityId($communityId);
 
         foreach ($eventList as $event){
             $ticket = $this->getDoctrine()->getRepository('AppBundle:Ticket')->findLowestPriceTicketByEventId($event->getId());

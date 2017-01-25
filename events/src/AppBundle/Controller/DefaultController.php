@@ -136,7 +136,7 @@ class DefaultController extends Controller
             $dayTwo->add(new \DateInterval("P1D"));
             $eventMain = array();
             $eventMain['eventDate'] = clone $dayOne;
-            $eventMain['eventList'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByDate( $dayOne,$dayTwo);
+            $eventMain['eventList'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findPublishEventsByDate( $dayOne,$dayTwo);
             array_push($prevPrevWeekEventList,$eventMain);
             $dayOne->add(new \DateInterval("P1D"));
             $i++;
@@ -160,7 +160,7 @@ class DefaultController extends Controller
             $dayTwo->add(new \DateInterval("P1D"));
             $eventMain = array();
             $eventMain['eventDate'] = clone $dayOne;
-            $eventMain['eventList'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByDate( $dayOne,$dayTwo);
+            $eventMain['eventList'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findPublishEventsByDate( $dayOne,$dayTwo);
             array_push($previousWeekEventList,$eventMain);
             $dayOne->add(new \DateInterval("P1D"));
             $i++;
@@ -186,7 +186,7 @@ class DefaultController extends Controller
             $dayTwo->add(new \DateInterval("P1D"));
             $eventMain = array();
             $eventMain['eventDate'] = clone $dayOne;
-            $eventMain['eventList'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByDate( $dayOne,$dayTwo);
+            $eventMain['eventList'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findPublishEventsByDate( $dayOne,$dayTwo);
             if($currentDay<=$dayOne){
                 $eventMain['isFuture'] = true;
             }
@@ -216,7 +216,7 @@ class DefaultController extends Controller
             $dayTwo->add(new \DateInterval("P1D"));
             $eventMain = array();
             $eventMain['eventDate'] = clone $dayOne;
-            $eventMain['eventList'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByDate( $dayOne,$dayTwo);
+            $eventMain['eventList'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findPublishEventsByDate( $dayOne,$dayTwo);
             array_push($nextWeekEventList,$eventMain);
             $dayOne->add(new \DateInterval("P1D"));
             $i++;
@@ -239,7 +239,7 @@ class DefaultController extends Controller
             $dayTwo->add(new \DateInterval("P1D"));
             $eventMain = array();
             $eventMain['eventDate'] = clone $dayOne;
-            $eventMain['eventList'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByDate( $dayOne,$dayTwo);
+            $eventMain['eventList'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findPublishEventsByDate( $dayOne,$dayTwo);
             array_push($nextNextWeekEventList,$eventMain);
             $dayOne->add(new \DateInterval("P1D"));
             $i++;
@@ -252,7 +252,7 @@ class DefaultController extends Controller
         $today->setTime(0,0);
         $tomorrow = clone $today;
         $tomorrow->add(new \DateInterval("P1D"));
-        $data['todayEvents'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByDate( $today,$tomorrow);
+        $data['todayEvents'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findPublishEventsByDate( $today,$tomorrow);
         $data['todayDate'] = $today;
 
         return $this->render('AppBundle:default:main_events.html.twig' , $data);
@@ -380,7 +380,7 @@ class DefaultController extends Controller
             $dateTimeEnd= \DateTime::createFromFormat('Y/m/d', $date);
             $dateTimeEnd->setTime(23,59);
 
-            $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findEventsByDate( $dateTimeStart,$dateTimeEnd);
+            $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findPublishEventsByDate( $dateTimeStart,$dateTimeEnd);
 
             foreach ($eventList as $event) {
                 $evetObj =array();

@@ -32,18 +32,28 @@ class EventController extends Controller
     {
         $data = array();
 
-        $event = $this->getDoctrine()->getRepository('AppBundle:Event')->find($eventId);
+        $state = $this->getDoctrine()->getRepository('AppBundle:State')->findPublishState();
+        $event = $this->getDoctrine()->getRepository('AppBundle:Event')->findOneBy(array('id'=>$eventId,'state'=>$state));
         $tickets = $this->getDoctrine()->getRepository('AppBundle:Ticket')->findBy(array('event'=>$eventId));
-
 
         // --1-- kullanıcı varsa ve topluluk yöneticisi ise userIsAdmin true döner
         // --2-- kullanıcı varsa ve topluluk yöneticisi değilse userIsAdmin false döner
         // --3-- eğer kullanıcı yoksa null döner ve register butonu da kaldırılır
         if($event){
-            if($event->getCommunityUser()->getCommunity() && $this->getUser()){
-                $isUserAdmin = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findBy(array('community'=>$event->getCommunityUser()->getCommunity() , 'user'=>$this->getUser() , 'status'=>1));
-                $data['userIsAdmin'] = $isUserAdmin and count($isUserAdmin)>0 ? true : false;
+            $community = $this->getDoctrine()->getRepository('AppBundle:Community')->findOnePublishCommunity($event->getCommunityUser()->getCommunity());
+            if($community){
+                if($this->getUser()){
+                    $communityAdminRole = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoles')->findCommunityAdminRoles($this->getUser());
+                    $data['userIsAdmin'] = $communityAdminRole and count($communityAdminRole)>0 ? true : false;
+                }
+            }else{
+                $data['pageError'] = "Üzgünüz şuan içeriğe ulaşılamıyor";
+                $data['pageErrorBody'] = "Etkinlik Topluluğu Yayında Değil";
             }
+
+        }else{
+            $data['pageError'] = "Üzgünüz şuan içeriğe ulaşılamıyor";
+            $data['pageErrorBody'] = "Etkinlik Bulunamadı ya da yayında kaldırıldı";
         }
 
         $data['event'] = $event;
