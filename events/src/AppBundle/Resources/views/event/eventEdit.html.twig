@@ -6,303 +6,316 @@
 {% block content %}
 
     <!-- --------------------------------------------- -->
+    <!-- ------------------ ERROR -------------------- -->
+    <!-- --------------------------------------------- -->
+    {% if pageError is defined %}
+
+        <section class="guppy-section align-center">
+            <div class="error-head">{{ pageError }}</div>
+            <div class="error-body">{{ pageErrorBody }}</div>
+        </section>
+
+    <!-- --------------------------------------------- -->
     <!-- ------------------ CONTENT ------------------ -->
     <!-- --------------------------------------------- -->
+    {% else %}
+        <section class="guppy-section align-center">
+            <div class="container">
+                <div class="align-left col-sm-12">
+                    <form id="add_event_form" action="{{ path("event_edit_post") }}" method="POST" class="form form-mail-us" novalidate="novalidate" _lpchecked="1">
+                        <div class="col-sm-12">
+                            <h5 class="highlight">Etkinlik Ekle</h5>
+                            <br>
+                        </div>
 
-    <section class="guppy-section align-center">
-        <div class="container">
-            <div class="align-left col-sm-12">
-                <form id="add_event_form" action="{{ path("event_edit_post") }}" method="POST" class="form form-mail-us" novalidate="novalidate" _lpchecked="1">
-                    <div class="col-sm-12">
-                        <h5 class="highlight">Etkinlik Ekle</h5>
-                        <br>
-                    </div>
+                        <fieldset class="col-sm-12 col-md-12">
+                            <fieldset>
+                                <label for="name">Düzenleyen:</label>
+                                <select id="community_id" name="community_id" type="text">
+                                    {% for communityAdminRole in communityAdminRoles %}
+                                        {% if event.communityUser.community.id == communityAdminRole.communityUser.community.id %}
+                                            <option selected value="{{ communityAdminRole.communityUser.community.id }}">{{ communityAdminRole.communityUser.community.name }}</option>
+                                        {% else %}
+                                            <option value="{{ communityAdminRole.communityUser.community.id }}">{{ communityAdminRole.communityUser.community.name }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </fieldset>
+                            <fieldset>
+                                <label for="name">Adı:</label>
+                                <input type="text" class="form-control" rows="3" name="event_title" id="event_title" value="{{ event.title }}">
+                                <input type="text" style="display:none" name="event_id" value="{{ event.id }}">
+                            </fieldset>
 
-                    <fieldset class="col-sm-12 col-md-12">
-                        <fieldset>
-                            <label for="name">Düzenleyen:</label>
-                            <select id="community_id" name="community_id" type="text">
-                                {% for communityUser in communityUserList %}
-                                    {% if event.communityUser.community.id == communityUser.community.id %}
-                                        <option selected value="{{ communityUser.community.id }}">{{ communityUser.community.name }}</option>
-                                    {% else %}
-                                        <option value="{{ communityUser.community.id }}">{{ communityUser.community.name }}</option>
-                                    {% endif %}
-                                {% endfor %}
-                            </select>
-                        </fieldset>
-                        <fieldset>
-                            <label for="name">Adı:</label>
-                            <input type="text" class="form-control" rows="3" name="event_title" id="event_title" value="{{ event.title }}">
-                            <input type="text" style="display:none" name="event_id" value="{{ event.id }}">
-                        </fieldset>
+                            <fieldset>
+                                <label for="date">Tarihi:</label><p></p>
+                                <input id="event_date" name="event_date" type="text">
+                            </fieldset>
+                            <fieldset>
+                                <label for="name">Açıklaması:</label>
+                                <textarea id="event_description" name="event_description">{{ event.description }}</textarea>
+                            </fieldset>
+                            <fieldset>
+                                <label>Görünürlüğü:</label>
+                                <select id="event_permission" class="form-control" name="event_permission">
+                                    <option selected="{{ event.permission == "PUBLIC" ? "true":"false" }}" value="PUBLIC">Herkese Açık</option>
+                                    <option selected="{{ event.permission == "UNIVERSITY" ? "true":"false" }}" value="UNIVERSITY">Üniversite Öğrencileri</option>
+                                    <option selected="{{ event.permission == "COMMUNITY" ? "true":"false" }}" value="COMMUNITY">Topluluk Üyeleri</option>
+                                </select>
+                            </fieldset>
+                            <fieldset>
+                                <label for="name">Bilet Fiyatı:</label>
+                                <input id="event_price" name="event_price" type="text" value="{{ tickets|length > 0 ? tickets[0].price : 0 }}">
+                                <input id="ticket_id" style="display: none;" name="ticket_id" type="text" value="{{ tickets|length > 0 ? tickets[0].id : 0 }}">
+                            </fieldset>
+                            <fieldset>
+                                <label for="name">Katılımcı Sayısı Limiti:</label>
+                                <input type="text" class="form-control" name="event_participant_count" value="{{ event.maxParticipantNum }}">
+                            </fieldset>
+                            <fieldset>
+                                <label>Kapak Fotoğrafı</label>
+                                <input type="text" style="display: none;" class="form-control" id="event_image_base64" name="event_image_base64" value="{{ event.imageBase64 }}">
 
-                        <fieldset>
-                            <label for="date">Tarihi:</label><p></p>
-                            <input id="event_date" name="event_date" type="text">
-                        </fieldset>
-                        <fieldset>
-                            <label for="name">Açıklaması:</label>
-                            <textarea id="event_description" name="event_description">{{ event.description }}</textarea>
-                        </fieldset>
-                        <fieldset>
-                            <label>Görünürlüğü:</label>
-                            <select id="event_permission" class="form-control" name="event_permission">
-                                <option selected="{{ event.permission == "PUBLIC" ? "true":"false" }}" value="PUBLIC">Herkese Açık</option>
-                                <option selected="{{ event.permission == "UNIVERSITY" ? "true":"false" }}" value="UNIVERSITY">Üniversite Öğrencileri</option>
-                                <option selected="{{ event.permission == "COMMUNITY" ? "true":"false" }}" value="COMMUNITY">Topluluk Üyeleri</option>
-                            </select>
-                        </fieldset>
-                        <fieldset>
-                            <label for="name">Bilet Fiyatı:</label>
-                            <input id="event_price" name="event_price" type="text" value="{{ tickets|length > 0 ? tickets[0].price : 0 }}">
-                            <input id="ticket_id" style="display: none;" name="ticket_id" type="text" value="{{ tickets|length > 0 ? tickets[0].id : 0 }}">
-                        </fieldset>
-                        <fieldset>
-                            <label for="name">Katılımcı Sayısı Limiti:</label>
-                            <input type="text" class="form-control" name="event_participant_count" value="{{ event.maxParticipantNum }}">
-                        </fieldset>
-                        <fieldset>
-                            <label>Kapak Fotoğrafı</label>
-                            <input type="text" style="display: none;" class="form-control" id="event_image_base64" name="event_image_base64" value="{{ event.imageBase64 }}">
-
-                            <div class="image-editor">
-                                <input type="file" class="cropit-image-input">
-                                <div class="cropit-preview">
+                                <div class="image-editor">
+                                    <input type="file" class="cropit-image-input">
+                                    <div class="cropit-preview">
+                                    </div>
+                                    <div class="image-size-label">
+                                        Kapak fotoğrafını ayarla
+                                    </div>
+                                    <input type="range" class="cropit-image-zoom-input">
                                 </div>
-                                <div class="image-size-label">
-                                    Kapak fotoğrafını ayarla
-                                </div>
-                                <input type="range" class="cropit-image-zoom-input">
-                            </div>
-                        </fieldset>
-                        <fieldset>
-                            <label for="name">Konumu:</label>
-                            <input id="search_event_location" name="search_event_location" type="text" size="150">
-                            <input id="event_location_lat" name="event_location_lat" value="{{ event.gpsLocationLat }}" style="display: none;"/>
-                            <input id="event_location_lng" name="event_location_lng" value="{{ event.gpsLocationLng }}" style="display: none;"/>
-                            <div id="event_location" style="height: 400px;"></div>
-                        </fieldset>
+                            </fieldset>
+                            <fieldset>
+                                <label for="name">Konumu:</label>
+                                <input id="search_event_location" name="search_event_location" type="text" size="150">
+                                <input id="event_location_lat" name="event_location_lat" value="{{ event.gpsLocationLat }}" style="display: none;"/>
+                                <input id="event_location_lng" name="event_location_lng" value="{{ event.gpsLocationLng }}" style="display: none;"/>
+                                <div id="event_location" style="height: 400px;"></div>
+                            </fieldset>
 
+                </div>
+
+                <fieldset class="col-sm-12">
+                    <input type="submit" class="btn btn-solid" value="Submit">
+                </fieldset>
+                </form>
             </div>
-
-            <fieldset class="col-sm-12">
-                <input type="submit" class="btn btn-solid" value="Submit">
-            </fieldset>
-            </form>
-        </div>
-        </div>
-    </section>
+            </div>
+        </section>
+    {% endif %}
 
 {% endblock %}
 
 
 {% block javascriptcontent %}
-    {% javascripts 'theme/assets/cropit/jquery.cropit.js'%}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-    <style>
-        .cropit-preview {
-            background-color: #f8f8f8;
-            background-size: cover;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            margin-top: 7px;
-            width: 600px;
-            height: 400px;
-        }
-
-        .cropit-preview-image-container {
-            cursor: move;
-        }
-
-        .image-size-label {
-            margin-top: 10px;
-        }
-
-        input, .export {
-            display: block;
-        }
-
-        button {
-            margin-top: 10px;
-        }
-    </style>
-    <script>
-
-/***********************************************************************************************************************
- *                                          LOCAL VARIABLE
- **********************************************************************************************************************/
-        var autocomplete;
-        var map;
-
-
-/***********************************************************************************************************************
- *                                          UTIL FUNCTIONS
- **********************************************************************************************************************/
-        function fillInAddress(e) {
-            // Get the place details from the autocomplete object.
-            var place = autocomplete.getPlace();
-
-            $("#event_location_lat").val(place.geometry.location.lat());
-            $("#event_location_lng").val(place.geometry.location.lng());
-            marker.setPosition(place.geometry.location);
-            map.setCenter(place.geometry.location);
-            map.setZoom(16);
-            $('#search_event_location').val(place.name);
-
-
-
-
-        }
-
-        $('#add_event_form').submit(function() {
-            var imageData = $('.image-editor').cropit('export');
-            $('#event_image_base64').val(imageData);
-            return true; // return false to cancel form action
-        });
-
-        function initMap() {
-
-            if({{ event.imageBase64 is not null }}) {
-                $('.image-editor').cropit({
-                    imageState: {
-                        src: '{{ event.imageBase64 }}'
-                    },
-                });
-            }else{
-                $('.image-editor').cropit({
-                    imageState: {
-                        src: ''
-                    },
-                });
-            }
-            $('.image-editor').cropit('maxZoom', 2);
-            $('.image-editor').cropit('minZoom', 'fit');
-
-            $("#event_date").datetimepicker();
-
-            if({{ event.startDate is not null }}) {
-                $("#event_date").data("DateTimePicker").date("{{ event.startDate.format('m/d/Y H:i') }}");
+    {% if pageError is not defined %}
+        {% javascripts 'theme/assets/cropit/jquery.cropit.js'%}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+        <style>
+            .cropit-preview {
+                background-color: #f8f8f8;
+                background-size: cover;
+                border: 1px solid #ccc;
+                border-radius: 3px;
+                margin-top: 7px;
+                width: 600px;
+                height: 400px;
             }
 
-
-            var input = document.getElementById('search_event_location');
-            autocomplete = new google.maps.places.Autocomplete(input);
-            autocomplete.addListener('place_changed', fillInAddress);
-
-            var event_gps_location = {lat: parseFloat($('#event_location_lat').val()), lng: parseFloat($('#event_location_lng').val()) };
-            map = new google.maps.Map(document.getElementById('event_location'), {
-                zoom: 11,
-                scrollwheel:  false,
-                draggable: true,
-                center: event_gps_location,
-            });
-
-            marker = new google.maps.Marker({
-                position: event_gps_location,
-                map: map
-            });
-            google.maps.event.addListener(map, 'click', function( event ){
-                $("#event_location_lat").val(event.latLng.lat());
-                $("#event_location_lng").val(event.latLng.lng());
-                marker.setPosition(event.latLng);
-            });
-        }
-
-        function fileToBase64Converter() {
-            if (this.files && this.files[0]) {
-                var FR= new FileReader();
-                FR.onload = function(e) {
-                    $('#img_viewer').attr('src', e.target.result);
-                    $('#event_image_base64').val(e.target.result);
-                };
-                FR.readAsDataURL( this.files[0] );
+            .cropit-preview-image-container {
+                cursor: move;
             }
-        }
+
+            .image-size-label {
+                margin-top: 10px;
+            }
+
+            input, .export {
+                display: block;
+            }
+
+            button {
+                margin-top: 10px;
+            }
+        </style>
+        <script>
+
+    /***********************************************************************************************************************
+     *                                          LOCAL VARIABLE
+     **********************************************************************************************************************/
+            var autocomplete;
+            var map;
+
+
+    /***********************************************************************************************************************
+     *                                          UTIL FUNCTIONS
+     **********************************************************************************************************************/
+            function fillInAddress(e) {
+                // Get the place details from the autocomplete object.
+                var place = autocomplete.getPlace();
+
+                $("#event_location_lat").val(place.geometry.location.lat());
+                $("#event_location_lng").val(place.geometry.location.lng());
+                marker.setPosition(place.geometry.location);
+                map.setCenter(place.geometry.location);
+                map.setZoom(16);
+                $('#search_event_location').val(place.name);
 
 
 
-/***********************************************************************************************************************
- *                                          AJAX OPERATIONS
- **********************************************************************************************************************/
 
+            }
 
-/***********************************************************************************************************************
- *                                          EVENTS
- **********************************************************************************************************************/
+            $('#add_event_form').submit(function() {
+                var imageData = $('.image-editor').cropit('export');
+                $('#event_image_base64').val(imageData);
+                return true; // return false to cancel form action
+            });
 
+            function initMap() {
 
-/***********************************************************************************************************************
- *                                          DOCUMENT ON READY
- **********************************************************************************************************************/
-
-            if ( CKEDITOR.env.ie && CKEDITOR.env.version < 9 )
-                CKEDITOR.tools.enableHtml5Elements( document );
-
-            CKEDITOR.config.height = 150;
-            CKEDITOR.config.width = 'auto';
-
-            CKEDITOR.editorConfig = function( config ) {
-                config.toolbarGroups = [
-                    { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
-                    { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
-                    { name: 'links', groups: [ 'links' ] },
-                    { name: 'insert', groups: [ 'insert' ] },
-                    { name: 'forms', groups: [ 'forms' ] },
-                    { name: 'tools', groups: [ 'tools' ] },
-                    { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
-                    { name: 'others', groups: [ 'others' ] },
-                    '/',
-                    { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-                    { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
-                    { name: 'styles', groups: [ 'styles' ] },
-                    { name: 'colors', groups: [ 'colors' ] },
-                    { name: 'about', groups: [ 'about' ] }
-                ];
-            };
-
-            CKEDITOR.replace( 'event_description' );
-
-            var initSample = ( function() {
-                var wysiwygareaAvailable = isWysiwygareaAvailable(),
-                        isBBCodeBuiltIn = !!CKEDITOR.plugins.get( 'bbcode' );
-
-                return function() {
-                    var editorElement = CKEDITOR.document.getById( 'editor' );
-
-                    if ( isBBCodeBuiltIn ) {
-                        editorElement.setHtml('Etkinlik Açıklama Editor\n\n');
-                    }
-
-                    // Depending on the wysiwygare plugin availability initialize classic or inline editor.
-                    if ( wysiwygareaAvailable ) {
-                        CKEDITOR.replace( 'editor' );
-                    } else {
-                        editorElement.setAttribute( 'contenteditable', 'true' );
-                        CKEDITOR.inline( 'editor' );
-                    }
-                };
-
-                function isWysiwygareaAvailable() {
-                    // If in development mode, then the wysiwygarea must be available.
-                    // Split REV into two strings so builder does not replace it :D.
-                    if ( CKEDITOR.revision == ( '%RE' + 'V%' ) ) {
-                        return true;
-                    }
-                    return !!CKEDITOR.plugins.get( 'wysiwygarea' );
+                if({{ event.imageBase64 is not null }}) {
+                    $('.image-editor').cropit({
+                        imageState: {
+                            src: '{{ event.imageBase64 }}'
+                        },
+                    });
+                }else{
+                    $('.image-editor').cropit({
+                        imageState: {
+                            src: ''
+                        },
+                    });
                 }
-            } )();
+                $('.image-editor').cropit('maxZoom', 2);
+                $('.image-editor').cropit('minZoom', 'fit');
 
-            initSample();
+                $("#event_date").datetimepicker();
 
-    </script>
+                if({{ event.startDate is not null }}) {
+                    $("#event_date").data("DateTimePicker").date("{{ event.startDate.format('m/d/Y H:i') }}");
+                }
 
-    <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDLqDBN5nlLAbTBnSrkI0gwft2v6SWFjh8&callback=initMap&libraries=places">
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.css" >
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+
+                var input = document.getElementById('search_event_location');
+                autocomplete = new google.maps.places.Autocomplete(input);
+                autocomplete.addListener('place_changed', fillInAddress);
+
+                var event_gps_location = {lat: parseFloat($('#event_location_lat').val()), lng: parseFloat($('#event_location_lng').val()) };
+                map = new google.maps.Map(document.getElementById('event_location'), {
+                    zoom: 11,
+                    scrollwheel:  false,
+                    draggable: true,
+                    center: event_gps_location,
+                });
+
+                marker = new google.maps.Marker({
+                    position: event_gps_location,
+                    map: map
+                });
+                google.maps.event.addListener(map, 'click', function( event ){
+                    $("#event_location_lat").val(event.latLng.lat());
+                    $("#event_location_lng").val(event.latLng.lng());
+                    marker.setPosition(event.latLng);
+                });
+            }
+
+            function fileToBase64Converter() {
+                if (this.files && this.files[0]) {
+                    var FR= new FileReader();
+                    FR.onload = function(e) {
+                        $('#img_viewer').attr('src', e.target.result);
+                        $('#event_image_base64').val(e.target.result);
+                    };
+                    FR.readAsDataURL( this.files[0] );
+                }
+            }
+
+
+
+    /***********************************************************************************************************************
+     *                                          AJAX OPERATIONS
+     **********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************
+     *                                          EVENTS
+     **********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************
+     *                                          DOCUMENT ON READY
+     **********************************************************************************************************************/
+
+                if ( CKEDITOR.env.ie && CKEDITOR.env.version < 9 )
+                    CKEDITOR.tools.enableHtml5Elements( document );
+
+                CKEDITOR.config.height = 150;
+                CKEDITOR.config.width = 'auto';
+
+                CKEDITOR.editorConfig = function( config ) {
+                    config.toolbarGroups = [
+                        { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
+                        { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+                        { name: 'links', groups: [ 'links' ] },
+                        { name: 'insert', groups: [ 'insert' ] },
+                        { name: 'forms', groups: [ 'forms' ] },
+                        { name: 'tools', groups: [ 'tools' ] },
+                        { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
+                        { name: 'others', groups: [ 'others' ] },
+                        '/',
+                        { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+                        { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+                        { name: 'styles', groups: [ 'styles' ] },
+                        { name: 'colors', groups: [ 'colors' ] },
+                        { name: 'about', groups: [ 'about' ] }
+                    ];
+                };
+
+                CKEDITOR.replace( 'event_description' );
+
+                var initSample = ( function() {
+                    var wysiwygareaAvailable = isWysiwygareaAvailable(),
+                            isBBCodeBuiltIn = !!CKEDITOR.plugins.get( 'bbcode' );
+
+                    return function() {
+                        var editorElement = CKEDITOR.document.getById( 'editor' );
+
+                        if ( isBBCodeBuiltIn ) {
+                            editorElement.setHtml('Etkinlik Açıklama Editor\n\n');
+                        }
+
+                        // Depending on the wysiwygare plugin availability initialize classic or inline editor.
+                        if ( wysiwygareaAvailable ) {
+                            CKEDITOR.replace( 'editor' );
+                        } else {
+                            editorElement.setAttribute( 'contenteditable', 'true' );
+                            CKEDITOR.inline( 'editor' );
+                        }
+                    };
+
+                    function isWysiwygareaAvailable() {
+                        // If in development mode, then the wysiwygarea must be available.
+                        // Split REV into two strings so builder does not replace it :D.
+                        if ( CKEDITOR.revision == ( '%RE' + 'V%' ) ) {
+                            return true;
+                        }
+                        return !!CKEDITOR.plugins.get( 'wysiwygarea' );
+                    }
+                } )();
+
+                initSample();
+
+        </script>
+
+        <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDLqDBN5nlLAbTBnSrkI0gwft2v6SWFjh8&callback=initMap&libraries=places">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.css" >
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+    {% endif %}
 
 {% endblock %}

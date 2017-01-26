@@ -39,7 +39,7 @@ class EventController extends Controller
         // --1-- kullanıcı varsa ve topluluk yöneticisi ise userIsAdmin true döner
         // --2-- kullanıcı varsa ve topluluk yöneticisi değilse userIsAdmin false döner
         // --3-- eğer kullanıcı yoksa null döner ve register butonu da kaldırılır
-        if($event){
+        if(isset($event)){
             $community = $this->getDoctrine()->getRepository('AppBundle:Community')->findOnePublishCommunity($event->getCommunityUser()->getCommunity());
             if($community){
                 if($this->getUser()){
@@ -64,20 +64,39 @@ class EventController extends Controller
 
     /**
      * @Route("/edit/{eventId}", name="event_edit_page")
+     * @Security("has_role('ROLE_USER')")
      */
     public function eventEditPageAction($eventId)
     {
         $data = array();
 
-        $event = $this->getDoctrine()->getRepository('AppBundle:Event')->find($eventId);
+        $event = $this->getDoctrine()->getRepository('AppBundle:Event')->findOneBy(array('id'=>$eventId));
+        if(isset($event)){
 
-        $tickets = $this->getDoctrine()->getRepository('AppBundle:Ticket')->findBy(array('event'=>$eventId));
-        $communityUserList = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findBy(array('user'=>$this->getUser()->getId(), 'status'=>1));
-        $data["communityUserList"] = $communityUserList;
+            $tickets = $this->getDoctrine()->getRepository('AppBundle:Ticket')->findBy(array('event'=>$eventId));
+            $community = $this->getDoctrine()->getRepository('AppBundle:Community')->findOnePublishCommunity($event->getCommunityUser()->getCommunity());
+            // -- Eger topluluk yayında değilse etkinlik sayfasında bu gösterilmeli
+            if(isset($community)){
+//                if($this->getUser()){
+//                    $communityAdminRole = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoles')->findCommunityAdminRoles($this->getUser());
+//                    $data['userIsAdmin'] = $communityAdminRole and count($communityAdminRole)>0 ? true : false;
+//                }
+            }else{
+                $data['pageWarning'] = "Üzgünüz şuan içeriğe ulaşılamıyor";
+                $data['pageWarningBody'] = "Etkinlik Topluluğu Yayında Değil";
+            }
 
-        $data['event'] = $event;
-        $data['tickets'] = $tickets;
+            $communityUserRoles = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoles')->findCommunityAdminRoles($this->getUser()->getId());
+            $data["communityAdminRoles"] = $communityUserRoles;
 
+            $data['event'] = $event;
+            $data['tickets'] = $tickets;
+
+        }else{
+            $data['pageError'] = "Üzgünüz şuan içeriğe ulaşılamıyor";
+            $data['pageErrorBody'] = "Etkinlik Bulunamadı ya da yayında kaldırıldı";
+        }
+        
         return $this->render('AppBundle:event:eventEdit.html.twig' , $data);
     }
 
