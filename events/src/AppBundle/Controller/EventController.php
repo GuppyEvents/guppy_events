@@ -69,28 +69,30 @@ class EventController extends Controller
     public function eventEditPageAction($eventId)
     {
         $data = array();
-
+        
         $event = $this->getDoctrine()->getRepository('AppBundle:Event')->findOneBy(array('id'=>$eventId));
         if(isset($event)){
 
-            $tickets = $this->getDoctrine()->getRepository('AppBundle:Ticket')->findBy(array('event'=>$eventId));
-            $community = $this->getDoctrine()->getRepository('AppBundle:Community')->findOnePublishCommunity($event->getCommunityUser()->getCommunity());
-            // -- Eger topluluk yayında değilse etkinlik sayfasında bu gösterilmeli
-            if(isset($community)){
-//                if($this->getUser()){
-//                    $communityAdminRole = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoles')->findCommunityAdminRoles($this->getUser());
-//                    $data['userIsAdmin'] = $communityAdminRole and count($communityAdminRole)>0 ? true : false;
-//                }
+            $isUserCommunityAdmin = $this->getDoctrine()->getRepository('AppBundle:User')->isUserCommunityAdmin($this->getUser()->getId(), $event->getCommunityUser()->getCommunity()->getId());
+            if($isUserCommunityAdmin){
+
+                $tickets = $this->getDoctrine()->getRepository('AppBundle:Ticket')->findBy(array('event'=>$eventId));
+                $community = $this->getDoctrine()->getRepository('AppBundle:Community')->findOnePublishCommunity($event->getCommunityUser()->getCommunity());
+                // -- Eger topluluk yayında değilse etkinlik sayfasında bu gösterilmeli
+                if(!isset($community)){
+                    $data['pageWarning'] = "Üzgünüz şuan içeriğe ulaşılamıyor";
+                    $data['pageWarningBody'] = "Etkinlik Topluluğu Yayında Değil";
+                }
+
+                $communityUserRoles = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoles')->findCommunityAdminRoles($this->getUser()->getId());
+                $data["communityAdminRoles"] = $communityUserRoles;
+                $data['event'] = $event;
+                $data['tickets'] = $tickets;
+
             }else{
-                $data['pageWarning'] = "Üzgünüz şuan içeriğe ulaşılamıyor";
-                $data['pageWarningBody'] = "Etkinlik Topluluğu Yayında Değil";
+                $data['pageError'] = "Üzgünüz şuan içeriğe ulaşılamıyor";
+                $data['pageErrorBody'] = "Etkinlik için erişim izniniz bulunmamaktadır";
             }
-
-            $communityUserRoles = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoles')->findCommunityAdminRoles($this->getUser()->getId());
-            $data["communityAdminRoles"] = $communityUserRoles;
-
-            $data['event'] = $event;
-            $data['tickets'] = $tickets;
 
         }else{
             $data['pageError'] = "Üzgünüz şuan içeriğe ulaşılamıyor";

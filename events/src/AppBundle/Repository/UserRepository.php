@@ -57,13 +57,16 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
 
     /**
      *
+     * İlgili kullanıcının verilen topluluk için admin role sahip olup olmadığı sonucunu döner. Topluluğun onaylanmış
+     * ya da yayından kaldırılmış olup olmadığına bakılmaz.
+     *
      * @param User $user The user
+     * @param Community $community The community
      * @return true | false
      */
     public function isUserCommunityAdmin($user, $community)
     {
-
-        if($community){
+        if(isset($user) && isset($community)){
             $communityUser = $this->getEntityManager()->getRepository('AppBundle:CommunityUser')->findOneBy(array('community'=>$community , 'user'=>$user));
 
             $acceptState = $this->getEntityManager()->getRepository('AppBundle:CommunityUserRoleState')->findAcceptState();
