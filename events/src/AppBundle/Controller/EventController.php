@@ -69,7 +69,7 @@ class EventController extends Controller
     public function eventEditPageAction($eventId)
     {
         $data = array();
-        
+
         $event = $this->getDoctrine()->getRepository('AppBundle:Event')->findOneBy(array('id'=>$eventId));
         if(isset($event)){
 
@@ -105,14 +105,21 @@ class EventController extends Controller
 
     /**
      * @Route("/add", name="event_add_page")
+     * @Security("has_role('ROLE_USER')")
      */
     public function eventAddPageAction()
     {
         $data = array();
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
-        $communityUserList = $em->getRepository('AppBundle:CommunityUser')->findBy(array('user'=>$user->getId(), 'status'=>1));
-        $data["communityUserList"] = $communityUserList;
+
+        $communityUserRoles = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoles')->findCommunityAdminRoles($this->getUser()->getId());
+        if($communityUserRoles){
+            $data["communityAdminRoles"] = $communityUserRoles;
+        }else{
+            return $this->redirectToRoute('home_events');
+        }
+
         return $this->render('AppBundle:event:eventAdd.html.twig' , $data);
     }
 
