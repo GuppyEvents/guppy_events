@@ -14,6 +14,14 @@ class DefaultController extends Controller
 {
 
     /**
+     * @Route("/f240212d605c.html", name="yandex_mail")
+     */
+    public function yandexMailAction(Request $request)
+    {
+        return $this->render('AppBundle:default:yamdex.html.twig');
+    }
+
+    /**
      * @Route("/", name="homepage")
      */
     public function homeAction(Request $request)
