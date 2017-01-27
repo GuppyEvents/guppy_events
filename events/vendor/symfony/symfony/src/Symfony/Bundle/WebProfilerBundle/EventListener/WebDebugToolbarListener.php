@@ -98,6 +98,7 @@ class WebDebugToolbarListener implements EventSubscriberInterface
             || $response->isRedirection()
             || ($response->headers->has('Content-Type') && false === strpos($response->headers->get('Content-Type'), 'html'))
             || 'html' !== $request->getRequestFormat()
+            || false !== stripos($response->headers->get('Content-Disposition'), 'attachment;')
         ) {
             return;
         }
@@ -107,8 +108,6 @@ class WebDebugToolbarListener implements EventSubscriberInterface
 
     /**
      * Injects the web debug toolbar into the given Response.
-     *
-     * @param Response $response A Response instance
      */
     protected function injectToolbar(Response $response, Request $request)
     {

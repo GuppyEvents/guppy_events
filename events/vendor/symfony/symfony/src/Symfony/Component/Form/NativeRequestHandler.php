@@ -81,15 +81,12 @@ class NativeRequestHandler implements RequestHandlerInterface
             // Mark the form with an error if the uploaded size was too large
             // This is done here and not in FormValidator because $_POST is
             // empty when that error occurs. Hence the form is never submitted.
-            $contentLength = $this->serverParams->getContentLength();
-            $maxContentLength = $this->serverParams->getPostMaxSize();
-
-            if (!empty($maxContentLength) && $contentLength > $maxContentLength) {
+            if ($this->serverParams->hasPostMaxSizeBeenExceeded()) {
                 // Submit the form, but don't clear the default values
                 $form->submit(null, false);
 
                 $form->addError(new FormError(
-                    $form->getConfig()->getOption('post_max_size_message'),
+                    call_user_func($form->getConfig()->getOption('upload_max_size_message')),
                     null,
                     array('{{ max }}' => $this->serverParams->getNormalizedIniPostMaxSize())
                 ));
@@ -132,7 +129,7 @@ class NativeRequestHandler implements RequestHandlerInterface
     /**
      * Returns the method used to submit the request to the server.
      *
-     * @return string The request method.
+     * @return string The request method
      */
     private static function getRequestMethod()
     {
@@ -200,9 +197,9 @@ class NativeRequestHandler implements RequestHandlerInterface
     /**
      * Sets empty uploaded files to NULL in the given uploaded files array.
      *
-     * @param mixed $data The file upload data.
+     * @param mixed $data The file upload data
      *
-     * @return array|null Returns the stripped upload data.
+     * @return array|null Returns the stripped upload data
      */
     private static function stripEmptyFiles($data)
     {

@@ -21,7 +21,8 @@
         "sensio/distribution-bundle": "~5.0",
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "~2.0",
-        "symfony/assetic-bundle": "^2.8"
+        "symfony/assetic-bundle": "^2.8",
+	"google/cloud": "*"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",
@@ -48,7 +49,7 @@
     "config": {
         "bin-dir": "bin",
         "platform": {
-            "php": "5.3.9"
+            "php": "5.6.9"
         }
     },
     "extra": {

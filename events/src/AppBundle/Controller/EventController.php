@@ -32,18 +32,28 @@ class EventController extends Controller
     {
         $data = array();
 
-        $event = $this->getDoctrine()->getRepository('AppBundle:Event')->find($eventId);
+        //$state = $this->getDoctrine()->getRepository('AppBundle:State')->findPublishState();
+        $event = $this->getDoctrine()->getRepository('AppBundle:Event')->findOneBy(array('id'=>$eventId));
         $tickets = $this->getDoctrine()->getRepository('AppBundle:Ticket')->findBy(array('event'=>$eventId));
-
 
         // --1-- kullanıcı varsa ve topluluk yöneticisi ise userIsAdmin true döner
         // --2-- kullanıcı varsa ve topluluk yöneticisi değilse userIsAdmin false döner
         // --3-- eğer kullanıcı yoksa null döner ve register butonu da kaldırılır
-        if($event){
-            if($event->getCommunityUser()->getCommunity() && $this->getUser()){
-                $isUserAdmin = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findBy(array('community'=>$event->getCommunityUser()->getCommunity() , 'user'=>$this->getUser() , 'status'=>1));
-                $data['userIsAdmin'] = $isUserAdmin and count($isUserAdmin)>0 ? true : false;
+        if(isset($event)){
+            $community = $this->getDoctrine()->getRepository('AppBundle:Community')->findOnePublishCommunity($event->getCommunityUser()->getCommunity());
+            if($community){
+                if($this->getUser()){
+                    $communityAdminRole = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoles')->findCommunityAdminRoles($this->getUser());
+                    $data['userIsAdmin'] = $communityAdminRole and count($communityAdminRole)>0 ? true : false;
+                }
+            }else{
+                $data['pageError'] = "Üzgünüz şuan içeriğe ulaşılamıyor";
+                $data['pageErrorBody'] = "Etkinlik Topluluğu Yayında Değil";
             }
+
+        }else{
+            $data['pageError'] = "Üzgünüz şuan içeriğe ulaşılamıyor";
+            $data['pageErrorBody'] = "Etkinlik Bulunamadı ya da yayında kaldırıldı";
         }
 
         $data['event'] = $event;
@@ -54,34 +64,62 @@ class EventController extends Controller
 
     /**
      * @Route("/edit/{eventId}", name="event_edit_page")
+     * @Security("has_role('ROLE_USER')")
      */
     public function eventEditPageAction($eventId)
     {
         $data = array();
 
-        $event = $this->getDoctrine()->getRepository('AppBundle:Event')->find($eventId);
+        $event = $this->getDoctrine()->getRepository('AppBundle:Event')->findOneBy(array('id'=>$eventId));
+        if(isset($event)){
 
-        $tickets = $this->getDoctrine()->getRepository('AppBundle:Ticket')->findBy(array('event'=>$eventId));
-        $communityUserList = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findBy(array('user'=>$this->getUser()->getId(), 'status'=>1));
-        $data["communityUserList"] = $communityUserList;
+            $isUserCommunityAdmin = $this->getDoctrine()->getRepository('AppBundle:User')->isUserCommunityAdmin($this->getUser()->getId(), $event->getCommunityUser()->getCommunity()->getId());
+            if($isUserCommunityAdmin){
 
-        $data['event'] = $event;
-        $data['tickets'] = $tickets;
+                $tickets = $this->getDoctrine()->getRepository('AppBundle:Ticket')->findBy(array('event'=>$eventId));
+                $community = $this->getDoctrine()->getRepository('AppBundle:Community')->findOnePublishCommunity($event->getCommunityUser()->getCommunity());
+                // -- Eger topluluk yayında değilse etkinlik sayfasında bu gösterilmeli
+                if(!isset($community)){
+                    $data['pageWarning'] = "Üzgünüz şuan içeriğe ulaşılamıyor";
+                    $data['pageWarningBody'] = "Etkinlik Topluluğu Yayında Değil";
+                }
 
+                $communityUserRoles = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoles')->findCommunityAdminRoles($this->getUser()->getId());
+                $data["communityAdminRoles"] = $communityUserRoles;
+                $data['event'] = $event;
+                $data['tickets'] = $tickets;
+
+            }else{
+                $data['pageError'] = "Üzgünüz şuan içeriğe ulaşılamıyor";
+                $data['pageErrorBody'] = "Etkinlik için erişim izniniz bulunmamaktadır";
+            }
+
+        }else{
+            $data['pageError'] = "Üzgünüz şuan içeriğe ulaşılamıyor";
+            $data['pageErrorBody'] = "Etkinlik Bulunamadı ya da yayında kaldırıldı";
+        }
+        
         return $this->render('AppBundle:event:eventEdit.html.twig' , $data);
     }
 
 
     /**
      * @Route("/add", name="event_add_page")
+     * @Security("has_role('ROLE_USER')")
      */
     public function eventAddPageAction()
     {
         $data = array();
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
-        $communityUserList = $em->getRepository('AppBundle:CommunityUser')->findBy(array('user'=>$user->getId(), 'status'=>1));
-        $data["communityUserList"] = $communityUserList;
+
+        $communityUserRoles = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoles')->findCommunityAdminRoles($this->getUser()->getId());
+        if($communityUserRoles){
+            $data["communityAdminRoles"] = $communityUserRoles;
+        }else{
+            return $this->redirectToRoute('home_events');
+        }
+
         return $this->render('AppBundle:event:eventAdd.html.twig' , $data);
     }
 
@@ -105,36 +143,45 @@ class EventController extends Controller
                 // --1.2-- Event may contains community
                 $user = $this->getUser();
                 $community = $em->getRepository('AppBundle:Community')->find($request->get('community_id'));
-                $communityUser = $em->getRepository('AppBundle:CommunityUser')->findBy(array('user'=>$user->getId() , 'community'=>$community->getId()));
+                if($community){
+                    $communityUser = $em->getRepository('AppBundle:CommunityUser')->findBy(array('user'=>$user->getId() , 'community'=>$community->getId()));
+                    $isUserCommunityAdmin = $this->getDoctrine()->getRepository('AppBundle:User')->isUserCommunityAdmin($this->getUser()->getId(), $community->getId());
 
-                // --2.1-- Eğer böyle bir topluluk kullanıcısı varsa o kullanıcı ile işlem yap
-                if(count($communityUser)>0){
-                    $communityUser = $communityUser[0];
+                    // --2.1-- Eğer böyle bir topluluk kullanıcısı varsa o kullanıcı ile işlem yap
+                    if(count($communityUser)>0){
+                        $communityUser = $communityUser[0];
+                    }else if(!$isUserCommunityAdmin){
+                        return $this->redirectToRoute('home_events');
+                    }else{
+                        return $this->redirectToRoute('event_add_page');
+                    }
+
+                    $request_date = \DateTime::createFromFormat('m/d/Y H:i A', $request->get('event_date'));
+                    $request_permission = $request->get('event_permission') ? $request->get('event_permission') : 'PUBLIC';
+                    $pendingState = $this->getDoctrine()->getRepository('AppBundle:State')->findPendingState();
+
+                    $event = $em->getRepository('AppBundle:Event')->find($request->get('event_id'));
+                    $event->setTitle( $request->get('event_title') );
+                    $event->setDescription( $request->get('event_description') );
+                    $event->setPermission($request_permission);
+                    $event->setStartDate( $request_date );
+                    $event->setMaxParticipantNum( $request->get('event_participant_count') );
+                    $event->setImageBase64($request->get('event_image_base64'));
+                    $event->setGpsLocationLat($request->get('event_location_lat'));
+                    $event->setGpsLocationLng($request->get('event_location_lng'));
+                    $event->setCommunityUser( $communityUser );
+                    $event->setLocationName($request->get('search_event_location'));
+                    $event->setState($pendingState);
+
+                    $ticket = $em->getRepository('AppBundle:Ticket')->find($request->get('ticket_id'));
+                    $ticket->setPrice(intval($request->get('event_price')));
+
+                    $em->flush();
+
+                    return $this->redirectToRoute('user_event_mainpage', array('eventId' => $event->getId()));
                 }else{
-                    return $this->redirectToRoute('event_add_page');
+                    return $this->redirectToRoute('home_events');
                 }
-
-                $request_date = \DateTime::createFromFormat('m/d/Y H:i A', $request->get('event_date'));
-                $request_permission = $request->get('event_permission') ? $request->get('event_permission') : 'PUBLIC';
-
-                $event = $em->getRepository('AppBundle:Event')->find($request->get('event_id'));
-                $event->setTitle( $request->get('event_title') );
-                $event->setDescription( $request->get('event_description') );
-                $event->setPermission($request_permission);
-                $event->setStartDate( $request_date );
-                $event->setMaxParticipantNum( $request->get('event_participant_count') );
-                $event->setImageBase64($request->get('event_image_base64'));
-                $event->setGpsLocationLat($request->get('event_location_lat'));
-                $event->setGpsLocationLng($request->get('event_location_lng'));
-                $event->setCommunityUser( $communityUser );
-                $event->setLocationName($request->get('search_event_location'));
-
-                $ticket = $em->getRepository('AppBundle:Ticket')->find($request->get('ticket_id'));
-                $ticket->setPrice(intval($request->get('event_price')));
-
-                $em->flush();
-
-                return $this->redirectToRoute('user_event_mainpage', array('eventId' => $event->getId()));
             } catch (Exception $e){
                 return $this->redirectToRoute('event_add_page');
             }
@@ -162,36 +209,45 @@ class EventController extends Controller
                 // --1.2-- Event may contains community
                 $user = $this->getUser();
                 $community = $em->getRepository('AppBundle:Community')->find($request->get('community_id'));
-                $communityUser = $em->getRepository('AppBundle:CommunityUser')->findBy(array('user'=>$user->getId() , 'community'=>$community->getId()));
+                if($community){
+                    $communityUser = $em->getRepository('AppBundle:CommunityUser')->findBy(array('user'=>$user->getId() , 'community'=>$community->getId()));
+                    $isUserCommunityAdmin = $this->getDoctrine()->getRepository('AppBundle:User')->isUserCommunityAdmin($this->getUser()->getId(), $community->getId());
 
-                // --2.1-- Eğer böyle bir topluluk kullanıcısı varsa o kullanıcı ile işlem yap
-                if(count($communityUser)>0){
-                    $communityUser = $communityUser[0];
+                    // --2.1-- Eğer böyle bir topluluk kullanıcısı varsa o kullanıcı ile işlem yap
+                    if(count($communityUser)>0){
+                        $communityUser = $communityUser[0];
+                    }else if(!$isUserCommunityAdmin){
+                        return $this->redirectToRoute('home_events');
+                    }else{
+                        return $this->redirectToRoute('event_add_page');
+                    }
+
+                    $request_date = \DateTime::createFromFormat('m/d/Y H:i A', $request->get('event_date'));
+                    $request_permission = $request->get('event_permission') ? $request->get('event_permission') : 'PUBLIC';
+                    $pendingState = $this->getDoctrine()->getRepository('AppBundle:State')->findPendingState();
+
+                    $event = new Event();
+                    $event->setTitle( $request->get('event_title') );
+                    $event->setDescription( $request->get('event_description') );
+                    $event->setPermission($request_permission);
+                    $event->setStartDate( $request_date );
+                    $event->setMaxParticipantNum( $request->get('event_participant_count') );
+                    $event->setImageBase64($request->get('event_image_base64'));
+                    $event->setGpsLocationLat($request->get('event_location_lat'));
+                    $event->setGpsLocationLng($request->get('event_location_lng'));
+                    $event->setCommunityUser( $communityUser );
+                    $event->setState($pendingState);
+
+                    $ticket = new Ticket();
+                    $ticket->setPrice(intval($request->get('event_price')));
+                    $ticket->setEvent($event);
+                    $em->persist($event);
+                    $em->persist($ticket);
+                    $em->flush();
+                    return $this->redirectToRoute('user_event_mainpage', array('eventId' => $event->getId()));
                 }else{
-                    return $this->redirectToRoute('event_add_page');
+                    return $this->redirectToRoute('home_events');
                 }
-
-                $request_date = \DateTime::createFromFormat('m/d/Y H:i A', $request->get('event_date'));
-                $request_permission = $request->get('event_permission') ? $request->get('event_permission') : 'PUBLIC';
-
-                $event = new Event();
-                $event->setTitle( $request->get('event_title') );
-                $event->setDescription( $request->get('event_description') );
-                $event->setPermission($request_permission);
-                $event->setStartDate( $request_date );
-                $event->setMaxParticipantNum( $request->get('event_participant_count') );
-                $event->setImageBase64($request->get('event_image_base64'));
-                $event->setGpsLocationLat($request->get('event_location_lat'));
-                $event->setGpsLocationLng($request->get('event_location_lng'));
-                $event->setCommunityUser( $communityUser );
-
-                $ticket = new Ticket();
-                $ticket->setPrice(intval($request->get('event_price')));
-                $ticket->setEvent($event);
-                $em->persist($event);
-                $em->persist($ticket);
-                $em->flush();
-                return $this->redirectToRoute('user_event_mainpage', array('eventId' => $event->getId()));
             } catch (Exception $e){
                 return $this->redirectToRoute('event_add_page');
             }

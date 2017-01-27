@@ -50,4 +50,21 @@ class CommunityRepository extends EntityRepository
             ->getResult();
     }
 
+
+    /**
+     *
+     * @param string $communityId The community id value
+     * @return Community|null
+     */
+    public function findOnePublishCommunity($communityId)
+    {
+        return $this->createQueryBuilder('community')
+            ->where('community.id= :communityId')
+            ->andWhere('community.isApproved=true')
+            ->andWhere('community.deleteDate is null')
+            ->setParameter('communityId', $communityId)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
 }

@@ -18,6 +18,27 @@ class EventRepository extends EntityRepository
      * @param string $username The username
      * @return UserInterface|null
      */
+    public function findPublishEventsByCommunityId($communityId)
+    {
+        $statePublish = $this->getEntityManager()->getRepository('AppBundle:State')->findPublishState();
+        return $this->createQueryBuilder('event')
+            ->join('event.communityUser', 'communityUser')
+            ->join('communityUser.community', 'community')
+            ->join('event.state', 'state')
+            ->where('community.id = :communityId')
+            ->andWhere('state.id = :statePublish')
+            ->orderBy('event.startDate', 'DESC')
+            ->setParameter('communityId', intval($communityId))
+            ->setParameter('statePublish', $statePublish)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     *
+     * @param string $username The username
+     * @return UserInterface|null
+     */
     public function findEventsByCommunityId($communityId)
     {
         return $this->createQueryBuilder('event')
@@ -59,6 +80,25 @@ class EventRepository extends EntityRepository
             ->where('event.startDate BETWEEN :targetDate AND :targetNextDate')
             ->setParameter('targetDate', $firstDate)
             ->setParameter('targetNextDate', $lastDate)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     *
+     * @param \DateTime $datetime The date
+     * @return UserInterface|null
+     */
+    public function findPublishEventsByDate($firstDate , $lastDate)
+    {
+        $statePublish = $this->getEntityManager()->getRepository('AppBundle:State')->findPublishState();
+        return $this->createQueryBuilder('event')
+            ->join('event.state', 'state')
+            ->where('event.startDate BETWEEN :targetDate AND :targetNextDate')
+            ->andWhere('state.id = :statePublish')
+            ->setParameter('targetDate', $firstDate)
+            ->setParameter('targetNextDate', $lastDate)
+            ->setParameter('statePublish', $statePublish)
             ->getQuery()
             ->getResult();
     }

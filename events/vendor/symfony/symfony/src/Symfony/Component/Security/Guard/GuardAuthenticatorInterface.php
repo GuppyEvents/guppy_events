@@ -40,10 +40,14 @@ interface GuardAuthenticatorInterface extends AuthenticationEntryPointInterface
      *
      * For example, for a form login, you might:
      *
-     *      return array(
-     *          'username' => $request->request->get('_username'),
-     *          'password' => $request->request->get('_password'),
-     *      );
+     *      if ($request->request->has('_username')) {
+     *          return array(
+     *              'username' => $request->request->get('_username'),
+     *              'password' => $request->request->get('_password'),
+     *          );
+     *      } else {
+     *          return;
+     *      }
      *
      * Or for an API token that's on a header, you might use:
      *
@@ -83,7 +87,7 @@ interface GuardAuthenticatorInterface extends AuthenticationEntryPointInterface
      *
      * @param mixed         $credentials
      * @param UserInterface $user
-     * 
+     *
      * @return bool
      *
      * @throws AuthenticationException

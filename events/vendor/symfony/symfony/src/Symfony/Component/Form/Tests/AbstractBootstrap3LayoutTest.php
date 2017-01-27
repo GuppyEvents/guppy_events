@@ -232,6 +232,68 @@ abstract class AbstractBootstrap3LayoutTest extends AbstractLayoutTest
         );
     }
 
+    public function testSingleChoiceAttributesWithMainAttributes()
+    {
+        $form = $this->factory->createNamed('name', 'Symfony\Component\Form\Extension\Core\Type\ChoiceType', '&a', array(
+            'choices' => array('Choice&A' => '&a', 'Choice&B' => '&b'),
+            'choices_as_values' => true,
+            'multiple' => false,
+            'expanded' => false,
+            'attr' => array('class' => 'bar&baz'),
+        ));
+
+        $this->assertWidgetMatchesXpath($form->createView(), array('attr' => array('class' => 'bar&baz')),
+'/select
+    [@name="name"]
+    [@class="bar&baz form-control"]
+    [not(@required)]
+    [
+        ./option[@value="&a"][@selected="selected"][.="[trans]Choice&A[/trans]"]
+        /following-sibling::option[@value="&b"][not(@selected)][.="[trans]Choice&B[/trans]"]
+    ]
+    [count(./option)=2]
+'
+        );
+    }
+
+    public function testSingleExpandedChoiceAttributesWithMainAttributes()
+    {
+        $form = $this->factory->createNamed('name', 'Symfony\Component\Form\Extension\Core\Type\ChoiceType', '&a', array(
+            'choices' => array('Choice&A' => '&a', 'Choice&B' => '&b'),
+            'choices_as_values' => true,
+            'multiple' => false,
+            'expanded' => true,
+            'attr' => array('class' => 'bar&baz'),
+        ));
+
+        $this->assertWidgetMatchesXpath($form->createView(), array('attr' => array('class' => 'bar&baz')),
+'/div
+    [@class="bar&baz"]
+    [
+        ./div
+            [@class="radio"]
+            [
+                ./label
+                    [.=" [trans]Choice&A[/trans]"]
+                    [
+                        ./input[@type="radio"][@name="name"][@id="name_0"][@value="&a"][@checked]
+                    ]
+            ]
+        /following-sibling::div
+            [@class="radio"]
+            [
+                ./label
+                    [.=" [trans]Choice&B[/trans]"]
+                    [
+                        ./input[@type="radio"][@name="name"][@id="name_1"][@value="&b"][not(@checked)]
+                    ]
+            ]
+        /following-sibling::input[@type="hidden"][@id="name__token"]
+    ]
+'
+        );
+    }
+
     public function testSelectWithSizeBiggerThanOneCanBeRequired()
     {
         $form = $this->factory->createNamed('name', 'Symfony\Component\Form\Extension\Core\Type\ChoiceType', null, array(
@@ -1346,7 +1408,7 @@ abstract class AbstractBootstrap3LayoutTest extends AbstractLayoutTest
 
     public function testDateTime()
     {
-        $form = $this->factory->createNamed('name', 'Symfony\Component\Form\Extension\Core\Type\DateTimeType', '2011-02-03 04:05:06', array(
+        $form = $this->factory->createNamed('name', 'Symfony\Component\Form\Extension\Core\Type\DateTimeType', date('Y').'-02-03 04:05:06', array(
             'input' => 'string',
             'with_seconds' => false,
         ));
@@ -1365,7 +1427,7 @@ abstract class AbstractBootstrap3LayoutTest extends AbstractLayoutTest
         /following-sibling::select
             [@id="name_date_year"]
             [@class="form-control"]
-            [./option[@value="2011"][@selected="selected"]]
+            [./option[@value="'.date('Y').'"][@selected="selected"]]
         /following-sibling::select
             [@id="name_time_hour"]
             [@class="form-control"]
@@ -1420,7 +1482,7 @@ abstract class AbstractBootstrap3LayoutTest extends AbstractLayoutTest
 
     public function testDateTimeWithHourAndMinute()
     {
-        $data = array('year' => '2011', 'month' => '2', 'day' => '3', 'hour' => '4', 'minute' => '5');
+        $data = array('year' => date('Y'), 'month' => '2', 'day' => '3', 'hour' => '4', 'minute' => '5');
 
         $form = $this->factory->createNamed('name', 'Symfony\Component\Form\Extension\Core\Type\DateTimeType', $data, array(
             'input' => 'array',
@@ -1442,7 +1504,7 @@ abstract class AbstractBootstrap3LayoutTest extends AbstractLayoutTest
         /following-sibling::select
             [@id="name_date_year"]
             [@class="form-control"]
-            [./option[@value="2011"][@selected="selected"]]
+            [./option[@value="'.date('Y').'"][@selected="selected"]]
         /following-sibling::select
             [@id="name_time_hour"]
             [@class="form-control"]
@@ -1459,7 +1521,7 @@ abstract class AbstractBootstrap3LayoutTest extends AbstractLayoutTest
 
     public function testDateTimeWithSeconds()
     {
-        $form = $this->factory->createNamed('name', 'Symfony\Component\Form\Extension\Core\Type\DateTimeType', '2011-02-03 04:05:06', array(
+        $form = $this->factory->createNamed('name', 'Symfony\Component\Form\Extension\Core\Type\DateTimeType', date('Y').'-02-03 04:05:06', array(
             'input' => 'string',
             'with_seconds' => true,
         ));
@@ -1479,7 +1541,7 @@ abstract class AbstractBootstrap3LayoutTest extends AbstractLayoutTest
         /following-sibling::select
             [@id="name_date_year"]
             [@class="form-control"]
-            [./option[@value="2011"][@selected="selected"]]
+            [./option[@value="'.date('Y').'"][@selected="selected"]]
         /following-sibling::select
             [@id="name_time_hour"]
             [@class="form-control"]
@@ -1569,7 +1631,7 @@ abstract class AbstractBootstrap3LayoutTest extends AbstractLayoutTest
 
     public function testDateChoice()
     {
-        $form = $this->factory->createNamed('name', 'Symfony\Component\Form\Extension\Core\Type\DateType', '2011-02-03', array(
+        $form = $this->factory->createNamed('name', 'Symfony\Component\Form\Extension\Core\Type\DateType', date('Y').'-02-03', array(
             'input' => 'string',
             'widget' => 'choice',
         ));
@@ -1589,7 +1651,7 @@ abstract class AbstractBootstrap3LayoutTest extends AbstractLayoutTest
         /following-sibling::select
             [@id="name_year"]
             [@class="form-control"]
-            [./option[@value="2011"][@selected="selected"]]
+            [./option[@value="'.date('Y').'"][@selected="selected"]]
     ]
     [count(./select)=3]
 '

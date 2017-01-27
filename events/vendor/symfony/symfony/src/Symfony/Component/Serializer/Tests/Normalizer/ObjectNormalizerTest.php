@@ -39,7 +39,7 @@ class ObjectNormalizerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->serializer = $this->getMock(__NAMESPACE__.'\ObjectSerializerNormalizer');
+        $this->serializer = $this->getMockBuilder(__NAMESPACE__.'\ObjectSerializerNormalizer')->getMock();
         $this->normalizer = new ObjectNormalizer();
         $this->normalizer->setSerializer($this->serializer);
     }
@@ -355,8 +355,8 @@ class ObjectNormalizerTest extends \PHPUnit_Framework_TestCase
             array(
                 array(
                     'bar' => function ($bar) {
-                            return 'baz';
-                        },
+                        return 'baz';
+                    },
                 ),
                 'baz',
                 array('foo' => '', 'bar' => 'baz', 'baz' => true),
@@ -365,8 +365,8 @@ class ObjectNormalizerTest extends \PHPUnit_Framework_TestCase
             array(
                 array(
                     'bar' => function ($bar) {
-                            return;
-                        },
+                        return;
+                    },
                 ),
                 'baz',
                 array('foo' => '', 'bar' => null, 'baz' => true),
@@ -375,8 +375,8 @@ class ObjectNormalizerTest extends \PHPUnit_Framework_TestCase
             array(
                 array(
                     'bar' => function ($bar) {
-                            return $bar->format('d-m-Y H:i:s');
-                        },
+                        return $bar->format('d-m-Y H:i:s');
+                    },
                 ),
                 new \DateTime('2011-09-10 06:30:00'),
                 array('foo' => '', 'bar' => '10-09-2011 06:30:00', 'baz' => true),
@@ -385,13 +385,13 @@ class ObjectNormalizerTest extends \PHPUnit_Framework_TestCase
             array(
                 array(
                     'bar' => function ($bars) {
-                            $foos = '';
-                            foreach ($bars as $bar) {
-                                $foos .= $bar->getFoo();
-                            }
+                        $foos = '';
+                        foreach ($bars as $bar) {
+                            $foos .= $bar->getFoo();
+                        }
 
-                            return $foos;
-                        },
+                        return $foos;
+                    },
                 ),
                 array(new ObjectConstructorDummy('baz', '', false), new ObjectConstructorDummy('quux', '', false)),
                 array('foo' => '', 'bar' => 'bazquux', 'baz' => true),
@@ -400,8 +400,8 @@ class ObjectNormalizerTest extends \PHPUnit_Framework_TestCase
             array(
                 array(
                     'bar' => function ($bars) {
-                            return count($bars);
-                        },
+                        return count($bars);
+                    },
                 ),
                 array(new ObjectConstructorDummy('baz', '', false), new ObjectConstructorDummy('quux', '', false)),
                 array('foo' => '', 'bar' => 2, 'baz' => true),
@@ -416,7 +416,7 @@ class ObjectNormalizerTest extends \PHPUnit_Framework_TestCase
      */
     public function testUnableToNormalizeObjectAttribute()
     {
-        $serializer = $this->getMock('Symfony\Component\Serializer\SerializerInterface');
+        $serializer = $this->getMockBuilder('Symfony\Component\Serializer\SerializerInterface')->getMock();
         $this->normalizer->setSerializer($serializer);
 
         $obj = new ObjectDummy();
