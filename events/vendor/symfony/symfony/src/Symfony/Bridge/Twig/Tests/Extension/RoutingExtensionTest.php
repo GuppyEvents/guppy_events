@@ -20,10 +20,10 @@ class RoutingExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function testEscaping($template, $mustBeEscaped)
     {
-        $twig = new \Twig_Environment($this->getMock('Twig_LoaderInterface'), array('debug' => true, 'cache' => false, 'autoescape' => 'html', 'optimizations' => 0));
-        $twig->addExtension(new RoutingExtension($this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface')));
+        $twig = new \Twig_Environment($this->getMockBuilder('Twig_LoaderInterface')->getMock(), array('debug' => true, 'cache' => false, 'autoescape' => 'html', 'optimizations' => 0));
+        $twig->addExtension(new RoutingExtension($this->getMockBuilder('Symfony\Component\Routing\Generator\UrlGeneratorInterface')->getMock()));
 
-        $nodes = $twig->parse($twig->tokenize($template));
+        $nodes = $twig->parse($twig->tokenize(new \Twig_Source($template, '')));
 
         $this->assertSame($mustBeEscaped, $nodes->getNode('body')->getNode(0)->getNode('expr') instanceof \Twig_Node_Expression_Filter);
     }

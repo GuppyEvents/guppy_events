@@ -12,6 +12,7 @@
 namespace Symfony\Component\Validator\Tests\Mapping;
 
 use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\Constraints\GreaterThan;
 use Symfony\Component\Validator\Constraints\Valid;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Tests\Fixtures\ConstraintA;
@@ -134,20 +135,45 @@ class ClassMetadataTest extends \PHPUnit_Framework_TestCase
     {
         $parent = new ClassMetadata(self::PARENTCLASS);
         $parent->addPropertyConstraint('firstName', new ConstraintA());
+        $parent->addPropertyConstraint('firstName', new ConstraintB(array('groups' => 'foo')));
 
         $this->metadata->mergeConstraints($parent);
         $this->metadata->addPropertyConstraint('firstName', new ConstraintA());
 
+        $constraintA1 = new ConstraintA(array('groups' => array(
+            'Default',
+            'EntityParent',
+            'Entity',
+        )));
+        $constraintA2 = new ConstraintA(array('groups' => array(
+            'Default',
+            'Entity',
+        )));
+        $constraintB = new ConstraintB(array(
+            'groups' => array('foo'),
+        ));
+
         $constraints = array(
-            new ConstraintA(array('groups' => array(
-                'Default',
-                'EntityParent',
-                'Entity',
-            ))),
-            new ConstraintA(array('groups' => array(
-                'Default',
-                'Entity',
-            ))),
+            $constraintA1,
+            $constraintB,
+            $constraintA2,
+        );
+
+        $constraintsByGroup = array(
+            'Default' => array(
+                $constraintA1,
+                $constraintA2,
+            ),
+            'EntityParent' => array(
+                $constraintA1,
+            ),
+            'Entity' => array(
+                $constraintA1,
+                $constraintA2,
+            ),
+            'foo' => array(
+                $constraintB,
+            ),
         );
 
         $members = $this->metadata->getPropertyMetadata('firstName');
@@ -155,6 +181,7 @@ class ClassMetadataTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $members);
         $this->assertEquals(self::PARENTCLASS, $members[0]->getClassName());
         $this->assertEquals($constraints, $members[0]->getConstraints());
+        $this->assertEquals($constraintsByGroup, $members[0]->constraintsByGroup);
     }
 
     public function testMemberMetadatas()
@@ -277,4 +304,29 @@ class ClassMetadataTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertCount(0, $this->metadata->getPropertyMetadata('foo'), '->getPropertyMetadata() returns an empty collection if no metadata is configured for the given property');
     }
+
+    public function testMergeDoesOverrideConstraintsFromParentClassIfPropertyIsOverriddenInChildClass()
+    {
+        $parentMetadata = new ClassMetadata('\Symfony\Component\Validator\Tests\Mapping\ParentClass');
+        $parentMetadata->addPropertyConstraint('example', new GreaterThan(0));
+
+        $childMetadata = new ClassMetadata('\Symfony\Component\Validator\Tests\Mapping\ChildClass');
+        $childMetadata->addPropertyConstraint('example', new GreaterThan(1));
+        $childMetadata->mergeConstraints($parentMetadata);
+
+        $expectedMetadata = new ClassMetadata('\Symfony\Component\Validator\Tests\Mapping\ChildClass');
+        $expectedMetadata->addPropertyConstraint('example', new GreaterThan(1));
+
+        $this->assertEquals($expectedMetadata, $childMetadata);
+    }
+}
+
+class ParentClass
+{
+    public $example = 0;
+}
+
+class ChildClass extends ParentClass
+{
+    public $example = 1;    // overrides parent property of same name
 }

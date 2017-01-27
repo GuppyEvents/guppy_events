@@ -12,6 +12,7 @@
 namespace Symfony\Bundle\FrameworkBundle\Tests\Templating;
 
 use Symfony\Bundle\FrameworkBundle\Templating\DelegatingEngine;
+use Symfony\Component\HttpFoundation\Response;
 
 class DelegatingEngineTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,7 +39,7 @@ class DelegatingEngineTest extends \PHPUnit_Framework_TestCase
 
         $delegatingEngine = new DelegatingEngine($container, array('engine.first', 'engine.second'));
 
-        $this->assertSame($secondEngine, $delegatingEngine->getEngine('template.php', array('foo' => 'bar')));
+        $this->assertSame($secondEngine, $delegatingEngine->getEngine('template.php'));
     }
 
     /**
@@ -55,12 +56,12 @@ class DelegatingEngineTest extends \PHPUnit_Framework_TestCase
         ));
 
         $delegatingEngine = new DelegatingEngine($container, array('engine.first', 'engine.second'));
-        $delegatingEngine->getEngine('template.php', array('foo' => 'bar'));
+        $delegatingEngine->getEngine('template.php');
     }
 
     public function testRenderResponseWithFrameworkEngine()
     {
-        $response = $this->getMock('Symfony\Component\HttpFoundation\Response');
+        $response = new Response();
         $engine = $this->getFrameworkEngineMock('template.php', true);
         $engine->expects($this->once())
             ->method('renderResponse')
@@ -84,7 +85,7 @@ class DelegatingEngineTest extends \PHPUnit_Framework_TestCase
 
     private function getEngineMock($template, $supports)
     {
-        $engine = $this->getMock('Symfony\Component\Templating\EngineInterface');
+        $engine = $this->getMockBuilder('Symfony\Component\Templating\EngineInterface')->getMock();
 
         $engine->expects($this->once())
             ->method('supports')
@@ -96,7 +97,7 @@ class DelegatingEngineTest extends \PHPUnit_Framework_TestCase
 
     private function getFrameworkEngineMock($template, $supports)
     {
-        $engine = $this->getMock('Symfony\Bundle\FrameworkBundle\Templating\EngineInterface');
+        $engine = $this->getMockBuilder('Symfony\Bundle\FrameworkBundle\Templating\EngineInterface')->getMock();
 
         $engine->expects($this->once())
             ->method('supports')
@@ -108,7 +109,7 @@ class DelegatingEngineTest extends \PHPUnit_Framework_TestCase
 
     private function getContainerMock($services)
     {
-        $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $container = $this->getMockBuilder('Symfony\Component\DependencyInjection\ContainerInterface')->getMock();
 
         $i = 0;
         foreach ($services as $id => $service) {

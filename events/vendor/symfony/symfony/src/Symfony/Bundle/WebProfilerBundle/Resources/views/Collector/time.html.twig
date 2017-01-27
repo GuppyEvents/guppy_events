@@ -60,10 +60,19 @@
             <span class="label">Symfony initialization</span>
         </div>
 
+        {% if profile.collectors.memory %}
+            <div class="metric">
+                <span class="value">{{ '%.2f'|format(profile.collectors.memory.memory / 1024 / 1024) }} <span class="unit">MB</span></span>
+                <span class="label">Peak memory usage</span>
+            </div>
+        {% endif %}
+
         {% if profile.children|length > 0 %}
+            <div class="metric-divider"></div>
+
             <div class="metric">
                 <span class="value">{{ profile.children|length }}</span>
-                <span class="label">Sub-Requests</span>
+                <span class="label">Sub-Request{{ profile.children|length > 1 ? 's' }}</span>
             </div>
 
             {% set subrequests_time = 0 %}
@@ -73,14 +82,7 @@
 
             <div class="metric">
                 <span class="value">{{ subrequests_time }} <span class="unit">ms</span></span>
-                <span class="label">Sub-Requests time</span>
-            </div>
-        {% endif %}
-
-        {% if profile.collectors.memory %}
-            <div class="metric">
-                <span class="value">{{ '%.2f'|format(profile.collectors.memory.memory / 1024 / 1024) }} <span class="unit">MB</span></span>
-                <span class="label">Peak memory usage</span>
+                <span class="label">Sub-Request{{ profile.children|length > 1 ? 's' }} time</span>
             </div>
         {% endif %}
     </div>
@@ -160,7 +162,7 @@
         /**
          * Query an element with a CSS selector.
          *
-         * @param string selector a CSS-selector-compatible query string.
+         * @param {string} selector - a CSS-selector-compatible query string
          *
          * @return DOMElement|null
          */
@@ -187,7 +189,7 @@
             /**
              * Check whether this event is a child event.
              *
-             * @return true if it is.
+             * @return true if it is
              */
             function isChildEvent(event)
             {
@@ -197,7 +199,7 @@
             /**
              * Check whether this event is categorized in 'section'.
              *
-             * @return true if it is.
+             * @return true if it is
              */
             function isSectionEvent(event)
             {
@@ -217,8 +219,8 @@
              *
              * @param request   the request object
              * @param max       <subjected for removal>
-             * @param threshold the threshold (lower bound) of the length of the timeline (in milliseconds).
-             * @param width     the width of the canvas.
+             * @param threshold the threshold (lower bound) of the length of the timeline (in milliseconds)
+             * @param width     the width of the canvas
              */
             this.drawOne = function(request, max, threshold, width)
             {

@@ -23,9 +23,9 @@ interface FormInterface extends \ArrayAccess, \Traversable, \Countable
     /**
      * Sets the parent form.
      *
-     * @param FormInterface|null $parent The parent form or null if it's the root.
+     * @param FormInterface|null $parent The parent form or null if it's the root
      *
-     * @return FormInterface The form instance
+     * @return self
      *
      * @throws Exception\AlreadySubmittedException If the form has already been submitted.
      * @throws Exception\LogicException            When trying to set a parent for a form with
@@ -36,18 +36,18 @@ interface FormInterface extends \ArrayAccess, \Traversable, \Countable
     /**
      * Returns the parent form.
      *
-     * @return FormInterface|null The parent form or null if there is none.
+     * @return self|null The parent form or null if there is none
      */
     public function getParent();
 
     /**
      * Adds or replaces a child to the form.
      *
-     * @param FormInterface|string|int $child   The FormInterface instance or the name of the child.
-     * @param string|null              $type    The child's type, if a name was passed.
-     * @param array                    $options The child's options, if a name was passed.
+     * @param FormInterface|string|int $child   The FormInterface instance or the name of the child
+     * @param string|null              $type    The child's type, if a name was passed
+     * @param array                    $options The child's options, if a name was passed
      *
-     * @return FormInterface The form instance
+     * @return self
      *
      * @throws Exception\AlreadySubmittedException If the form has already been submitted.
      * @throws Exception\LogicException            When trying to add a child to a non-compound form.
@@ -60,7 +60,7 @@ interface FormInterface extends \ArrayAccess, \Traversable, \Countable
      *
      * @param string $name The name of the child
      *
-     * @return FormInterface The child form
+     * @return self
      *
      * @throws \OutOfBoundsException If the named child does not exist.
      */
@@ -80,7 +80,7 @@ interface FormInterface extends \ArrayAccess, \Traversable, \Countable
      *
      * @param string $name The name of the child to remove
      *
-     * @return FormInterface The form instance
+     * @return $this
      *
      * @throws Exception\AlreadySubmittedException If the form has already been submitted.
      */
@@ -89,7 +89,7 @@ interface FormInterface extends \ArrayAccess, \Traversable, \Countable
     /**
      * Returns all children in this group.
      *
-     * @return FormInterface[] An array of FormInterface instances
+     * @return self[]
      */
     public function all();
 
@@ -102,9 +102,6 @@ interface FormInterface extends \ArrayAccess, \Traversable, \Countable
      *
      * @return FormErrorIterator An iterator over the {@link FormError}
      *                           instances that where added to this form
-     *
-     * @since 2.5 Since version 2.5 this method returns a
-     *            {@link FormErrorIterator} instance instead of an array
      */
     public function getErrors($deep = false, $flatten = true);
 
@@ -113,7 +110,7 @@ interface FormInterface extends \ArrayAccess, \Traversable, \Countable
      *
      * @param mixed $modelData The data formatted as expected for the underlying object
      *
-     * @return FormInterface The form instance
+     * @return $this
      *
      * @throws Exception\AlreadySubmittedException If the form has already been submitted.
      * @throws Exception\LogicException            If listeners try to call setData in a cycle. Or if
@@ -132,7 +129,7 @@ interface FormInterface extends \ArrayAccess, \Traversable, \Countable
     /**
      * Returns the normalized data of the field.
      *
-     * @return mixed When the field is not submitted, the default data is returned.
+     * @return mixed When the field is not submitted, the default data is returned
      *               When the field is submitted, the normalized submitted data is
      *               returned if the field is valid, null otherwise.
      */
@@ -155,7 +152,7 @@ interface FormInterface extends \ArrayAccess, \Traversable, \Countable
     /**
      * Returns the form's configuration.
      *
-     * @return FormConfigInterface The configuration.
+     * @return FormConfigInterface The configuration
      */
     public function getConfig();
 
@@ -169,14 +166,14 @@ interface FormInterface extends \ArrayAccess, \Traversable, \Countable
     /**
      * Returns the name by which the form is identified in forms.
      *
-     * @return string The name of the form.
+     * @return string The name of the form
      */
     public function getName();
 
     /**
      * Returns the property path that the form is mapped to.
      *
-     * @return \Symfony\Component\PropertyAccess\PropertyPathInterface The property path.
+     * @return \Symfony\Component\PropertyAccess\PropertyPathInterface The property path
      */
     public function getPropertyPath();
 
@@ -185,7 +182,7 @@ interface FormInterface extends \ArrayAccess, \Traversable, \Countable
      *
      * @param FormError $error
      *
-     * @return FormInterface The form instance
+     * @return $this
      */
     public function addError(FormError $error);
 
@@ -251,7 +248,7 @@ interface FormInterface extends \ArrayAccess, \Traversable, \Countable
      *
      * Should be called on the root form after constructing the tree.
      *
-     * @return FormInterface The form instance.
+     * @return $this
      */
     public function initialize();
 
@@ -263,21 +260,21 @@ interface FormInterface extends \ArrayAccess, \Traversable, \Countable
      * {@link RequestHandlerInterface} instance, which determines whether to
      * submit the form or not.
      *
-     * @param mixed $request The request to handle.
+     * @param mixed $request The request to handle
      *
-     * @return FormInterface The form instance.
+     * @return $this
      */
     public function handleRequest($request = null);
 
     /**
      * Submits data to the form, transforms and validates it.
      *
-     * @param null|string|array $submittedData The submitted data.
+     * @param null|string|array $submittedData The submitted data
      * @param bool              $clearMissing  Whether to set fields to NULL
      *                                         when they are missing in the
      *                                         submitted data.
      *
-     * @return FormInterface The form instance
+     * @return $this
      *
      * @throws Exception\AlreadySubmittedException If the form has already been submitted.
      */
@@ -286,7 +283,7 @@ interface FormInterface extends \ArrayAccess, \Traversable, \Countable
     /**
      * Returns the root of the form tree.
      *
-     * @return FormInterface The root of the tree
+     * @return self The root of the tree
      */
     public function getRoot();
 

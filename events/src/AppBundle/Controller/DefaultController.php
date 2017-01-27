@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Entity\User;
 use AppBundle\Form\UserType;
 
+use Google\Cloud\Storage\StorageClient;
+
 class DefaultController extends Controller
 {
 

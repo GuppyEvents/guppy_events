@@ -28,7 +28,7 @@ abstract class AbstractLayoutTest extends \Symfony\Component\Form\Test\FormInteg
 
         \Locale::setDefault('en');
 
-        $this->csrfTokenManager = $this->getMock('Symfony\Component\Security\Csrf\CsrfTokenManagerInterface');
+        $this->csrfTokenManager = $this->getMockBuilder('Symfony\Component\Security\Csrf\CsrfTokenManagerInterface')->getMock();
 
         parent::setUp();
     }
@@ -47,7 +47,7 @@ abstract class AbstractLayoutTest extends \Symfony\Component\Form\Test\FormInteg
         parent::tearDown();
     }
 
-    protected function assertXpathNodeValue(\DomElement $element, $expression, $nodeValue)
+    protected function assertXpathNodeValue(\DOMElement $element, $expression, $nodeValue)
     {
         $xpath = new \DOMXPath($element->ownerDocument);
         $nodeList = $xpath->evaluate($expression);
@@ -637,6 +637,55 @@ abstract class AbstractLayoutTest extends \Symfony\Component\Form\Test\FormInteg
         /following-sibling::option[@value="&b"]'.$classPart.'[not(@selected)][.="[trans]Choice&B[/trans]"]
     ]
     [count(./option)=2]
+'
+        );
+    }
+
+    public function testSingleChoiceAttributesWithMainAttributes()
+    {
+        $form = $this->factory->createNamed('name', 'Symfony\Component\Form\Extension\Core\Type\ChoiceType', '&a', array(
+            'choices' => array('Choice&A' => '&a', 'Choice&B' => '&b'),
+            'choices_as_values' => true,
+            'multiple' => false,
+            'expanded' => false,
+            'attr' => array('class' => 'bar&baz'),
+        ));
+
+        $this->assertWidgetMatchesXpath($form->createView(), array('attr' => array('class' => 'bar&baz')),
+'/select
+    [@name="name"]
+    [@class="bar&baz"]
+    [not(@required)]
+    [
+        ./option[@value="&a"][@selected="selected"][.="[trans]Choice&A[/trans]"][not(@id)][not(@name)]
+        /following-sibling::option[@value="&b"][not(@class)][not(@selected)][.="[trans]Choice&B[/trans]"][not(@id)][not(@name)]
+    ]
+    [count(./option)=2]
+'
+        );
+    }
+
+    public function testSingleExpandedChoiceAttributesWithMainAttributes()
+    {
+        $form = $this->factory->createNamed('name', 'Symfony\Component\Form\Extension\Core\Type\ChoiceType', '&a', array(
+            'choices' => array('Choice&A' => '&a', 'Choice&B' => '&b'),
+            'choices_as_values' => true,
+            'multiple' => false,
+            'expanded' => true,
+            'attr' => array('class' => 'bar&baz'),
+        ));
+
+        $this->assertWidgetMatchesXpath($form->createView(), array('attr' => array('class' => 'bar&baz')),
+'/div
+    [@class="bar&baz"]
+    [
+        ./input[@type="radio"][@name="name"][@id="name_0"][@value="&a"][@checked]
+        /following-sibling::label[@for="name_0"][.="[trans]Choice&A[/trans]"]
+        /following-sibling::input[@type="radio"][@name="name"][@id="name_1"][@value="&b"][not(@checked)]
+        /following-sibling::label[@for="name_1"][.="[trans]Choice&B[/trans]"]
+        /following-sibling::input[@type="hidden"][@id="name__token"]
+    ]
+    [count(./input)=3]
 '
         );
     }
@@ -1251,7 +1300,7 @@ abstract class AbstractLayoutTest extends \Symfony\Component\Form\Test\FormInteg
 
     public function testDateTime()
     {
-        $form = $this->factory->createNamed('name', 'Symfony\Component\Form\Extension\Core\Type\DateTimeType', '2011-02-03 04:05:06', array(
+        $form = $this->factory->createNamed('name', 'Symfony\Component\Form\Extension\Core\Type\DateTimeType', date('Y').'-02-03 04:05:06', array(
             'input' => 'string',
             'with_seconds' => false,
         ));
@@ -1270,7 +1319,7 @@ abstract class AbstractLayoutTest extends \Symfony\Component\Form\Test\FormInteg
                     [./option[@value="3"][@selected="selected"]]
                 /following-sibling::select
                     [@id="name_date_year"]
-                    [./option[@value="2011"][@selected="selected"]]
+                    [./option[@value="'.date('Y').'"][@selected="selected"]]
             ]
         /following-sibling::div
             [@id="name_time"]
@@ -1330,7 +1379,7 @@ abstract class AbstractLayoutTest extends \Symfony\Component\Form\Test\FormInteg
 
     public function testDateTimeWithHourAndMinute()
     {
-        $data = array('year' => '2011', 'month' => '2', 'day' => '3', 'hour' => '4', 'minute' => '5');
+        $data = array('year' => date('Y'), 'month' => '2', 'day' => '3', 'hour' => '4', 'minute' => '5');
 
         $form = $this->factory->createNamed('name', 'Symfony\Component\Form\Extension\Core\Type\DateTimeType', $data, array(
             'input' => 'array',
@@ -1351,7 +1400,7 @@ abstract class AbstractLayoutTest extends \Symfony\Component\Form\Test\FormInteg
                     [./option[@value="3"][@selected="selected"]]
                 /following-sibling::select
                     [@id="name_date_year"]
-                    [./option[@value="2011"][@selected="selected"]]
+                    [./option[@value="'.date('Y').'"][@selected="selected"]]
             ]
         /following-sibling::div
             [@id="name_time"]
@@ -1371,7 +1420,7 @@ abstract class AbstractLayoutTest extends \Symfony\Component\Form\Test\FormInteg
 
     public function testDateTimeWithSeconds()
     {
-        $form = $this->factory->createNamed('name', 'Symfony\Component\Form\Extension\Core\Type\DateTimeType', '2011-02-03 04:05:06', array(
+        $form = $this->factory->createNamed('name', 'Symfony\Component\Form\Extension\Core\Type\DateTimeType', date('Y').'-02-03 04:05:06', array(
             'input' => 'string',
             'with_seconds' => true,
         ));
@@ -1390,7 +1439,7 @@ abstract class AbstractLayoutTest extends \Symfony\Component\Form\Test\FormInteg
                     [./option[@value="3"][@selected="selected"]]
                 /following-sibling::select
                     [@id="name_date_year"]
-                    [./option[@value="2011"][@selected="selected"]]
+                    [./option[@value="'.date('Y').'"][@selected="selected"]]
             ]
         /following-sibling::div
             [@id="name_time"]
@@ -1477,7 +1526,7 @@ abstract class AbstractLayoutTest extends \Symfony\Component\Form\Test\FormInteg
 
     public function testDateChoice()
     {
-        $form = $this->factory->createNamed('name', 'Symfony\Component\Form\Extension\Core\Type\DateType', '2011-02-03', array(
+        $form = $this->factory->createNamed('name', 'Symfony\Component\Form\Extension\Core\Type\DateType', date('Y').'-02-03', array(
             'input' => 'string',
             'widget' => 'choice',
         ));
@@ -1493,7 +1542,7 @@ abstract class AbstractLayoutTest extends \Symfony\Component\Form\Test\FormInteg
             [./option[@value="3"][@selected="selected"]]
         /following-sibling::select
             [@id="name_year"]
-            [./option[@value="2011"][@selected="selected"]]
+            [./option[@value="'.date('Y').'"][@selected="selected"]]
     ]
     [count(./select)=3]
 '
@@ -2373,7 +2422,11 @@ abstract class AbstractLayoutTest extends \Symfony\Component\Form\Test\FormInteg
         $html = $this->renderWidget($form->createView());
 
         // compare plain HTML to check the whitespace
-        $this->assertSame('<input type="text" id="text" name="text" readonly="readonly" disabled="disabled" required="required" maxlength="10" pattern="\d+" class="foobar" data-foo="bar" value="value" />', $html);
+        try {
+            $this->assertSame('<input type="text" id="text" name="text" readonly="readonly" disabled="disabled" required="required" maxlength="10" pattern="\d+" class="foobar" data-foo="bar" value="value" />', $html);
+        } catch (\PHPUnit_Framework_AssertionFailedError $e) {
+            $this->assertSame('<input type="text" id="text" name="text" disabled="disabled" required="required" readonly="readonly" maxlength="10" pattern="\d+" class="foobar" data-foo="bar" value="value" />', $html);
+        }
     }
 
     public function testWidgetAttributeNameRepeatedIfTrue()

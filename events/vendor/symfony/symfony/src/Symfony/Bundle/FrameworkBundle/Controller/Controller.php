@@ -11,7 +11,6 @@
 
 namespace Symfony\Bundle\FrameworkBundle\Controller;
 
-use AppBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -340,7 +339,7 @@ class Controller extends ContainerAware
     /**
      * Get a user from the Security Token Storage.
      *
-     * @return User
+     * @return mixed
      *
      * @throws \LogicException If SecurityBundle is not available
      *

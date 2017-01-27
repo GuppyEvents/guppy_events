@@ -32,7 +32,7 @@ class DeprecationErrorHandler
      * - use a number to define the upper bound of allowed deprecations,
      *   making the test suite fail whenever more notices are trigerred.
      *
-     * @param int|string|false $mode The reporting mode. Defaults to not allowing any deprecations.
+     * @param int|string|false $mode The reporting mode, defaults to not allowing any deprecations
      */
     public static function register($mode = 0)
     {
@@ -195,7 +195,7 @@ class DeprecationErrorHandler
     {
         if ('\\' === DIRECTORY_SEPARATOR) {
             return
-                0 >= version_compare('10.0.10586', PHP_WINDOWS_VERSION_MAJOR.'.'.PHP_WINDOWS_VERSION_MINOR.'.'.PHP_WINDOWS_VERSION_BUILD)
+                '10.0.10586' === PHP_WINDOWS_VERSION_MAJOR.'.'.PHP_WINDOWS_VERSION_MINOR.'.'.PHP_WINDOWS_VERSION_BUILD
                 || false !== getenv('ANSICON')
                 || 'ON' === getenv('ConEmuANSI')
                 || 'xterm' === getenv('TERM');

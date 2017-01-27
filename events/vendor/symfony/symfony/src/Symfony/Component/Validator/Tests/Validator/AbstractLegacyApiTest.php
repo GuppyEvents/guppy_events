@@ -23,8 +23,6 @@ use Symfony\Component\Validator\ValidatorInterface as LegacyValidatorInterface;
 /**
  * Verifies that a validator satisfies the API of Symfony < 2.5.
  *
- * @since  2.5
- *
  * @author Bernhard Schussek <bschussek@gmail.com>
  * @group legacy
  */
@@ -269,8 +267,8 @@ abstract class AbstractLegacyApiTest extends AbstractValidatorTest
         $entity->initialized = false;
 
         // prepare initializers that set "initialized" to true
-        $initializer1 = $this->getMock('Symfony\\Component\\Validator\\ObjectInitializerInterface');
-        $initializer2 = $this->getMock('Symfony\\Component\\Validator\\ObjectInitializerInterface');
+        $initializer1 = $this->getMockBuilder('Symfony\\Component\\Validator\\ObjectInitializerInterface')->getMock();
+        $initializer2 = $this->getMockBuilder('Symfony\\Component\\Validator\\ObjectInitializerInterface')->getMock();
 
         $initializer1->expects($this->once())
             ->method('initialize')

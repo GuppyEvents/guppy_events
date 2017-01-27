@@ -74,7 +74,19 @@ class MemcachedCache extends CacheProvider
      */
     protected function doFetchMultiple(array $keys)
     {
-        return $this->memcached->getMulti($keys);
+        return $this->memcached->getMulti($keys) ?: [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function doSaveMultiple(array $keysAndValues, $lifetime = 0)
+    {
+        if ($lifetime > 30 * 24 * 3600) {
+            $lifetime = time() + $lifetime;
+        }
+
+        return $this->memcached->setMulti($keysAndValues, $lifetime);
     }
 
     /**
