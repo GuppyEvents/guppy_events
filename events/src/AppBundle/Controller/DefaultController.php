@@ -16,7 +16,7 @@ class DefaultController extends Controller
 {
 
     /**
-     * @Route("/f240212d605c.html", name="yandex_mail")
+     * @Route("/eb9d2a57c52b.html", name="yandex_mail")
      */
     public function yandexMailAction(Request $request)
     {
