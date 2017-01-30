@@ -28,8 +28,8 @@ class DefaultController extends Controller
      */
     public function homeAction(Request $request)
     {
-//        return $this->redirectToRoute('coming_soon');
-        return $this->redirectToRoute('home_events');
+        return $this->redirectToRoute('coming_soon');
+//        return $this->redirectToRoute('home_events');
     }
 
     /**
