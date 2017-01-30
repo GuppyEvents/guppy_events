@@ -28,8 +28,8 @@ class DefaultController extends Controller
      */
     public function homeAction(Request $request)
     {
-        return $this->redirectToRoute('coming_soon');
-//        return $this->redirectToRoute('home_events');
+//        return $this->redirectToRoute('coming_soon');
+        return $this->redirectToRoute('home_events');
     }
 
     /**
@@ -131,134 +131,62 @@ class DefaultController extends Controller
     public function eventsAction(Request $request)
     {
 
-        // PREVIOUS WEEK
-        // calculate first day of current week
-        $prevPrevWeekStartDay = new \DateTime();
-        $prevPrevWeekStartDay->setTime(0,0);
-        $wk_ts  = strtotime('+' . $prevPrevWeekStartDay->format('W')-3 . ' weeks', strtotime('2017' . '0101'));
-        $mon_ts = strtotime('-' . date('w', $wk_ts) + 1 . ' days', $wk_ts);
-        $prevPrevWeekStartDay->setTimestamp($mon_ts);
+        // öncelikle bulunan ay değeri alınır
+        // ayın ilk gününe set edilir ve haftası alınır
+        // ayın son gününe set edilir ve haftası alınır
+        // döngü ile ilk hafta-son hafta arası etkinlikler alınır
 
-        $i = 0;
-        $prevPrevWeekEventList = array();
-        $dayOne = clone $prevPrevWeekStartDay;
-        do {
-            $dayTwo = clone $dayOne;
-            $dayTwo->add(new \DateInterval("P1D"));
-            $eventMain = array();
-            $eventMain['eventDate'] = clone $dayOne;
-            $eventMain['eventList'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findPublishEventsByDate( $dayOne,$dayTwo);
-            array_push($prevPrevWeekEventList,$eventMain);
-            $dayOne->add(new \DateInterval("P1D"));
-            $i++;
-        } while ($i < 7);
-        $data['prevPrevWeekEventDays'] = $prevPrevWeekEventList;
-
-
-        // PREVIOUS WEEK
-        // calculate first day of current week
-        $prevWeekStartDay = new \DateTime();
-        $prevWeekStartDay->setTime(0,0);
-        $wk_ts  = strtotime('+' . $prevWeekStartDay->format('W')-2 . ' weeks', strtotime('2017' . '0101'));
-        $mon_ts = strtotime('-' . date('w', $wk_ts) + 1 . ' days', $wk_ts);
-        $prevWeekStartDay->setTimestamp($mon_ts);
-
-        $i = 0;
-        $previousWeekEventList = array();
-        $dayOne = clone $prevWeekStartDay;
-        do {
-            $dayTwo = clone $dayOne;
-            $dayTwo->add(new \DateInterval("P1D"));
-            $eventMain = array();
-            $eventMain['eventDate'] = clone $dayOne;
-            $eventMain['eventList'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findPublishEventsByDate( $dayOne,$dayTwo);
-            array_push($previousWeekEventList,$eventMain);
-            $dayOne->add(new \DateInterval("P1D"));
-            $i++;
-        } while ($i < 7);
-        $data['previousWeekEventDays'] = $previousWeekEventList;
-
-
-        // CURRENT WEEK
-        $currentDay = new \DateTime();
+        $currentDay = new \DateTime();      // takvim üzerinden bugun öncesi ve sonrası olarak ayrılacak
         $currentDay->setTime(0,0);
-        $weekStartDay = new \DateTime();
-        $weekStartDay->setTime(0,0);
-        // calculate first day of current week
-        $wk_ts  = strtotime('+' . $weekStartDay->format('W')-1 . ' weeks', strtotime('2017' . '0101'));
-        $mon_ts = strtotime('-' . date('w', $wk_ts) + 1 . ' days', $wk_ts);
-        $weekStartDay->setTimestamp($mon_ts);
-
-        $i = 0;
-        $currentWeekEventList = array();
-        $dayOne = clone $weekStartDay;
-        do {
-            $dayTwo = clone $dayOne;
-            $dayTwo->add(new \DateInterval("P1D"));
-            $eventMain = array();
-            $eventMain['eventDate'] = clone $dayOne;
-            $eventMain['eventList'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findPublishEventsByDate( $dayOne,$dayTwo);
-            if($currentDay<=$dayOne){
-                $eventMain['isFuture'] = true;
-            }
-
-            if($currentDay==$dayOne){
-                $eventMain['isToday'] = true;
-            }
-            array_push($currentWeekEventList,$eventMain);
-            $dayOne->add(new \DateInterval("P1D"));
-            $i++;
-        } while ($i < 7);
-        $data['eventDays'] = $currentWeekEventList;
+        $currentdate = new \DateTime();
+        $firstDayOfMonth = new \DateTime($currentdate->format('Y').'-'.$currentdate->format('m').'-01');
+        $firstDayOfMonth->setTime(0,0);
+        $lastDayOfMonth = new \DateTime();
+        $lastDayOfMonth->setTimestamp(strtotime('+' . 1 . ' month', $firstDayOfMonth->getTimestamp()));
+        $lastDayOfMonth->setTimestamp(strtotime('-' . 1 . ' days', $lastDayOfMonth->getTimestamp()));
 
 
-        // NEXT WEEK
-        $nextWeekStartDay = new \DateTime();
-        $nextWeekStartDay->setTime(0,0);
-        $wk_ts  = strtotime('+' . $nextWeekStartDay->format('W')+0 . ' weeks', strtotime('2017' . '0101'));
-        $mon_ts = strtotime('-' . date('w', $wk_ts) + 1 . ' days', $wk_ts);
-        $nextWeekStartDay->setTimestamp($mon_ts);
+        $data['eventListWeeks'] = array();
+        $lastWeek = $lastDayOfMonth->format('W') % 52;
+        // ay içerisindeki haftalar tek tek alınır
+        while ($firstDayOfMonth->format('W')%52 <= $lastWeek) {
 
-        $i = 0;
-        $nextWeekEventList = array();
-        $dayOne = clone $nextWeekStartDay;
-        do {
-            $dayTwo = clone $dayOne;
-            $dayTwo->add(new \DateInterval("P1D"));
-            $eventMain = array();
-            $eventMain['eventDate'] = clone $dayOne;
-            $eventMain['eventList'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findPublishEventsByDate( $dayOne,$dayTwo);
-            array_push($nextWeekEventList,$eventMain);
-            $dayOne->add(new \DateInterval("P1D"));
-            $i++;
-        } while ($i < 7);
-        $data['nextWeekEventDays'] = $nextWeekEventList;
+            // burada haftanın ilk günü bulunur
+            $firstDayOfWeek = clone $firstDayOfMonth;
+            $backDayCount = date('w', $firstDayOfWeek->getTimestamp()) == 0 ? 7 : date('w', $firstDayOfWeek->getTimestamp());
+            $mon_ts = strtotime('-' . $backDayCount + 1 . ' days', $firstDayOfWeek->getTimestamp());
+            $firstDayOfWeek->setTimestamp($mon_ts);
 
+            // haftanın günlerinin tek tek etkinlikleri alınır
+            $i = 0;
+            $eventListOfWeek = array();
+            $dayOne = clone $firstDayOfWeek;
+            do {
+                $dayTwo = clone $dayOne;
+                $dayTwo->add(new \DateInterval("P1D"));
+                $eventMain = array();
+                $eventMain['a'] = 'a';
+                $eventMain['eventDate'] = clone $dayOne;
+                $eventMain['eventList'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findPublishEventsByDate( $dayOne,$dayTwo);
 
-        // NEXT NEXT WEEK
-        $nextNextWeekStartDay = new \DateTime();
-        $nextNextWeekStartDay->setTime(0,0);
-        $wk_ts  = strtotime('+' . $nextNextWeekStartDay->format('W')+1 . ' weeks', strtotime('2017' . '0101'));
-        $mon_ts = strtotime('-' . date('w', $wk_ts) + 1 . ' days', $wk_ts);
-        $nextNextWeekStartDay->setTimestamp($mon_ts);
+                if($currentDay<=$dayOne){
+                    $eventMain['isFuture'] = true;
+                }
 
-        $i = 0;
-        $nextNextWeekEventList = array();
-        $dayOne = clone $nextNextWeekStartDay;
-        do {
-            $dayTwo = clone $dayOne;
-            $dayTwo->add(new \DateInterval("P1D"));
-            $eventMain = array();
-            $eventMain['eventDate'] = clone $dayOne;
-            $eventMain['eventList'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findPublishEventsByDate( $dayOne,$dayTwo);
-            array_push($nextNextWeekEventList,$eventMain);
-            $dayOne->add(new \DateInterval("P1D"));
-            $i++;
-        } while ($i < 7);
-        $data['nextNextWeekEventDays'] = $nextNextWeekEventList;
+                if($currentDay==$dayOne){
+                    $eventMain['isToday'] = true;
+                }
+
+                array_push($eventListOfWeek,$eventMain);
+                $dayOne->add(new \DateInterval("P1D"));
+                $i++;
+            } while ($i < 7);
+            array_push($data['eventListWeeks'],$eventListOfWeek);
+            $firstDayOfMonth = $firstDayOfMonth->setTimestamp(strtotime('+' . 1 . ' weeks', $firstDayOfMonth->getTimestamp()));
+        }
 
 
-
+        // varsa bugunun etkinlikleri alınır
         $today = new \DateTime();
         $today->setTime(0,0);
         $tomorrow = clone $today;
