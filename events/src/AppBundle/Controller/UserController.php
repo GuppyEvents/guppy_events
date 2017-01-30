@@ -10,13 +10,16 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Form\ChangePasswordType;
-use Symfony\Component\Security\Core\Encoder\EncoderFactory;
+use Google\Cloud\Storage\StorageClient;
+use Google\Cloud\Storage\Acl;
+use AppBundle\Entity\Utils;
 
 /**
  * @Route("/user", name="user")
  */
 class UserController extends Controller
 {
+
 
     /**
      * @Route("/a/profile", name="admin_profile")
@@ -27,6 +30,7 @@ class UserController extends Controller
         return $this->render('AppBundle:user:admin_profile.html.twig', array(
             'aa'=>'aa',
         ));
+
     }
 
 
@@ -38,6 +42,8 @@ class UserController extends Controller
     public function userProfileAction(Request $request)
     {
         $data = array();
+        $data['user'] = $this->getUser();
+        $data['isProfileOwner'] = true;
         $em = $this->getDoctrine()->getManager();
 
         // 1) POST OPERATION
@@ -50,8 +56,29 @@ class UserController extends Controller
                 $user_sex = intval($request->get('usex'));
                 $user_uphone = $request->get('uphone');
                 $user_image = $request->get('profile_image_base64');
-                $user_birthdate = \DateTime::createFromFormat('m/d/Y', $request->get('ubirthdate'));
+                $fileName ="";
+                if($this->container->get('kernel')->getEnvironment()=='dev'){
+                    $fileName .= "dev/";
+                }
+                $extension = substr($user_image,0,strpos($user_image,";"));
+                $fileName .= Utils::getGUID();
+                if(strpos($extension, "data:image") !== false){
+                    if(strpos($extension, "jpeg") !== false){
+                        $fileName .= ".jpg";
+                    }else if(strpos($extension, "png") != false){
+                        $fileName .= ".png";
+                    }else{
+                        $data['error_msg'] = 'Desteklenmeyen görüntü biçimi.';
+                        return $this->render('AppBundle:user:profile_settings_account.html.twig', $data);
+                    }
+                }else{
+                    $data['error_msg'] = 'Desteklenmeyen dosya biçimi.';
+                    return $this->render('AppBundle:user:profile_settings_account.html.twig', $data);
+                }
 
+                $user_image = Utils::uploadBase64ToServer($user_image,$fileName);
+
+                $user_birthdate = \DateTime::createFromFormat('m/d/Y', $request->get('ubirthdate'));
                 // --1.2-- check that user exist
                 $user = $this->getUser();
                 if($user){
@@ -59,6 +86,7 @@ class UserController extends Controller
                     $user->setSurname($user_surname);
                     $user->setPhone($user_uphone);
                     $user->setImageBase64($user_image);
+
                     $user->setSex($user_sex);
 
                     if($user_birthdate)
@@ -82,9 +110,18 @@ class UserController extends Controller
             $data['warning_msg'] = 'Mail adresinizi onaylayınız';
         }
 
-        $data['user'] = $this->getUser();
-        $data['isProfileOwner'] = true;
         return $this->render('AppBundle:user:profile_settings_account.html.twig', $data);
+    }
+
+    function base64_to_jpeg($base64_string, $output_file) {
+        $ifp = fopen($output_file, "wb");
+
+        $data = explode(',', $base64_string);
+
+        fwrite($ifp, base64_decode($data[1]));
+        fclose($ifp);
+
+        return $output_file;
     }
 
 
