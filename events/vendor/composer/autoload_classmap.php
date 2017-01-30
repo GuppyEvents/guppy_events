@@ -38,6 +38,8 @@ return array(
     'Google\\Auth\\Subscriber\\AuthTokenSubscriber' => $vendorDir . '/google/auth/src/Subscriber/AuthTokenSubscriber.php',
     'Google\\Auth\\Subscriber\\ScopedAccessTokenSubscriber' => $vendorDir . '/google/auth/src/Subscriber/ScopedAccessTokenSubscriber.php',
     'Google\\Auth\\Subscriber\\SimpleSubscriber' => $vendorDir . '/google/auth/src/Subscriber/SimpleSubscriber.php',
+    'Google_Service_Exception' => $vendorDir . '/google/apiclient/src/Google/Service/Exception.php',
+    'Google_Service_Resource' => $vendorDir . '/google/apiclient/src/Google/Service/Resource.php',
     'IntlDateFormatter' => $vendorDir . '/symfony/symfony/src/Symfony/Component/Intl/Resources/stubs/IntlDateFormatter.php',
     'Locale' => $vendorDir . '/symfony/symfony/src/Symfony/Component/Intl/Resources/stubs/Locale.php',
     'NumberFormatter' => $vendorDir . '/symfony/symfony/src/Symfony/Component/Intl/Resources/stubs/NumberFormatter.php',
