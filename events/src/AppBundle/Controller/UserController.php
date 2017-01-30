@@ -42,6 +42,8 @@ class UserController extends Controller
     public function userProfileAction(Request $request)
     {
         $data = array();
+        $data['user'] = $this->getUser();
+        $data['isProfileOwner'] = true;
         $em = $this->getDoctrine()->getManager();
 
         // 1) POST OPERATION
@@ -58,7 +60,22 @@ class UserController extends Controller
                 if($this->container->get('kernel')->getEnvironment()=='dev'){
                     $fileName .= "dev/";
                 }
-                $fileName .= Utils::getGUID() . ".jpg";
+                $extension = substr($user_image,0,strpos($user_image,";"));
+                $fileName .= Utils::getGUID();
+                if(strpos($extension, "data:image") !== false){
+                    if(strpos($extension, "jpeg") !== false){
+                        $fileName .= ".jpg";
+                    }else if(strpos($extension, "png") != false){
+                        $fileName .= ".png";
+                    }else{
+                        $data['error_msg'] = 'Desteklenmeyen görüntü biçimi.';
+                        return $this->render('AppBundle:user:profile_settings_account.html.twig', $data);
+                    }
+                }else{
+                    $data['error_msg'] = 'Desteklenmeyen dosya biçimi.';
+                    return $this->render('AppBundle:user:profile_settings_account.html.twig', $data);
+                }
+
                 $user_image = Utils::uploadBase64ToServer($user_image,$fileName);
 
                 $user_birthdate = \DateTime::createFromFormat('m/d/Y', $request->get('ubirthdate'));
@@ -93,8 +110,6 @@ class UserController extends Controller
             $data['warning_msg'] = 'Mail adresinizi onaylayınız';
         }
 
-        $data['user'] = $this->getUser();
-        $data['isProfileOwner'] = true;
         return $this->render('AppBundle:user:profile_settings_account.html.twig', $data);
     }
 
