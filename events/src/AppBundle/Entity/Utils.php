@@ -18,6 +18,7 @@ class Utils
      *
      */
     public static function uploadBase64ToServer($imageBase64, $fileName){
+        putenv('GOOGLE_APPLICATION_CREDENTIALS=/var/www/events/key_27_ocak_14_05.json');
         $result=null;
         $client = new Google_Client();
         $client->useApplicationDefaultCredentials();
