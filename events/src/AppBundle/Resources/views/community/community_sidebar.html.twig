@@ -1,31 +1,28 @@
 
 
         <!-- -------------- SIDEBAR -------------- -->
-        <div class="community-sidebar col-md-2">
-            <div class="community-sidebar-photo" >
-                <div class="society">
-                    <div class="photo-wrapper rounded">
-                        <img src="{{ community.imageBase64 }}" alt="{{ community.name }}" class="img-responsive" />
-                    </div>
+        <div class="ge-community-left-sidebar col-md-2 col-sm-3">
+            <div class="ge-community-logo-area">
+                <div class="ge-community-logo">
+                    <img src="{{ community.imageBase64 }}" alt="{{ community.name }}" class="img-responsive" />
                 </div>
             </div>
-
-            <div class="community-sidebar-name">
-
-                <h7><span class="highlight">{{ community.name }}</span></h7>
+            <div class="ge-community-name">
+                <h3>{{ community.name }}</h3>
             </div>
+            <ul class="ge-community-sidebar-menu ge-menu-group">
+                <li class="{% if app.request.get('_route') == 'user_community_homepage'%}active{% endif %}"><a href="{{ path('user_community_homepage', {'communityId': community.id}) }}" class="ge-menu-group-item">Genel Bilgi</a></li>
+                <li class="{% if app.request.get('_route') == 'user_community_events_homepage'%}active{% endif %}"><a href="{{ path('user_community_events_homepage', {'communityId': community.id}) }}" class="ge-menu-group-item">Etkinlikler</a></li>
+                <li class="{% if app.request.get('_route') == 'user_community_users_homepage'%}active{% endif %}"><a href="{{ path('user_community_users_homepage', {'communityId': community.id}) }}" class="ge-menu-group-item">Üyeler</a></li>
+                {% if isUserCommunityAdmin is defined and isUserCommunityAdmin %}
+                    <li class="{% if app.request.get('_route') == 'user_community_membership_applications_homepage'%}active{% endif %}"><a href="{{ path('user_community_membership_applications_homepage', {'communityId': community.id}) }}" class="ge-menu-group-item">Başvurular</a></li>
+                {% endif %}
+            </ul>
 
-            <hr>
-            <div class="community-sidebar-navigation">
-                <ul class="community-dropdown-menu">
-                    <li class="community-navigation-item"><a href="{{ path('user_community_homepage', {'communityId': community.id}) }}" class="navigation-link  {% if app.request.get('_route') == 'user_community_homepage'%}active{% endif %}">Genel Bilgi</a></li>
-                    <li class="community-navigation-item"><a href="{{ path('user_community_events_homepage', {'communityId': community.id}) }}" class="navigation-link {% if app.request.get('_route') == 'user_community_events_homepage'%}active{% endif %}">Etkinlikler</a></li>
-                    <li class="community-navigation-item"><a href="{{ path('user_community_users_homepage', {'communityId': community.id}) }}" class="navigation-link {% if app.request.get('_route') == 'user_community_users_homepage'%}active{% endif %}">Üyeler</a></li>
+            {% if isUserCommunityAdmin is defined and isUserCommunityAdmin %}
+                <div class="ge-community-sidebar-action">
+                    <button class="ge-community-action-btn" onclick="window.location.href='{{ path('event_add_page') }}'" type="submit"><i class="fa fa-plus"></i>Etkinlik Oluştur</button>
+                </div>
+            {% endif %}
 
-                    {% if isUserCommunityAdmin is defined and isUserCommunityAdmin %}
-                        <li class="community-navigation-item"><a href="{{ path('user_community_membership_applications_homepage', {'communityId': community.id}) }}" class="navigation-link {% if app.request.get('_route') == 'user_community_membership_applications_homepage'%}active{% endif %}">Başvuru Listesi</a></li>
-                    {% endif %}
-
-                </ul>
-            </div>
         </div>

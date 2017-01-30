@@ -17,124 +17,66 @@
     <!-- --------------------------------------------- -->
     <!-- ------------------ CONTENT ------------------ -->
     <!-- --------------------------------------------- -->
-    <section id="community-home" class="guppy-section align-center">
+    <section id="community-home" class="guppy-section align-center guppy-section-community">
         <div class="container">
+            <div class="ge-community-page-content">
 
-            <!-- -------------- SIDEBAR -------------- -->
-            {{ include('AppBundle:community:community_sidebar.html.twig') }}
+                {#<!-- -------------- SIDEBAR -------------- -->#}
+                {{ include('AppBundle:community:community_sidebar.html.twig') }}
 
 
-            <!-- -------------- CONTENT -------------- -->
-            <div class="community-content col-md-10">
+                {#<!-- -------------- CONTENT -------------- -->#}
+                <div class="ge-community-right-content col-md-10 col-sm-9">
 
-                <div class="community-content-header">
+                    {% include('AppBundle:community:community_background.html.twig') %}
 
-                    {#{% if community.imageBackgroundBase64 %}#}
-                        {#<img src="{{ community.imageBackgroundBase64 }}" alt="{{ community.name }}" class="img-responsive" />#}
-                    {#{% else %}#}
-                        {#{% image 'theme/assets/img/guppy_bilkent_banner_01.jpg' %}#}
-                            {#<img src="{{ asset_url }}" class="img-responsive" alt="{{ community.name }}" />#}
-                        {#{% endimage %}#}
-                    {#{% endif %}#}
+                    <div class="ge-content-box" style="overflow: hidden;">
 
-                    <div class="img-preview preview-lg"></div>
-                    <span id="community-background-image-edit" class="community-content-header-edit" data-modal-link="community-background-image"><i class="fa fa-cog" aria-hidden="true"></i></span>
+                        {% for event in eventList %}
 
-                    <div class="modal-window" data-modal="community-background-image">
-                        <div class="modal-box medium animated" data-animation="zoomIn" data-duration="100">
-                            <span class="close-btn icon icon-office-52"></span>
+                            <!-- event-card start-->
+                            <div class="col-sm-4">
+                                <div class="community-event-card {% if date(event.startDate) < date() %}past{% endif %}" c-event-id="{{ event.id }}">
+                                    <a href="{{ path('user_event_mainpage' , {'eventId': event.id}) }}" class="community-event-card-main">
+                                        <div class="community-event-card-main-header">
+                                            <div class="community-event-card-main-header-image">
+                                                <img src="{{ event.imageBase64 }}" alt="Event Name">
+                                            </div>
 
-                            <div class="row">
-                                <div id="img-container-modal" class="col-md-12">
-                                    <!-- <h3 class="page-header">Demo:</h3> -->
-                                    <div class="img-container">
-                                        {% if community.imageBackgroundBase64 %}
-                                            <img src="{{ community.imageBackgroundBase64 }}" alt="{{ community.name }}" class="img-responsive" />
-                                        {% else %}
-                                            {% image 'theme/assets/img/guppy_bilkent_banner_01.jpg' %}
-                                                <img src="{{ asset_url }}" class="img-responsive" alt="{{ community.name }}" />
-                                            {% endimage %}
-
-                                        {% endif %}
-                                    </div>
-
-                                    <!-- <h3 class="page-header">Data:</h3> -->
-                                    <div class="docs-data">
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control" id="dataX" style="display:none;" placeholder="x">
+                                            {% if event.ticket_price is defined and event.ticket_price %}
+                                                <span class="community-event-card-ticket">{{ event.ticket_price }}</span>
+                                            {% else %}
+                                                <span class="community-event-card-ticket">Ücretsiz</span>
+                                            {% endif %}
+                                            <!--<span class="community-event-card-hourglass"><i class="fa fa-clock-o" aria-hidden="true"></i></span>-->
                                         </div>
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control" id="dataY" style="display:none;" placeholder="y">
+                                        <div class="community-event-card-main-body">
+                                            <div class="community-event-card-date"> {{ event.startDate.format('d/m/Y H:i A') }} </div>
+                                            <div class="community-event-card-title">{{ event.title }}</div>
+                                            <div class="community-event-card-venue">Ankara, Bilkent</div>
                                         </div>
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control" id="dataWidth" style="display:none;" placeholder="width">
-                                        </div>
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control" id="dataHeight" style="display:none;" placeholder="height">
+                                    </a>
+
+                                    <div class="community-event-card-footer">
+                                        <div class="community-event-card-footer-tags"></div>
+                                        <div class="community-event-card-footer-actions">
+                                            <a><span class="fa fa-share community-event-share"></span></a>
+                                            {% if event.is_saved is defined and event.is_saved %}
+                                                <a><span class="fa fa-bookmark community-event-save"></span></a>
+                                            {% else %}
+                                                <a><span class="fa fa-bookmark-o community-event-save"></span></a>
+                                            {% endif %}
                                         </div>
                                     </div>
-
-
                                 </div>
-                            </div>
+                            </div><!-- event-card end-->
 
-                        </div>
-                    </div> <!-- modal end -->
-                </div>
+                        {% endfor %}
 
-                <!-- Kullanıcı topluluk yöneticisi ise etkinlik ekle butonu yerleştirilir -->
-                {% if isUserCommunityAdmin %}
-                    <div class="event-share-register align-right" style="padding-top: 5px; padding-bottom: 5px; border-bottom: 1px solid; border-bottom-color: #fe4918;">
-                        <a href="{{ path('event_add_page') }}" class="btn" ><span>Etkinlik Ekle</span></a>
                     </div>
-                {% endif %}
-
-                <div class="community-content-body">
-
-                    {% for event in eventList %}
-
-                        <!-- event-card start-->
-                        <div class="col-sm-4">
-                            <div class="community-event-card {% if date(event.startDate) < date() %}past{% endif %}" c-event-id="{{ event.id }}">
-                                <a href="{{ path('user_event_mainpage' , {'eventId': event.id}) }}" class="community-event-card-main">
-                                    <div class="community-event-card-main-header">
-                                        <div class="community-event-card-main-header-image">
-                                            <img src="{{ event.imageBase64 }}" alt="Event Name">
-                                        </div>
-
-                                        {% if event.ticket_price is defined and event.ticket_price %}
-                                            <span class="community-event-card-ticket">{{ event.ticket_price }}</span>
-                                        {% else %}
-                                            <span class="community-event-card-ticket">Ücretsiz</span>
-                                        {% endif %}
-                                        <!--<span class="community-event-card-hourglass"><i class="fa fa-clock-o" aria-hidden="true"></i></span>-->
-                                    </div>
-                                    <div class="community-event-card-main-body">
-                                        <div class="community-event-card-date"> {{ event.startDate.format('d/m/Y H:i A') }} </div>
-                                        <div class="community-event-card-title">{{ event.title }}</div>
-                                        <div class="community-event-card-venue">Ankara, Bilkent</div>
-                                    </div>
-                                </a>
-
-                                <div class="community-event-card-footer">
-                                    <div class="community-event-card-footer-tags"></div>
-                                    <div class="community-event-card-footer-actions">
-                                        <a><span class="fa fa-share community-event-share"></span></a>
-                                        {% if event.is_saved is defined and event.is_saved %}
-                                            <a><span class="fa fa-bookmark community-event-save"></span></a>
-                                        {% else %}
-                                            <a><span class="fa fa-bookmark-o community-event-save"></span></a>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!-- event-card end-->
-
-                    {% endfor %}
-
-                </div><!-- community-content-body end -->
-
+                </div>
             </div>
+
         </div>
     </section>
 
