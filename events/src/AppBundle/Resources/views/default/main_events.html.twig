@@ -12,20 +12,20 @@
     <section class="">
         <div class="container">
             <div class="col-sm-12">
-                <div class="ge-event-calendar-area">
+                <div class="ge-event-calendar-area ge-content-box">
                     <div class="ge-event-calendar-action" id="ge-event-calendar-action">
                         <div class="ge-select-month-btn pull-left">
                             <div>
-                                <button class="btn btn-outline-clr btn-sm"><i class="fa fa-chevron-left"></i></button>
-                                <button class="btn btn-outline-clr btn-sm"><i class="fa fa-chevron-right"></i></button>
+                                <button onclick="window.location.href='{{ path('home_events',{'d':prevMonthDateParam}) }}'" class="btn btn-outline-clr btn-sm"><i class="fa fa-chevron-left"></i></button>
+                                <button onclick="window.location.href='{{ path('home_events',{'d':nextMonthDateParam}) }}'" class="btn btn-outline-clr btn-sm"><i class="fa fa-chevron-right"></i></button>
                             </div>
                         </div>
                         <div class="ge-select-month-name pull-left">
                             <span class="ge-select-month-name-box">
-                                OCAK
+                                {{ calendarHeaderMonth }}
                             </span>
                            <span class="ge-select-month-year-box">
-                                2017
+                                {{ calendarHeaderYear }}
                             </span>
                         </div>
                         <div class="ge-other-action pull-right">

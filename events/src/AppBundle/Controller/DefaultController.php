@@ -20,7 +20,7 @@ class DefaultController extends Controller
      */
     public function yandexMailAction(Request $request)
     {
-        return $this->render('AppBundle:default:yamdex.html.twig');
+        return $this->render('AppBundle:default:yandex.html.twig');
     }
 
     /**
@@ -131,25 +131,101 @@ class DefaultController extends Controller
     public function eventsAction(Request $request)
     {
 
-        // öncelikle bulunan ay değeri alınır
-        // ayın ilk gününe set edilir ve haftası alınır
-        // ayın son gününe set edilir ve haftası alınır
-        // döngü ile ilk hafta-son hafta arası etkinlikler alınır
-
         $currentDay = new \DateTime();      // takvim üzerinden bugun öncesi ve sonrası olarak ayrılacak
         $currentDay->setTime(0,0);
-        $currentdate = new \DateTime();
-        $firstDayOfMonth = new \DateTime($currentdate->format('Y').'-'.$currentdate->format('m').'-01');
+
+        $param = $request->get('d'); // d=1702 => 2017-02
+        if(strlen($param)>=4){
+            $pyear = substr($param, 0, 2);
+            $pmonth = substr($param, 2, 2);
+        }
+
+        // --1-- CHECKER
+        // -1.1- Yıl > 15 & Yıl < 99 olmalıdır
+        if(isset($pyear) && !(intval($pyear)>15)){
+            $data['referer'] = $request->headers->get('referer') ? $request->headers->get('referer') : $this->get('router')->generate('homepage');
+            $data['content'] = 'Etkinliklerin gelmesini istediğiniz yıl için hata aldık. 2015 yılından önce etkinlik bulunmamaktadır ' ;
+            return $this->render('AppBundle:error:error.html.twig' , $data);
+        }
+
+        // -1.2- ay > 0 & ay < 13 olmalıdır
+        if(isset($pmonth) && (!(intval($pmonth)>0) || !(intval($pmonth)<13))){
+            $data['referer'] = $request->headers->get('referer') ? $request->headers->get('referer') : $this->get('router')->generate('homepage');
+            $data['content'] = 'Etkinliklerin gelmesini istediğiniz ay için hata aldık.';
+            return $this->render('AppBundle:error:error.html.twig' , $data);
+        }
+
+        $targetyear = isset($pyear) ? '20'.$pyear : $currentDay->format('Y');
+        $targetmonth = isset($pmonth) ? $pmonth : $currentDay->format('m');
+
+        $firstDayOfMonth = new \DateTime($targetyear.'-'.$targetmonth.'-01');
         $firstDayOfMonth->setTime(0,0);
         $lastDayOfMonth = new \DateTime();
         $lastDayOfMonth->setTimestamp(strtotime('+' . 1 . ' month', $firstDayOfMonth->getTimestamp()));
         $lastDayOfMonth->setTimestamp(strtotime('-' . 1 . ' days', $lastDayOfMonth->getTimestamp()));
 
+        // bir sonraki ve önceki ay için parametreler
+        $nextMonthFirstDay = clone $lastDayOfMonth;
+        $nextMonthFirstDay->setTimestamp(strtotime('+1 days', $nextMonthFirstDay->getTimestamp()));
+        $data['nextMonthDateParam'] = substr($nextMonthFirstDay->format('Y'),2,2) . $nextMonthFirstDay->format('m');
+        $prevMonthLastDay = clone $firstDayOfMonth;
+        $prevMonthLastDay->setTimestamp(strtotime('-1 days', $prevMonthLastDay->getTimestamp()));
+        $data['prevMonthDateParam'] = substr($prevMonthLastDay->format('Y'),2,2) . $prevMonthLastDay->format('m');
+
+        // takvim üzerinde yazan yıl ve ayı döner
+        $data['calendarHeaderYear'] = $firstDayOfMonth->format('Y');
+        switch ($firstDayOfMonth->format('m')) {
+            case '1':
+                $data['calendarHeaderMonth'] = 'Ocak';
+                break;
+            case '2':
+                $data['calendarHeaderMonth'] = 'Şubat';
+                break;
+            case '3':
+                $data['calendarHeaderMonth'] = 'Mart';
+                break;
+            case '4':
+                $data['calendarHeaderMonth'] = 'Nisan';
+                break;
+            case '5':
+                $data['calendarHeaderMonth'] = 'Mayıs';
+                break;
+            case '6':
+                $data['calendarHeaderMonth'] = 'Haziran';
+                break;
+            case '7':
+                $data['calendarHeaderMonth'] = 'Temmuz';
+                break;
+            case '8':
+                $data['calendarHeaderMonth'] = 'Ağustos';
+                break;
+            case '9':
+                $data['calendarHeaderMonth'] = 'Eylül';
+                break;
+            case '10':
+                $data['calendarHeaderMonth'] = 'Ekim';
+                break;
+            case '11':
+                $data['calendarHeaderMonth'] = 'Kasım';
+                break;
+            case '12':
+                $data['calendarHeaderMonth'] = 'Aralık';
+                break;
+            default:
+                $data['calendarHeaderMonth'] = 'HATA';
+                break;
+        }
+
 
         $data['eventListWeeks'] = array();
-        $lastWeek = $lastDayOfMonth->format('W') % 52;
+        $flag = true;
         // ay içerisindeki haftalar tek tek alınır
-        while ($firstDayOfMonth->format('W')%52 <= $lastWeek) {
+        while ($firstDayOfMonth->format('W')%52 <= $lastDayOfMonth->format('W') && $flag) {
+
+            // yılın bası ve sonunda sorun oldugundan eklendi
+            if($firstDayOfMonth->format('W')==$lastDayOfMonth->format('W')){
+                $flag = false;
+            }
 
             // burada haftanın ilk günü bulunur
             $firstDayOfWeek = clone $firstDayOfMonth;
