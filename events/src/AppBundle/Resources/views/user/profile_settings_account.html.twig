@@ -116,7 +116,7 @@
 
                                             <!-- Hidden Parameters -->
                                             <fieldset style="display: none">
-                                                <input type="text" id="profile_image_base64" name="profile_image_base64" value="{{ user.imageBase64 }}">
+                                                <textarea id="profile_image_base64" name="profile_image_base64" value="{{ user.imageBase64 }}"></textarea>
                                             </fieldset>
                                         {% endif %}
 
@@ -245,7 +245,9 @@
 
         // -- File to base64
         $(document).on('change' , '#temp_img_loader' , function (event) {
+
             fileToBase64Converter(event.target ,'#img_viewer', '#profile_image_base64');
+
         });
 
         $(document).on('click', '#temp_img_loader_trigger' , function(){
