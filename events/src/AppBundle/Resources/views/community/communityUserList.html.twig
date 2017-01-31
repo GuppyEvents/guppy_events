@@ -17,173 +17,118 @@
     <!-- --------------------------------------------- -->
     <!-- ------------------ CONTENT ------------------ -->
     <!-- --------------------------------------------- -->
-    <section id="community-home" class="guppy-section align-center">
+    <section id="community-home" class="guppy-section align-center guppy-section-community">
         <div class="container">
+            <div class="ge-community-page-content">
 
-            <!-- -------------- SIDEBAR -------------- -->
-            {{ include('AppBundle:community:community_sidebar.html.twig') }}
-
-
-            <!-- -------------- CONTENT -------------- -->
-            <div class="community-content col-md-10">
-
-                <div class="community-content-header">
-
-                    {#{% if community.imageBackgroundBase64 %}#}
-                        {#<img src="{{ community.imageBackgroundBase64 }}" alt="{{ community.name }}" class="img-responsive" />#}
-                    {#{% else %}#}
-                        {#{% image 'theme/assets/img/guppy_bilkent_banner_01.jpg' %}#}
-                            {#<img src="{{ asset_url }}" class="img-responsive" alt="{{ community.name }}" />#}
-                        {#{% endimage %}#}
-                    {#{% endif %}#}
-
-                    <div class="img-preview preview-lg"></div>
-                    <span id="community-background-image-edit" class="community-content-header-edit" data-modal-link="community-background-image"><i class="fa fa-cog" aria-hidden="true"></i></span>
-
-                    <div class="modal-window" data-modal="community-background-image">
-                        <div class="modal-box medium animated" data-animation="zoomIn" data-duration="100">
-                            <span class="close-btn icon icon-office-52"></span>
-
-                            <div class="row">
-                                <div id="img-container-modal" class="col-md-12">
-                                    <!-- <h3 class="page-header">Demo:</h3> -->
-                                    <div class="img-container">
-                                        {% if community.imageBackgroundBase64 %}
-                                            <img src="{{ community.imageBackgroundBase64 }}" alt="{{ community.name }}" class="img-responsive" />
-                                        {% else %}
-                                            {% image 'theme/assets/img/guppy_bilkent_banner_01.jpg' %}
-                                                <img src="{{ asset_url }}" class="img-responsive" alt="{{ community.name }}" />
-                                            {% endimage %}
-
-                                        {% endif %}
-                                    </div>
-
-                                    <!-- <h3 class="page-header">Data:</h3> -->
-                                    <div class="docs-data">
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control" id="dataX" style="display:none;" placeholder="x">
-                                        </div>
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control" id="dataY" style="display:none;" placeholder="y">
-                                        </div>
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control" id="dataWidth" style="display:none;" placeholder="width">
-                                        </div>
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control" id="dataHeight" style="display:none;" placeholder="height">
-                                        </div>
-                                    </div>
+                {#<!-- -------------- SIDEBAR -------------- -->#}
+                {{ include('AppBundle:community:community_sidebar.html.twig') }}
 
 
+                {#<!-- -------------- CONTENT -------------- -->#}
+                <div class="ge-community-right-content col-md-10 col-sm-9">
+
+                    {{ include('AppBundle:community:community_background.html.twig') }}
+
+                    <div class="ge-content-box">
+
+
+                        <div id="dialog-form" title="Rol seçimi">
+                            <p class="validateTips">Başvurmak istediğiniz rolü seçiniz.</p>
+
+                            <form id="roleForm">
+                                <fieldset>
+                                    {% for role in userRoles %}
+                                        <input type="radio" name="role" value="{{ role.id }}"> {{ role.name }}<br>
+                                    {% endfor %}
+                                </fieldset>
+                            </form>
+                        </div>
+
+                        {% if communityUserList is defined and communityUserList|length > 0 %}
+                            <div class="row co-admin">
+                                <div class="col-sm-12">
+                                    <p class="text-left"><strong>YÖNETİCİ LİSTESİ</strong></p>
                                 </div>
-                            </div>
-
-                        </div>
-                    </div> <!-- modal end -->
-                </div>
-
-                <div id="dialog-form" title="Rol seçimi">
-                    <p class="validateTips">Başvurmak istediğiniz rolü seçiniz.</p>
-
-                    <form id="roleForm">
-                        <fieldset>
-                            {% for role in userRoles %}
-                                <input type="radio" name="role" value="{{ role.id }}"> {{ role.name }}<br>
-                            {% endfor %}
-                        </fieldset>
-                    </form>
-                </div>
-
-                <div class="community-content-body">
-                    {% if userRole is defined and userRole %}
-                        <div class="event-share-register align-right" style="padding-top: 5px; padding-bottom: 5px; border-bottom: 1px solid; border-bottom-color: #fe4918;">
-                            <a id="admin_apply" class="btn" ><span>YÖNETİCİ OL</span></a>
-                        </div>
-                    {% endif %}
-
-
-                    {% if communityUserList is defined and communityUserList|length > 0 %}
-                        <div class="row co-admin">
-                            <div class="col-sm-12">
-                                <p class="text-left"><strong>YÖNETİCİ LİSTESİ</strong></p>
-                            </div>
-                            {% for communityUser in communityUserList %}
-                                {% if communityUser.communityRole.id == 100 %}
-                                    <div class="col-sm-6">
-                                        <div class="testimonial">
-                                            <div class="author-block">
-                                                <div class="photo-container">
-                                                    {% if communityUser.communityUser.user.imageBase64 %}
-                                                        <img src="{{ communityUser.communityUser.user.imageBase64 }}" alt="{{ communityUser.communityUser.user.name }}" class="img-responsive" />
-                                                    {% else %}
-                                                        {% image 'theme/assets/img/guppy_avatar_001.png' %}
+                                {% for communityUser in communityUserList %}
+                                    {% if communityUser.communityRole.id == 100 %}
+                                        <div class="col-sm-6">
+                                            <div class="testimonial">
+                                                <div class="author-block">
+                                                    <div class="photo-container">
+                                                        {% if communityUser.communityUser.user.imageBase64 %}
+                                                            <img src="{{ communityUser.communityUser.user.imageBase64 }}" alt="{{ communityUser.communityUser.user.name }}" class="img-responsive" />
+                                                        {% else %}
+                                                            {% image 'theme/assets/img/guppy_avatar_001.png' %}
                                                             <img src="{{ asset_url }}" class="img-responsive" alt="{{ communityUser.communityUser.user.name }}" />
-                                                        {% endimage %}
-                                                    {% endif %}
-                                                </div>
+                                                            {% endimage %}
+                                                        {% endif %}
+                                                    </div>
 
-                                                <strong class="name">{{ communityUser.communityUser.user.name }} {{ communityUser.communityUser.user.surname }}</strong>
-                                                <small class="text-alt company">Yönetici @ {{ communityUser.communityUser.community.name }}</small>
+                                                    <strong class="name">{{ communityUser.communityUser.user.name }} {{ communityUser.communityUser.user.surname }}</strong>
+                                                    <small class="text-alt company">Yönetici @ {{ communityUser.communityUser.community.name }}</small>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-
-
-                        <div class="row co-member" style="padding-top: 20px;">
-                            <div class="col-sm-12">
-                                <p class="text-left"><strong>ÜYE LİSTESİ</strong></p>
+                                    {% endif %}
+                                {% endfor %}
                             </div>
-                            {% for communityUser in communityUserList %}
-                                {% if communityUser.communityUser.user and communityUser.communityUser.status == 200 %}
-                                    <div class="col-sm-6">
-                                        <div class="testimonial">
-                                            <div class="author-block">
-                                                <div class="photo-container">
-                                                    {% if communityUser.user.imageBase64 %}
-                                                        <img src="{{ communityUser.user.imageBase64 }}" alt="{{ communityUser.user.name }}" class="img-responsive" />
-                                                    {% else %}
-                                                        {% image 'theme/assets/img/guppy_avatar_001.png' %}
-                                                        <img src="{{ asset_url }}" class="img-responsive" alt="{{ communityUser.user.name }}" />
-                                                        {% endimage %}
-                                                    {% endif %}
-                                                </div>
 
-                                                <strong class="name">{{ communityUser.user.name }} {{ communityUser.user.surname }}</strong>
-                                                <small class="text-alt company">Üye @ {{ communityUser.community.name }}</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
-                            <div class="col-sm-12">
-                                <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto;"></div>
-                            </div>
-                        </div>
 
-                    <!-- Topluluğun hiç üyesi olmaması durumu -->
-                    {% else %}
-
-                        <div class="row co-no-member">
-                            Olamaz :( Bu topluluğun üyesi bulunmamakta...
-                            <br>
-
-                            {% if app.user and app.user.emailValidated %}
-                                <div id="join_community_panel" class-="col-sm-2 align-right" style="padding-top: 20px;">
-                                    <a id="join_community" class="btn btn-rounded btn-sm" data-community-id="{{ community.id }}">Topluluğa katıl</a>
+                            <div class="row co-member" style="padding-top: 20px;">
+                                <div class="col-sm-12">
+                                    <p class="text-left"><strong>ÜYE LİSTESİ</strong></p>
                                 </div>
-                            {% else %}
-                                Topluluğun ilk üyesi olmak için giriş yapabilirsin ;)
-                            {% endif %}
-                        </div>
+                                {% for communityUser in communityUserList %}
+                                    {% if communityUser.communityUser.user and communityUser.communityUser.status == 200 %}
+                                        <div class="col-sm-6">
+                                            <div class="testimonial">
+                                                <div class="author-block">
+                                                    <div class="photo-container">
+                                                        {% if communityUser.user.imageBase64 %}
+                                                            <img src="{{ communityUser.user.imageBase64 }}" alt="{{ communityUser.user.name }}" class="img-responsive" />
+                                                        {% else %}
+                                                            {% image 'theme/assets/img/guppy_avatar_001.png' %}
+                                                            <img src="{{ asset_url }}" class="img-responsive" alt="{{ communityUser.user.name }}" />
+                                                            {% endimage %}
+                                                        {% endif %}
+                                                    </div>
 
-                    {% endif %}
+                                                    <strong class="name">{{ communityUser.user.name }} {{ communityUser.user.surname }}</strong>
+                                                    <small class="text-alt company">Üye @ {{ communityUser.community.name }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                                <div class="col-sm-12">
+                                    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto;"></div>
+                                </div>
+                            </div>
 
-                </div><!-- community-content-body end -->
+                            <!-- Topluluğun hiç üyesi olmaması durumu -->
+                        {% else %}
 
+                            <div class="row co-no-member">
+                                Olamaz :( Bu topluluğun üyesi bulunmamakta...
+                                <br>
+
+                                {% if app.user and app.user.emailValidated %}
+                                    <div id="join_community_panel" class-="col-sm-2 align-right" style="padding-top: 20px;">
+                                        <a id="join_community" class="btn btn-rounded btn-sm" data-community-id="{{ community.id }}">Topluluğa katıl</a>
+                                    </div>
+                                {% else %}
+                                    Topluluğun ilk üyesi olmak için giriş yapabilirsin ;)
+                                {% endif %}
+                            </div>
+
+                        {% endif %}
+
+
+                    </div>
+                </div>
             </div>
+
         </div>
     </section>
 

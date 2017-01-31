@@ -12,26 +12,27 @@
     <section class="">
         <div class="container">
             <div class="col-sm-12">
-                <div class="ge-event-calendar-area">
+                <div class="ge-event-calendar-area ge-content-box">
                     <div class="ge-event-calendar-action" id="ge-event-calendar-action">
                         <div class="ge-select-month-btn pull-left">
                             <div>
-                                <button class="btn btn-outline-clr btn-sm"><i class="fa fa-chevron-left"></i></button>
-                                <button class="btn btn-outline-clr btn-sm"><i class="fa fa-chevron-right"></i></button>
+                                <button onclick="window.location.href='{{ path('home_events',{'d':prevMonthDateParam}) }}'" class="btn btn-outline-clr btn-sm"><i class="fa fa-chevron-left"></i></button>
+                                <button onclick="window.location.href='{{ path('home_events',{'d':nextMonthDateParam}) }}'" class="btn btn-outline-clr btn-sm"><i class="fa fa-chevron-right"></i></button>
                             </div>
                         </div>
                         <div class="ge-select-month-name pull-left">
                             <span class="ge-select-month-name-box">
-                                OCAK
+                                {{ calendarHeaderMonth }}
                             </span>
                            <span class="ge-select-month-year-box">
-                                2017
+                                {{ calendarHeaderYear }}
                             </span>
                         </div>
                         <div class="ge-other-action pull-right">
                             <button class="btn btn-sm btn-white-text"><i class="fa fa-calendar-plus-o"></i></button>
                         </div>
                     </div>
+
                     <div class="ge-event-calendar" id="ge-event-calendar">
                         <table class="table">
                             <thead>
@@ -46,163 +47,85 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    {% for eventDay in prevPrevWeekEventDays %}
-                                        <td class="calendar-day" data-date="{{ date(eventDay.eventDate)|date('Y/m/d') }}">
-                                            <div class="ge-calendar-cell-div" id="ge-calendar-cell-div">
-                                                <span class="ge-calendar-cell-day-number ge-other-day-number">{{ date(eventDay.eventDate)|date('d') }}</span>
-                                                <ul class="list-inline">
-                                                    {% for event in eventDay.eventList %}
-                                                        <li class="ge-event-item">
-                                                            <a href="#" class="ge-event-item-link" title="{{ event.title }}" rel="tooltip">
-                                                                <img src="{{ event.communityUser.community.imageBase64 }}" alt="">
-                                                            </a>
-                                                        </li>
-                                                    {% endfor %}
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    {% endfor %}
-                                </tr>
-
-                                <tr>
-                                    {% for eventDay in previousWeekEventDays %}
-                                        <td class="calendar-day" data-date="{{ date(eventDay.eventDate)|date('Y/m/d') }}">
-                                            <div class="ge-calendar-cell-div" id="ge-calendar-cell-div">
-                                                <span class="ge-calendar-cell-day-number ge-other-day-number">{{ date(eventDay.eventDate)|date('d') }}</span>
-                                                <ul class="list-inline">
-                                                    {% for event in eventDay.eventList %}
-                                                        <li class="ge-event-item">
-                                                            <a href="#" class="ge-event-item-link" title="{{ event.title }}" rel="tooltip">
-                                                                <img src="{{ event.communityUser.community.imageBase64 }}" alt="">
-                                                            </a>
-                                                        </li>
-                                                    {% endfor %}
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    {% endfor %}
-                                </tr>
-
-                                <tr>
-                                    {% for eventDay in eventDays %}
-                                        <td data-date="{{ date(eventDay.eventDate)|date('Y/m/d') }}" {% if eventDay.isToday is defined and eventDay.isToday %}class="active calendar-day"{% else %} class="calendar-day"{% endif %}>
-                                            <div class="ge-calendar-cell-div" id="ge-calendar-cell-div">
-                                                <span class="ge-calendar-cell-day-number {% if eventDay.isFuture is not defined %}ge-other-day-number{% endif %}">{{ date(eventDay.eventDate)|date('d') }}</span>
-                                                {% if eventDay.isFuture is defined and eventDay.isFuture %}
-                                                    <span class="ge-calendar-cell-add-event">
-                                                        <i class="fa fa-plus"></i><a href="#">Oluştur</a>
-                                                    </span>
-                                                {% endif %}
-                                                <ul class="list-inline">
-                                                    {% for event in eventDay.eventList %}
-                                                        <li class="ge-event-item">
-                                                            <a href="#" class="ge-event-item-link" title="{{ event.title }}" rel="tooltip">
-                                                                <img src="{{ event.communityUser.community.imageBase64 }}" alt="">
-                                                            </a>
-                                                        </li>
-                                                    {% endfor %}
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    {% endfor %}
-                                </tr>
-
-                                <tr>
-                                    {% for eventDay in nextWeekEventDays %}
-                                        <td class="calendar-day" data-date="{{ date(eventDay.eventDate)|date('Y/m/d') }}">
-                                            <div class="ge-calendar-cell-div" id="ge-calendar-cell-div">
-                                                <span class="ge-calendar-cell-day-number">{{ date(eventDay.eventDate)|date('d') }}</span>
-                                                <span class="ge-calendar-cell-add-event">
-                                                    <i class="fa fa-plus"></i><a href="#">Oluştur</a>
-                                                </span>
-                                                <ul class="list-inline">
-                                                    {% for event in eventDay.eventList %}
-                                                        <li class="ge-event-item">
-                                                            <a href="#" class="ge-event-item-link" title="{{ event.title }}" rel="tooltip">
-                                                                <img src="{{ event.communityUser.community.imageBase64 }}" alt="">
-                                                            </a>
-                                                        </li>
-                                                    {% endfor %}
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    {% endfor %}
-                                </tr>
-
-                                <tr>
-                                    {% for eventDay in nextNextWeekEventDays %}
-                                        <td class="calendar-day" data-date="{{ date(eventDay.eventDate)|date('Y/m/d') }}">
-                                            <div class="ge-calendar-cell-div" id="ge-calendar-cell-div">
-                                                <span class="ge-calendar-cell-day-number">{{ date(eventDay.eventDate)|date('d') }}</span>
-                                                <span class="ge-calendar-cell-add-event">
-                                                    <i class="fa fa-plus"></i><a href="#">Oluştur</a>
-                                                </span>
-                                                <ul class="list-inline">
-                                                    {% for event in eventDay.eventList %}
-                                                        <li class="ge-event-item">
-                                                            <a href="#" class="ge-event-item-link" title="{{ event.title }}" rel="tooltip">
-                                                                <img src="{{ event.communityUser.community.imageBase64 }}" alt="">
-                                                            </a>
-                                                        </li>
-                                                    {% endfor %}
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    {% endfor %}
-                                </tr>
+                                {% for eventListWeek in eventListWeeks %}
+                                    <tr>
+                                        {% for eventDay in eventListWeek %}
+                                            <td {% if eventDay.isToday is defined and eventDay.isToday %}class="active calendar-day"{% else %} class="calendar-day"{% endif %} data-date="{{ date(eventDay.eventDate)|date('Y/m/d') }}">
+                                                <div class="ge-calendar-cell-div" id="ge-calendar-cell-div">
+                                                    <span class="ge-calendar-cell-day-number {% if eventDay.isFuture is not defined %}ge-other-day-number{% endif %}">{{ date(eventDay.eventDate)|date('d') }}</span>
+                                                    {% if eventDay.isFuture is defined and eventDay.isFuture %}
+                                                        <span class="ge-calendar-cell-add-event">
+                                                            <i class="fa fa-plus"></i><a href="#">Oluştur</a>
+                                                        </span>
+                                                    {% endif %}
+                                                    <ul class="list-inline">
+                                                        {% for event in eventDay.eventList %}
+                                                            <li class="ge-event-item">
+                                                                <a href="#" class="ge-event-item-link" title="{{ event.title }}" rel="tooltip">
+                                                                    <img src="{{ event.communityUser.community.imageBase64 }}" alt="">
+                                                                </a>
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
-                    </div>
-                </div>
+                    </div><!-- calendar ends -->
+
+                </div> <!-- calendar-panel ends -->
             </div>
         </div>
     </section>
 
     <section class="section ge-events-list-section">
-    <div id="daily-events-container" class="container">
-    <h4 id="daily-events-title" class="ge-events-list-title">{{ todayDate|date('d.m.Y') }} Etkinlikleri</h4>
+        <div id="daily-events-container" class="container">
+        <h4 id="daily-events-title" class="ge-events-list-title">{{ todayDate|date('d.m.Y') }} Etkinlikleri</h4>
 
-    {% if todayEvents|length>0 %}
+        {% if todayEvents|length>0 %}
 
-                {% for event in todayEvents %}
-                    <div class="col-sm-4">
-                        <div class="ge-events-box" id="ge-event-box">
-                            <a href="{{ path('user_event_mainpage' , {'eventId':event.id}) }}" title="{{ event.title }}" class="ge-events-box-link">
-                            <span class="ge-events-box-img">
-                                <img src="{{ event.imageBase64 }}" alt="" class="img-responsive">
-                            </span>
-                            <span class="ge-events-box-date">
-                                {{ event.startDate|date("d.m.Y / H:i") }}
-                            </span>
-                                <h5 class="ge-events-box-title">{{ event.title }}</h5>
-                                <span class="ge-events-box-location">{{ event.communityUser.community.name }} @ {{ event.communityUser.community.university.name }} </span>
-                            </a>
-                            <div class="ge-event-box-footer">
-                                <div class="ge-event-box-footer-tags">
-                                    <ul class="list-inline">
-                                        <li><a href="#" title="">#event</a></li>
-                                    </ul>
-                                </div>
-                                <div class="ge-event-box-footer-btn">
-                                    <ul>
-                                        <li><a href="#" title="Paylaş" rel="tooltip"><i class="fa fa-share-alt"></i></a></li>
-                                        <li><a href="#" title="Kaydet" rel="tooltip"><i class="fa fa-bookmark-o"></i></a></li>
-                                    </ul>
-                                </div>
+            {% for event in todayEvents %}
+                <div class="col-sm-4">
+                    <div class="ge-events-box" id="ge-event-box">
+                        <a href="{{ path('user_event_mainpage' , {'eventId':event.id}) }}" title="{{ event.title }}" class="ge-events-box-link">
+                        <span class="ge-events-box-img">
+                            <img src="{{ event.imageBase64 }}" alt="" class="img-responsive">
+                        </span>
+                        <span class="ge-events-box-date">
+                            {{ event.startDate|date("d.m.Y / H:i") }}
+                        </span>
+                            <h5 class="ge-events-box-title">{{ event.title }}</h5>
+                            <span class="ge-events-box-location">{{ event.communityUser.community.name }} @ {{ event.communityUser.community.university.name }} </span>
+                        </a>
+                        <div class="ge-event-box-footer">
+                            <div class="ge-event-box-footer-tags">
+                                <ul class="list-inline">
+                                    <li><a href="#" title="">#event</a></li>
+                                </ul>
+                            </div>
+                            <div class="ge-event-box-footer-btn">
+                                <ul>
+                                    <li><a href="#" title="Paylaş" rel="tooltip"><i class="fa fa-share-alt"></i></a></li>
+                                    <li><a href="#" title="Kaydet" rel="tooltip"><i class="fa fa-bookmark-o"></i></a></li>
+                                </ul>
                             </div>
                         </div>
                     </div>
-                {% endfor %}
+                </div>
+            {% endfor %}
 
-                <!-- DAHA FAZLA BUTONU -->
-                {#<div class="col-sm-12">#}
-                    {#<div class="ge-events-list-more align-center">#}
-                        {#<button class="btn btn-outline-clr"><span>Daha Fazla</span></button>#}
-                    {#</div>#}
+            <!-- DAHA FAZLA BUTONU -->
+            {#<div class="col-sm-12">#}
+                {#<div class="ge-events-list-more align-center">#}
+                    {#<button class="btn btn-outline-clr"><span>Daha Fazla</span></button>#}
                 {#</div>#}
-    {% endif %}
-    </div>
+            {#</div>#}
+
+        {% endif %}
+        </div>
     </section>
 
 {% endblock %}

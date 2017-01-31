@@ -1,0 +1,104 @@
+
+
+        <!-- -------------- COMMUNITY BACKGROUND -------------- -->
+        <div class="ge-community-cover-area">
+            <div class="ge-community-cover-img">
+                <div class="img-preview preview-lg"></div>
+                {#<img src="assets/img/community/community-cover1.jpg" alt="" class="img-responsive img-preview preview-lg">#}
+            </div>
+        </div>
+        <div id="sticky-anchor"></div>
+        <div class="ge-community-action-row" id="sticky">
+            <div class="pull-left">
+                <button class="ge-community-action-btn" type="submit"><i class="fa fa-thumbs-o-up"></i>Beğen</button>
+                <button class="ge-community-action-btn" type="submit"><i class="fa fa-share-alt"></i>Paylaş</button>
+            </div>
+            <div class="pull-right">
+
+                {% set confirm = false %}
+                {% set reject = false %}
+                {% set apply = false %}
+                {% if app.user and app.user.emailValidated %}
+                    {% if communityUserRoles is defined %}
+                        {% for communityUserRole in communityUserRoles %}
+                            {% if communityUserRole.state.id == 1000 %}
+                                {% set confirm = true %}
+                            {% elseif communityUserRole.state.id == 2000 %}
+                                {% set reject = true %}
+                            {% elseif communityUserRole.state.id == 3000 %}
+                                {% set apply = true %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+
+                    {% if confirm %}
+
+                    {% elseif apply %}
+                        <div>
+                            <button class="ge-community-action-btn" type="submit" data-community-id="{{ community.id }}"><i class="fa fa-flag"></i>Başvurdunuz</button>
+                        </div>
+                    {% else %}
+                        <div id="join_community_panel">
+                            <button id="join_community" class="ge-community-action-btn" type="submit" data-community-id="{{ community.id }}"><i class="fa fa-flag-o"></i>Katıl</button>
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+                {% if userRole is defined and userRole %}
+                    <button class="ge-community-action-btn" type="submit">Yönetici ol</button>
+                {% endif %}
+            </div>
+        </div>
+
+
+        <!-- -- -- BAŞVURU UYARISI -- -- -->
+        {% if apply %}
+            <div class="alert alert-warning alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                Kulüp başvurunuz yöneticiler tarafından araştırılmaktadır. Onaylanması durumunda kulüp üyesi olacaksınız.
+            </div>
+        {% endif %}
+
+
+        <!-- -- -- CROPPER MODAL -- -- -->
+        {#<span id="community-background-image-edit" class="community-content-header-edit" data-modal-link="community-background-image"><i class="fa fa-cog" aria-hidden="true"></i></span>#}
+
+        <div class="modal-window" data-modal="community-background-image">
+            <div class="modal-box medium animated" data-animation="zoomIn" data-duration="100">
+                <span class="close-btn icon icon-office-52"></span>
+
+                <div class="row">
+                    <div id="img-container-modal" class="col-md-12">
+                        <!-- <h3 class="page-header">Demo:</h3> -->
+                        <div class="img-container">
+                            {% if community.imageBackgroundBase64 %}
+                                <img src="{{ community.imageBackgroundBase64 }}" alt="{{ community.name }}" class="img-responsive" />
+                            {% else %}
+                                {% image 'theme/assets/img/guppy_bilkent_banner_01.jpg' %}
+                                <img src="{{ asset_url }}" class="img-responsive" alt="{{ community.name }}" />
+                                {% endimage %}
+                            {% endif %}
+                        </div>
+
+                        <!-- <h3 class="page-header">Data:</h3> -->
+                        <div class="docs-data">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control" id="dataX" style="display:none;" placeholder="x">
+                            </div>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control" id="dataY" style="display:none;" placeholder="y">
+                            </div>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control" id="dataWidth" style="display:none;" placeholder="width">
+                            </div>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control" id="dataHeight" style="display:none;" placeholder="height">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div> <!-- modal end -->
+

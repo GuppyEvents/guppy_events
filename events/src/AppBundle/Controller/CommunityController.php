@@ -82,6 +82,10 @@ class CommunityController extends Controller
             $event->ticket_price = $ticket && $ticket->getPrice()>0 ? $ticket->getPrice() . ' TL' : null;
         }
 
+        $communityUser = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findOneBy(array('community'=>$community , 'user'=>$this->getUser()));
+        $communityUserRoles = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoles')->findBy(array('communityUser'=>$communityUser));
+        $data['communityUserRoles'] = $communityUserRoles;
+
         $data['community'] = $community;
         $data['eventList'] = $eventList;
         $data['isUserCommunityAdmin'] = $this->getUser() ? $this->getDoctrine()->getRepository('AppBundle:User')->isUserCommunityAdmin($this->getUser(),$community) : false;
@@ -122,6 +126,10 @@ class CommunityController extends Controller
 
             // İlgili kullanıcının topluluğun yöneticisi olup olunmadığına bakılır
             $data['isUserCommunityAdmin'] = $this->getUser() ? $this->getDoctrine()->getRepository('AppBundle:User')->isUserCommunityAdmin($this->getUser(),$community) : false;
+
+            $communityUser = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findOneBy(array('community'=>$community , 'user'=>$this->getUser()));
+            $communityUserRoles = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoles')->findBy(array('communityUser'=>$communityUser));
+            $data['communityUserRoles'] = $communityUserRoles;
         }
 
         $data['community'] = $community;
@@ -147,6 +155,10 @@ class CommunityController extends Controller
             // Topluluğun üyelik başvurusu yapanların listesi alınır
             $communityMembershipApplications = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoles')->findBy(array('communityUser'=>$communityUsers , 'state'=>$pendingState ));
             $data['communityMembershipApplications'] = $communityMembershipApplications;
+
+            $communityUser = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findOneBy(array('community'=>$community , 'user'=>$this->getUser()));
+            $communityUserRoles = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoles')->findBy(array('communityUser'=>$communityUser));
+            $data['communityUserRoles'] = $communityUserRoles;
         }
 
         $data['community'] = $community;

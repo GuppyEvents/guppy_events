@@ -146,7 +146,7 @@ body {
   overflow: hidden;
 
   margin-right: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 0px;
 }
 
 .img-preview > img {
@@ -154,7 +154,7 @@ body {
 }
 
 .preview-lg {
-  width: 920px!important;
+  width: 918px!important;
   height: 275px!important;
 }
 
