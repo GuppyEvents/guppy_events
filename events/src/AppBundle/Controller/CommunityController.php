@@ -15,13 +15,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 /**
- * @Route("/community", name="community")
+ * @Route("/topluluk", name="community")
  */
 class CommunityController extends Controller
 {
 
     /**
-     * @Route("/home/{communityId}", name="user_community_homepage")
+     * @Route("/bilgi/{communityId}", name="user_community_homepage")
      */
     public function communityHomeAction($communityId)
     {
@@ -65,7 +65,7 @@ class CommunityController extends Controller
 
 
     /**
-     * @Route("/events/{communityId}", name="user_community_events_homepage")
+     * @Route("/etkinlik/{communityId}", name="user_community_events_homepage")
      */
     public function communityEventsAction($communityId)
     {
@@ -95,7 +95,7 @@ class CommunityController extends Controller
 
 
     /**
-     * @Route("/users/{communityId}", name="user_community_users_homepage")
+     * @Route("/uyeler/{communityId}", name="user_community_users_homepage")
      */
     public function communityUsersAction($communityId)
     {
@@ -138,7 +138,7 @@ class CommunityController extends Controller
 
 
     /**
-     * @Route("/membership-applications/{communityId}", name="user_community_membership_applications_homepage")
+     * @Route("/uye-basvurulari/{communityId}", name="user_community_membership_applications_homepage")
      * @Security("has_role('ROLE_USER')")
      */
     public function communityMembershipApplicationsAction($communityId)

@@ -1,6 +1,8 @@
 {% extends 'AppBundle::main_base.html.twig' %}
 
-{% block title %}Seruvent - Topluluk Anasayfa{% endblock %}
+{% block title %}{{ community.name }}{% endblock %}
+{% block metaDescription %}{{ community.name }} üniversite öğrenci topluluğu hakkında bilgi bilgi verir{% endblock %}
+{% block metaKeyword %}Seruvent bilkent üniversitesi öğrenci topluluğu kulübü {% endblock %}
 
 {% block stylesheets %}
 

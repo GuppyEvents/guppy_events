@@ -1,6 +1,8 @@
 {% extends 'AppBundle::main_base.html.twig' %}
 
-{% block title %}S.S.S{% endblock %}
+{% block title %}Seruvent S.S.S{% endblock %}
+{% block metaDescription %}Seruvent hakkında sık sorulan soruların yanıtını bulabilirsiniz{% endblock %}
+{% block metaKeyword %}Seruvent hakkında sıkça sorulan sorular{% endblock %}
 
 
 {% block content %}
@@ -8,7 +10,6 @@
     <!-- --------------------------------------------- -->
     <!-- ------------------ CONTENT ------------------ -->
     <!-- --------------------------------------------- -->
-
 
     <section class="guppy-section align-center">
         <div class="container">
@@ -79,6 +80,7 @@
                             </ul>
                         </div>
                     </div>
+                </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
@@ -91,7 +93,7 @@
                         </div>
                     </div>
                 </div>
-                </div>
+
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
@@ -160,54 +162,6 @@
 
 {% endblock %}
 
-
-
-
-
-{% block javascriptcontent %}
-    <script>
-
-/***********************************************************************************************************************
- *                                          LOCAL VARIABLE
- **********************************************************************************************************************/
-
-
-/***********************************************************************************************************************
- *                                          UTIL FUNCTIONS
- **********************************************************************************************************************/
-
-        function fileToBase64Converter() {
-            if (this.files && this.files[0]) {
-                var FR= new FileReader();
-                FR.onload = function(e) {
-                    $('#img_viewer').attr('src', e.target.result);
-                    $('#university_image_base64').val(e.target.result);
-                };
-                FR.readAsDataURL( this.files[0] );
-            }
-        }
-
-/***********************************************************************************************************************
- *                                          AJAX OPERATIONS
- **********************************************************************************************************************/
-
-
-/***********************************************************************************************************************
- *                                          EVENTS
- **********************************************************************************************************************/
-
-
-/***********************************************************************************************************************
- *                                          DOCUMENT ON READY
- **********************************************************************************************************************/
-
-        // -- File to base64
-        //document.getElementById("temp_img_loader").addEventListener("change", fileToBase64Converter, false);
-
-
-    </script>
-
-{% endblock %}
 
 
 

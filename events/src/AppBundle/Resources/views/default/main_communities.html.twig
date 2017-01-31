@@ -1,6 +1,8 @@
 {% extends 'AppBundle::main_base.html.twig' %}
 
-{% block title %}Topluluklar{% endblock %}
+{% block title %}Üniversite Kulüpleri{% endblock %}
+{% block metaDescription %}Üniversite toplulukları ve kulüplerinin listesi{% endblock %}
+{% block metaKeyword %}Seruvent bilkent üniversitesi öğrenci toplulukları kulüpleri {% endblock %}
 
 {% block content %}
 
@@ -16,7 +18,8 @@
                     {#<a href="#" class="btn btn-black btn-sm">Grid</a>#}
                     {#<a href="#" class="btn btn-black btn-sm">List</a>#}
                 {#</div>#}
-                <h5 class="heading-alt">Kayıtlı Kulüpler</h5>
+                <h1 class="heading-alt" style="display: none;">Üniversite Kulüpleri</h1>
+                <h5 class="heading-alt">Öğrenci Toplulukları</h5>
                 <br>
             </div>
 
@@ -33,7 +36,7 @@
                                 {% endif %}
                             {% endimage %}
                         </div>
-                        <h3 class="name"><a href="{{ path("user_community_homepage" , {'communityId': community.id}) }}">{{ community.name }}</a></h3>
+                        <h3 class="name"><a href="{{ path("user_community_events_homepage" , {'communityId': community.id}) }}">{{ community.name }}</a></h3>
                         <p class="text-alt"><small>{{ community.university.name }}</small></p>
                         <ul class="speaker-socials">
                             <li><a href="{% if community.link_facebook %}{{ community.link_facebook }}{% endif %}" target="_blank"><span class="fa fa-facebook" aria-hidden="true"></span></a></li>

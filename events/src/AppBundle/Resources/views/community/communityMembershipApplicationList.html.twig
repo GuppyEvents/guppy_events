@@ -1,6 +1,9 @@
 {% extends 'AppBundle::main_base.html.twig' %}
 
-{% block title %}Seruvent - Topluluk Üye Başvuruları{% endblock %}
+{% block title %}{{ community.name }} Üye Başvuruları{% endblock %}
+{% block metaDescription %}{{ community.name }} üye başvurularının listesidir{% endblock %}
+{% block metaKeyword %}Seruvent bilkent üniversitesi kulüp üye başvuruları {% endblock %}
+
 
 {% block stylesheets %}
 
@@ -117,7 +120,7 @@
 /***********************************************************************************************************************
  *                                          LOCAL VARIABLE
  **********************************************************************************************************************/
-var dialog, form;
+        var dialog, form;
 
 /***********************************************************************************************************************
  *                                          UTIL FUNCTIONS

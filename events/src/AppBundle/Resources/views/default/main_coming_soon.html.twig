@@ -6,10 +6,10 @@
         <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
         <meta name="description" content="Etkinliklere bir tıkla ulaşabileceğiniz seruvent ile yakında sizlerleyiz">
-        <meta name="keywords" content="Events">
+        <meta name="keywords" content="etkinlik topluluk üniversite serüven">
         <meta name="author" content="Kemal Sami KARACA">
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-        <title>ÇOK YAKINDA</title>
+        <title>Seruvent Çok Yakında</title>
 
         {% stylesheets
                 'theme/assets/css/lib/animate.css'
@@ -109,9 +109,11 @@
                         </div>
                     </div>
 
-                    <h6 class="thin base-font">Etkinliklere bir tıkla ulaşabileceğiniz web sitemiz ile <strong>yakında sizlerleyiz.</strong></h6>
+                    <h6 class="thin base-font">Etkinliklere ve kulüplere bir tıkla ulaşabileceğiniz web sitemiz ile <strong>yakında sizlerleyiz.</strong></h6>
                     <div class="btns-container">
                         <a href="#" class="btn btn-md" data-modal-link="email-ticket">ABONE OLUN</a>
+                        <a href="{{ path('home_events') }}" class="btn btn-md" style="display: none;">Etkinlikler</a>
+                        <a href="{{ path('home_communities') }}" class="btn btn-md" style="display: none;">Kulüpler</a>
                     </div>
 
                     <!-- countdown end -->
@@ -123,34 +125,7 @@
         <div class="modal-window" data-modal="email-ticket" style="background-color: rgba(2, 2, 2, 0.85);">
             <div class="modal-box small animated" data-animation="zoomIn" data-duration="700">
                 <span class="close-btn icon icon-office-52"></span>
-                <h5 class="align-center"><span class="highlight">Yeniliklerden haberdar olun!</span></h5>
-
-
-                {#<form class="form registration-form align-center">#}
-
-                    {#<fieldset class="col-sm-12">#}
-                        {#<label for="first_name">Adınız</label>#}
-                        {#<input id="first_name" name="first_name" type="text">#}
-                    {#</fieldset>#}
-
-                    {#<fieldset class="col-sm-12">#}
-                        {#<label for="last_name">Soyadınız</label>#}
-                        {#<input id="last_name" name="last_name" type="text">#}
-                    {#</fieldset>#}
-
-                    {#<fieldset class="col-sm-12">#}
-                        {#<label for="email">Eposta</label>#}
-                        {#<input id="email" name="email" type="email">#}
-                    {#</fieldset>#}
-
-                    {#<fieldset class="col-sm-12">#}
-                        {#<input id="privacy" name="privacy" type="checkbox"><label for="privacy"><a href="#">Kullanım şartlarını</a> okudum, kabul ediyorum.</label>#}
-                        {#<br />#}
-                        {#<br />#}
-                    {#</fieldset>#}
-
-                    {#<input type="submit" value="Kayıt" class="btn">#}
-                {#</form>#}
+                <h5 class="align-center"><span class="highlight">Topluluğumuza Sende Katıl!</span></h5>
 
                 {{ form_start(form ,{'attr': {'class':'form registration-form align-center'}}) }}
                     <fieldset class="col-sm-12">

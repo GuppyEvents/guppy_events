@@ -19,7 +19,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\Ticket;
 
 /**
- * @Route("/event", name="event")
+ * @Route("/etkinlik", name="event")
  */
 class EventController extends Controller
 {
@@ -104,7 +104,7 @@ class EventController extends Controller
 
 
     /**
-     * @Route("/add", name="event_add_page")
+     * @Route("/ekle", name="event_add_page")
      * @Security("has_role('ROLE_USER')")
      */
     public function eventAddPageAction()

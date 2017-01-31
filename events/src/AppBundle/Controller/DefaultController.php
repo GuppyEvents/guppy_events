@@ -89,7 +89,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/home/communities", name="home_communities")
+     * @Route("/anasayfa/topluluklar", name="home_communities")
      */
     public function communitiesAction(Request $request)
     {
@@ -121,12 +121,12 @@ class DefaultController extends Controller
             }
         }
         $data['communities'] = $communityList;
-        return $this->render('AppBundle:default:main_community_list.html.twig' , $data);
+        return $this->render('AppBundle:default:main_communities.html.twig' , $data);
     }
 
 
     /**
-     * @Route("/home/events", name="home_events")
+     * @Route("/anasayfa/etkinlikler", name="home_events")
      */
     public function eventsAction(Request $request)
     {
@@ -286,12 +286,12 @@ class DefaultController extends Controller
 
 
     /**
-     * @Route("/home/faq", name="faq")
+     * @Route("/anasayfa/merak-edilen-sorular", name="faq")
      */
     public function faqAction(Request $request)
     {
         $data = array();
-        return $this->render('AppBundle:default:faq.html.twig' , $data);
+        return $this->render('AppBundle:default:main_faq.html.twig' , $data);
 
     }
 
@@ -350,7 +350,7 @@ class DefaultController extends Controller
                     }
                 }
 
-                $communityObj['homepagelink'] = $this->get('router')->generate('user_community_homepage' , array(
+                $communityObj['homepagelink'] = $this->get('router')->generate('user_community_events_homepage' , array(
                     'communityId' => $community->getId(),
                 ));
                 
