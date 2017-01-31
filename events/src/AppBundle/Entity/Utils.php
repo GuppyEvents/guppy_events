@@ -23,12 +23,17 @@ class Utils
         $client = new Google_Client();
         $client->useApplicationDefaultCredentials();
         $client->addScope(\Google_Service_Storage::DEVSTORAGE_FULL_CONTROL);
+
         $bucket	= "seruvent_images";
 
 
         $data = explode(',', $imageBase64);
 
         $file_content = base64_decode($data[1]);
+
+        $f = finfo_open();
+
+        $mime_type = finfo_buffer($f, $file_content, FILEINFO_MIME_TYPE);
 
 
         $storageService = new Google_Service_Storage($client);
@@ -41,7 +46,8 @@ class Utils
                 'name' => $fileName,
                 'data' => $file_content,
                 'uploadType' => 'media',
-                'predefinedAcl' =>'publicRead'
+                'predefinedAcl' =>'publicRead',
+                'mimeType' => $mime_type
 
             );
             $gsso = new Google_Service_Storage_StorageObject();
