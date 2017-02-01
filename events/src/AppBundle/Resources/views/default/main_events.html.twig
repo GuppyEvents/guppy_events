@@ -63,7 +63,7 @@
                                                     <ul class="list-inline">
                                                         {% for event in eventDay.eventList %}
                                                             <li class="ge-event-item">
-                                                                <a href="#" class="ge-event-item-link" title="{{ event.title }}" rel="tooltip">
+                                                                <a href="{{ path('user_event_mainpage' , {'eventId':event.id}) }}" class="ge-event-item-link" title="{{ event.title }}" rel="tooltip">
                                                                     <img src="{{ event.communityUser.community.imageBase64 }}" alt="">
                                                                 </a>
                                                             </li>
@@ -174,7 +174,7 @@
 
                             communityElem = '<div class="col-sm-4">' +
                                     '<div class="ge-events-box" id="ge-event-box">' +
-                                    '<a href="/event/h/' + event.id +'" title="' + event.title + '" class="ge-events-box-link">' +
+                                    '<a href="/etkinlik/h/' + event.id +'" title="' + event.title + '" class="ge-events-box-link">' +
                                     '<span class="ge-events-box-img">' +
                                     '<img src="'+ event.imageBase64 +'" alt="" class="img-responsive">' +
                                     '</span>' +
@@ -222,10 +222,11 @@
 
         // select day from calendar event
         $(document).on('click', 'td.calendar-day',function(event){
-            ajaxGetDailyEvents($(event.target).attr('data-date'));
-            $(".ge-event-calendar  table tbody tr td").removeClass("active");
-            $(event.target).addClass("active");
-
+            if($(event.target).attr('data-date')){
+                ajaxGetDailyEvents($(event.target).attr('data-date'));
+                $(".ge-event-calendar  table tbody tr td").removeClass("active");
+                $(event.target).addClass("active");
+            }
         });
 
     </script>

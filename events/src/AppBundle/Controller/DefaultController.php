@@ -398,8 +398,10 @@ class DefaultController extends Controller
             $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findPublishEventsByDate( $dateTimeStart,$dateTimeEnd);
 
             foreach ($eventList as $event) {
-                $evetObj =array();
-                $evetObj["id"] = $event->getId();
+                // event objesine homepageLink attribute atanamıyor json a cevirilip atlması gerekiyor
+                $event->homepageLink = $this->get('router')->generate('user_event_mainpage' , array(
+                    'eventId' => $event->getId()
+                ));
             }
 
             $data["eventList"] = $eventList;

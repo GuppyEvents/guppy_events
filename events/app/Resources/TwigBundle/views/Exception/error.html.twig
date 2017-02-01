@@ -1,14 +1,31 @@
-{% extends 'base.html.twig' %}
+{% extends 'AppBundle::main_base.html.twig' %}
 
-{% block body %}
-    <h1>Page not found</h1>
+{% block title %}Seruvent 404{% endblock %}
 
-    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-        {# ... #}
-    {% endif %}
+{% block content %}
 
-    <p>
-        The requested page couldn't be located. Checkout for any URL
-        misspelling or <a href="{{ path('homepage') }}">return to the homepage</a>.
-    </p>
+    <!-- --------------------------------------------- -->
+    <!-- ------------------ CONTENT ------------------ -->
+    <!-- --------------------------------------------- -->
+    <section>
+        <div class="container">
+            <div class="container">
+                <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-12">
+                    <div class="ge-content-box error-box-content-area">
+                        <div class="error-box-content-header">
+                            <i class="fa fa-warning"></i> HATA!
+                        </div>
+                        <div class="error-box-content-text">
+                            <p>Üzgünüz! Aradığınız sayfa kullanılmamaktadır.</p>
+                        </div>
+                        <div class="error-box-content-footer">
+                            <a href="{{ path('homepage') }}" title="" class="pull-left"><i class="fa fa-chevron-left"></i>Anasayfaya Dönün</a>
+                            <a href="#" title="" class="pull-right" data-modal-link="ge-send-mail"><i class="fa fa-envelope-o"></i>Hatalı İçeriği Bildirin</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
 {% endblock %}
