@@ -47,28 +47,28 @@
                             </form>
                         </div>
 
-                        {% if communityUserList is defined and communityUserList|length > 0 %}
+                        {% if communityAllUserRoles is defined and communityAllUserRoles|length > 0 %}
                             <div class="row co-admin">
                                 <div class="col-sm-12">
                                     <p class="text-left"><strong>YÖNETİCİ LİSTESİ</strong></p>
                                 </div>
-                                {% for communityUser in communityUserList %}
-                                    {% if communityUser.communityRole.id == 100 %}
+                                {% for communityUserRole in communityAllUserRoles %}
+                                    {% if communityUserRole.communityRole.id == 100 %}
                                         <div class="col-sm-6">
                                             <div class="testimonial">
                                                 <div class="author-block">
                                                     <div class="photo-container">
-                                                        {% if communityUser.communityUser.user.imageBase64 %}
-                                                            <img src="{{ communityUser.communityUser.user.imageBase64 }}" alt="{{ communityUser.communityUser.user.name }}" class="img-responsive" />
+                                                        {% if communityUserRole.communityUser.user.imageBase64 %}
+                                                            <img src="{{ communityUserRole.communityUser.user.imageBase64 }}" alt="{{ communityUserRole.communityUser.user.name }}" class="img-responsive" />
                                                         {% else %}
                                                             {% image 'theme/assets/img/guppy_avatar_001.png' %}
-                                                            <img src="{{ asset_url }}" class="img-responsive" alt="{{ communityUser.communityUser.user.name }}" />
+                                                            <img src="{{ asset_url }}" class="img-responsive" alt="{{ communityUserRole.communityUser.user.name }}" />
                                                             {% endimage %}
                                                         {% endif %}
                                                     </div>
 
-                                                    <strong class="name">{{ communityUser.communityUser.user.name }} {{ communityUser.communityUser.user.surname }}</strong>
-                                                    <small class="text-alt company">Yönetici @ {{ communityUser.communityUser.community.name }}</small>
+                                                    <strong class="name">{{ communityUserRole.communityUser.user.name }} {{ communityUserRole.communityUser.user.surname }}</strong>
+                                                    <small class="text-alt company">Yönetici @ {{ communityUserRole.communityUser.community.name }}</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -81,23 +81,23 @@
                                 <div class="col-sm-12">
                                     <p class="text-left"><strong>ÜYE LİSTESİ</strong></p>
                                 </div>
-                                {% for communityUser in communityUserList %}
-                                    {% if communityUser.communityUser.user and communityUser.communityUser.status == 200 %}
+                                {% for communityUserRole in communityAllUserRoles %}
+                                    {% if communityUserRole.communityRole.id == 200 %}
                                         <div class="col-sm-6">
                                             <div class="testimonial">
                                                 <div class="author-block">
                                                     <div class="photo-container">
-                                                        {% if communityUser.user.imageBase64 %}
-                                                            <img src="{{ communityUser.user.imageBase64 }}" alt="{{ communityUser.user.name }}" class="img-responsive" />
+                                                        {% if communityUserRole.communityUser.user.imageBase64 %}
+                                                            <img src="{{ communityUserRole.communityUser.user.imageBase64 }}" alt="{{ communityUserRole.communityUser.user.name }}" class="img-responsive" />
                                                         {% else %}
                                                             {% image 'theme/assets/img/guppy_avatar_001.png' %}
-                                                            <img src="{{ asset_url }}" class="img-responsive" alt="{{ communityUser.user.name }}" />
+                                                            <img src="{{ asset_url }}" class="img-responsive" alt="{{ communityUserRole.communityUser.user.name }}" />
                                                             {% endimage %}
                                                         {% endif %}
                                                     </div>
 
-                                                    <strong class="name">{{ communityUser.user.name }} {{ communityUser.user.surname }}</strong>
-                                                    <small class="text-alt company">Üye @ {{ communityUser.community.name }}</small>
+                                                    <strong class="name">{{ communityUserRole.communityUser.user.name }} {{ communityUserRole.communityUser.user.surname }}</strong>
+                                                    <small class="text-alt company">Üye @ {{ communityUserRole.communityUser.community.name }}</small>
                                                 </div>
                                             </div>
                                         </div>

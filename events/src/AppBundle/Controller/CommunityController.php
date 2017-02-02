@@ -106,7 +106,7 @@ class CommunityController extends Controller
             $communityUser = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->findBy(array('community'=>$community));
             $acceptState = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoleState')->findAcceptState();
             $communityUserRole = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoles')->findBy(array('communityUser'=>$communityUser, 'state' => $acceptState));
-            $data['communityUserList'] = $communityUserRole;
+            $data['communityAllUserRoles'] = $communityUserRole;
             $dates= array();
 
             foreach($communityUserRole as $comm){
