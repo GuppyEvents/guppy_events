@@ -1,86 +1,66 @@
 
         <!-- -------------- SIDEBAR -------------- -->
-        <div class="community-sidebar col-md-2">
-            <div class="community-sidebar-photo" >
-                <div class="society">
-                    <div class="photo-wrapper rounded">
-                        {% if user.imageBase64 %}
-                            <img src="{{ user.imageBase64 }}" alt="{{ user.name }}" class="img-responsive" />
-                        {% else %}
-                            {% image 'theme/assets/img/guppy_avatar_001.png' %}
-                                <img src="{{ asset_url }}" class="img-responsive" alt="{{ user.name }}" />
-                            {% endimage %}
-                        {% endif %}
-                    </div>
+
+        <div class="ge-community-left-sidebar col-md-2 col-sm-3">
+            <div class="ge-community-logo-area">
+                <div class="ge-community-logo">
+                    {% if user.imageBase64 %}
+                        <img src="{{ user.imageBase64 }}" alt="{{ user.name }}" class="img-responsive" />
+                    {% else %}
+                        {% image 'theme/assets/img/guppy_avatar_001.png' %}
+                        <img src="{{ asset_url }}" class="img-responsive" alt="{{ user.name }}" />
+                        {% endimage %}
+                    {% endif %}
                 </div>
             </div>
-
-            <hr>
-            <div class="community-sidebar-navigation">
-                <ul class="community-dropdown-menu">
-
-                    <!-- SIDEBAR LINK ABOUT -->
-                    <!-- SIDEBAR LINK ABOUT -->
-                    <li class="community-navigation-item">
-                        <a href="
+            <div class="ge-community-name">
+                <hr/>
+            </div>
+            <ul class="ge-community-sidebar-menu ge-menu-group">
+                <li class="{% if app.request.get('_route') == 'user_profile_account' or app.request.get('_route') == 'user_profile_with_id'%}active{% endif %}">
+                    <a href="
                             {% if urlContinueWithId is defined and urlContinueWithId==true%}
                                 {{ path('user_profile_with_id' , {'userId':user.id}) }}
                             {% else %}
                                 {{ path('user_profile_account') }}
                             {% endif %}"
-                                class="navigation-link {% if app.request.get('_route') == 'user_profile_account' or app.request.get('_route') == 'user_profile_with_id'%}active{% endif %}">Hesap</a>
-                    </li>
-
-
-                    <!-- SIDEBAR LINK PASSWORD CHANGE -->
-                    <!-- SIDEBAR LINK PASSWORD CHANGE -->
-                    {% if isProfileOwner is defined and isProfileOwner==true %}
-                        <li class="community-navigation-item"><a href="{{ path('user_profile_password') }}" class="navigation-link {% if app.request.get('_route') == 'user_profile_password'%}active{% endif %}">Şifre İşlemleri</a></li>
-                    {% endif %}
-
-
-                    <!-- SIDEBAR LINK MAIL -->
-                    <!-- SIDEBAR LINK MAIL -->
-                    <li class="community-navigation-item">
-                        <a href="
+                       class="ge-menu-group-item">Hakkında</a></li>
+                <li class="{% if app.request.get('_route') == 'user_profile_password'%}active{% endif %}"><a href="{{ path('user_profile_password') }}" class="ge-menu-group-item">Şifre İşlemleri</a></li>
+                <li class="{% if app.request.get('_route') == 'user_profile_mail' or app.request.get('_route') == 'user_profile_mail_with_id' %}active{% endif %}">
+                    <a href="
                             {% if urlContinueWithId is defined and urlContinueWithId==true%}
                                 {{ path('user_profile_mail_with_id' , {'userId':user.id}) }}
                             {% else %}
                                 {{ path('user_profile_mail') }}
-                            {% endif %}"
-                                class="navigation-link {% if app.request.get('_route') == 'user_profile_mail' or app.request.get('_route') == 'user_profile_mail_with_id' %}active{% endif %}">Mail Adresleri </a>
-                    </li>
+                            {% endif %}" class="ge-menu-group-item">Mail Adresleri</a></li>
 
-
-                    <!-- SIDEBAR LINK COMMUNITIES -->
-                    <!-- SIDEBAR LINK COMMUNITIES -->
-                    <li class="community-navigation-item">
-                        <a href="
+                <li class="{% if app.request.get('_route') == 'user_profile_communities' or app.request.get('_route') == 'user_profile_communities_with_id' %}active{% endif %}">
+                    <a href="
                             {% if urlContinueWithId is defined and urlContinueWithId==true%}
                                 {{ path('user_profile_communities_with_id' , {'userId':user.id}) }}
                             {% else %}
                                 {{ path('user_profile_communities') }}
-                            {% endif %}"
-                                class="navigation-link {% if app.request.get('_route') == 'user_profile_communities' or app.request.get('_route') == 'user_profile_communities_with_id' %}active{% endif %}">Topluluklar</a>
-                    </li>
+                            {% endif %}" class="ge-menu-group-item">Topluluklar</a></li>
 
 
-                    <!-- SIDEBAR LINK BADGES -->
-                    <!-- SIDEBAR LINK BADGES -->
-                    <!-- şimdilik kullanılmadığından kapatıldı -->
-                    <li class="community-navigation-item" style="display: none;">
-                        <a href="
+                <li style="display: none;" class="{% if app.request.get('_route') == 'user_profile_badges' or app.request.get('_route') == 'user_profile_badges_with_id' %}active{% endif %}">
+                    <a href="
                             {% if urlContinueWithId is defined and urlContinueWithId==true%}
                                 {{ path('user_profile_badges_with_id' , {'userId':user.id}) }}
                             {% else %}
                                 {{ path('user_profile_badges') }}
-                            {% endif %}"
-                                class="navigation-link {% if app.request.get('_route') == 'user_profile_badges' or app.request.get('_route') == 'user_profile_badges_with_id' %}active{% endif %}">Rozetler</a>
-                    </li>
+                            {% endif %}" class="ge-menu-group-item">Rozetler</a></li>
 
-                </ul>
-            </div>
+            </ul>
+
+            {% if isUserCommunityAdmin is defined and isUserCommunityAdmin %}
+                <div class="ge-community-sidebar-action">
+                    <button class="ge-community-action-btn" onclick="window.location.href='{{ path('event_add_page') }}'" type="submit"><i class="fa fa-plus"></i>Etkinlik Oluştur</button>
+                </div>
+            {% endif %}
+
         </div>
+
 
 
 
