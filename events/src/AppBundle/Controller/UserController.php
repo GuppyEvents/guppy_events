@@ -44,6 +44,7 @@ class UserController extends Controller
         $data = array();
         $data['user'] = $this->getUser();
         $data['isProfileOwner'] = true;
+        $data['hasCommunityAdminRole'] = $this->getDoctrine()->getRepository('AppBundle:User')->hasUserCommunityAdmin($this->getUser());
         $em = $this->getDoctrine()->getManager();
 
         // 1) POST OPERATION

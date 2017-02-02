@@ -53,7 +53,7 @@
 
             </ul>
 
-            {% if isUserCommunityAdmin is defined and isUserCommunityAdmin %}
+            {% if hasCommunityAdminRole is defined and hasCommunityAdminRole %}
                 <div class="ge-community-sidebar-action">
                     <button class="ge-community-action-btn" onclick="window.location.href='{{ path('event_add_page') }}'" type="submit"><i class="fa fa-plus"></i>Etkinlik Oluştur</button>
                 </div>
