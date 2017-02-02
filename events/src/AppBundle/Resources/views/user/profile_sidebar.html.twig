@@ -25,7 +25,11 @@
                                 {{ path('user_profile_account') }}
                             {% endif %}"
                        class="ge-menu-group-item">Hakkında</a></li>
-                <li class="{% if app.request.get('_route') == 'user_profile_password'%}active{% endif %}"><a href="{{ path('user_profile_password') }}" class="ge-menu-group-item">Şifre İşlemleri</a></li>
+
+                {% if isProfileOwner is defined and isProfileOwner==true %}
+                    <li class="{% if app.request.get('_route') == 'user_profile_password'%}active{% endif %}"><a href="{{ path('user_profile_password') }}" class="ge-menu-group-item">Şifre İşlemleri</a></li>
+                {% endif %}
+
                 <li class="{% if app.request.get('_route') == 'user_profile_mail' or app.request.get('_route') == 'user_profile_mail_with_id' %}active{% endif %}">
                     <a href="
                             {% if urlContinueWithId is defined and urlContinueWithId==true%}

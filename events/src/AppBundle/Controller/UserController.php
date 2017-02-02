@@ -162,6 +162,7 @@ class UserController extends Controller
     {
         $data = array();
         $em = $this->getDoctrine()->getManager();
+        $data['hasCommunityAdminRole'] = $this->getDoctrine()->getRepository('AppBundle:User')->hasUserCommunityAdmin($this->getUser());
 
         // 1) POST OPERATION
         if($request->getMethod() == 'POST'){
@@ -247,6 +248,7 @@ class UserController extends Controller
 
         $data = array();
         $em = $this->getDoctrine()->getManager();
+        $data['hasCommunityAdminRole'] = $this->getDoctrine()->getRepository('AppBundle:User')->hasUserCommunityAdmin($this->getUser());
 
         // 1) POST OPERATION
         if($request->getMethod() == 'POST'){
@@ -299,6 +301,7 @@ class UserController extends Controller
 
         $data = array();
         $em = $this->getDoctrine()->getManager();
+        $data['hasCommunityAdminRole'] = $this->getDoctrine()->getRepository('AppBundle:User')->hasUserCommunityAdmin($this->getUser());
 
         $data['user'] = $this->getUser();
         $data['isProfileOwner'] = true;
@@ -343,6 +346,7 @@ class UserController extends Controller
 
         $data = array();
         $em = $this->getDoctrine()->getManager();
+        $data['hasCommunityAdminRole'] = $this->getDoctrine()->getRepository('AppBundle:User')->hasUserCommunityAdmin($this->getUser());
 
         $data['communityUserAdminRoles'] = $em->getRepository('AppBundle:CommunityUserRoles')->findCommunityAdminRoles($this->getUser());
         $data['communityUserMemberRoles'] = $em->getRepository('AppBundle:CommunityUserRoles')->findCommunityMemberRoles($this->getUser());
