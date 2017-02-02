@@ -114,14 +114,6 @@
                             <div class="row co-no-member">
                                 Olamaz :( Bu topluluğun üyesi bulunmamakta...
                                 <br>
-
-                                {% if app.user and app.user.emailValidated %}
-                                    <div id="join_community_panel" class-="col-sm-2 align-right" style="padding-top: 20px;">
-                                        <a id="join_community" class="btn btn-rounded btn-sm" data-community-id="{{ community.id }}">Topluluğa katıl</a>
-                                    </div>
-                                {% else %}
-                                    Topluluğun ilk üyesi olmak için giriş yapabilirsin ;)
-                                {% endif %}
                             </div>
 
                         {% endif %}
@@ -150,6 +142,10 @@
     {% endjavascripts %}
     <script src="http://code.highcharts.com/stock/highstock.js"></script>
     <script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
+
+    {#<!-- -------------- COMMUNITY COMMON JS -------------- -->#}
+    {% include('AppBundle:community:community_background.javascript.twig') %}
+
     <script>
 
 /***********************************************************************************************************************
@@ -259,46 +255,10 @@ $(window).on("load", function(){
 
         });
 
-
-        function ajaxRequestJoinCommunity(eventTarget){
-
-            // -- 1 --
-
-
-            // -- 2 --
-            // ajax call
-            $.post("{{ path('service_community_user_add') }}" ,{
-                cid : $(eventTarget).attr('data-community-id'),
-            }).always(function(){
-
-            }).done(function(data){
-
-                // -- 2.1 -- CONSOLE
-                if(Guppy.responseDebugMode)
-                    console.log(data);
-
-                // -- 2.2 -- sonuc düzenlenir
-                if(data.resultText == 'SUCCESS'){
-
-                    $('#join_community_panel').slideUp();
-                    toastr.success('Başvurunuz alınmıştır.');
-
-                }else if(data.resultText == 'SUCCESS_EMPTY'){
-                    toastr.error('Beklenmeyen hata ile karşılaşıldı');
-                }else if(data.resultText == 'FAILURE_PERMISSION'){
-                    toastr.error('Bu işlem için izniniz bulunmamaktadır');
-                }else{
-                    toastr.error('Beklenmeyen hata ile karşılaşıldı');
-                }
-            });
-        }
-
 /***********************************************************************************************************************
  *                                          EVENTS
  **********************************************************************************************************************/
-        $(document).on('click','#join_community',function(event){
-            ajaxRequestJoinCommunity(event.target);
-        });
+
 
 /***********************************************************************************************************************
  *                                          BEFORE DOCUMENT ON READY

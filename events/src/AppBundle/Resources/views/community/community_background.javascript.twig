@@ -1,0 +1,34 @@
+
+
+
+<script>
+/***********************************************************************************************************************
+ *                                          AJAX OPERATIONS
+ **********************************************************************************************************************/
+
+    function ajaxRequestJoinCommunity(eventTarget){
+        $.post("{{ path('service_apply_role') }}", {
+            roleId: 200,
+            communityId: {{ community.id }}
+        }).always(function () {
+        }).done(function (data) {
+            if (data.resultCode == 'result.Guppy.001') {
+                $('#join_community_panel').slideUp();
+                toastr.success("Başvurunuz kaydedildi.");
+            } else if (data.resultCode == 'result.Guppy.601') {
+                toastr.error("Bu pozisyona daha önce başvurmuş olduğunuz için işleminiz gerçekleştirilemedi.");
+            }else{
+                toastr.error("Beklenmeyen bir hata oluştu.");
+            }
+        });
+    }
+
+/***********************************************************************************************************************
+ *                                          EVENTS
+ **********************************************************************************************************************/
+
+    $(document).on('click','#join_community',function(event){
+        ajaxRequestJoinCommunity(event.target);
+    });
+
+</script>
