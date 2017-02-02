@@ -268,25 +268,23 @@ class CommunityController extends Controller
         try{
 
             // -- 2.1 -- Get parameters
-            $communityUserId = $request->get('communityUserId');
-            $communityUser = $this->getDoctrine()->getRepository('AppBundle:CommunityUser')->find($communityUserId);
+            $communityUserRolesId = $request->get('curi');
+            $communityUserRole = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoles')->find($communityUserRolesId);
 
             // -- 2.2 -- Checkers
-            if (!$communityUser) {
-                $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent('Community User bulunamadi')));
+            if (!$communityUserRole) {
+                $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent('Kullanıcının böyle bir rolü bulunamadı')));
                 return $response;
             }
 
-            if ($communityUser->getUser()->getId() != $this->getUser()->getId()) {
+            if ($communityUserRole->getCommunityUser() && $communityUserRole->getCommunityUser()->getUser()->getId() != $this->getUser()->getId()) {
                 $response->setContent(json_encode(Result::$FAILURE_PERMISSION->setContent('Yetkiniz bulunmamaktadır')));
                 return $response;
             }
 
-            $communityUser->setStatus($communityUser->getStatus() + 1000);
-
-            $this->getDoctrine()->getManager()->persist($communityUser);
+            $this->getDoctrine()->getManager()->remove($communityUserRole);
             $this->getDoctrine()->getManager()->flush();
-            $data['success_msg'] = 'Gruptan başarılı bir şekilde ayrıldınız';
+            $data['success_msg'] = 'Gruptan ayrıldınız :(';
 
             // -- 2.2 -- Return Result
             $response->setContent(json_encode(Result::$SUCCESS->setContent($data)));

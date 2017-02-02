@@ -35,7 +35,7 @@
                                     {% for communityUserAdminRole in communityUserAdminRoles %}
                                         {% if communityUserAdminRole.communityUser.community %}
                                             <div class="col-sm-6">
-                                                <div class="testimonial profile-community-body" data-co-user-id="{{ communityUserAdminRole.communityUser.id }}" data-community-name="{{ communityUserAdminRole.communityUser.community.name }}" style="border: 1px solid #ccc!important;">
+                                                <div class="testimonial profile-community-body" data-co-user-role-id="{{ communityUserAdminRole.id }}" data-co-user-id="{{ communityUserAdminRole.communityUser.id }}" data-community-name="{{ communityUserAdminRole.communityUser.community.name }}" style="border: 1px solid #ccc!important;">
                                                     <div class="author-block">
                                                         <div class="photo-container">
                                                             {% if communityUserAdminRole.communityUser.community.imageBase64 %}
@@ -71,7 +71,7 @@
                                     {% for communityUserMemberRole in communityUserMemberRoles %}
                                         {% if communityUserMemberRole.communityUser.community %}
                                             <div class="col-sm-6">
-                                                <div class="testimonial profile-community-body" data-co-user-id="{{ communityUserMemberRole.communityUser.id }}" data-community-name="{{ communityUserMemberRole.communityUser.community.name }}" style="border: 1px solid #ccc!important;">
+                                                <div class="testimonial profile-community-body" data-co-user-role-id="{{ communityUserMemberRole.id }}" data-co-user-id="{{ communityUserMemberRole.communityUser.id }}" data-community-name="{{ communityUserMemberRole.communityUser.community.name }}" style="border: 1px solid #ccc!important;">
                                                     <div class="author-block">
                                                         <div class="photo-container">
                                                             {% if communityUserMemberRole.communityUser.community.imageBase64 %}
@@ -107,7 +107,7 @@
                                     {% for communityUserApplyRole in communityUserApplyRoles %}
                                         {% if communityUserApplyRole.communityUser.community %}
                                             <div class="col-sm-6">
-                                                <div class="testimonial profile-community-body" data-co-user-id="{{ communityUserApplyRole.communityUser.id }}" data-community-name="{{ communityUserApplyRole.communityUser.community.name }}" style="border: 1px solid #ccc!important;">
+                                                <div class="testimonial profile-community-body" data-co-user-role-id="{{ communityUserApplyRole.id }}" data-co-user-id="{{ communityUserApplyRole.communityUser.id }}" data-community-name="{{ communityUserApplyRole.communityUser.community.name }}" style="border: 1px solid #ccc!important;">
                                                     <div class="author-block">
                                                         <div class="photo-container">
                                                             {% if communityUserApplyRole.communityUser.community.imageBase64 %}
@@ -184,11 +184,11 @@
 
     {% if isProfileOwner is defined and isProfileOwner==true %}
 
-        function ajaxLeaveFromCommunity(eventTarget,communityUserId){
+        function ajaxLeaveFromCommunity(eventTarget,communityUserRoleId){
 
             // -- 2 --
             $.post("{{ path('user_community_membership_leave') }}" ,{
-                communityUserId : communityUserId,
+                curi : communityUserRoleId,
             }).always(function(){
 
             }).done(function(data){
@@ -240,7 +240,7 @@
         // topluluktan ayrılma işlemi
         $(document).on('click' , '.profile-community-box-edit' , function (event) {
 
-            communityUserId = $(event.target).parentsUntil('.profile-community-body').last().parent().attr('data-co-user-id');
+            curi = $(event.target).parentsUntil('.profile-community-body').last().parent().attr('data-co-user-role-id');
             communityName = $(event.target).parentsUntil('.profile-community-body').last().parent().attr('data-community-name');
 
             $('#modal-alert-text').html(communityName + ' topluluğundan ayrılmak istediğinize emin misiniz?');
@@ -252,7 +252,7 @@
                 title: "Bu gruptan ayrıl?",
                 buttons: {
                     "Ayrıl": function() {
-                        ajaxLeaveFromCommunity(event.target , communityUserId)
+                        ajaxLeaveFromCommunity(event.target , curi)
                         $( this ).dialog( "close" );
                     },
                     "İptal": function() {
