@@ -6,6 +6,7 @@ use Google_Client;
 use Google_Service_Storage;
 use Google_Service_Storage_StorageObject;
 use Google\Cloud\Storage\Acl;
+use Mailgun\Mailgun;
 
 class Utils
 {
@@ -75,6 +76,18 @@ class Utils
             . substr($charid, 16, 4) . $hyphen
             . substr($charid, 20, 12);
         return $uuid;
+    }
+
+    public static function mailSendSingle($toAddress, $subject, $content){
+        # First, instantiate the SDK with your API credentials and define your domain.
+        $mg = new Mailgun("key-0bf7967ba162156ff166b8151ec9d4b6");
+        $domain = "mg.seruvent.com";
+
+        # Now, compose and send your message.
+        $mg->sendMessage($domain, array('from'    => 'Seruvent Team<info@seruvent.com>',
+            'to'      => $toAddress,
+            'subject' => $subject,
+            'text'    => $content));
     }
 }
 

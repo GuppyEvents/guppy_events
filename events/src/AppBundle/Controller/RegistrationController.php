@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Utils;
+use Monolog\Handler\Curl\Util;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +30,8 @@ class RegistrationController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $acceptedMailAddress = '@ug.bilkent.edu.tr';
+//            $acceptedMailAddress = '@ug.bilkent.edu.tr';
+            $acceptedMailAddress = '@gmail.com';
             if(substr($user->getEmail(), -strlen($acceptedMailAddress)) === $acceptedMailAddress){
 
                 // 3) Encode the password (you could also do this via Doctrine listener)
@@ -40,6 +43,9 @@ class RegistrationController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($user);
                 $em->flush();
+                $confirmLink = "http://seruvent.com/activation/" . base64_encode( Utils::getGUID() . "**" . $user->getId() . "##" . rand(10,100));
+
+                Utils::mailSendSingle($user->getEmail(),"Seruvent Kayıt Aktivasyonu", "Merhaba " . $user->getName() . ",\n\rKaydını onaylamak için aşağıdaki linke tıklaman yeterli.\n\r" . $confirmLink);
 
                 return $this->redirectToRoute('homepage');
 
@@ -47,7 +53,6 @@ class RegistrationController extends Controller
                 $data['error_msg'] = "Bilkent mail adresi ile kayıt olmanız gerekiyor. (@ug.bilkent.edu.tr)";
             }
         }
-
         return $this->render('AppBundle:registration:register.html.twig', $data );
 
     }
@@ -59,6 +64,9 @@ class RegistrationController extends Controller
      */
     public function registerActivationAction($uid)
     {
+        $uid = base64_decode($uid);
+        $uid = substr($uid, strpos($uid, "**")+2);
+        $uid = substr($uid, 0, strpos($uid, "##"));
 
         $em = $this->getDoctrine()->getManager();
         $data = array();
@@ -68,7 +76,7 @@ class RegistrationController extends Controller
             $user = $em->getRepository('AppBundle:User')->find($uid);
             if (!$uid) {
                 throw $this->createNotFoundException(
-                    'No product found for id '.$uid
+                    'No user found for id '.$uid
                 );
             }
 
@@ -78,7 +86,7 @@ class RegistrationController extends Controller
 
         } catch (Exception $e){}
 
-        return $this->redirectToRoute('user_profile_account');
+        return $this->redirectToRoute('homepage');
     }
     
 }
