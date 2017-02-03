@@ -130,6 +130,39 @@
         </div>
     </section>
 
+    <!-- SHARE MODAL -->
+    <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h6 class="modal-title">Arkadaşlarınla Paylaş !</h6>
+
+                </div>
+                <div class="modal-body" style="background-color: #CCCCCC;">
+                    <div class="te">
+                        <ul class="socials-nav" style="position: inherit!important;">
+                            <li class="socials-nav-item" ><a href="#"><span class="fa fa-twitter"></span></a></li>
+                            <li class="socials-nav-item" data-social-share="facebook" ><a href="#"><span class="fa fa-facebook"></span></a></li>
+                            <li class="socials-nav-item" ><a href="#"><span class="fa fa-github"></span></a></li>
+                            <li class="socials-nav-item" ><a href="#"><span class="fa fa-vimeo-square"></span></a></li>
+                            <li class="socials-nav-item" ><a href="#"><span class="fa fa-google-plus"></span></a></li>
+                            <li class="socials-nav-item" ><a href="#"><span class="fa fa-instagram"></span></a></li>
+                        </ul>
+
+                        <div style="padding-left: 5%; padding-right: 5%;">
+                            <input id="shareModalInput" name="shareModalInput" type="url" value=""/>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
 {% endblock %}
 
 
@@ -169,36 +202,37 @@
                     // -- 2.2.2 --
                     if(data.content){
 
-                        data.content.eventList.forEach(function(event) {
+                        data.content.eventList.forEach(function(eventMain) {
 
-
-                            communityElem = '<div class="col-sm-4">' +
+                            communityElem =
+                                '<div class="col-sm-4 seruvent-ebox" data-link="'+eventMain.eventLink+'">' +
                                     '<div class="ge-events-box" id="ge-event-box">' +
-                                    '<a href="/etkinlik/h/' + event.id +'" title="' + event.title + '" class="ge-events-box-link">' +
-                                    '<span class="ge-events-box-img">' +
-                                    '<img src="'+ event.imageBase64 +'" alt="" class="img-responsive">' +
-                                    '</span>' +
-                                    '<span class="ge-events-box-date">' +
-                                        event.startDate +
-                            '</span>' +
-                            '<h5 class="ge-events-box-title">' + event.title + '</h5>' +
-                            '<span class="ge-events-box-location">'+ event.community +'</span>' +
-                            '</a>' +
-                            '<div class="ge-event-box-footer">' +
-                                '<div class="ge-event-box-footer-tags">' +
-                                '<ul class="list-inline">' +
-                                    '<li><a href="#" title="">#event</a></li>' +
-                            '</ul>' +
-                            '</div>' +
-                            '<div class="ge-event-box-footer-btn">' +
-                                '<ul>' +
-                                    '<li><a href="#" title="Paylaş" rel="tooltip"><i class="fa fa-share-alt"></i></a></li>' +
-                            '<li><a href="#" title="Kaydet" rel="tooltip"><i class="fa fa-bookmark-o"></i></a></li>' +
-                            '</ul>' +
-                            '</div>' +
-                            '</div>' +
-                            '</div>' +
-                            '</div>';
+                                        '<a href="' + eventMain.eventLink + '" title="' + eventMain.event.title + '" class="ge-events-box-link">' +
+                                            '<span class="ge-events-box-img">' +
+                                                '<img src="'+ eventMain.event.imageBase64 +'" alt="" class="img-responsive">' +
+                                            '</span>' +
+                                            '<span class="ge-events-box-date">' + eventMain.event.startDate + '</span>' +
+
+                                            '<h5 class="ge-events-box-title">' + eventMain.event.title + '</h5>' +
+                                            '<span class="ge-events-box-location">'+ eventMain.event.community +'</span>' +
+                                        '</a>' +
+
+                                        '<div class="ge-event-box-footer">' +
+                                            '<div class="ge-event-box-footer-tags">' +
+                                                '<ul class="list-inline">' +
+                                                    '<li><a href="#" title="">#event</a></li>' +
+                                                '</ul>' +
+                                            '</div>' +
+                                            '<div class="ge-event-box-footer-btn">' +
+                                                '<ul>' +
+                                                    '<li><a class="shareLink" title="Paylaş" data-toggle="modal" rel="tooltip"><i class="fa fa-share-alt"></i></a></li>' +
+                                                    '<li><a href="#" title="Kaydet" rel="tooltip"><i class="fa fa-bookmark-o"></i></a></li>' +
+                                                '</ul>' +
+                                            '</div>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>';
+
                             $('#daily-events-container').append(communityElem);
                         });
 
@@ -228,6 +262,30 @@
                 $(event.target).addClass("active");
             }
         });
+
+
+        // paylaş butonu tıklanıldığında
+        $(document).on('click', '.shareLink',function(event){
+            $('#shareModalInput').val($(event.target).parentsUntil('.seruvent-ebox').last().parent().attr('data-link'));
+            $('#shareModal').modal('show');
+        });
+
+
+        // paylaşılacak sosyal ağ seçildiğinde
+        $(document).on('click', '.socials-nav-item',function(event){
+            
+            social =  $(event.target).parentsUntil('li').last().parent().attr('data-social-share');
+            switch(social) {
+                case 'facebook':
+                    $('#shareModal').modal('hide');
+                    var win = window.open('https://www.facebook.com/sharer/sharer.php?u='+$('#shareModalInput').val(), '_blank');
+                    win.focus();
+                    break;
+                default:
+                    break;
+            }
+        });
+
 
     </script>
 {% endblock %}
