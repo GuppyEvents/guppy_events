@@ -9,6 +9,7 @@ return array(
     'Twig_' => array($vendorDir . '/twig/twig/lib'),
     'SensioLabs\\Security' => array($vendorDir . '/sensiolabs/security-checker'),
     'Rize\\UriTemplate' => array($vendorDir . '/rize/uri-template/src'),
+    'Mailgun' => array($vendorDir . '/mailgun/mailgun-php/src'),
     'Google_Service_' => array($vendorDir . '/google/apiclient-services/src'),
     'Google_' => array($vendorDir . '/google/apiclient/src'),
     'Doctrine\\ORM\\' => array($vendorDir . '/doctrine/orm/lib'),
