@@ -194,6 +194,11 @@
          **************************************************************************************************************/
             // Global değişkenler Guppy objesine yerleştirilmelidir (orn. Guppy.responseDebugMode)
             // var debugMode = true;
+
+            var error_msg = '{% if error_msg is defined %}{{ error_msg|json_encode|raw }}{% endif %}';
+            var success_msg = '{% if success_msg is defined %}{{ success_msg|json_encode|raw }}{% endif %}';
+            var warning_msg = '{% if warning_msg is defined %}{{ warning_msg|json_encode|raw }}{% endif %}';
+
         </script>
 
 
@@ -234,6 +239,17 @@
             $(window).on('resize',function(event){
                 $('.guppy-container').css('min-height' , $( window ).height() - $('.header').height() - $('.footer').height() -50 );
             });
+
+            // -- Operation Result Message
+            if(success_msg){
+                toastr.success(success_msg);
+            }
+            if(error_msg){
+                toastr.error(error_msg);
+            }
+            if(warning_msg){
+                toastr.warning(warning_msg);
+            }
 
         </script>
 

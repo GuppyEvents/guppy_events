@@ -8,9 +8,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Form\UserType;
-use AppBundle\Form\AdminUserType;
 use AppBundle\Entity\User;
-use AppBundle\Entity\AdminUser;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class RegistrationController extends Controller
 {
@@ -31,27 +30,28 @@ class RegistrationController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
 
 //            $acceptedMailAddress = '@ug.bilkent.edu.tr';
-            $acceptedMailAddress = '@gmail.com';
-            if(substr($user->getEmail(), -strlen($acceptedMailAddress)) === $acceptedMailAddress){
+            $acceptedMailAddress = '@';
 
-                // 3) Encode the password (you could also do this via Doctrine listener)
-                $password = $this->get('security.password_encoder')
-                    ->encodePassword($user, $user->getPassword());
-                $user->setPassword($password);
 
-                // 4) save the User!
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($user);
-                $em->flush();
-                $confirmLink = "http://seruvent.com/activation/" . base64_encode( Utils::getGUID() . "**" . $user->getId() . "##" . rand(10,100));
+            // 3) Encode the password (you could also do this via Doctrine listener)
+            $password = $this->get('security.password_encoder')
+                ->encodePassword($user, $user->getPassword());
+            $user->setPassword($password);
 
-                Utils::mailSendSingle($user->getEmail(),"Seruvent Kayıt Aktivasyonu", "Merhaba " . $user->getName() . ",\n\rKaydını onaylamak için aşağıdaki linke tıklaman yeterli.\n\r" . $confirmLink);
+            // 4) save the User!
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+            $confirmLink = "http://seruvent.com/activation/" . base64_encode(Utils::getGUID() . "**" . $user->getId() . "##" . rand(10, 100));
 
-                return $this->redirectToRoute('homepage');
+            Utils::mailSendSingle($user->getEmail(), "Seruvent Kayıt Aktivasyonu", "Merhaba " . $user->getName() . ",\n\rKaydını onaylamak için aşağıdaki linke tıklaman yeterli.\n\r" . $confirmLink);
 
-            }else{
-                $data['error_msg'] = "Bilkent mail adresi ile kayıt olmanız gerekiyor. (@ug.bilkent.edu.tr)";
-            }
+            $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+            $this->get('security.token_storage')->setToken($token);
+            $this->get('session')->set('_security_main', serialize($token));
+
+            $_SESSION['success_message'] = "Kaydınız başarıyla tamamlanmıştır.";//redirect edilen sayfada mesaj gosterilmesi için sessiona mesaj atanır
+            return $this->redirectToRoute('home_events');
         }
         return $this->render('AppBundle:registration:register.html.twig', $data );
 
@@ -83,10 +83,9 @@ class RegistrationController extends Controller
             $user->setEmailValidated(true);
             $em->persist($user);
             $em->flush();
-
         } catch (Exception $e){}
 
-        return $this->redirectToRoute('homepage');
+        return $this->redirectToRoute('login');
     }
     
 }

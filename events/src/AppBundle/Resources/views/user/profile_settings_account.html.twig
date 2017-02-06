@@ -48,7 +48,7 @@
                                             <!-- Eğer mail adresi onaylanmamış ise -->
                                             {% if user.emailValidated == false %}
                                                 <div class="fieldset-edit-panel">
-                                                    <a href="{{ path('user_register_activation' , {'uid': user.id}) }}">
+                                                    <a>
                                                         <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                                                     </a>
                                                 </div>
@@ -198,9 +198,6 @@
 /***********************************************************************************************************************
  *                                          LOCAL VARIABLE
  **********************************************************************************************************************/
-        var error_msg = '{% if error_msg is defined %}{{ error_msg|json_encode|raw }}{% endif %}';
-        var success_msg = '{% if success_msg is defined %}{{ success_msg|json_encode|raw }}{% endif %}';
-        var warning_msg = '{% if warning_msg is defined %}{{ warning_msg|json_encode|raw }}{% endif %}';
 
 
 /***************************************************************************************************************
@@ -274,14 +271,7 @@
             yearRange: '1975:'+(new Date).getFullYear(),
         });
 
-        // -- Operation Result Message
-        if(success_msg){
-            toastr.success(success_msg);
-        }else if(error_msg){
-            toastr.error(error_msg);
-        }else if(warning_msg){
-            toastr.warning(warning_msg);
-        }
+
 
     </script>
 

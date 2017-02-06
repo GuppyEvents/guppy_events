@@ -89,6 +89,23 @@ class Utils
             'subject' => $subject,
             'text'    => $content));
     }
+
+    public static function getSessionToastMessages(){
+        $messages = array();
+        if(isset($_SESSION['success_message'])){
+            $messages["success_msg"] = $_SESSION['success_message'];
+            unset($_SESSION['success_message']); // clear the value so that it doesn't display again
+        }
+        if(isset($_SESSION['warning_message'])){
+            $messages["warning_msg"] = $_SESSION['warning_message'];
+            unset($_SESSION['warning_message']); // clear the value so that it doesn't display again
+        }
+        if(isset($_SESSION['error_message'])){
+            $messages["error_msg"] = $_SESSION['error_message'];
+            unset($_SESSION['error_message']); // clear the value so that it doesn't display again
+        }
+        return $messages;
+    }
 }
 
 ?>
