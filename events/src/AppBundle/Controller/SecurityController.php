@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Entity\Utils;
 
 class SecurityController extends Controller
 {
@@ -14,6 +15,7 @@ class SecurityController extends Controller
      */
     public function loginAction(Request $request)
     {
+
         $authenticationUtils = $this->get('security.authentication_utils');
 
         // get the login error if there is one
@@ -28,13 +30,15 @@ class SecurityController extends Controller
             return $this->redirectToRoute('home_about');
         }
 
+        $data = array(
+            // last username entered by the user
+            'last_username' => $lastUsername,
+            'error'         => $error,
+        );
+        $data = array_merge($data,Utils::getSessionToastMessages());
         return $this->render(
             'AppBundle:security:login.html.twig',
-            array(
-                // last username entered by the user
-                'last_username' => $lastUsername,
-                'error'         => $error,
-            )
+            $data
         );
     }
     
