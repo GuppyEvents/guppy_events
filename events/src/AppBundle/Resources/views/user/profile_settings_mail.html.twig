@@ -105,8 +105,6 @@
 /***********************************************************************************************************************
  *                                          LOCAL VARIABLE
  **********************************************************************************************************************/
-        var error_msg = '{% if error_msg is defined %}{{ error_msg|json_encode|raw }}{% endif %}';
-        var success_msg = '{% if success_msg is defined %}{{ success_msg|json_encode|raw }}{% endif %}';
 
 
 /***********************************************************************************************************************
@@ -177,12 +175,6 @@
         // -- File to base64
         //document.getElementById("temp_img_loader").addEventListener("change", fileToBase64Converter, false);
 
-        // -- Operation Result Message
-        if(success_msg){
-            toastr.success(success_msg);
-        }else if(error_msg){
-            toastr.error(error_msg);
-        }
 
 
     </script>

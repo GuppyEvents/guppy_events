@@ -2,13 +2,14 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Utils;
+use Monolog\Handler\Curl\Util;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Form\UserType;
-use AppBundle\Form\AdminUserType;
 use AppBundle\Entity\User;
-use AppBundle\Entity\AdminUser;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class RegistrationController extends Controller
 {
@@ -28,26 +29,30 @@ class RegistrationController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $acceptedMailAddress = '@ug.bilkent.edu.tr';
-            if(substr($user->getEmail(), -strlen($acceptedMailAddress)) === $acceptedMailAddress){
+//            $acceptedMailAddress = '@ug.bilkent.edu.tr';
+            $acceptedMailAddress = '@';
 
-                // 3) Encode the password (you could also do this via Doctrine listener)
-                $password = $this->get('security.password_encoder')
-                    ->encodePassword($user, $user->getPassword());
-                $user->setPassword($password);
 
-                // 4) save the User!
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($user);
-                $em->flush();
+            // 3) Encode the password (you could also do this via Doctrine listener)
+            $password = $this->get('security.password_encoder')
+                ->encodePassword($user, $user->getPassword());
+            $user->setPassword($password);
 
-                return $this->redirectToRoute('homepage');
+            // 4) save the User!
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+            $confirmLink = "http://seruvent.com/activation/" . base64_encode(Utils::getGUID() . "**" . $user->getId() . "##" . rand(10, 100));
 
-            }else{
-                $data['error_msg'] = "Bilkent mail adresi ile kayıt olmanız gerekiyor. (@ug.bilkent.edu.tr)";
-            }
+            Utils::mailSendSingle($user->getEmail(), "Seruvent Kayıt Aktivasyonu", "Merhaba " . $user->getName() . ",\n\rKaydını onaylamak için aşağıdaki linke tıklaman yeterli.\n\r" . $confirmLink);
+
+            $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+            $this->get('security.token_storage')->setToken($token);
+            $this->get('session')->set('_security_main', serialize($token));
+
+            $_SESSION['success_message'] = "Kaydınız başarıyla tamamlanmıştır.";//redirect edilen sayfada mesaj gosterilmesi için sessiona mesaj atanır
+            return $this->redirectToRoute('home_events');
         }
-
         return $this->render('AppBundle:registration:register.html.twig', $data );
 
     }
@@ -59,6 +64,9 @@ class RegistrationController extends Controller
      */
     public function registerActivationAction($uid)
     {
+        $uid = base64_decode($uid);
+        $uid = substr($uid, strpos($uid, "**")+2);
+        $uid = substr($uid, 0, strpos($uid, "##"));
 
         $em = $this->getDoctrine()->getManager();
         $data = array();
@@ -68,17 +76,16 @@ class RegistrationController extends Controller
             $user = $em->getRepository('AppBundle:User')->find($uid);
             if (!$uid) {
                 throw $this->createNotFoundException(
-                    'No product found for id '.$uid
+                    'No user found for id '.$uid
                 );
             }
 
             $user->setEmailValidated(true);
             $em->persist($user);
             $em->flush();
-
         } catch (Exception $e){}
 
-        return $this->redirectToRoute('user_profile_account');
+        return $this->redirectToRoute('login');
     }
     
 }

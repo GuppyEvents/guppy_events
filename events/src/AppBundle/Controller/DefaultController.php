@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Result;
+use AppBundle\Entity\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -130,6 +131,8 @@ class DefaultController extends Controller
      */
     public function eventsAction(Request $request)
     {
+        $data = array();
+        $data = array_merge($data,Utils::getSessionToastMessages());
 
         $currentDay = new \DateTime();      // takvim üzerinden bugun öncesi ve sonrası olarak ayrılacak
         $currentDay->setTime(0,0);
