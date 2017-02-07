@@ -3,6 +3,33 @@
 {% block title %}Mail Ayarları{% endblock %}
 
 
+{% block stylesheets %}
+
+
+    <!-- iconbar -->
+    <style>
+        .icon-bar {
+            width: 100%;
+            text-align: center;
+            overflow: auto;
+        }
+
+        .icon-bar a {
+            width: 40%;
+            padding: 4px 0;
+            float: left;
+            transition: all 0.3s ease;
+            color: white;
+            font-size: 16px;
+        }
+
+        .icon-bar a:hover {
+            background-color: #000;
+        }
+    </style>
+
+{% endblock %}
+
 {% block content %}
 
     <!-- --------------------------------------------- -->
@@ -51,14 +78,11 @@
                                                     {% if isProfileOwner is defined and isProfileOwner==true %}
                                                         <td>
                                                             <form id="mail_setting" action="{{ path('user_profile_mail') }}" method="post">
-                                                                <li class="mail-operation dropdown">
-                                                                    <a class="mail-operation-link dropdown-toggle" data-toggle="dropdown">İşlem</a>
-                                                                    <ul class="dropdown-menu">
-                                                                        <li class="mail-operation"><a class="navigation-link" id="op_mail_save">Kaydet</a></li>
-                                                                        <li class="mail-operation"><a class="navigation-link" id="op_mail_send_activation">Aktivasyon Linki</a></li>
-                                                                        <li class="mail-operation"><a class="navigation-link" id="op_mail_remove">Sil</a></li>
-                                                                    </ul>
-                                                                </li>
+
+                                                                <div class="icon-bar">
+                                                                    <a id="op_mail_send_activation"><i class="fa fa-link"></i></a>
+                                                                    <a id="op_mail_remove"><i class="fa fa-trash-o"></i></a>
+                                                                </div>
 
                                                                 <!-- TODO: Form yapısı kaldırılabilir  -->
                                                                 <input type="text" class="form-control" name="mail_id" style="display: none;">
@@ -158,10 +182,6 @@
 /***********************************************************************************************************************
  *                                          EVENTS
  **********************************************************************************************************************/
-
-        $(document).on('click' , '#op_mail_save' , function(){
-            toastr.warning('mail adresinde değişiklik kaydetme işlemi...', 'YAPIM AŞAMASINDA');
-        });
 
         $(document).on('click' , '#op_mail_send_activation' , function(){
             toastr.warning('mail adresine aktivasyon maili yollanacak...', 'YAPIM AŞAMASINDA');
