@@ -295,7 +295,23 @@ class DefaultController extends Controller
     {
         $data = array();
         return $this->render('AppBundle:default:main_faq.html.twig' , $data);
+    }
 
+    /**
+     * @Route("/sozlesme", name="home_terms")
+     */
+    public function termsAction(Request $request)
+    {
+        $data = array();
+        $em = $this->getDoctrine()->getManager();
+        try{
+            // -2.1- Find latest terms
+            $terms = $em->getRepository('AppBundle:Terms')->findOneBy(array(),array('id' => 'DESC'));
+            $data['terms'] = $terms;
+        } catch (Exception $e){}
+
+        // --3-- DEFAULT CASE
+        return $this->render('AppBundle:default:main_terms.html.twig' , $data);
     }
 
 

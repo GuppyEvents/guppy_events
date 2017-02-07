@@ -159,7 +159,7 @@
                     </fieldset>
 
                     <fieldset class="col-sm-12">
-                        {{ form_widget(form.termsAccepted, {'attr': {}}) }}<label for="privacy"><a href="#">Kullanım şartlarını</a> okudum, kabul ediyorum.</label>
+                        {{ form_widget(form.termsAccepted, {'attr': {}}) }}<label for="privacy"><a href="{{ path('home_terms') }}" target="_blank">Kullanım şartlarını</a> okudum, kabul ediyorum.</label>
                         <br />
                     </fieldset>
 

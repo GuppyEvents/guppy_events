@@ -95,7 +95,7 @@
 
 {% block javascriptcontent %}
     {% javascripts 'theme/assets/cropit/jquery.cropit.js'%}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
+        <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
     <style>
         .cropit-preview {
@@ -136,21 +136,19 @@
 /***********************************************************************************************************************
  *                                          UTIL FUNCTIONS
  **********************************************************************************************************************/
-function fillInAddress(e) {
-    // Get the place details from the autocomplete object.
-    var place = autocomplete.getPlace();
+        function fillInAddress(e) {
+            // Get the place details from the autocomplete object.
+            var place = autocomplete.getPlace();
 
-    $("#event_location_lat").val(place.geometry.location.lat());
-    $("#event_location_lng").val(place.geometry.location.lng());
-    marker.setPosition(place.geometry.location);
-    map.setCenter(place.geometry.location);
-    map.setZoom(16);
-    $('#search_event_location').val(place.name);
+            $("#event_location_lat").val(place.geometry.location.lat());
+            $("#event_location_lng").val(place.geometry.location.lng());
+            marker.setPosition(place.geometry.location);
+            map.setCenter(place.geometry.location);
+            map.setZoom(16);
+            $('#search_event_location').val(place.name);
+        }
 
 
-
-
-}
 
 $('#add_event_form').submit(function() {
     var imageData = $('.image-editor').cropit('export');
