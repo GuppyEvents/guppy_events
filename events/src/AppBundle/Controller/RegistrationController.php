@@ -80,10 +80,17 @@ class RegistrationController extends Controller
                 );
             }
 
+            if($user->getEmailValidated()){
+                $_SESSION['error_message'] = "Üyelik daha önce aktifleştirilmiştir.";//redirect edilen sayfada mesaj gosterilmesi için sessiona mesaj atanır
+                return $this->redirectToRoute('login');
+            }
+
             $user->setEmailValidated(true);
             $em->persist($user);
             $em->flush();
         } catch (Exception $e){}
+
+        $_SESSION['success_message'] = "Üyeliğiniz başarıyla aktif edilmiştir.";//redirect edilen sayfada mesaj gosterilmesi için sessiona mesaj atanır
 
         return $this->redirectToRoute('login');
     }
