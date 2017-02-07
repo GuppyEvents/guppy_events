@@ -90,7 +90,7 @@
         {% if todayEvents|length>0 %}
 
             {% for event in todayEvents %}
-                <div class="col-sm-4">
+                <div class="col-sm-4 seruvent-ebox" data-link="{{ event.eventLink }}" data-title="{{ event.title }}>
                     <div class="ge-events-box" id="ge-event-box">
                         <a href="{{ path('user_event_mainpage' , {'eventId':event.id}) }}" title="{{ event.title }}" class="ge-events-box-link">
                         <span class="ge-events-box-img">
@@ -105,7 +105,7 @@
                         <div class="ge-event-box-footer">
                             <div class="ge-event-box-footer-tags">
                                 <ul class="list-inline">
-                                    <li><a href="#" title="">#event</a></li>
+                                    <li><a href="#" title="">#etkinlik</a></li>
                                 </ul>
                             </div>
                             <div class="ge-event-box-footer-btn">
@@ -142,17 +142,20 @@
                 <div class="modal-body" style="background-color: #CCCCCC;">
                     <div class="te">
                         <ul class="socials-nav" style="position: inherit!important;">
-                            <li class="socials-nav-item" ><a href="#"><span class="fa fa-twitter"></span></a></li>
+                            <li class="socials-nav-item" data-social-share="twitter" ><a href="#"><span class="fa fa-twitter"></span></a></li>
                             <li class="socials-nav-item" data-social-share="facebook" ><a href="#"><span class="fa fa-facebook"></span></a></li>
-                            <li class="socials-nav-item" ><a href="#"><span class="fa fa-github"></span></a></li>
-                            <li class="socials-nav-item" ><a href="#"><span class="fa fa-vimeo-square"></span></a></li>
-                            <li class="socials-nav-item" ><a href="#"><span class="fa fa-google-plus"></span></a></li>
-                            <li class="socials-nav-item" ><a href="#"><span class="fa fa-instagram"></span></a></li>
+                            {#<li class="socials-nav-item" ><a href="#"><span class="fa fa-vimeo-square"></span></a></li>#}
+                            {#<li class="socials-nav-item" ><a href="#"><span class="fa fa-google-plus"></span></a></li>#}
                         </ul>
 
                         <div style="padding-left: 5%; padding-right: 5%;">
                             <input id="shareModalInput" name="shareModalInput" type="url" value=""/>
+                            <input id="shareModalTitleInput" name="shareModalTitleInput" type="text" value="" style="display:none;"/>
                         </div>
+
+                        <a id="share-seruvent-on-twitter" class="twitter-share-button" target="_blank"
+                           href="https://twitter.com/intent/tweet?"></a>
+
                     </div>
                 </div>
 
@@ -205,7 +208,7 @@
                         data.content.eventList.forEach(function(eventMain) {
 
                             communityElem =
-                                '<div class="col-sm-4 seruvent-ebox" data-link="'+eventMain.eventLink+'">' +
+                                '<div class="col-sm-4 seruvent-ebox" data-link="'+eventMain.eventLink+'" data-title="'+eventMain.event.title+'">' +
                                     '<div class="ge-events-box" id="ge-event-box">' +
                                         '<a href="' + eventMain.eventLink + '" title="' + eventMain.event.title + '" class="ge-events-box-link">' +
                                             '<span class="ge-events-box-img">' +
@@ -220,7 +223,7 @@
                                         '<div class="ge-event-box-footer">' +
                                             '<div class="ge-event-box-footer-tags">' +
                                                 '<ul class="list-inline">' +
-                                                    '<li><a href="#" title="">#event</a></li>' +
+                                                    '<li><a href="#" title="">#etkinlik</a></li>' +
                                                 '</ul>' +
                                             '</div>' +
                                             '<div class="ge-event-box-footer-btn">' +
@@ -267,19 +270,30 @@
         // paylaş butonu tıklanıldığında
         $(document).on('click', '.shareLink',function(event){
             $('#shareModalInput').val($(event.target).parentsUntil('.seruvent-ebox').last().parent().attr('data-link'));
+            $('#shareModalTitleInput').val($(event.target).parentsUntil('.seruvent-ebox').last().parent().attr('data-title'));
             $('#shareModal').modal('show');
         });
 
 
         // paylaşılacak sosyal ağ seçildiğinde
         $(document).on('click', '.socials-nav-item',function(event){
-            
+
             social =  $(event.target).parentsUntil('li').last().parent().attr('data-social-share');
             switch(social) {
                 case 'facebook':
                     $('#shareModal').modal('hide');
                     var win = window.open('https://www.facebook.com/sharer/sharer.php?u='+$('#shareModalInput').val(), '_blank');
                     win.focus();
+                    break;
+
+                case 'twitter':
+                        twitterlink = 'https://twitter.com/intent/tweet?';
+                        parameters = '&url=' + $('#shareModalInput').val();
+                        parameters += '&hashtags=' + 'seruvent,etkinlik';
+                        parameters += '&text=' + $('#shareModalTitleInput').val();
+
+                        $( "#share-seruvent-on-twitter" ).attr('href',twitterlink+parameters);
+                        $( "#share-seruvent-on-twitter" )[0].click();
                     break;
                 default:
                     break;
