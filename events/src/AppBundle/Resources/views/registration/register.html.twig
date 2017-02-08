@@ -39,11 +39,6 @@
 
             <div class="register-box-body">
 
-                <fb:login-button
-                        scope="public_profile,email"
-                        onlogin="checkLoginState();">
-                </fb:login-button>
-
                 <p class="login-box-msg">Kullanıcı Kayıt Sayfası</p>
 
                 {{ form_start(form, {'action': path('user_registration'), 'method': 'POST'}) }}
@@ -221,7 +216,6 @@
                     $("form input[name='user[name]']").val(name);
                     $("form input[name='user[surname]']").val(surname);
                     $("form input[name='user[username]']").val(response.email);
-                    $("form input[name='user[email]']").val(response.email);
                     $("form input[name='user[email]']").val(response.email);
                     $("form input[name='user[password][first]']").val("_________________");
                     $("form input[name='user[password][second]']").val("_________________");
