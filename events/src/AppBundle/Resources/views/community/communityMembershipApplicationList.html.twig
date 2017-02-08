@@ -13,6 +13,28 @@
         <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
     {% endstylesheets %}
 
+    <!-- iconbar -->
+    <style>
+        .icon-bar {
+            width: 100%;
+            text-align: center;
+            overflow: auto;
+        }
+
+        .icon-bar a {
+            width: 25%;
+            padding: 4px 0;
+            float: left;
+            transition: all 0.3s ease;
+            color: white;
+            font-size: 16px;
+        }
+
+        .icon-bar a:hover {
+            background-color: #000;
+        }
+    </style>
+
 {% endblock %}
 
 {% block content %}
@@ -68,14 +90,11 @@
                                             <td>{{ communityUserRole.communityUser.registerDate|date('d/m/Y') }}</td>
                                             <td>
                                                 {#<form id="mail_setting" action="{{ path('user_profile_mail') }}" method="post">#}
-                                                <li class="membership-application-operation dropdown">
-                                                    <a class="application-operation-link dropdown-toggle" data-toggle="dropdown">İşlem</a>
-                                                    <ul class="dropdown-menu">
-                                                        <li class="application-operation"><a class="navigation-link" id="op_application_confirm">Onayla</a></li>
-                                                        <li class="application-operation"><a href="{{ path('user_profile_with_id' , {'userId':communityUserRole.communityUser.user.id}) }}" class="navigation-link" id="op_application_profile">Profil</a></li>
-                                                        <li class="application-operation"><a class="navigation-link" id="op_application_reject">Reddet</a></li>
-                                                    </ul>
-                                                </li>
+                                                <div class="icon-bar">
+                                                    <a id="op_application_confirm" href="#"><i class="fa fa-user-plus"></i></a>
+                                                    <a href="{{ path('user_profile_with_id' , {'userId':communityUserRole.communityUser.user.id}) }}"><i class="fa fa-user-secret"></i></a>
+                                                    <a id="op_application_reject" href="#"><i class="fa fa-user-times"></i></a>
+                                                </div>
 
                                                 <!-- TODO: Form yapısı kaldırılabilir  -->
                                                 <input type="text" class="form-control" name="mail_id" style="display: none;">

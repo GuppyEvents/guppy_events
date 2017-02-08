@@ -19,167 +19,169 @@
             <!-- -------------- CONTENT -------------- -->
             <div class="community-content col-md-10">
 
-                <div class="profile-content-header"></div>
+                <div class="ge-content-box" style="overflow: hidden;">
+                    <div class="profile-content-header"></div>
 
-                <div class="profile-content-body">
-                    <div class="fade active in">
+                    <div class="profile-content-body">
+                        <div class="fade active in">
 
-                        <div class="col-sm-8 align-left">
-                            <h6>Hesap İşlemleri</h6>
+                            <div class="col-sm-8 align-left">
+                                <h6>Hesap İşlemleri</h6>
 
-                            <div>
-                                <form action="{{ path('user_profile_account') }}" method="post">
+                                <div>
+                                    <form action="{{ path('user_profile_account') }}" method="post">
 
-                                    <div class="col-sm-6 col-md-5 align-left">
-                                        <fieldset>
-                                            <label for="username">Kullanıcı adı</label>
-                                            <div class="fieldset-input-panel">
-                                                <input id="username" name="username" type="text" value="{{ user.username }}" disabled/>
-                                            </div>
-                                        </fieldset>
-
-                                        <fieldset>
-                                            <label for="email">Birincil Mail Adresi</label>
-                                            <div class="fieldset-input-panel">
-                                                <input id="email" name="email" type="email" value="{{ user.email }}" disabled/>
-                                            </div>
-
-
-                                            <!-- Eğer mail adresi onaylanmamış ise -->
-                                            {% if user.emailValidated == false %}
-                                                <div class="fieldset-edit-panel">
-                                                    <a>
-                                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                                                    </a>
-                                                </div>
-                                            {% endif %}
-
-                                        </fieldset>
-
-                                        <fieldset>
-                                            <label for="uname" >İsim</label>
-                                            <div class="fieldset-input-panel">
-                                                <input id="uname" name="uname" type="text" value="{{ user.name }}" disabled />
-                                            </div>
-                                            {% if isProfileOwner is defined and isProfileOwner==true %}
-                                                <div class="fieldset-edit-panel">
-                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                                </div>
-                                            {% endif %}
-                                        </fieldset>
-
-                                        <fieldset>
-                                            <label for="usurname">Soyad</label>
-                                            <div class="fieldset-input-panel">
-                                                <input id="usurname" name="usurname" type="text" value="{{ user.surname }}" disabled/>
-                                            </div>
-                                            {% if isProfileOwner is defined and isProfileOwner==true %}
-                                                <div class="fieldset-edit-panel">
-                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                                </div>
-                                            {% endif %}
-                                        </fieldset>
-
-                                        <fieldset>
-                                            <label for="uphone">Cep Numarası</label>
-                                            <div class="fieldset-input-panel">
-                                                <input id="uphone" name="uphone" type="tel" value="{{ user.phone }}" disabled/>
-                                            </div>
-                                            {% if isProfileOwner is defined and isProfileOwner==true %}
-                                                <div class="fieldset-edit-panel">
-                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                                </div>
-                                            {% endif %}
-                                        </fieldset>
-
-                                        <fieldset>
-                                            <label for="ubirthdate">Doğum Tarihi</label>
-                                            <div class="fieldset-input-panel">
-                                                <input id="ubirthdate" name="ubirthdate" type="text" {% if user.birthDate %}value="{{ user.birthDate.format('m/d/Y') }}"{% endif %} disabled/>
-                                            </div>
-                                            {% if isProfileOwner is defined and isProfileOwner==true %}
-                                                <div class="fieldset-edit-panel">
-                                                    <i class="fa fa-calendar-o" aria-hidden="true"></i>
-                                                </div>
-                                            {% endif %}
-                                        </fieldset>
-
-                                        <!-- Cinsiyet & resim yükleme alanlarına erişim dışardan default olarak engellendi -->
-                                        {% if isProfileOwner is defined and isProfileOwner==true %}
+                                        <div class="col-sm-6 col-md-5 align-left">
                                             <fieldset>
-                                                <label for="usex">Cinsiyetiniz</label>
+                                                <label for="username">Kullanıcı adı</label>
                                                 <div class="fieldset-input-panel">
-                                                    <input id="usex" name="usex" type="radio" value="1" {% if user.sex and user.sex==1 %}checked{% endif %}/> Kadın <br/>
-                                                    <input id="usex" name="usex" type="radio" value="2" {% if user.sex and user.sex==2 %}checked{% endif %}/> Erkek
+                                                    <input id="username" name="username" type="text" value="{{ user.username }}" disabled/>
                                                 </div>
                                             </fieldset>
 
-                                            <!-- Hidden Parameters -->
-                                            <fieldset style="display: none">
-                                                <textarea id="profile_image_base64" name="profile_image_base64" value="{{ user.imageBase64 }}"></textarea>
+                                            <fieldset>
+                                                <label for="email">Birincil Mail Adresi</label>
+                                                <div class="fieldset-input-panel">
+                                                    <input id="email" name="email" type="email" value="{{ user.email }}" disabled/>
+                                                </div>
+
+
+                                                <!-- Eğer mail adresi onaylanmamış ise -->
+                                                {% if user.emailValidated == false %}
+                                                    <div class="fieldset-edit-panel">
+                                                        <a>
+                                                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                                        </a>
+                                                    </div>
+                                                {% endif %}
+
+                                            </fieldset>
+
+                                            <fieldset>
+                                                <label for="uname" >İsim</label>
+                                                <div class="fieldset-input-panel">
+                                                    <input id="uname" name="uname" type="text" value="{{ user.name }}" disabled />
+                                                </div>
+                                                {% if isProfileOwner is defined and isProfileOwner==true %}
+                                                    <div class="fieldset-edit-panel">
+                                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                    </div>
+                                                {% endif %}
+                                            </fieldset>
+
+                                            <fieldset>
+                                                <label for="usurname">Soyad</label>
+                                                <div class="fieldset-input-panel">
+                                                    <input id="usurname" name="usurname" type="text" value="{{ user.surname }}" disabled/>
+                                                </div>
+                                                {% if isProfileOwner is defined and isProfileOwner==true %}
+                                                    <div class="fieldset-edit-panel">
+                                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                    </div>
+                                                {% endif %}
+                                            </fieldset>
+
+                                            <fieldset>
+                                                <label for="uphone">Cep Numarası</label>
+                                                <div class="fieldset-input-panel">
+                                                    <input id="uphone" name="uphone" type="tel" value="{{ user.phone }}" disabled/>
+                                                </div>
+                                                {% if isProfileOwner is defined and isProfileOwner==true %}
+                                                    <div class="fieldset-edit-panel">
+                                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                    </div>
+                                                {% endif %}
+                                            </fieldset>
+
+                                            <fieldset>
+                                                <label for="ubirthdate">Doğum Tarihi</label>
+                                                <div class="fieldset-input-panel">
+                                                    <input id="ubirthdate" name="ubirthdate" type="text" {% if user.birthDate %}value="{{ user.birthDate.format('m/d/Y') }}"{% endif %} disabled/>
+                                                </div>
+                                                {% if isProfileOwner is defined and isProfileOwner==true %}
+                                                    <div class="fieldset-edit-panel">
+                                                        <i class="fa fa-calendar-o" aria-hidden="true"></i>
+                                                    </div>
+                                                {% endif %}
+                                            </fieldset>
+
+                                            <!-- Cinsiyet & resim yükleme alanlarına erişim dışardan default olarak engellendi -->
+                                            {% if isProfileOwner is defined and isProfileOwner==true %}
+                                                <fieldset>
+                                                    <label for="usex">Cinsiyetiniz</label>
+                                                    <div class="fieldset-input-panel">
+                                                        <input id="usex" name="usex" type="radio" value="1" {% if user.sex and user.sex==1 %}checked{% endif %}/> Kadın <br/>
+                                                        <input id="usex" name="usex" type="radio" value="2" {% if user.sex and user.sex==2 %}checked{% endif %}/> Erkek
+                                                    </div>
+                                                </fieldset>
+
+                                                <!-- Hidden Parameters -->
+                                                <fieldset style="display: none">
+                                                    <textarea id="profile_image_base64" name="profile_image_base64" value="{{ user.imageBase64 }}"></textarea>
+                                                </fieldset>
+                                            {% endif %}
+
+                                        </div>
+
+                                        {% if isProfileOwner is defined and isProfileOwner==true %}
+                                            <fieldset class="col-sm-12" style="padding-top: 20px;">
+                                                <input id="form-confirm" type="submit" class="btn btn-rounded btn-sm" value="Kaydet">
                                             </fieldset>
                                         {% endif %}
+                                    </form>
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-4 align-left">
+                                <h6>&nbsp;</h6>
+
+                                {% if isProfileOwner is defined and isProfileOwner==true %}
+                                    <div>
+                                        <span class="masonry-item">
+                                            <a href="#" class="gallery-thumb-link" data-modal-link="user-profile-picture">
+                                                {% if user.imageBase64 %}
+                                                    <img id="img_viewer" src="{{ user.imageBase64 }}" alt="{{ user.name }}" class="img-responsive" />
+                                                {% else %}
+                                                    {% image 'theme/assets/img/guppy_avatar_001.png' %}
+                                                        <img id="img_viewer" src="{{ asset_url }}" class="img-responsive" alt="{{ user.name }}" />
+                                                    {% endimage %}
+                                                {% endif %}
+                                            </a>
+
+                                            <div class="modal-window" data-modal="user-profile-picture">
+                                                <div class="modal-box small animated" data-animation="zoomIn" data-duration="700">
+                                                    <span class="close-btn icon icon-office-52"></span>
+
+                                                    <h5 class="heading-alt">Profil Resminiz</h5>
+
+                                                    {% if false and user.imageBase64 %}
+                                                        <img src="{{ user.imageBase64 }}" alt="{{ user.name }}" class="img-responsive" />
+                                                    {% else %}
+                                                        {% image 'theme/assets/img/guppy_avatar_001.png' %}
+                                                            <img src="{{ asset_url }}" class="full-width-img" alt="{{ user.name }}" />
+                                                        {% endimage %}
+                                                    {% endif %}
+
+                                                </div>
+                                            </div>
+
+                                        </span>
+                                        <div>
+                                            <input id="temp_img_loader" type='file' style="display: none;"/>
+                                            <a id="temp_img_loader_trigger">
+                                                <i class="fa fa-upload" aria-hidden="true"> Resim Yükle</i></a>
+                                        </div>
 
                                     </div>
+                                {% endif %}
 
-                                    {% if isProfileOwner is defined and isProfileOwner==true %}
-                                        <fieldset class="col-sm-12" style="padding-top: 20px;">
-                                            <input id="form-confirm" type="submit" class="btn btn-rounded btn-sm" value="Kaydet">
-                                        </fieldset>
-                                    {% endif %}
-                                </form>
-                            </div>
+                            </div> <!-- profil-content-body right end -->
 
                         </div>
 
-                        <div class="col-sm-4 align-left">
-                            <h6>&nbsp;</h6>
-
-                            {% if isProfileOwner is defined and isProfileOwner==true %}
-                                <div>
-                                    <span class="masonry-item">
-                                        <a href="#" class="gallery-thumb-link" data-modal-link="user-profile-picture">
-                                            {% if user.imageBase64 %}
-                                                <img id="img_viewer" src="{{ user.imageBase64 }}" alt="{{ user.name }}" class="img-responsive" />
-                                            {% else %}
-                                                {% image 'theme/assets/img/guppy_avatar_001.png' %}
-                                                    <img id="img_viewer" src="{{ asset_url }}" class="img-responsive" alt="{{ user.name }}" />
-                                                {% endimage %}
-                                            {% endif %}
-                                        </a>
-
-                                        <div class="modal-window" data-modal="user-profile-picture">
-                                            <div class="modal-box small animated" data-animation="zoomIn" data-duration="700">
-                                                <span class="close-btn icon icon-office-52"></span>
-
-                                                <h5 class="heading-alt">Profil Resminiz</h5>
-
-                                                {% if false and user.imageBase64 %}
-                                                    <img src="{{ user.imageBase64 }}" alt="{{ user.name }}" class="img-responsive" />
-                                                {% else %}
-                                                    {% image 'theme/assets/img/guppy_avatar_001.png' %}
-                                                        <img src="{{ asset_url }}" class="full-width-img" alt="{{ user.name }}" />
-                                                    {% endimage %}
-                                                {% endif %}
-
-                                            </div>
-                                        </div>
-
-                                    </span>
-                                    <div>
-                                        <input id="temp_img_loader" type='file' style="display: none;"/>
-                                        <a id="temp_img_loader_trigger">
-                                            <i class="fa fa-upload" aria-hidden="true"> Resim Yükle</i></a>
-                                    </div>
-
-                                </div>
-                            {% endif %}
-
-                        </div> <!-- profil-content-body right end -->
-
-                    </div>
-
-                </div><!-- profil-content-body end -->
+                    </div><!-- profil-content-body end -->
+                </div>
 
             </div>
         </div>

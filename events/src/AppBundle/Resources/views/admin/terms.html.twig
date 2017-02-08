@@ -1,0 +1,141 @@
+{% extends 'AppBundle:admin:admin_base.html.twig' %}
+
+{% block content %}
+
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Terms Of Use
+                <small>Admin Panel</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="{{ path('admin_homepage') }}"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Terms List</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+            <!-- /.row -->
+            <div class="row">
+
+                <div class="col-md-12">
+                    <div class="box box-info">
+
+                        <form action="{{ path('admin_terms_update') }}" method="post">
+                            <!-- /.box-header -->
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Terms</h3>
+                            </div>
+                            <!-- /.box-header -->
+
+                            <!-- /.box-body -->
+                            <div class="box-body">
+                                <textarea id="terms_description" name="terms_description">{{ terms.termsOfUse }}</textarea>
+                            </div>
+                            <!-- /.box-body -->
+
+                            <!-- /.box-footer -->
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-sm btn-primary">Update Terms</button>
+                            </div>
+                            <!-- /.box-footer -->
+                        </form>
+
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.column -->
+            </div>
+            <!-- /.row -->
+
+        </section>
+        <!-- /.content -->
+    </div>
+
+{% endblock %}
+
+
+{% block javascriptcontent %}
+    <script>
+
+/***********************************************************************************************************************
+ *                                          LOCAL VARIABLE
+ **********************************************************************************************************************/
+
+
+/***********************************************************************************************************************
+ *                                          AJAX OPERATIONS
+ **********************************************************************************************************************/
+
+
+/***********************************************************************************************************************
+ *                                          CHECKER FUNCTIONS
+ **********************************************************************************************************************/
+
+
+/***********************************************************************************************************************
+ *                                          EVENTS
+ **********************************************************************************************************************/
+
+        if ( CKEDITOR.env.ie && CKEDITOR.env.version < 9 )
+            CKEDITOR.tools.enableHtml5Elements( document );
+
+        CKEDITOR.config.height = 150;
+        CKEDITOR.config.width = 'auto';
+
+        CKEDITOR.editorConfig = function( config ) {
+            config.toolbarGroups = [
+                { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
+                { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+                { name: 'links', groups: [ 'links' ] },
+                { name: 'insert', groups: [ 'insert' ] },
+                { name: 'forms', groups: [ 'forms' ] },
+                { name: 'tools', groups: [ 'tools' ] },
+                { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
+                { name: 'others', groups: [ 'others' ] },
+                '/',
+                { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+                { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+                { name: 'styles', groups: [ 'styles' ] },
+                { name: 'colors', groups: [ 'colors' ] },
+                { name: 'about', groups: [ 'about' ] }
+            ];
+        };
+
+        CKEDITOR.replace( 'terms_description' );
+
+        var initSample = ( function() {
+            var wysiwygareaAvailable = isWysiwygareaAvailable(),
+                    isBBCodeBuiltIn = !!CKEDITOR.plugins.get( 'bbcode' );
+
+            return function() {
+                var editorElement = CKEDITOR.document.getById( 'editor' );
+
+                if ( isBBCodeBuiltIn ) {
+                    editorElement.setHtml('Etkinlik Açıklama Editor\n\n');
+                }
+
+                // Depending on the wysiwygare plugin availability initialize classic or inline editor.
+                if ( wysiwygareaAvailable ) {
+                    CKEDITOR.replace( 'editor' );
+                } else {
+                    editorElement.setAttribute( 'contenteditable', 'true' );
+                    CKEDITOR.inline( 'editor' );
+                }
+            };
+
+            function isWysiwygareaAvailable() {
+                // If in development mode, then the wysiwygarea must be available.
+                // Split REV into two strings so builder does not replace it :D.
+                if ( CKEDITOR.revision == ( '%RE' + 'V%' ) ) {
+                    return true;
+                }
+                return !!CKEDITOR.plugins.get( 'wysiwygarea' );
+            }
+        } )();
+
+    </script>
+{% endblock %}

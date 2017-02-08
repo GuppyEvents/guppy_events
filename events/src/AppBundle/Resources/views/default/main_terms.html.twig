@@ -1,0 +1,29 @@
+{% extends 'AppBundle::main_base.html.twig' %}
+
+{% block title %}Kullanıcı sözleşmesi - Seruvent{% endblock %}
+{% block metaDescription %}Kullanıcı Sözleşmesi{% endblock %}
+{% block metaKeyword %}sözleşme{% endblock %}
+
+
+{% block content %}
+
+    <!-- --------------------------------------------- -->
+    <!-- ------------------ CONTENT ------------------ -->
+    <!-- --------------------------------------------- -->
+    <section class="guppy-section align-center">
+        <div class="container">
+            <div class="ge-community-page-content">
+                <div class="ge-community-right-content col-md-12">
+                    <div class="ge-content-box" style="overflow: hidden; text-align: left;">
+                        {{ terms.termsOfUse|raw }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+
+
+

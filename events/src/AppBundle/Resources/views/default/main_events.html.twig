@@ -52,7 +52,7 @@
                                 {% for eventListWeek in eventListWeeks %}
                                     <tr>
                                         {% for eventDay in eventListWeek %}
-                                            <td {% if eventDay.isToday is defined and eventDay.isToday %}class="active calendar-day"{% else %} class="calendar-day"{% endif %} data-date="{{ date(eventDay.eventDate)|date('Y/m/d') }}">
+                                            <td {% if eventDay.isToday is defined and eventDay.isToday %}class="active calendar-day"{% else %} href="#gunun-etkinlikleri" class="calendar-day"{% endif %} data-date="{{ date(eventDay.eventDate)|date('Y/m/d') }}">
                                                 <div class="ge-calendar-cell-div" id="ge-calendar-cell-div">
                                                     <span class="ge-calendar-cell-day-number {% if eventDay.isFuture is not defined %}ge-other-day-number{% endif %}">{{ date(eventDay.eventDate)|date('d') }}</span>
                                                     {% if eventDay.isFuture is defined and eventDay.isFuture %}
@@ -83,14 +83,14 @@
         </div>
     </section>
 
-    <section class="section ge-events-list-section">
+    <section id="gunun-etkinlikleri" class="section ge-events-list-section">
         <div id="daily-events-container" class="container">
         <h4 id="daily-events-title" class="ge-events-list-title">{{ todayDate|date('d.m.Y') }} Etkinlikleri</h4>
 
         {% if todayEvents|length>0 %}
 
             {% for event in todayEvents %}
-                <div class="col-sm-4 seruvent-ebox" data-link="{{ event.eventLink }}" data-title="{{ event.title }}>
+                <div class="col-sm-4 seruvent-ebox" data-link="{{ event.eventLink }}" data-title="{{ event.title }}">
                     <div class="ge-events-box" id="ge-event-box">
                         <a href="{{ path('user_event_mainpage' , {'eventId':event.id}) }}" title="{{ event.title }}" class="ge-events-box-link">
                         <span class="ge-events-box-img">
@@ -237,6 +237,11 @@
                                 '</div>';
 
                             $('#daily-events-container').append(communityElem);
+
+                            //sayfa seçilen etkinliklerin listesine yönelir
+                            $('html,body').animate({
+                                scrollTop: ($('#gunun-etkinlikleri').offset().top)
+                            },500);
                         });
 
                     }
