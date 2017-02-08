@@ -49,7 +49,7 @@ vagrantfile:
             vflsf_cr0dew7emdsu:
                 source: ../../
                 target: /var/www
-                sync_type: nfs
+                sync_type: default
                 smb:
                     smb_host: ''
                     smb_username: ''
@@ -242,6 +242,7 @@ php:
             - cli
             - intl
             - xml
+            - curl
         pear: {  }
         pecl: {  }
     ini:

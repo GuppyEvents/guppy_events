@@ -262,6 +262,7 @@ li.active a.ge-menu-group-item{
     margin-bottom: 20px;
     border: 1px solid #e5e6e9;
     box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+    overflow: hidden;
 }
 .ge-community-content-row{
     margin-bottom: 30px;
@@ -288,7 +289,11 @@ li.active a.ge-menu-group-item{
     margin: -20px -20px 10px;
     padding:10px 20px;
     border-bottom: 1px solid #E5E6E9;
-    font-weight: bold;
+    font-weight: 500;
+    font-size: 16px;
+}
+.error-box-content-header i{
+    margin-right: 5px;
 }
 .error-box-content-text{
     margin-top: 20px;
@@ -307,8 +312,220 @@ li.active a.ge-menu-group-item{
     display: inline-block;
     margin-right: 8px;
 }
+body.ge-search-page .ge-search-result-section{
+    padding-top: 130px;
+}
+body.ge-search-page .tab-content{
+    padding-bottom: 0px;
+}
+.header-wrapper textarea:not(textarea),
+.header-wrapper input[type=text]:not(textarea),
+.header-wrapper input[type=url]:not(textarea),
+.header-wrapper input[type=tel]:not(textarea),
+.header-wrapper input[type=number]:not(textarea),
+.header-wrapper input[type=color]:not(textarea),
+.header-wrapper input[type=email]:not(textarea),
+.header-wrapper input[type=email]:not(textarea),
+.header-wrapper input[type=password]:not(textarea){
+    height: 34px;
+    padding: 0 10px;
+    line-height: 1;
+}
+.ge-filter-box textarea:not(textarea),
+.ge-filter-box input[type=text]:not(textarea),
+.ge-filter-box input[type=url]:not(textarea),
+.ge-filter-box input[type=tel]:not(textarea),
+.ge-filter-box input[type=number]:not(textarea),
+.ge-filter-box input[type=color]:not(textarea),
+.ge-filter-box input[type=email]:not(textarea),
+.ge-filter-box input[type=email]:not(textarea),
+.ge-filter-box input[type=password]:not(textarea){
+    height: 34px;
+    padding: 0 10px;
+    line-height: 1;
+}
+.ge-filter-box .pseudo-select .pseudo-select-field,
+.ge-filter-box .nav-current{
+    height: 36px;
+    line-height: 34px;
+    font-size: 14px;
+    margin-bottom: 0;
+}
+.ge-filter-box .pseudo-select .pseudo-select-dropdown-item{
+    overflow: visible;
+    line-height: 34px;
+    display: block;
+    margin: 0;
+}
+.search-menu{
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    border-bottom: 1px solid #e0e1e5;
+    height: 46px;
+    background: #FFF;
+    z-index: 1111;
+    overflow: hidden;
+}
+.search-menu-list{
+    margin: 0;
+    padding: 0
+}
+.search-menu-list li{
+    float: left;
+    margin-right: 2px;
+}
+.search-menu-list li a{
+    display: block;
+    padding: 11px 15px 9px 15px;
+    border-bottom: 2px solid transparent;
+    color: #4c4f57;
+}
+.search-menu-list li a:hover{
+    text-decoration: none;
+    color: #4c4f57;
+    border-bottom-color: #ddd;
+}
+.search-menu-list li.active a{
+    font-weight: 500;
+    border-bottom-color: #fe4918;
+    text-decoration: none;
+}
+.ge-filter-box{
+    margin-bottom: 40px;
+}
+.ge-filter-box h6{
+    font-size: 15px;
+    font-weight: bold;
+    color: #4c4f57;
+}
+.ge-horizontal-list-area{
+    padding: 0 20px;
+}
+.ge-horizontal-list-area-header {
+    margin-bottom: 25px;
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 1;
+    color: #4c4f57;
+}
+.ge-horizontal-list-area-header  i{
+    margin-right: 5px;
+    color: #4c4f57;
+}
+.ge-horizontal-item-box{
+    margin-bottom: 10px;
+    border: 1px solid #e8ebef;
+    border-bottom-color: #d8dbdf;
+    -webkit-transform: translateZ(0);
+    -moz-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-transition: .2s cubic-bezier(0,.2,.4,1);
+    -moz-transition: .2s cubic-bezier(0,.2,.4,1);
+    transition: .2s cubic-bezier(0,.2,.4,1);
+    background-color: #fff;
+    overflow: hidden;
+}
+.ge-events-community-title {
+    color: #282c35;
+    font-size: 20px;
+    line-height: 1.5;
+    font-weight: 500;
+    letter-spacing: 0;
+    margin: 0 0 5px;
+    overflow: hidden;
+}
+.ge-events-community-title a{
+    color: #282c35;
+    text-decoration: none;
+}
+.ge-events-community-title a:hover{
+    color: #fe4918;
+    text-decoration: none;
+}
+.ge-community-photo-container{
+    padding: 20px 10px;
+}
+.ge-community-text-container{
+    height: auto;
+    padding: 20px 0 10px;
+}
+.ge-community-add-btn .btn{
+    letter-spacing: normal;
+    font-size: 14px;
+    margin: 0 0 20px;
+    padding: 12px 14px 11px;
+}
+.ge-events-right-content .ge-horizontal-item-box .ge-events-box-date{
+    margin: 0;
+    padding: 0;
+}
+.ge-events-right-content .ge-horizontal-item-box .ge-events-box-title{
+    margin: 0 0 5px;
+    padding: 0;
+    height: auto;
+}
+.ge-events-box-title a{
+    color: #282c35;
+}
+.ge-events-right-content .ge-horizontal-item-box .ge-events-box-location{
+    margin: 0;
+    padding: 0;
+}
+.ge-events-box-location a{
+    color: #999;
+}
+.ge-events-box-location i,
+.ge-events-registered i{
+    color: #666;
+    margin-right: 7px;
+}
+.ge-events-registered{
+    display: block;
+    color: #999;
+    font-weight: 300;
+    font-size: 14px;
+    height: 22px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.ge-event-photo-container {
+    margin-left: -15px;
+}
+.ge-event-box-footer-stats li{
+    margin-right: 20px;
+}
+.ge-event-box-footer-stats li .fa,
+.ge-event-box-footer-stats .list-inline > li .fa:first-child{
+    margin-right: 7px;
+    vertical-align: baseline;
+    color: #666;
+}
+.ge-event-location{
+    text-align: center;
+}
+.ge-event-location h5{
+    margin-top: 10px !important;
+}
 
 
+
+
+
+@media (max-width: 991px) and (min-width: 768px) {
+    .ge-events-community-title{
+        font-size: 17px;
+    }
+    .ge-community-text-container{
+        padding-top: 10px;
+    }
+    .ge-event-photo-container {
+        margin: 0 -15px;
+        padding: 0;
+    }
+}
 
 @media (max-width: 991px) {
 
@@ -378,6 +595,35 @@ li.active a.ge-menu-group-item{
     .community-cover-title-area h3{
         font-size: 26px;
     }
+    body.ge-search-page section{
+        padding-top: 100px;
+    }
+    .search-menu{
+        top: 106px;
+    }
+    .ge-community-text-container{
+        padding-top: 0px;
+    }
+    .ge-community-text-container,
+    .ge-community-add-btn{
+        text-align: center;
+    }
+
+    .ge-event-box-footer-stats li span{
+        display: none;
+    }
+    .ge-horizontal-list-area{
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .ge-events-community-title{
+        font-size: 22px;
+    }
+    .ge-event-photo-container{
+        margin-left: 0;
+        margin-bottom: 10px;
+        padding: 20px 0;
+    }
 
 }
 @media (max-width: 479px) {
@@ -391,6 +637,14 @@ li.active a.ge-menu-group-item{
     }
     .community-cover-title-area h3{
         font-size: 24px;
+    }
+    .ge-events-community-title{
+        font-size: 16px;
+    }
+    .ge-community-add-btn .btn{
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 
