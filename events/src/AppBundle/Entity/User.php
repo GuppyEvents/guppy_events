@@ -119,6 +119,13 @@ class User extends Base implements UserInterface, \Serializable
      */
     private $address;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fb_id", type="string", length=64, nullable=true)
+     */
+    private $fbId;
+
 
     public function __construct()
     {
@@ -397,6 +404,28 @@ class User extends Base implements UserInterface, \Serializable
         $this->imageBase64 = $imageBase64;
     }
 
+    /**
+     * Set fbId
+     *
+     * @param string $fbId
+     * @return User
+     */
+    public function setFbId($fbId)
+    {
+        $this->fbId = $fbId;
+
+        return $this;
+    }
+
+    /**
+     * Get fbId
+     *
+     * @return string
+     */
+    public function getFbId()
+    {
+        return $this->fbId;
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------

@@ -106,6 +106,10 @@ class Utils
         }
         return $messages;
     }
+
+    public static function getEmailFromFbToken($token){
+        
+    }
 }
 
 ?>

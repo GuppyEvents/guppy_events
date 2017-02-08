@@ -35,7 +35,7 @@ class UserType extends AbstractType
                     'mapped' => false,
                     'constraints' => new IsTrue(),
                 )
-            );
+            )->add('fbId', TextType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

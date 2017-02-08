@@ -28,6 +28,10 @@
     </head>
 
     <body class="hold-transition register-page">
+        <script>
+
+        </script>
+
         <div class="register-box">
             <div class="register-logo">
                 <a href="{{ path('home_communities') }}"><b>Seru</b>vent</a>
@@ -35,9 +39,14 @@
 
             <div class="register-box-body">
 
+                <fb:login-button
+                        scope="public_profile,email"
+                        onlogin="checkLoginState();">
+                </fb:login-button>
+
                 <p class="login-box-msg">Kullanıcı Kayıt Sayfası</p>
 
-                {{ form_start(form) }}
+                {{ form_start(form, {'action': path('user_registration'), 'method': 'POST'}) }}
                     <div class="form-group has-feedback">
                         {{ form_widget(form.name, {'attr': {'class': 'form-control register-name' , 'placeholder':'İsim' , 'oninput':'checkValidation(this , "İsim boş bırakılamaz")', 'oninvalid':'checkValidation(this , "İsim boş bırakılamaz")'}}) }}
                         <span class="glyphicon glyphicon-user form-control-feedback"></span>
@@ -62,6 +71,10 @@
                         {{ form_widget(form.password.second, {'attr': {'class': 'form-control', 'placeholder':'Şifre Tekrar' ,'oninput':'checkValidation(this , "Şifre tekrarı boş bırakılamaz")','onchange':'checkPasswordValidation(this , "Şifreleriniz uyuşmamaktadır")' }}) }}
                         <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
                     </div>
+                    <div style="display: none;" class="form-group has-feedback">
+                        {{ form_widget(form.fbId, {'attr': {'class': 'form-control', 'placeholder':'Token' }}) }}
+                        <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
+                    </div>
                     <div class="row">
                         <div class="col-xs-8">
                             <div class="checkbox icheck">
@@ -82,8 +95,8 @@
 
                 <div class="social-auth-links text-center">
                     <p>- YA DA -</p>
-                    <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Facebook ile Kaydol</a>
-                    <a href="#" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Google+ ile Kaydol</a>
+                    <a onclick="loginFacebook()" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Facebook ile Kaydol</a>
+                    <a onclick="logoutFacebook()" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Google+ ile Kaydol</a>
                 </div>
 
                 <a href="{{ path('login') }}" class="text-center">Seruvent hesabı ile giriş yap</a>
@@ -136,6 +149,95 @@
                 }
 
             });
+
+
+            window.fbAsyncInit = function() {
+                FB.init({
+                    appId      : '1807236222874605',
+                    cookie     : true,
+                    xfbml      : true,
+                    version    : 'v2.8'
+                });
+                FB.AppEvents.logPageView();
+
+                FB.getLoginStatus(function(response) {
+                    console.log(response);
+
+                });
+            };
+
+            function checkLoginState() {
+                FB.getLoginStatus(function(response) {
+                    statusChangeCallback(response);
+                });
+            }
+
+            function statusChangeCallback(response){
+                if (response.status === 'connected') {
+                    registerUser(response);
+                } else if (response.status === 'not_authorized') {
+                    // The person is logged into Facebook, but not your app.
+                    FB.login(function(response) {
+                        statusChangeCallback(response);
+                    },{
+                        scope: 'email, public_profile',
+                        return_scopes: true
+                    });
+                } else {
+                    // The person is not logged into Facebook, so we're not sure if
+                    // they are logged into this app or not.
+                    FB.login(function(response) {
+                        statusChangeCallback(response);
+                    },{
+                        scope: 'email, public_profile',
+                        return_scopes: true
+                    });
+                }
+            }
+
+            (function(d, s, id){
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) {return;}
+                js = d.createElement(s); js.id = id;
+                js.src = "//connect.facebook.net/en_US/sdk.js";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+
+            function loginFacebook(){
+                checkLoginState();
+            }
+            function registerUser(response1) {
+                console.log('Welcome!  Fetching your information.... ');
+                FB.api('/me?fields=id,name,email,permissions', function(response) {
+                    $("form").attr("action", "/registerFacebook");
+                    var name=" ", surname=" ";
+                    if(response.name.lastIndexOf(" ")!=-1){
+                        name = response.name.substring(0, response.name.lastIndexOf(" "));
+                        surname = response.name.substring(response.name.lastIndexOf(" ")+1);
+                    }else{
+                        name = response.name;
+                        surname = response.name;
+                    }
+                    $("form input[name='user[name]']").val(name);
+                    $("form input[name='user[surname]']").val(surname);
+                    $("form input[name='user[username]']").val(response.email);
+                    $("form input[name='user[email]']").val(response.email);
+                    $("form input[name='user[email]']").val(response.email);
+                    $("form input[name='user[password][first]']").val("_________________");
+                    $("form input[name='user[password][second]']").val("_________________");
+                    $("form input[name='user[termsAccepted]']").attr("checked", true);
+                    $("form input[name='user[fbId]']").val(response1.authResponse.accessToken);
+                    $("form").submit();
+                 });
+
+            }
+
+            function logoutFacebook(){
+                FB.logout(function(response) {
+                    console.log(response);
+                });
+            }
+
 
         </script>
     </body>

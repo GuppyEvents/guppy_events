@@ -57,6 +57,43 @@ class RegistrationController extends Controller
 
     }
 
+    /**
+     * @Route("/registerFacebook", name="user_registration_facebook")
+     */
+    public function registerFacebookAction(Request $request)
+    {
+        // 1) build the form
+        $user = new User();
+        $data = array();
+        $form = $this->createForm(UserType::class, $user);
+        $data['form'] = $form->createView();
+
+        // 2) handle the submit (will only happen on POST)
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // 3) check facebook access token
+            
+
+            // 4) save the User!
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+            $confirmLink = "http://seruvent.com/activation/" . base64_encode(Utils::getGUID() . "**" . $user->getId() . "##" . rand(10, 100));
+
+            //Utils::mailSendSingle($user->getEmail(), "Seruvent Kayıt Aktivasyonu", "Merhaba " . $user->getName() . ",\n\rKaydını onaylamak için aşağıdaki linke tıklaman yeterli.\n\r" . $confirmLink);
+
+            $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+            $this->get('security.token_storage')->setToken($token);
+            $this->get('session')->set('_security_main', serialize($token));
+
+            $_SESSION['success_message'] = "Kaydınız başarıyla tamamlanmıştır.";//redirect edilen sayfada mesaj gosterilmesi için sessiona mesaj atanır
+
+            return $this->redirectToRoute('home_events');
+        }
+        return $this->render('AppBundle:registration:register.html.twig', $data );
+
+    }
+
 
 
     /**
