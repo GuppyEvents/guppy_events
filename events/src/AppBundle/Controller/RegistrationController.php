@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Form\UserType;
 use AppBundle\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Facebook\Facebook;
 
 class RegistrationController extends Controller
 {
@@ -22,6 +23,7 @@ class RegistrationController extends Controller
         // 1) build the form
         $user = new User();
         $data = array();
+        $data = array_merge($data,Utils::getSessionToastMessages());
         $form = $this->createForm(UserType::class, $user);
         $data['form'] = $form->createView();
 
@@ -62,6 +64,7 @@ class RegistrationController extends Controller
      */
     public function registerFacebookAction(Request $request)
     {
+
         // 1) build the form
         $user = new User();
         $data = array();
@@ -70,10 +73,19 @@ class RegistrationController extends Controller
 
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             // 3) check facebook access token
-            
-
+            $fbUser = Utils::getFbUserFromFbToken($user->getFbId());
+            if($fbUser->getEmail() == $user->getEmail()){
+                $user->setFbId($fbUser->getId());
+                $password = $this->get('security.password_encoder')
+                    ->encodePassword($user, "guppy@facebook@user");
+                $user->setPassword($password);
+            }else{
+                $_SESSION['error_message'] = "Bir hatayla karşılaşıldı.";//redirect edilen sayfada mesaj gosterilmesi için sessiona mesaj atanır
+                return $this->render('AppBundle:registration:register.html.twig', $data );
+            }
             // 4) save the User!
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);

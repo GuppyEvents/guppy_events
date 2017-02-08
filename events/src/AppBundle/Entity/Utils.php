@@ -7,6 +7,7 @@ use Google_Service_Storage;
 use Google_Service_Storage_StorageObject;
 use Google\Cloud\Storage\Acl;
 use Mailgun\Mailgun;
+use Facebook\Facebook;
 
 class Utils
 {
@@ -107,8 +108,26 @@ class Utils
         return $messages;
     }
 
-    public static function getEmailFromFbToken($token){
-        
+    public static function getFbUserFromFbToken($token){
+        $fb = new Facebook([
+            'app_id' => '1807236222874605',
+            'app_secret' => '5d206a0119067c93b68055bfc3082fcf',
+            'default_graph_version' => 'v2.8',
+            //'default_access_token' => '{access-token}', // optional
+        ]);
+
+        try {
+            $response = $fb->get('/me?fields=email,id', $token);
+            return $response->getGraphUser();
+        } catch(\Facebook\Exceptions\FacebookResponseException $e) {
+            // When Graph returns an error
+            //echo 'Graph returned an error: ' . $e->getMessage();
+            //exit;
+        } catch(\Facebook\Exceptions\FacebookSDKException $e) {
+            // When validation fails or other local issues
+            //echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            //exit;
+        }
     }
 }
 

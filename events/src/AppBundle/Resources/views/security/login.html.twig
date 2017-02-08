@@ -50,6 +50,11 @@
                         <input type="password" id="password" name="_password" class="form-control" placeholder="Password">
                         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                     </div>
+
+                    <div style="display: none;" class="form-group has-feedback">
+                        <input type="text" name="fbToken" class="form-control" placeholder="" value="" />
+                        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                    </div>
                     <div class="row">
                         <div class="col-xs-8">
                             <div class="checkbox icheck">
@@ -68,7 +73,7 @@
 
                 <div class="social-auth-links text-center">
                     <p>- OR -</p>
-                    <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in using
+                    <a onclick="loginFacebook()" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in using
                         Facebook</a>
                     <a href="#" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Sign in using
                         Google+</a>
@@ -98,6 +103,70 @@
                     increaseArea: '20%' // optional
                 });
             });
+
+            window.fbAsyncInit = function() {
+                FB.init({
+                    appId      : '1807236222874605',
+                    cookie     : true,
+                    xfbml      : true,
+                    version    : 'v2.8'
+                });
+                FB.AppEvents.logPageView();
+
+                FB.getLoginStatus(function(response) {
+                    console.log(response);
+
+                });
+            };
+
+            (function(d, s, id){
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) {return;}
+                js = d.createElement(s); js.id = id;
+                js.src = "//connect.facebook.net/en_US/sdk.js";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+
+            function loginFacebook(){
+                checkLoginState();
+            }
+            function checkLoginState() {
+                FB.getLoginStatus(function(response) {
+                    statusChangeCallback(response);
+                });
+            }
+            function statusChangeCallback(response){
+                if (response.status === 'connected') {
+                    loginUser(response);
+                } else if (response.status === 'not_authorized') {
+                    // The person is logged into Facebook, but not your app.
+                    FB.login(function(response) {
+                        statusChangeCallback(response);
+                    },{
+                        scope: 'email, public_profile',
+                        return_scopes: true
+                    });
+                } else {
+                    // The person is not logged into Facebook, so we're not sure if
+                    // they are logged into this app or not.
+                    FB.login(function(response) {
+                        statusChangeCallback(response);
+                    },{
+                        scope: 'email, public_profile',
+                        return_scopes: true
+                    });
+                }
+            }
+            function loginUser(response1) {
+                FB.api('/me?fields=id,email', function(response) {
+                    $("form").attr("action", "/loginFacebook");
+                    //$("form input[name='_username']").val(response.email);
+                    //$("form input[name='_password']").val(response1.authResponse.accessToken);
+                    $("form input[name='fbToken']").val(response1.authResponse.accessToken);
+                    $("form").submit();
+                });
+
+            }
         </script>
 
     </body>
