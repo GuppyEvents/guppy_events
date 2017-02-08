@@ -45,6 +45,7 @@ return array(
     'Google\\Cloud\\' => array($vendorDir . '/google/cloud/src'),
     'Google\\Auth\\' => array($vendorDir . '/google/auth/src'),
     'Firebase\\JWT\\' => array($vendorDir . '/firebase/php-jwt/src'),
+    'Facebook\\' => array($vendorDir . '/facebook/graph-sdk/src/Facebook'),
     'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator'),
     'Doctrine\\Common\\Cache\\' => array($vendorDir . '/doctrine/cache/lib/Doctrine/Common/Cache'),
     'Doctrine\\Common\\Annotations\\' => array($vendorDir . '/doctrine/annotations/lib/Doctrine/Common/Annotations'),
