@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @Route("/search", name="search")
+ * @Route("/arama", name="search")
  */
 class SearchController extends Controller
 {
