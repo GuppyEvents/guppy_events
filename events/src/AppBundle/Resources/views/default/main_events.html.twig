@@ -110,8 +110,8 @@
                             </div>
                             <div class="ge-event-box-footer-btn">
                                 <ul>
-                                    <li><a href="#" title="Paylaş" rel="tooltip"><i class="fa fa-share-alt"></i></a></li>
-                                    <li><a href="#" title="Kaydet" rel="tooltip"><i class="fa fa-bookmark-o"></i></a></li>
+                                    <li><a title="Paylaş" rel="tooltip"><i class="fa fa-share-alt"></i></a></li>
+                                    <li><a title="Kaydet" class="search-event-box" rel="tooltip"><i class="fa fa-bookmark-o"></i></a></li>
                                 </ul>
                             </div>
                         </div>
@@ -144,8 +144,6 @@
                         <ul class="socials-nav" style="position: inherit!important;">
                             <li class="socials-nav-item" data-social-share="twitter" ><a href="#"><span class="fa fa-twitter"></span></a></li>
                             <li class="socials-nav-item" data-social-share="facebook" ><a href="#"><span class="fa fa-facebook"></span></a></li>
-                            {#<li class="socials-nav-item" ><a href="#"><span class="fa fa-vimeo-square"></span></a></li>#}
-                            {#<li class="socials-nav-item" ><a href="#"><span class="fa fa-google-plus"></span></a></li>#}
                         </ul>
 
                         <div style="padding-left: 5%; padding-right: 5%;">
@@ -178,6 +176,44 @@
      ******************************************************************************************************************/
         var communityPage=2;    // ilk sayfa 24 topluluk getirdiğinde 12lik topluluk 3.sayfadan başlayacak
 
+        function appendEvent(eventMain){
+            saveButtonElem = '';
+            if(eventMain['isSaved']){
+                saveButtonElem = 'fa-bookmark';
+            }else{
+                saveButtonElem = 'fa-bookmark-o';
+            }
+
+            $('#daily-events-container').append(
+                '<div class="col-sm-4 seruvent-ebox event-main-box" data-event-id="'+eventMain.event.id+'" data-link="'+eventMain.eventLink+'" data-title="'+eventMain.event.title+'">' +
+                    '<div class="ge-events-box" id="ge-event-box">' +
+                        '<a href="' + eventMain.eventLink + '" title="' + eventMain.event.title + '" class="ge-events-box-link">' +
+                            '<span class="ge-events-box-img">' +
+                            '   <img src="'+ eventMain.event.imageBase64 +'" alt="" class="img-responsive">' +
+                            '</span>' +
+                            '<span class="ge-events-box-date">' + eventMain.event.startDate + '</span>' +
+                            '<h5 class="ge-events-box-title">' + eventMain.event.title + '</h5>' +
+                            '<span class="ge-events-box-location">'+ eventMain.event.community +'</span>' +
+                        '</a>' +
+
+                        '<div class="ge-event-box-footer">' +
+                            '<div class="ge-event-box-footer-tags">' +
+                                '<ul class="list-inline">' +
+                                    '<li><a href="#" title="">#etkinlik</a></li>' +
+                                '</ul>' +
+                            '</div>' +
+                            '<div class="ge-event-box-footer-btn">' +
+                                '<ul>' +
+                                    '<li><a class="shareLink" title="Paylaş" data-toggle="modal" rel="tooltip"><i class="fa fa-share-alt"></i></a></li>' +
+                                    '<li><a title="Kaydet" class="search-event-box" rel="tooltip"><i class="fa '+saveButtonElem+'"></i></a></li>' +
+                                '</ul>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>'
+            );
+        }
+
 
     /*******************************************************************************************************************
      *                                          AJAX OPERATIONS
@@ -206,44 +242,13 @@
                     if(data.content){
 
                         data.content.eventList.forEach(function(eventMain) {
-
-                            communityElem =
-                                '<div class="col-sm-4 seruvent-ebox" data-link="'+eventMain.eventLink+'" data-title="'+eventMain.event.title+'">' +
-                                    '<div class="ge-events-box" id="ge-event-box">' +
-                                        '<a href="' + eventMain.eventLink + '" title="' + eventMain.event.title + '" class="ge-events-box-link">' +
-                                            '<span class="ge-events-box-img">' +
-                                                '<img src="'+ eventMain.event.imageBase64 +'" alt="" class="img-responsive">' +
-                                            '</span>' +
-                                            '<span class="ge-events-box-date">' + eventMain.event.startDate + '</span>' +
-
-                                            '<h5 class="ge-events-box-title">' + eventMain.event.title + '</h5>' +
-                                            '<span class="ge-events-box-location">'+ eventMain.event.community +'</span>' +
-                                        '</a>' +
-
-                                        '<div class="ge-event-box-footer">' +
-                                            '<div class="ge-event-box-footer-tags">' +
-                                                '<ul class="list-inline">' +
-                                                    '<li><a href="#" title="">#etkinlik</a></li>' +
-                                                '</ul>' +
-                                            '</div>' +
-                                            '<div class="ge-event-box-footer-btn">' +
-                                                '<ul>' +
-                                                    '<li><a class="shareLink" title="Paylaş" data-toggle="modal" rel="tooltip"><i class="fa fa-share-alt"></i></a></li>' +
-                                                    '<li><a href="#" title="Kaydet" rel="tooltip"><i class="fa fa-bookmark-o"></i></a></li>' +
-                                                '</ul>' +
-                                            '</div>' +
-                                        '</div>' +
-                                    '</div>' +
-                                '</div>';
-
-                            $('#daily-events-container').append(communityElem);
-
-                            //sayfa seçilen etkinliklerin listesine yönelir
-                            $('html,body').animate({
-                                scrollTop: ($('#gunun-etkinlikleri').offset().top)
-                            },500);
+                            appendEvent(eventMain);
                         });
 
+                        //sayfa seçilen etkinliklerin listesine yönelir
+                        $('html,body').animate({
+                            scrollTop: ($('#gunun-etkinlikleri').offset().top)
+                        },500);
                     }
 
                 }else if(data.resultText == 'SUCCESS_EMPTY'){
@@ -252,6 +257,49 @@
                     alert('Warning -- ' + ' you are not authorization for this operation');
                 }else{
                     alert('Warning -- ' + ' error occured while getting borough list');
+                }
+            });
+        }
+
+
+        /*
+         * Kullanıcıların etkinliği kaydetmesini sağlar
+         */
+        function ajaxSocialSaveEvent(eventTarget){
+
+            // -- 1 --
+            eventId = $(eventTarget).parentsUntil('.event-main-box').last().parent().attr('data-event-id');
+            isSaved = $(eventTarget).parent().find('.fa-bookmark').length>0;
+
+            // -- 2 --
+            $.post("{{ path('social_event_rating') }}" ,{
+                eid : eventId,
+                is_saved : isSaved
+            }).always(function(){
+
+            }).done(function(data){
+
+                // -- 2.1 -- CONSOLE
+                if(Guppy.responseDebugMode)
+                    console.log(data);
+
+                // -- 2.2 -- sonuc düzenlenir
+                if(data.resultText == 'SUCCESS'){
+
+                    if(data.content['saved']){
+                        $(eventTarget).parent().find('.fa-bookmark-o').addClass('fa-bookmark').removeClass('fa-bookmark-o');
+                        toastr.success('Etkinlik takipte');
+                    }else{
+                        $(eventTarget).parent().find('.fa-bookmark').addClass('fa-bookmark-o').removeClass('fa-bookmark');
+                        toastr.success('Etkinlik takibi bırakıldı');
+                    }
+
+                }else if(data.resultText == 'SUCCESS_EMPTY'){
+                    toastr.error('Beklenmeyen hata ile karşılaşıldı');
+                }else if(data.resultText == 'FAILURE_PERMISSION'){
+                    toastr.error('Bu işlem için izniniz bulunmamaktadır');
+                }else{
+                    toastr.error('Beklenmeyen hata ile karşılaşıldı');
                 }
             });
         }
@@ -304,6 +352,11 @@
                     break;
             }
         });
+
+    // Etkinlikte kaydet tıklanması durumudur
+    $(document).on('click' , '.search-event-box' , function (event) {
+        ajaxSocialSaveEvent(event.target);
+    });
 
 
     </script>

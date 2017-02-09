@@ -423,6 +423,15 @@ class DefaultController extends Controller
                     'eventId' => $event->getId()
                 ),true);
                 $eventMain['event'] = $event;
+
+                $eventMain['isSaved'] = false;
+                if($this->getUser()){
+                    $eventUser = $this->getDoctrine()->getRepository('AppBundle:EventUserRating')->findOneBy(array('user'=>$this->getUser(),'event'=>$event));
+                    if($eventUser){
+                        $eventMain['isSaved'] = $eventUser->getIsSaved();
+                    }
+                }
+                
                 array_push($resultEventList, $eventMain);
             }
 
