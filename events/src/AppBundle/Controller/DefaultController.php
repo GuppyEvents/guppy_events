@@ -272,6 +272,7 @@ class DefaultController extends Controller
         $tomorrow->add(new \DateInterval("P1D"));
         $data['todayEvents'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findPublishEventsByDate( $today,$tomorrow);
         $data['todayDate'] = $today;
+        $data['hasCommunityAdminRole'] = $this->getDoctrine()->getRepository('AppBundle:User')->hasUserCommunityAdmin($this->getUser());
 
         return $this->render('AppBundle:default:main_events.html.twig' , $data);
     }

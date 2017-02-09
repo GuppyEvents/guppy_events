@@ -164,7 +164,9 @@ $('#add_event_form').submit(function() {
                 },
             });
 
-            $("#event_date").datetimepicker();
+            $("#event_date").datetimepicker({
+                defaultDate: "{{ selectedDate }}"
+            });
 
             var input = document.getElementById('search_event_location');
             autocomplete = new google.maps.places.Autocomplete(input);

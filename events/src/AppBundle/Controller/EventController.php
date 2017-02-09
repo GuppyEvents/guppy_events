@@ -107,12 +107,13 @@ class EventController extends Controller
      * @Route("/ekle", name="event_add_page")
      * @Security("has_role('ROLE_USER')")
      */
-    public function eventAddPageAction()
+    public function eventAddPageAction(Request $request)
     {
         $data = array();
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
 
+        $data["selectedDate"] = $request->get('sd')? str_replace('-' ,'/',$request->get('sd')) : null; // -> selected day
         $communityUserRoles = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoles')->findCommunityAdminRoles($this->getUser()->getId());
         if($communityUserRoles){
             $data["communityAdminRoles"] = $communityUserRoles;

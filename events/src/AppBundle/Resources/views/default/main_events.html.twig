@@ -57,7 +57,9 @@
                                                     <span class="ge-calendar-cell-day-number {% if eventDay.isFuture is not defined %}ge-other-day-number{% endif %}">{{ date(eventDay.eventDate)|date('d') }}</span>
                                                     {% if eventDay.isFuture is defined and eventDay.isFuture %}
                                                         <span class="ge-calendar-cell-add-event">
-                                                            <i class="fa fa-plus"></i><a href="#">Oluştur</a>
+                                                            {% if hasCommunityAdminRole is defined and hasCommunityAdminRole %}
+                                                                <i class="fa fa-plus"></i><a href="{{ path('event_add_page',{'sd': date(eventDay.eventDate)|date('Y-m-d')}) }}">Oluştur</a>
+                                                            {% endif %}
                                                         </span>
                                                     {% endif %}
                                                     <ul class="list-inline">
