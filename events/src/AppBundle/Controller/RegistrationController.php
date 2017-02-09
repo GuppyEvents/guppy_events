@@ -6,6 +6,7 @@ use AppBundle\Entity\Utils;
 use Monolog\Handler\Curl\Util;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Form\UserType;
 use AppBundle\Entity\User;
@@ -77,15 +78,13 @@ class RegistrationController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             // 3) check facebook access token
             $fbUser = Utils::getFbUserFromFbToken($user->getFbId());
-            if($fbUser->getEmail() == $user->getEmail()){
-                $user->setFbId($fbUser->getId());
-                $password = $this->get('security.password_encoder')
-                    ->encodePassword($user, "guppy@facebook@user");
-                $user->setPassword($password);
-            }else{
-                $_SESSION['error_message'] = "Bir hatayla karşılaşıldı.";//redirect edilen sayfada mesaj gosterilmesi için sessiona mesaj atanır
-                return $this->render('AppBundle:registration:register.html.twig', $data );
-            }
+
+            $user->setFbId($fbUser->getId());
+            $password = Utils::getGUID();
+            $user->setPassword($password);
+            $imageLink = Utils::uploadBytesToServer(file_get_contents($fbUser->getPicture()->getUrl()), Utils::getGUID() . ".jpg");
+            $user->setImageBase64($imageLink);
+
             // 4) save the User!
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);

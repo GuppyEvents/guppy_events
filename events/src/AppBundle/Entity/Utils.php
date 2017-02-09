@@ -65,6 +65,62 @@ class Utils
         }
         return null;
     }
+
+    /*
+     *
+     * Uploads the file to google cloud storage and
+     * returns google cloud link
+     * putenv('GOOGLE_APPLICATION_CREDENTIALS=/var/www/events/key_27_ocak_14_05.json');
+     * should be called once to put envvironment variable to server machine
+     *
+     */
+    public static function uploadBytesToServer($imageBytes, $fileName){
+        putenv('GOOGLE_APPLICATION_CREDENTIALS=/var/www/events/key_27_ocak_14_05.json');
+        $result=null;
+        $client = new Google_Client();
+        $client->useApplicationDefaultCredentials();
+        $client->addScope(\Google_Service_Storage::DEVSTORAGE_FULL_CONTROL);
+
+        $bucket	= "seruvent_images";
+
+
+
+
+        $file_content = $imageBytes;
+
+        $f = finfo_open();
+
+        $mime_type = finfo_buffer($f, $file_content, FILEINFO_MIME_TYPE);
+
+
+        $storageService = new Google_Service_Storage($client);
+        /***
+         * Write file to Google Storage
+         */
+        try
+        {
+            $postbody = array(
+                'name' => $fileName,
+                'data' => $file_content,
+                'uploadType' => 'media',
+                'predefinedAcl' =>'publicRead',
+                'mimeType' => $mime_type
+
+            );
+            $gsso = new Google_Service_Storage_StorageObject();
+            $gsso->setName( $fileName );
+            $result = $storageService->objects->insert( $bucket, $gsso, $postbody );
+            if($result != null){
+                return "https://storage.googleapis.com/seruvent_images/" . $fileName;
+            }
+        }
+        catch (Exception $e)
+        {
+            print $e->getMessage();
+        }
+        return null;
+    }
+
     public static function getGUID()
     {
 
@@ -117,7 +173,7 @@ class Utils
         ]);
 
         try {
-            $response = $fb->get('/me?fields=email,id', $token);
+            $response = $fb->get('/me?fields=name,email,id,picture.width(500).height(500)', $token);
             return $response->getGraphUser();
         } catch(\Facebook\Exceptions\FacebookResponseException $e) {
             // When Graph returns an error

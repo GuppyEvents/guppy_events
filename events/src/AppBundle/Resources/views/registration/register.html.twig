@@ -112,6 +112,7 @@
 
             var error_msg = '{% if error_msg is defined %}{{ error_msg|json_encode|raw }}{% endif %}';
             var success_msg = '{% if success_msg is defined %}{{ success_msg|json_encode|raw }}{% endif %}';
+            var facebook_asked = false;
 
             function checkPasswordValidation(input , message){
                 if(input.value=="" || input.value!=document.getElementById('user_password_first').value){
@@ -169,24 +170,60 @@
 
             function statusChangeCallback(response){
                 if (response.status === 'connected') {
-                    registerUser(response);
+                    if(response.authResponse.grantedScopes.indexOf("email") !=-1 ) {
+                        registerUser(response);
+                    }else{
+                        facebook_asked = true;
+                        registerUser(response);
+                        alert("Sitemizi kullanabilmeniz için email adresinizi bizimle paylaşmanız gerekmektedir.")
+//                        if(facebook_asked == false) {
+//                            FB.login(function (response) {
+//                                statusChangeCallback(response);
+//                            }, {
+//                                scope: 'email, public_profile',
+//                                return_scopes: true,
+//                                auth_type: "rerequest"
+//                            });
+//                            facebook_asked = true;
+//                        }
+                    }
                 } else if (response.status === 'not_authorized') {
                     // The person is logged into Facebook, but not your app.
-                    FB.login(function(response) {
-                        statusChangeCallback(response);
-                    },{
-                        scope: 'email, public_profile',
-                        return_scopes: true
-                    });
+                    if(facebook_asked) {
+                        FB.login(function (response) {
+                            statusChangeCallback(response);
+                        }, {
+                            scope: 'email, public_profile',
+                            return_scopes: true,
+                            auth_type: "rerequest"
+                        });
+                    }else{
+                        FB.login(function (response) {
+                            statusChangeCallback(response);
+                        }, {
+                            scope: 'email, public_profile',
+                            return_scopes: true
+                        });
+                    }
                 } else {
                     // The person is not logged into Facebook, so we're not sure if
                     // they are logged into this app or not.
-                    FB.login(function(response) {
-                        statusChangeCallback(response);
-                    },{
-                        scope: 'email, public_profile',
-                        return_scopes: true
-                    });
+                    if(facebook_asked) {
+                        FB.login(function (response) {
+                            statusChangeCallback(response);
+                        }, {
+                            scope: 'email, public_profile',
+                            return_scopes: true,
+                            auth_type: "rerequest"
+                        });
+                    }else{
+                        FB.login(function (response) {
+                            statusChangeCallback(response);
+                        }, {
+                            scope: 'email, public_profile',
+                            return_scopes: true
+                        });
+                    }
                 }
             }
 
@@ -202,7 +239,6 @@
                 checkLoginState();
             }
             function registerUser(response1) {
-                console.log('Welcome!  Fetching your information.... ');
                 FB.api('/me?fields=id,name,email,permissions', function(response) {
                     $("form").attr("action", "/registerFacebook");
                     var name=" ", surname=" ";
@@ -213,6 +249,8 @@
                         name = response.name;
                         surname = response.name;
                     }
+                    $("form input[name='user[password][first]']").hide();
+                    $("form input[name='user[password][second]']").hide();
                     $("form input[name='user[name]']").val(name);
                     $("form input[name='user[surname]']").val(surname);
                     $("form input[name='user[username]']").val(response.email);
@@ -221,7 +259,13 @@
                     $("form input[name='user[password][second]']").val("_________________");
                     $("form input[name='user[termsAccepted]']").attr("checked", true);
                     $("form input[name='user[fbId]']").val(response1.authResponse.accessToken);
-                    $("form").submit();
+                    $(".icheckbox_square-blue").addClass('checked')
+                    if(response.email) {
+                        $("form").submit();
+                    }else{
+                        $("#register_submit").html('<i class="fa fa-facebook"></i>' + '&nbsp;Tamamla');
+                        $("#register_submit").addClass("btn-facebook");
+                    }
                  });
 
             }
