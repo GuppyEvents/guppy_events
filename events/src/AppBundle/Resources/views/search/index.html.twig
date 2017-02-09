@@ -442,6 +442,8 @@
 
                 }else if(data.resultText == 'SUCCESS_EMPTY'){
                     toastr.error('Beklenmeyen hata ile karşılaşıldı');
+                }else if(data.resultText == 'FAILURE_AUTH'){
+                    toastr.warning('Etkinliği takip etmek için giriş yapınız');
                 }else if(data.resultText == 'FAILURE_PERMISSION'){
                     toastr.error('Bu işlem için izniniz bulunmamaktadır');
                 }else{
