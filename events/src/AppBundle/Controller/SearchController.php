@@ -31,6 +31,11 @@ class SearchController extends Controller
             $eventTemp['id'] = $event->getId();
             $eventTemp['title'] = $event->getTitle();
             $eventTemp['imageBase64'] = $event->getImageBase64();
+            $eventTemp['startDate'] = $event->getStartDate()->format('d.m.Y / H:m');
+            $eventTemp['isSaved'] = false;
+            $eventTemp['homepagelink'] = $this->get('router')->generate('user_event_mainpage' , array(
+                'eventId' => $event->getId()
+            ),true);
 
             if($this->getUser()){
                 $eventUser = $this->getDoctrine()->getRepository('AppBundle:EventUserRating')->findOneBy(array('user'=>$this->getUser(),'event'=>$event));
@@ -56,6 +61,19 @@ class SearchController extends Controller
     }
 
 
+    public function getSearchCommunities($searchKey,$page=1){
+        $communityList = $this->getDoctrine()->getRepository('AppBundle:Community')->searchCommunityListWithEventCount($searchKey,$page);
+        foreach ($communityList as &$community) {
+            $community['memberCount'] = $this->getDoctrine()->getRepository('AppBundle:Community')->findUserCountByCommunity($community['id']);
+            $community['homepagelink'] = $this->get('router')->generate('user_community_events_homepage' , array(
+                'communityId' => $community['id']
+            ),true);
+        }
+
+        return $communityList;
+    }
+
+
 
     // -----------------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
@@ -71,8 +89,12 @@ class SearchController extends Controller
         $data = array();
         $searchKey = $request->get('search_key');
 
+        // DEPRECIATED
+        // $data['communityList'] = $this->getDoctrine()->getRepository('AppBundle:Community')->findCommunityListByName($searchKey);
+
+        $data['universityCommunityCount'] = $this->getDoctrine()->getRepository('AppBundle:University')->findUniversityCommunityCount(5);
+        $data['communityList'] = $this->getSearchCommunities($searchKey);
         $data['search_key'] = $searchKey;
-        $data['communityList'] = $this->getDoctrine()->getRepository('AppBundle:Community')->findCommunityListByName($searchKey);
         $data['eventList'] = $this->getSearchEvents($searchKey);
 
         return $this->render('AppBundle:search:index.html.twig', $data);
@@ -107,16 +129,7 @@ class SearchController extends Controller
                     case 'community':
                         $page = intval($request->get('page'));
                         $key = $request->get('key');
-                        $communityList = $this->getDoctrine()->getRepository('AppBundle:Community')->findCommunityListByName($key,$page);
-
-                        $data['communityList'] = array();
-                        foreach ($communityList as $community) {
-                            $communityObj = array();
-                            $communityObj['id'] = $community->getId();
-                            $communityObj['name'] = $community->getName();
-                            $communityObj['image'] = $community->getImageBase64();
-                            array_push($data['communityList'], $communityObj);
-                        }
+                        $data['communityList'] = $this->getSearchCommunities($key,$page);
                         break;
 
                     case 'event':

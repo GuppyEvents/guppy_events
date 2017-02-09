@@ -11,4 +11,29 @@ use Doctrine\ORM\EntityRepository;
  */
 class UniversityRepository extends EntityRepository
 {
+
+
+    /**
+     *
+     * Üniversitenin toplam topluluk sayısını döner. Topluluğun onaylanıp onaylanmadığına bakılmaz
+     *
+     * @param string $universityId The university id
+     * @return int|null
+     */
+    public function findUniversityCommunityCount($universityId)
+    {
+        $em = $this->getEntityManager();
+        $query = $em->createQuery(
+            'SELECT COUNT(community.id) as communityCount
+                    FROM AppBundle:University university
+                    JOIN AppBundle:Community community WITH community.university=university.id
+                    WHERE university.id = :universityId and community.isApproved=true
+                '
+        )->setParameters(array(
+            'universityId' => $universityId
+        ));
+
+        return isset($query->getOneOrNullResult()['communityCount']) ? $query->getOneOrNullResult()['communityCount'] : 0;
+    }
+
 }

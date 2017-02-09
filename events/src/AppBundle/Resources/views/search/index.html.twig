@@ -30,7 +30,10 @@
 
             <div class="ge-community-page-content">
                 <div class="tab-content">
-                    <!-- Topluluk Listesi width=50%-->
+
+                    <!-- -------------------------- -->
+                    <!--    TOPLULUK SONUÇLARI      -->
+                    <!-- -------------------------- -->
                     <div id="search_result_communities" class="tab-pane fade active in">
                         <div class="ge-community-left-sidebar col-md-2 col-sm-3">
                             <div class="ge-left-sidebar-filter">
@@ -42,13 +45,13 @@
                                                 <label><input type="radio" name="filter-type" id="tumu" value="tümü" checked> İsme Göre </label>
                                             </div>
                                             <div class="radio">
-                                                <label><input type="radio" name="filter-type" id="kultur-sanat" value="kültür-sanat"> Üye Sayısına Göre </label>
+                                                <label><input type="radio" name="filter-type" id="sort-by-member-count" value="sort-by-member-count" disabled="true"> Üye Sayısına Göre </label>
                                             </div>
                                             <div class="radio">
-                                                <label><input type="radio" name="filter-type" id="spor-gezi-aktivite" value="spor-gezi-aktivite"> Etkinlik Sayısına Göre</label>
+                                                <label><input type="radio" name="filter-type" id="sort-by-event-count" value="sort-by-event-count" disabled="true"> Etkinlik Sayısına Göre</label>
                                             </div>
                                             <div class="radio">
-                                                <label><input type="radio" name="filter-type" id="bilim-teknoloji" value="bilim-teknoloji"> Yeniler </label>
+                                                <label><input type="radio" name="filter-type" id="sort-by-newest" value="sort-by-newest" disabled="true"> Yeniler </label>
                                             </div>
                                         </form>
                                     </div>
@@ -59,8 +62,8 @@
                                     <div class="ge-filter-form-area">
                                         <form action="">
                                             <select class="form-control">
-                                                <option>Tüm Üniversiteler <span>(23)</span></option>
-                                                <option>Bilkent Üniversitesi <span>(9)</span></option>
+                                                <option>Tüm Üniversiteler <span>({{ universityCommunityCount }})</span></option>
+                                                <option>Bilkent Üniversitesi <span>({{ universityCommunityCount }})</span></option>
                                             </select>
                                         </form>
                                     </div>
@@ -75,7 +78,7 @@
                                     <i class="fa fa-flag-o"></i>
                                     <span>Topluluklar</span>
                                 </div>
-                                <div class="row">
+                                <div id="search_result_community_list" class="row">
                                     {% for community in communityList %}
                                         <div class="col-sm-12">
                                             <div class="ge-horizontal-item-box">
@@ -94,8 +97,8 @@
 
                                                     <div class="col-md-9 col-sm-8">
                                                         <div class="ge-community-text-container">
-                                                            <h4 class="ge-events-community-title"><a href="#">{{ community.name }}</a></h4>
-                                                            <small class="text-alt company"> {{ community.university.name }}</small>
+                                                            <h4 class="ge-events-community-title"><a href="{{ community.homepagelink }}">{{ community.name }}</a></h4>
+                                                            <small class="text-alt company"> {{ community.universityName }}</small>
                                                         </div>
                                                         <div class="ge-community-add-btn">
                                                             <button class="btn btn-outline-clr"><span>Topluluğa Katıl</span></button>
@@ -107,14 +110,14 @@
                                                 <div class="ge-event-box-footer">
                                                     <div class="ge-event-box-footer-stats">
                                                         <ul class="list-inline">
-                                                            <li><i class="fa fa-group"></i>456 <span>Kayıtlı Üye</span></li>
-                                                            <li><a href="#" title=""><i class="fa fa-calendar-check-o"></i>17 <span>Aktif Etkinlik</span></a></li>
+                                                            <li><i class="fa fa-group"></i>{{ community.memberCount }} <span>Kayıtlı Üye</span></li>
+                                                            <li><a href="{{ community.homepagelink }}" title=""><i class="fa fa-calendar-check-o"></i>{{ community.eventCount }}<span> Etkinlik</span></a></li>
                                                         </ul>
                                                     </div>
                                                     <div class="ge-event-box-footer-btn">
                                                         <ul>
-                                                            <li><a href="#" title="Paylaş" rel="tooltip"><i class="fa fa-share-alt"></i></a></li>
-                                                            <li><a href="#" title="Kaydet" rel="tooltip"><i class="fa fa-bookmark-o"></i></a></li>
+                                                            {#<li><a href="#" title="Paylaş" rel="tooltip"><i class="fa fa-share-alt"></i></a></li>#}
+                                                            {#<li><a href="#" title="Kaydet" rel="tooltip"><i class="fa fa-bookmark-o"></i></a></li>#}
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -126,6 +129,10 @@
                         </div>
                     </div>
 
+
+                    <!-- -------------------------- -->
+                    <!--    ETKİNLİK SONUÇLARI      -->
+                    <!-- -------------------------- -->
                     <div id="search_result_events" class="tab-pane ">
                         <div class="ge-community-left-sidebar col-md-2 col-sm-3">
                             <div class="ge-left-sidebar-filter">
@@ -134,13 +141,13 @@
                                     <div class="ge-filter-form-area">
                                         <form action="">
                                             <div class="radio">
-                                                <label><input type="radio" name="filter-by" id="herkes" value="herkes" checked> Herkes </label>
+                                                <label><input type="radio" name="filter-by" id="herkes" value="herkes" checked> Yakın Tarihtekiler </label>
                                             </div>
                                             <div class="radio">
-                                                <label><input type="radio" name="filter-by" id="kendim" value="kendim"> Kendim </label>
+                                                <label><input type="radio" name="filter-by" id="kendim" value="kendim" disabled=true> En Çok Takip Edilenler </label>
                                             </div>
                                             <div class="radio">
-                                                <label><input type="radio" name="filter-by" id="haric" value="haric"> Benim Dışımda </label>
+                                                <label><input type="radio" name="filter-by" id="haric" value="haric" disabled=true> Takip Ettiklerim </label>
                                             </div>
                                         </form>
                                     </div>
@@ -151,7 +158,6 @@
                                         <form action="">
                                             <select class="form-control">
                                                 <option>2017</option>
-                                                <option>2016</option>
                                             </select>
                                         </form>
                                     </div>
@@ -162,13 +168,7 @@
                                         <form action="">
                                             <select class="form-control">
                                                 <option>Tüm Yerler</option>
-                                                <option>Ankara</option>
-                                                <option>İstanbul</option>
-                                                <option>İzmir</option>
-                                                <option>Kocaeli</option>
-                                                <option>Samsun</option>
-                                                <option>Trabzon</option>
-                                                <option>Mersin</option>
+                                                {#<option>Ankara</option>#}
                                             </select>
                                         </form>
                                     </div>
@@ -182,9 +182,9 @@
                                     <i class="fa fa-calendar-check-o"></i>
                                     <span>Etkinlikler</span>
                                 </div>
-                                <div class="row">
+                                <div id="search_result_event_list" class="row">
                                     {% for event in eventList %}
-                                        <div class="col-sm-12">
+                                        <div class="col-sm-12 event-main-box" data-event-id="{{ event.id }}">
                                             <div class="ge-horizontal-item-box">
                                                 <div class="ge-horizontal-item-box-content">
                                                     <div class="col-md-4 col-sm-5">
@@ -201,16 +201,16 @@
                                                     <div class="col-md-8 col-sm-7">
                                                         <div class="ge-community-text-container">
                                                                 <span class="ge-events-box-date">
-                                                                    10.02.2017 / 13:30 - 14:30
+                                                                    {{ event.startDate }}
                                                                 </span>
                                                             <h5 class="ge-events-box-title">
-                                                                <a href="{{ path('user_event_mainpage' , {'eventId':event.id}) }}" title="{{ event.title }}">{{ event.title }}</a>
+                                                                <a href="{{ event.homepagelink }}" title="{{ event.title }}">{{ event.title }}</a>
                                                             </h5>
-                                                            <span class="ge-events-box-location"><a href=""  title="Harita için tıklayın" rel="tooltip" data-modal-link="ge-event-location"><i class="fa fa-map-marker"></i>Yıldırım Beyazıt Üniversitesi Bilkent Kampüsü Rektörlük Binası</a></span>
-                                                            <span class="ge-events-registered"><i class="fa fa-group"></i>122 <span>Kişi kaydoldu</span></span>
+                                                            <span class="ge-events-box-location"><a href=""  title="Harita için tıklayın" rel="tooltip" data-modal-link="ge-event-location"><i class="fa fa-map-marker"></i>Etkinlik Adresi</a></span>
+                                                            <span class="ge-events-registered"><i class="fa fa-group"></i> {{ event.userSaveCount }} <span>Kişi takipte</span></span>
                                                         </div>
                                                         <div class="ge-community-add-btn">
-                                                            <button class="btn btn-outline-clr"><span>Kaydol</span></button>
+                                                            {#<button class="btn btn-outline-clr"><span>Kaydol</span></button>#}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -225,7 +225,7 @@
                                                     <div class="ge-event-box-footer-btn">
                                                         <ul>
                                                             <li><a href="#" title="Paylaş" rel="tooltip"><i class="fa fa-share-alt"></i></a></li>
-                                                            <li><a href="#" title="Kaydet" rel="tooltip"><i class="fa fa-bookmark-o"></i></a></li>
+                                                            <li><a href="#" title="Kaydet" rel="tooltip" class="search-event-box"><i class="fa {% if event.isSaved is defined and event.isSaved %}fa-bookmark{% else %}fa-bookmark-o{% endif %} "></i></a></li>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -237,98 +237,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- DEPRECIATED -->
-            <div style="display: none;">
-                <h6 class="heading-alt">Arama Sonuçları Etkinlikler</h6>
-
-                <div class="col-md-10 col-md-offset-1">
-
-                    <!-- Search Results start -->
-                    <div class="row schedule schedule-light">
-
-                        <!-- Search Result Navigation -->
-                        <ul class="nav nav-schedule">
-                            <li class="active" style="width: 50%;"><a href="#search_result_communities" data-toggle="tab">Topluluklar</a></li>
-                            <li style="width: 50%;"><a href="#search_result_events" data-toggle="tab">Etkinlikler</a></li>
-                            {#<li style="width: 30%;"><a href="#search_result_others" data-toggle="tab">Diğer</a></li>#}
-                        </ul>
-                        <!-- Navigation end -->
-
-                        <div class="tab-content">
-
-                            <!-- Topluluk Listesi width=50%-->
-                            <div id="search_result_communities" class="tab-pane fade active in">
-                                {% for community in communityList %}
-                                    <div class="col-sm-12">
-                                        <div class="testimonial profile-community-body" style="border: 1px solid #ccc!important;">
-                                            <div class="author-block">
-                                                <div class="photo-container">
-                                                    {% if community.imageBase64 %}
-                                                        <img src="{{ community.imageBase64 }}" alt="{{ community.name }}" class="img-responsive" />
-                                                    {% else %}
-                                                        {% image 'theme/assets/img/guppy_avatar_001.png' %}
-                                                            <img src="{{ asset_url }}" class="img-responsive" alt="{{ community.name }}" />
-                                                        {% endimage %}
-                                                    {% endif %}
-                                                </div>
-
-                                                <strong class="name"><a href="{{ path('user_community_users_homepage' , {'communityId':community.id}) }}">{{ community.name }} </a></strong>
-                                                <small class="text-alt company"> {{ community.university.name }}</small>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            </div>
-
-
-                            <!-- Etkinlik Listesi width=50%-->
-                            <div id="search_result_events" class="tab-pane fade in">
-                                {% for event in eventList %}
-                                    <div class="col-sm-12">
-                                        <div class="testimonial profile-community-body" data-event-id="{{ event.id }}" style="border: 1px solid #ccc!important;">
-                                            <div class="author-block">
-                                                <div class="photo-container">
-                                                    {% if event.imageBase64 %}
-                                                        <img src="{{ event.imageBase64 }}" alt="{{ event.title }}" class="img-responsive" style="width: inherit; height: inherit;"/>
-                                                    {% else %}
-                                                        {% image 'theme/assets/img/guppy_avatar_001.png' %}
-                                                            <img src="{{ asset_url }}" class="img-responsive" alt="{{ event.title }}" style="width: inherit; height: inherit;"/>
-                                                        {% endimage %}
-                                                    {% endif %}
-                                                </div>
-
-                                                <strong class="name"><a href="{{ path('user_event_mainpage' , {'eventId':event.id}) }}">{{ event.title }} </a></strong>
-                                                <small class="text-alt company">{{ event.communityName }}</small>
-                                                <br/>
-                                                <small class="text-alt company">{{ event.userSaveCount }} kişi gelmeyi düşünüyor</small>
-                                            </div>
-                                            {% if event.isSaved is defined %}
-                                                {% if event.isSaved==true %}
-                                                    <div class="profile-community-box-edit-parent"><span class="search-box-edit search-event-box" data-modal-link="community-background-image"><i class="fa fa-check-circle-o" aria-hidden="true"></i> Kaydet</span></div>
-                                                {% else %}
-                                                    <div class="profile-community-box-edit-parent"><span class="search-box-edit search-event-box" data-modal-link="community-background-image"><i class="fa fa-circle-o" aria-hidden="true"></i> Kaydet</span></div>
-                                                {% endif %}
-                                            {% else %}
-                                                <div class="profile-community-box-edit-parent"><span class="search-box-edit search-event-box" data-modal-link="community-background-image"><i class="fa fa-circle-o" aria-hidden="true"></i> Kaydet</span></div>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            </div>
-
-                            <!-- Kullanıcılar Listesi width=0%-->
-                            <div id="search_result_others" class="tab-pane fade in">
-                                Bu alanda kullanıcı sonuçları yer alacak ...
-                            </div>
-                        </div>
-
-                    </div>
-                    <!-- Search Results end -->
-
                 </div>
             </div>
 
@@ -349,6 +257,104 @@
         var search_key = '{% if search_key is defined %}{{ search_key }}{% endif %}';
         var communityPage=1, eventPage=1
 
+
+        function appendCommunity(community){
+            $('#search_result_community_list').append(
+                    '<div class="col-sm-12">'+
+                        '<div class="ge-horizontal-item-box">'+
+                            '<div class="ge-horizontal-item-box-content">'+
+                                '<div class="col-md-3 col-sm-4">'+
+                                    '<div class="ge-community-photo-container">'+
+                                        '<img src="' + community['imageBase64']+'" alt="'+community['name']+'" class="img-responsive" />'+
+                                    '</div>'+
+                                '</div>'+
+
+                                '<div class="col-md-9 col-sm-8">'+
+                                    '<div class="ge-community-text-container">'+
+                                        '<h4 class="ge-events-community-title"><a href="'+community['homepagelink']+'">' + community['name'] +'</a></h4>' +
+                                        '<small class="text-alt company">'+community['universityName']+'</small>' +
+                                    '</div>'+
+                                    '<div class="ge-community-add-btn">' +
+                                        '<button class="btn btn-outline-clr"><span>Topluluğa Katıl</span></button>'+
+                                    '</div>'+
+                                '</div>' +
+                            '</div>' +
+
+                            '<div class="clearfix"></div>' +
+                                '<div class="ge-event-box-footer">'+
+                                    '<div class="ge-event-box-footer-stats">'+
+                                        '<ul class="list-inline">' +
+                                            '<li><i class="fa fa-group"></i>'+ community['memberCount']+'<span>Kayıtlı Üye</span></li>'+
+                                            '<li><a href="'+community['homepagelink']+'" title=""><i class="fa fa-calendar-check-o"></i>'+community['eventCount']+'<span> Etkinlik</span></a></li>'+
+                                        '</ul>'+
+                                    '</div>'+
+
+                                    '<div class="ge-event-box-footer-btn">'+
+                                        '<ul>'+
+                                            '<li><a href="#" title="Paylaş" rel="tooltip"><i class="fa fa-share-alt"></i></a></li>'+
+                                            '<li><a href="#" title="Kaydet" rel="tooltip"><i class="fa fa-bookmark-o"></i></a></li>'+
+                                        '</ul>' +
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>'
+            );
+        }
+
+
+        function appendEvent(event){
+
+            saveButtonElem = '';
+            if(event['isSaved']){
+                saveButtonElem = 'fa-bookmark';
+            }else{
+                saveButtonElem = 'fa-bookmark-o';
+            }
+
+            $('#search_result_event_list').append(
+                    '<div class="col-sm-12 event-main-box" data-event-id="' + event['id'] + '">' +
+                        '<div class="ge-horizontal-item-box">' +
+                            '<div class="ge-horizontal-item-box-content">' +
+                                '<div class="col-md-4 col-sm-5">' +
+                                    '<div class="ge-event-photo-container">' +
+                                        '<img src="' + event['imageBase64'] + '" alt="'+event['title']+'" class="img-responsive" style="width: inherit; height: inherit;"/>' +
+                                    '</div>' +
+                                '</div>' +
+
+                                '<div class="col-md-8 col-sm-7">' +
+                                    '<div class="ge-community-text-container">' +
+                                        '<span class="ge-events-box-date">' + event['startDate'] + '</span>' +
+                                        '<h5 class="ge-events-box-title">' +
+                                            '<a href="' + event['homepagelink'] + '" title="' + event['title'] + '">' + event['title'] + '</a>' +
+                                        '</h5>'+
+                                        '<span class="ge-events-box-location"><a href="#"  title="Harita için tıklayın" rel="tooltip" data-modal-link="ge-event-location"><i class="fa fa-map-marker"></i>Etkinlik Adresi</a></span>' +
+                                        '<span class="ge-events-registered"><i class="fa fa-group"></i>' + event['userSaveCount'] + '<span>Kişi takipte</span></span>' +
+                                    '</div>'+
+
+                                    '<div class="ge-community-add-btn"></div>' +
+                                '</div>' +
+                            '</div>' +
+
+                            '<div class="clearfix"></div>' +
+                                '<div class="ge-event-box-footer">' +
+                                    '<div class="ge-event-box-footer-tags">' +
+                                        '<ul class="list-inline">' +
+                                            '<li><a href="#" title="">#bilkent</a></li>' +
+                                            '<li><a href="#" title="">#etkinlik</a></li>' +
+                                        '</ul>' +
+                                    '</div>' +
+
+                                    '<div class="ge-event-box-footer-btn">' +
+                                        '<ul>' +
+                                            '<li><a href="#" title="Paylaş" rel="tooltip"><i class="fa fa-share-alt"></i></a></li>' +
+                                            '<li><a href="#" title="Kaydet" rel="tooltip" class="search-event-box"><i class="fa '+saveButtonElem+'"></i></a></li>' +
+                                        '</ul>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>'
+            );
+        }
 
     /*******************************************************************************************************************
      *                                          AJAX OPERATIONS
@@ -378,48 +384,15 @@
                     if(data.content){
 
                         if(searchFrom=='community'){
-                            data.content.communityList.forEach(function(community) {
-                                $('#search_result_communities').append(
-                                    '<div class="col-sm-12">' +
-                                        '<div class="testimonial profile-community-body" style="border: 1px solid #ccc!important;">' +
-                                            '<div class="author-block">' +
-                                                '<div class="photo-container">' +
-                                                    '<img src="' + community['image']+'" alt="'+community['name']+'" class="img-responsive" />'+
-                                                '</div>' +
 
-                                            '<strong class="name"><a href="/community/home/'+community['id']+'">'+community['name']+'</a></strong>' +
-                                            '<small class="text-alt company">' + 'universite ismi' + '</small>' +
-                                            '</div>' +
-                                        '</div>' +
-                                    '</div>'
-                                );
+                            data.content.communityList.forEach(function(community) {
+                                appendCommunity(community);
                             });
+
                         }else if(searchFrom=='event'){
 
                             data.content.eventList.forEach(function(event) {
-
-                                saveButtonElem = '';
-                                if(event['isSaved']){
-                                    saveButtonElem = '<div class="profile-community-box-edit-parent"><span class="search-box-edit search-event-box" data-modal-link="community-background-image"><i class="fa fa-check-circle-o" aria-hidden="true"></i> Kaydet</span></div>';
-                                }else{
-                                    saveButtonElem = '<div class="profile-community-box-edit-parent"><span class="search-box-edit search-event-box" data-modal-link="community-background-image"><i class="fa fa-circle-o" aria-hidden="true"></i> Kaydet</span></div>';
-                                }
-
-                                eventDivElem =  '<div class="col-sm-12">' +
-                                                    '<div class="testimonial profile-community-body" data-event-id="'+event['id']+'" style="border: 1px solid #ccc!important;">' +
-                                                        '<div class="author-block">' +
-                                                            '<div class="photo-container">' +
-                                                                '<img src="' + event['imageBase64']+'" alt="'+event['title']+'" class="img-responsive" style="width: inherit; height: inherit;"/>' +
-                                                            '</div>' +
-                                                        '<strong class="name"><a href="/event/h/'+event['id']+'">'+event['title']+'</a></strong>' +
-                                                        '<small class="text-alt company">' + 'topluluk ismi @ universite ismi' + '</small><br/>' +
-                                                        '<small class="text-alt company">' + event['userSaveCount'] + ' kişi gelmeyi düşünüyor</small>'+
-                                                        '</div>' +
-                                                        saveButtonElem +
-                                                    '</div>' +
-                                                '</div>';
-
-                                $('#search_result_events').append(eventDivElem);
+                                appendEvent(event);
                             });
                         }
                     }
@@ -441,8 +414,8 @@
         function ajaxSocialSaveEvent(eventTarget){
 
             // -- 1 --
-            eventId = $(eventTarget).parentsUntil('.profile-community-body').last().parent().attr('data-event-id');
-            isSaved = $(eventTarget).find('.fa-check-circle-o').length>0;
+            eventId = $(eventTarget).parentsUntil('.event-main-box').last().parent().attr('data-event-id');
+            isSaved = $(eventTarget).parent().find('.fa-bookmark').length>0;
 
             // -- 2 --
             $.post("{{ path('social_event_rating') }}" ,{
@@ -460,10 +433,10 @@
                 if(data.resultText == 'SUCCESS'){
 
                     if(data.content['saved']){
-                        $(eventTarget).parent().find('.fa-circle-o').addClass('fa-check-circle-o').removeClass('fa-circle-o');
+                        $(eventTarget).parent().find('.fa-bookmark-o').addClass('fa-bookmark').removeClass('fa-bookmark-o');
                         toastr.success('Etkinlik takipte');
                     }else{
-                        $(eventTarget).parent().find('.fa-check-circle-o').addClass('fa-circle-o').removeClass('fa-check-circle-o');
+                        $(eventTarget).parent().find('.fa-bookmark').addClass('fa-bookmark-o').removeClass('fa-bookmark');
                         toastr.success('Etkinlik takibi bırakıldı');
                     }
 
@@ -485,7 +458,6 @@
         // ekranda aşağıya gidildikçe bir sonraki sayfaların gelmesi işlemidir
         $(window).scroll(function(){
             if($(document).height()==$(window).scrollTop()+$(window).height()){
-
                 if($('#search_result_communities').hasClass('active')){
                     ++communityPage;
                     ajaxGetMoreSearchResult('community',search_key,communityPage)

@@ -12,6 +12,64 @@ use Doctrine\ORM\EntityRepository;
 class CommunityRepository extends EntityRepository
 {
 
+
+    /**
+     *
+     * @param string $keyValue The community name key value
+     * @return Community|null
+     */
+    public function searchCommunityListWithEventCount($keyValue , $page=1 ,$pageSize=10)
+    {
+
+        // topluluğun etklinlik sayısı && kayıtlı üye sayısı dönülecek
+        $em = $this->getEntityManager();
+        $query = $em->createQuery(
+            'SELECT community.name, community.id, community.imageBase64, university.name as universityName, COUNT(community.id) as eventCount
+                FROM AppBundle:Community community
+                JOIN AppBundle:University university WITH university=community.university
+                JOIN AppBundle:CommunityUser communityUser WITH communityUser.community=community.id
+                JOIN AppBundle:Event event WITH event.communityUser=communityUser.id
+                WHERE university.id = :universityId and community.isApproved = true and community.name LIKE :nameKeyValue
+                GROUP By community.id
+                ORDER BY community.name ASC
+                '
+        )->setParameters(array(
+            'universityId' => 5,
+            'nameKeyValue' => '%'.$keyValue.'%'
+        ));
+
+        $query->setFirstResult($pageSize * ($page - 1));
+        $query->setMaxResults( $pageSize );
+        return $query->getResult();
+    }
+
+
+    /**
+     *
+     * @param int $communityId The community id value
+     * @return int|null
+     */
+    public function findUserCountByCommunity($communityId)
+    {
+
+        $em = $this->getEntityManager();
+        $roleState = $em->getRepository('AppBundle:CommunityUserRoleState')->findAcceptState();
+        $query = $em->createQuery(
+            'SELECT COUNT(community.id) as memberCount
+                    FROM AppBundle:Community community
+                    JOIN AppBundle:CommunityUser communityUser WITH communityUser.community=community.id
+                    JOIN AppBundle:CommunityUserRoles communityUserRoles WITH communityUserRoles.communityUser=communityUser.id
+                    WHERE communityUserRoles.state = :roleState and community.id = :communityId
+                '
+        )->setParameters(array(
+            'communityId' => $communityId,
+            'roleState' => $roleState
+        ));
+
+        return isset($query->getOneOrNullResult()['memberCount']) ? $query->getOneOrNullResult()['memberCount'] : 0;
+    }
+
+
     /**
      *
      * @param string $keyValue The community name key value
