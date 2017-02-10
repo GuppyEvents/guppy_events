@@ -125,9 +125,9 @@ nginx:
     upstreams: {  }
     vhosts:
         nxv_aotjvxpjlapk:
-            server_name: local.guppy.com.tr
+            server_name: local.seruvent.com.tr
             server_aliases:
-                - www.local.guppy.com.tr
+                - www.local.seruvent.com.tr
             www_root: /var/www/events/web
             listen_port: '80'
             client_max_body_size: 1m
