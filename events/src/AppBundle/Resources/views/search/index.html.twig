@@ -184,7 +184,7 @@
                                 </div>
                                 <div id="search_result_event_list" class="row">
                                     {% for event in eventList %}
-                                        <div class="col-sm-12 event-main-box" data-event-id="{{ event.id }}">
+                                        <div class="col-sm-12 event-main-box" data-event-id="{{ event.id }}" data-link="{{ event.homepagelink }}" data-title="{{ event.title }}">
                                             <div class="ge-horizontal-item-box">
                                                 <div class="ge-horizontal-item-box-content">
                                                     <div class="col-md-4 col-sm-5">
@@ -224,7 +224,7 @@
                                                     </div>
                                                     <div class="ge-event-box-footer-btn">
                                                         <ul>
-                                                            <li><a title="Paylaş" rel="tooltip"><i class="fa fa-share-alt"></i></a></li>
+                                                            <li><a title="Paylaş" rel="tooltip" class="shareLink"><i class="fa fa-share-alt"></i></a></li>
                                                             <li><a title="Kaydet" rel="tooltip" class="search-event-box"><i class="fa {% if event.isSaved is defined and event.isSaved %}fa-bookmark{% else %}fa-bookmark-o{% endif %} "></i></a></li>
                                                         </ul>
                                                     </div>
@@ -242,6 +242,41 @@
 
         </div>
     </section>
+
+
+    <!-- SHARE MODAL -->
+    <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 1111;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h6 class="modal-title">Arkadaşlarınla Paylaş !</h6>
+
+                </div>
+                <div class="modal-body" style="background-color: #CCCCCC;">
+                    <div class="te">
+                        <ul class="socials-nav" style="position: inherit!important;">
+                            <li class="socials-nav-item" data-social-share="twitter" ><a href="#"><span class="fa fa-twitter"></span></a></li>
+                            <li class="socials-nav-item" data-social-share="facebook" ><a href="#"><span class="fa fa-facebook"></span></a></li>
+                        </ul>
+
+                        <div style="padding-left: 5%; padding-right: 5%;">
+                            <input id="shareModalInput" name="shareModalInput" type="url" value=""/>
+                            <input id="shareModalTitleInput" name="shareModalTitleInput" type="text" value="" style="display:none;"/>
+                        </div>
+
+                        <a id="share-seruvent-on-twitter" class="twitter-share-button" target="_blank"
+                           href="https://twitter.com/intent/tweet?"></a>
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 
 {% endblock %}
 
@@ -473,6 +508,39 @@
         // Etkinlikte kaydet tıklanması durumudur
         $(document).on('click' , '.search-event-box' , function (event) {
             ajaxSocialSaveEvent(event.target);
+        });
+
+        // paylaş butonu tıklanıldığında
+        $(document).on('click', '.shareLink',function(event){
+            console.log()
+            $('#shareModalInput').val($(event.target).parentsUntil('.event-main-box').last().parent().attr('data-link'));
+            $('#shareModalTitleInput').val($(event.target).parentsUntil('.event-main-box').last().parent().attr('data-title'));
+            $('#shareModal').modal('show');
+        });
+
+        // paylaşılacak sosyal ağ seçildiğinde
+        $(document).on('click', '.socials-nav-item',function(event){
+    
+            social =  $(event.target).parentsUntil('li').last().parent().attr('data-social-share');
+            switch(social) {
+                case 'facebook':
+                    $('#shareModal').modal('hide');
+                    var win = window.open('https://www.facebook.com/sharer/sharer.php?u='+$('#shareModalInput').val(), '_blank');
+                    win.focus();
+                    break;
+
+                case 'twitter':
+                    twitterlink = 'https://twitter.com/intent/tweet?';
+                    parameters = '&url=' + $('#shareModalInput').val();
+                    parameters += '&hashtags=' + 'seruvent,etkinlik';
+                    parameters += '&text=' + $('#shareModalTitleInput').val();
+
+                    $( "#share-seruvent-on-twitter" ).attr('href',twitterlink+parameters);
+                    $( "#share-seruvent-on-twitter" )[0].click();
+                    break;
+                default:
+                    break;
+            }
         });
 
     </script>

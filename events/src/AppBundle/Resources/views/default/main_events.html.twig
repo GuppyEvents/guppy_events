@@ -70,6 +70,15 @@
                                                                 </a>
                                                             </li>
                                                         {% endfor %}
+
+                                                        {% if eventDay.eventCount>eventDay.eventList|length %}
+                                                            <li class="ge-event-item more-item">
+                                                                <a id="trigger-select-day" class="ge-event-item-link" title="+{{ eventDay.eventCount - eventDay.eventList|length }} daha" rel="tooltip">
+                                                                    <span>+{{ eventDay.eventCount - eventDay.eventList|length }}</span>
+                                                                </a>
+                                                            </li>
+                                                        {% endif %}
+
                                                     </ul>
                                                 </div>
                                             </td>
@@ -323,6 +332,10 @@
             }
         });
 
+        $(document).on('click', '#trigger-select-day',function(event){
+            $(event.target).parentsUntil('td.calendar-day').last().parent().trigger('click');
+        });
+
 
         // paylaş butonu tıklanıldığında
         $(document).on('click', '.shareLink',function(event){
@@ -357,10 +370,10 @@
             }
         });
 
-    // Etkinlikte kaydet tıklanması durumudur
-    $(document).on('click' , '.search-event-box' , function (event) {
-        ajaxSocialSaveEvent(event.target);
-    });
+        // Etkinlikte kaydet tıklanması durumudur
+        $(document).on('click' , '.search-event-box' , function (event) {
+            ajaxSocialSaveEvent(event.target);
+        });
 
 
     </script>

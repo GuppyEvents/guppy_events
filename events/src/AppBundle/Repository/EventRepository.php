@@ -16,7 +16,7 @@ class EventRepository extends EntityRepository
     /**
      *
      * @param string $username The username
-     * @return UserInterface|null
+     * @return Event|null
      */
     public function findPublishEventsByCommunityId($communityId)
     {
@@ -37,7 +37,7 @@ class EventRepository extends EntityRepository
     /**
      *
      * @param string $username The username
-     * @return UserInterface|null
+     * @return Event|null
      */
     public function findEventsByCommunityId($communityId)
     {
@@ -55,7 +55,7 @@ class EventRepository extends EntityRepository
     /**
      *
      * @param array $communityIdList The community id list
-     * @return UserInterface|null
+     * @return Event|null
      */
     public function findEventsByCommunityIdList($communityIdList)
     {
@@ -72,7 +72,7 @@ class EventRepository extends EntityRepository
     /**
      *
      * @param \DateTime $datetime The date
-     * @return UserInterface|null
+     * @return Event|null
      */
     public function findEventsByDate($firstDate , $lastDate)
     {
@@ -85,22 +85,27 @@ class EventRepository extends EntityRepository
     }
 
     /**
-     *
+     * $maxResult ile ilgili tarih için kaç tane etkinlik döneceği belirlenir
+     * 
      * @param \DateTime $datetime The date
-     * @return UserInterface|null
+     * @return Event|null
      */
-    public function findPublishEventsByDate($firstDate , $lastDate)
+    public function findPublishEventsByDate($firstDate , $lastDate , $maxResult=null)
     {
         $statePublish = $this->getEntityManager()->getRepository('AppBundle:State')->findPublishState();
-        return $this->createQueryBuilder('event')
+        $query = $this->createQueryBuilder('event')
             ->join('event.state', 'state')
             ->where('event.startDate BETWEEN :targetDate AND :targetNextDate')
             ->andWhere('state.id = :statePublish')
             ->setParameter('targetDate', $firstDate)
             ->setParameter('targetNextDate', $lastDate)
-            ->setParameter('statePublish', $statePublish)
-            ->getQuery()
-            ->getResult();
+            ->setParameter('statePublish', $statePublish);
+
+        if($maxResult){
+            $query->setMaxResults($maxResult);
+        }
+
+        return $query->getQuery()->getResult();
     }
 
 
