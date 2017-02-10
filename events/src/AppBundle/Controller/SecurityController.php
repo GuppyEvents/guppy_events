@@ -23,13 +23,10 @@ class SecurityController extends Controller
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
-
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
-        
-        if($this->getUser() && $this->getUser()->getId() && $this->getUser()->getRole()=='ROLE_ADMIN'){
-            return $this->redirectToRoute('admin_homepage');
-        }else if($this->getUser()){
+
+        if($this->getUser()){
             return $this->redirectToRoute('home_events');
         }
 
