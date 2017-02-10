@@ -73,7 +73,7 @@
 
                                                         {% if eventDay.eventCount>eventDay.eventList|length %}
                                                             <li class="ge-event-item more-item">
-                                                                <a id="trigger-select-day" class="ge-event-item-link" title="+4 daha" rel="tooltip">
+                                                                <a id="trigger-select-day" class="ge-event-item-link" title="+{{ eventDay.eventCount - eventDay.eventList|length }} daha" rel="tooltip">
                                                                     <span>+{{ eventDay.eventCount - eventDay.eventList|length }}</span>
                                                                 </a>
                                                             </li>
