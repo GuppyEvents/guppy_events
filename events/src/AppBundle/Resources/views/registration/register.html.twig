@@ -170,12 +170,13 @@
 
             function statusChangeCallback(response){
                 if (response.status === 'connected') {
-                    if(response.authResponse.grantedScopes.indexOf("email") !=-1 ) {
-                        registerUser(response);
-                    }else{
-                        facebook_asked = true;
-                        registerUser(response);
-                        alert("Sitemizi kullanabilmeniz için email adresinizi bizimle paylaşmanız gerekmektedir.")
+                    if(response.authResponse.grantedScopes){//izin sorulduysa
+                        if(response.authResponse.grantedScopes.indexOf("email") !=-1 ) {
+                            registerUser(response);
+                        }else{
+                            facebook_asked = true;
+                            registerUser(response);
+                            alert("Sitemizi kullanabilmeniz için email adresinizi bizimle paylaşmanız gerekmektedir.")
 //                        if(facebook_asked == false) {
 //                            FB.login(function (response) {
 //                                statusChangeCallback(response);
@@ -186,6 +187,10 @@
 //                            });
 //                            facebook_asked = true;
 //                        }
+                        }
+                    }else{
+                        alert("Zaten kayıtlısınız lütfen giriş yapınız.");
+                        window.href="login";
                     }
                 } else if (response.status === 'not_authorized') {
                     // The person is logged into Facebook, but not your app.
