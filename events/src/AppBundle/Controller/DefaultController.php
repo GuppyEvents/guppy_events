@@ -246,7 +246,8 @@ class DefaultController extends Controller
                 $eventMain = array();
                 $eventMain['a'] = 'a';
                 $eventMain['eventDate'] = clone $dayOne;
-                $eventMain['eventList'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findPublishEventsByDate( $dayOne,$dayTwo);
+                $eventMain['eventCount'] = count($this->getDoctrine()->getRepository('AppBundle:Event')->findPublishEventsByDate( $dayOne,$dayTwo));
+                $eventMain['eventList'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findPublishEventsByDate( $dayOne,$dayTwo,5);
 
                 if($currentDay<=$dayOne){
                     $eventMain['isFuture'] = true;
