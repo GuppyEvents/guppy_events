@@ -10,9 +10,9 @@ There are a few pre-requisites before you can begin guppy event web application 
   * ```vagrant up```
   
 3. Third, you must add the following hostname to your hosts file (**/etc/hosts**)
-  * ```192.168.56.101  local.guppy.com.tr  www.local.guppy.com.tr```
+  * ```192.168.56.101  local.seruvent.com  www.local.seruvent.com```
 
-4. Forth … well, that's all you need, really. You can call **local.guppy.com.tr** from your browser to see guppy event web application ;)
+4. Forth … well, that's all you need, really. You can call **local.seruvent.com** from your browser to see guppy event web application ;)
 
 
 <br /><br />
