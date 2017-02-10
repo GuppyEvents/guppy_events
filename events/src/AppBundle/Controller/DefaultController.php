@@ -25,6 +25,17 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/404", name="error_404")
+     */
+    public function pegeNotFoundAction(Request $request)
+    {
+        $data = array();
+        $data['referer'] = $request->headers->get('referer') ? $request->headers->get('referer') : $this->get('router')->generate('homepage');
+        $data['content'] = '' ;
+        return $this->render('AppBundle:error:error.html.twig',$data);
+    }
+
+    /**
      * @Route("/", name="homepage")
      */
     public function homeAction(Request $request)
