@@ -97,7 +97,7 @@
                                         <ul class="dropdown-menu">
                                             <li class="navigation-item"><a href="{{ path('user_profile_account') }}" class="navigation-link">Profil</a></li>
                                             {% if app.user.role == 'ROLE_ADMIN' %}
-                                                <li class="navigation-item"><a href="{{ path("login") }}" class="navigation-link">Yönetim Sayfası</a></li>
+                                                <li class="navigation-item"><a href="{{ path("admin_homepage") }}" class="navigation-link">Yönetim Sayfası</a></li>
                                             {% endif %}
                                             <li class="navigation-item"><a href="{{ path('logout') }}" class="navigation-link">Çıkış</a></li>
                                         </ul>
