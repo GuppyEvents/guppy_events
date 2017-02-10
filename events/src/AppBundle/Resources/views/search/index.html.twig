@@ -520,7 +520,7 @@
 
         // paylaşılacak sosyal ağ seçildiğinde
         $(document).on('click', '.socials-nav-item',function(event){
-    
+
             social =  $(event.target).parentsUntil('li').last().parent().attr('data-social-share');
             switch(social) {
                 case 'facebook':
