@@ -282,7 +282,6 @@ class DefaultController extends Controller
         $today->setTime(0,0);
         $tomorrow = clone $today;
         $tomorrow->add(new \DateInterval("P1D"));
-        $data['todayEvents'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findPublishEventsByDate( $today,$tomorrow);
         $data['todayDate'] = $today;
         $data['hasCommunityAdminRole'] = $this->getDoctrine()->getRepository('AppBundle:User')->hasUserCommunityAdmin($this->getUser());
 
