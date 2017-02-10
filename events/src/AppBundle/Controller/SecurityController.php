@@ -2,8 +2,10 @@
 
 namespace AppBundle\Controller;
 
+use Monolog\Handler\Curl\Util;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Utils;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -41,6 +43,89 @@ class SecurityController extends Controller
             'AppBundle:security:login.html.twig',
             $data
         );
+    }
+
+    /**
+     * @Route("/forgotPassword", name="forgotPassword")
+     */
+    public function forgotPasswordAction(Request $request)
+    {
+        $data = array();
+        array_merge($data,Utils::getSessionToastMessages());
+
+        if($request->isMethod('POST')){
+            $email = $request->get("email");
+            if($email){
+                $em = $this->getDoctrine()->getManager();
+                $user = $em->getRepository('AppBundle:User')->findOneBy(array("email" => $email));
+                if($user){
+                    $link = $this->createForgotPasswordLink($user);
+                    Utils::mailSendSingle($user->getEmail(), "Şifre Resetleme", "Merhaba " . $user->getName() . ",\n\rŞifreni değiştirmek için aşağıdaki linke tıklayabilirsin.\n\r" . $link);
+                    $_SESSION['success_message'] = "Şifre değiştirme linkiniz mail adresinize gönderilmiştir.";//redirect edilen sayfada mesaj gosterilmesi için sessiona mesaj atanır
+                    return $this->redirectToRoute('home_events');
+                }else{
+                    $_SESSION['error_message'] = "İşlem gerçekleştirilemedi.";//redirect edilen sayfada mesaj gosterilmesi için sessiona mesaj atanır
+                }
+            }else{
+                $_SESSION['error_message'] = "İşlem gerçekleştirilemedi.";//redirect edilen sayfada mesaj gosterilmesi için sessiona mesaj atanır
+            }
+        }
+        return $this->render(
+            'AppBundle:security:forgot_password.html.twig',
+            $data
+        );
+    }
+
+    /**
+     * @Route("/forgotPasswordChange", name="forgotPasswordChange")
+     */
+    public function forgotPasswordChangeAction(Request $request)
+    {
+        $data = array();
+        $data = array_merge($data, Utils::getSessionToastMessages());
+        $token = $request->get("token");
+        try{
+            if($request->isMethod("POST")) {
+                $token = base64_decode($token);
+                $id = substr($token, 0, strpos($token, "**"));
+                $pass = substr($token, strpos($token, "**") + 2);
+                $em = $this->getDoctrine()->getManager();
+                $user = $em->getRepository('AppBundle:User')->find($id);
+                if ($user && $user->getPassword() == $pass) {
+                    if($request->get("password")) {
+                        $password = $this->get('security.password_encoder')
+                            ->encodePassword($user, $request->get("password"));
+                        $user->setPassword($password);
+                        $em->persist($user);
+                        $em->flush();
+                        $_SESSION['success_message'] = "Şifreniz başarıyla değiştirilmiştir.";//redirect edilen sayfada mesaj gosterilmesi için sessiona mesaj atanır
+                        return $this->redirectToRoute('home_events');
+                    }else{
+                        $data = array("error_msg" => "Şifre boş bırakılamaz.");
+                        return $this->render(
+                            'AppBundle:security:forgot_password_change.html.twig',
+                            $data
+                        );
+                    }
+                } else {
+                    $_SESSION['error_message'] = "İşlem gerçekleştirilemedi.";//redirect edilen sayfada mesaj gosterilmesi için sessiona mesaj atanır
+                    return $this->redirectToRoute('forgotPassword');
+                }
+            }else{
+                return $this->render(
+                    'AppBundle:security:forgot_password_change.html.twig'
+                );
+            }
+        }catch (Exception $e){
+            $_SESSION['error_message'] = "İşlem gerçekleştirilemedi.";//redirect edilen sayfada mesaj gosterilmesi için sessiona mesaj atanır
+            return $this->redirectToRoute('forgotPassword');
+        }
+    }
+
+    public function createForgotPasswordLink($user){
+        $link = "http://seruvent.com/forgotPasswordChange?token=";
+        $params=$user->getId() . "**" . $user->getPassword();
+        return $link . base64_encode($params);
     }
 
     /**
