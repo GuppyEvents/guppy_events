@@ -70,7 +70,7 @@
                             </div>
                             <div class="event-content-header-price">
                                 {% if tickets|length >0 %}
-                                {{ tickets[0].price }} {{ tickets[0].priceType ? tickets[0].priceType : "TL" }}
+                                    {{ tickets[0].price }} {{ tickets[0].priceType ? tickets[0].priceType : "TL" }}
                                 {% else %}
                                     ÜCRETSİZ
                                 {% endif %}
@@ -80,10 +80,10 @@
                     </div>
 
                     <div class="event-share-register align-right" style="padding-top: 5px; padding-bottom: 5px; border-bottom: 1px solid; border-top: 1px solid; border-bottom-color: #AAA; border-top-color: #AAA;">
-                        <a href="#" class="btn" ><span>REGISTER</span></a>
+                        <a href="#" class="btn" ><span>Kaydol</span></a>
                         {% if userIsAdmin is defined %}
                             {% if userIsAdmin==true %}
-                                <a href="{{ path("event_edit_page", {'eventId': event.id }) }}" style="background-color: #fe4918" class="btn" ><span>EDIT EVENT</span></a>
+                                <a href="{{ path("event_edit_page", {'eventId': event.id }) }}" style="background-color: #fe4918" class="btn" ><span>Düzenle</span></a>
                             {% endif %}
                         {% endif %}
                     </div>
@@ -115,16 +115,15 @@
                             <div class="col-sm-12 align-left"></div>
                             <div class="col-sm-1 align-left"></div>
                             <div class="col-sm-11 align-left">
-                                <h6>TAGS</h6>
                                 <section>
                                     <span>
                                         <a href="" class="js-d-track-link badge badge--tag l-mar-top-2" data-event-action="BreadcrumbAddress" data-event-category="listing" data-event-label="/things-to-do/turkey--ankara/" data-automation="BreadcrumbAddress" data-xd-wired="track-link">
-                                            <span>MizahKültür</span>
+                                            <span>{{ event.communityUser.community.name }}</span>
                                         </a>
                                     </span>
                                     <span>
                                         <a href="" class="js-d-track-link badge badge--tag l-mar-top-2" data-event-action="BreadcrumbFormat" data-event-category="listing" data-event-label="/d/turkey--ankara/seminars/" data-automation="BreadcrumbFormat" data-xd-wired="track-link">
-                                            <span>ge250</span>
+                                            <span>etkinlik</span>
                                         </a>
                                     </span>
                                 </section>
