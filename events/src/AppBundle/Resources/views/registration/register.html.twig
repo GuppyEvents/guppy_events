@@ -10,6 +10,7 @@
 
         {% stylesheets
                 'bootstrap/css/bootstrap.min.css'
+                'theme/assets/css/lib/toastr.min.css'
                 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css'
                 'https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css'
                 'dist/css/AdminLTE.min.css'
@@ -17,8 +18,16 @@
             <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
         {% endstylesheets %}
 
+        {% javascripts
+            'plugins/jQuery/jQuery-2.2.0.min.js'
+            'theme/assets/js/toastr.min.js'
+        %}
+        <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+
         <!--[if lt IE 9]>
         {% javascripts
+                'theme/assets/js/toastr.min.js'
                 'https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js'
                 'https://oss.maxcdn.com/respond/1.4.2/respond.min.js' %}
             <script src="{{ asset_url }}"></script>
@@ -139,9 +148,9 @@
 
                 // -- Operation Result Message
                 if(success_msg){
-                    alert(success_msg);
+                    toastr.success(success_msg);
                 }else if(error_msg){
-                    alert(error_msg);
+                    toastr.error(error_msg);
                 }
 
             });
@@ -176,7 +185,7 @@
                         }else{
                             facebook_asked = true;
                             registerUser(response);
-                            alert("Sitemizi kullanabilmeniz için email adresinizi bizimle paylaşmanız gerekmektedir.")
+                            toastr.error("Sitemizi kullanabilmeniz için email adresinizi bizimle paylaşmanız gerekmektedir.")
 //                        if(facebook_asked == false) {
 //                            FB.login(function (response) {
 //                                statusChangeCallback(response);
@@ -189,8 +198,9 @@
 //                        }
                         }
                     }else{
-                        alert("Zaten kayıtlısınız lütfen giriş yapınız.");
-                        window.location="login";
+                        toastr.error("Zaten kayıtlısınız lütfen giriş yapınız.");
+
+                        setTimeout(function(){ window.location="login"; }, 500);
                     }
                 } else if (response.status === 'not_authorized') {
                     // The person is logged into Facebook, but not your app.
