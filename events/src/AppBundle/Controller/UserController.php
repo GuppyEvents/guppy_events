@@ -13,6 +13,7 @@ use AppBundle\Form\ChangePasswordType;
 use Google\Cloud\Storage\StorageClient;
 use Google\Cloud\Storage\Acl;
 use AppBundle\Entity\Utils;
+use Symfony\Component\Validator\Constraints\Email as EmailConstraint;
 
 /**
  * @Route("/user", name="user")
@@ -175,12 +176,34 @@ class UserController extends Controller
                     $data['error_msg']='Mail adresi boş olamaz';
                 }else{
 
-                    // --1.2-- check that user has mail_address
+                    // --1.2.1-- check if mail address is valid
+
+                    $emailConstraint = new EmailConstraint();
+
+                    $mailErrors = $this->get('validator')->validateValue(
+                        $mailAddress,
+                        $emailConstraint 
+                    );
+
+                    $isUserMailValid = false;
+                    if (count($mailErrors) == 0 && strlen( $mailAddress) <= 255) { //Mail adresleri 255 karakterden fazla olamaz
+                        
+                        $isUserMailValid = true;
+                    }
+
+                    // --1.2.2-- check that user has mail_address
                     $userUniversityMail = $em->getRepository('AppBundle:UniversityUser')->findBy(array('user'=>$this->getUser()->getId() , 'email'=>$mailAddress));
                     if($userUniversityMail){
-                        $data['error_msg'] = 'Eklenmek istenen mail adresi zaten bulunmaktadır';
 
-                    }else {
+                        $data['error_msg'] = 'Eklenmek istenen mail adresi zaten bulunmaktadır';
+                    }
+
+                    else if( !$isUserMailValid) {
+
+                        $data['error_msg'] = 'Mail adresi geçerli değildir';
+                    }
+
+                    else {
                         $universityUser = new UniversityUser();
                         $universityUser->setEmail($mailAddress);
                         $universityUser->setIsValidated(false);
