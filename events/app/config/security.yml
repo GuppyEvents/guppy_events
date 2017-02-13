@@ -1,6 +1,9 @@
 # To get started with security, check out the documentation:
 # http://symfony.com/doc/current/book/security.html
 security:
+
+    access_denied_url: /404
+
     encoders:
         AppBundle\Entity\User:
             algorithm: bcrypt
@@ -25,7 +28,7 @@ security:
             provider: db_provider
 
             form_login:
-                login_path: admin_homepage
+                login_path: login
                 check_path: login
                 failure_path: login
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
@@ -37,8 +40,7 @@ security:
         - { path: ^/admin, roles: ROLE_ADMIN }
 
     role_hierarchy:
-        ROLE_ADMIN:      [ROLE_USER]
-        ROLE_SUPERADMIN: [ROLE_ADMIN]
+        ROLE_ADMIN:      [ROLE_ADMIN]
 
 #    access_control:
 #        - { path: ^/admin, roles: ROLE_ADMIN }

@@ -94,52 +94,14 @@
         </div>
     </section>
 
+
+    <!-- GÜNÜN ETKİNLİKLERİ -->
     <section id="gunun-etkinlikleri" class="section ge-events-list-section">
         <div id="daily-events-container" class="container">
-        <h4 id="daily-events-title" class="ge-events-list-title">{{ todayDate|date('d.m.Y') }} Etkinlikleri</h4>
-
-        {% if todayEvents|length>0 %}
-
-            {% for event in todayEvents %}
-                <div class="col-sm-4 seruvent-ebox" data-link="{{ event.eventLink }}" data-title="{{ event.title }}">
-                    <div class="ge-events-box" id="ge-event-box">
-                        <a href="{{ path('user_event_mainpage' , {'eventId':event.id}) }}" title="{{ event.title }}" class="ge-events-box-link">
-                        <span class="ge-events-box-img">
-                            <img src="{{ event.imageBase64 }}" alt="" class="img-responsive">
-                        </span>
-                        <span class="ge-events-box-date">
-                            {{ event.startDate|date("d.m.Y / H:i") }}
-                        </span>
-                            <h5 class="ge-events-box-title">{{ event.title }}</h5>
-                            <span class="ge-events-box-location">{{ event.communityUser.community.name }} @ {{ event.communityUser.community.university.name }} </span>
-                        </a>
-                        <div class="ge-event-box-footer">
-                            <div class="ge-event-box-footer-tags">
-                                <ul class="list-inline">
-                                    <li><a href="#" title="">#etkinlik</a></li>
-                                </ul>
-                            </div>
-                            <div class="ge-event-box-footer-btn">
-                                <ul>
-                                    <li><a title="Paylaş" rel="tooltip"><i class="fa fa-share-alt"></i></a></li>
-                                    <li><a title="Kaydet" class="search-event-box" rel="tooltip"><i class="fa fa-bookmark-o"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-
-            <!-- DAHA FAZLA BUTONU -->
-            {#<div class="col-sm-12">#}
-                {#<div class="ge-events-list-more align-center">#}
-                    {#<button class="btn btn-outline-clr"><span>Daha Fazla</span></button>#}
-                {#</div>#}
-            {#</div>#}
-
-        {% endif %}
+            <h4 id="daily-events-title" class="ge-events-list-title">{{ todayDate|date('d.m.Y') }} Etkinlikleri</h4>
         </div>
     </section>
+
 
     <!-- SHARE MODAL -->
     <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -322,6 +284,10 @@
     /*******************************************************************************************************************
      *                                          EVENTS
      ******************************************************************************************************************/
+
+        $(document).ready(function(){
+            $('td.active.calendar-day').trigger('click');
+        });
 
         // select day from calendar event
         $(document).on('click', 'td.calendar-day',function(event){

@@ -25,6 +25,17 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/404", name="error_404")
+     */
+    public function pegeNotFoundAction(Request $request)
+    {
+        $data = array();
+        $data['referer'] = $request->headers->get('referer') ? $request->headers->get('referer') : $this->get('router')->generate('homepage');
+        $data['content'] = '' ;
+        return $this->render('AppBundle:error:error.html.twig',$data);
+    }
+
+    /**
      * @Route("/", name="homepage")
      */
     public function homeAction(Request $request)
@@ -271,7 +282,6 @@ class DefaultController extends Controller
         $today->setTime(0,0);
         $tomorrow = clone $today;
         $tomorrow->add(new \DateInterval("P1D"));
-        $data['todayEvents'] = $this->getDoctrine()->getRepository('AppBundle:Event')->findPublishEventsByDate( $today,$tomorrow);
         $data['todayDate'] = $today;
         $data['hasCommunityAdminRole'] = $this->getDoctrine()->getRepository('AppBundle:User')->hasUserCommunityAdmin($this->getUser());
 

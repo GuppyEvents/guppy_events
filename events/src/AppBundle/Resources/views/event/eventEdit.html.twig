@@ -24,12 +24,13 @@
                 <div class="align-left col-sm-12">
                     <form id="add_event_form" action="{{ path("event_edit_post") }}" method="POST" class="form form-mail-us" novalidate="novalidate" _lpchecked="1">
                         <div class="col-sm-12">
-                            <h5 class="highlight">Etkinlik Ekle</h5>
+                            <h5 class="highlight">Etkinlik Düzenle</h5>
                             <br>
                         </div>
 
-                        <fieldset class="col-sm-12 col-md-12">
-                            <fieldset>
+
+                        <div class="col-sm-12 col-md-12">
+                            <fieldset >
                                 <label for="name">Düzenleyen:</label>
                                 <select id="community_id" name="community_id" type="text">
                                     {% for communityAdminRole in communityAdminRoles %}
@@ -94,12 +95,12 @@
                                 <div id="event_location" style="height: 400px;"></div>
                             </fieldset>
 
-                </div>
+                            <fieldset class="col-sm-12">
+                                <input type="submit" class="btn btn-solid" value="Submit">
+                            </fieldset>
+                        </div>
 
-                <fieldset class="col-sm-12">
-                    <input type="submit" class="btn btn-solid" value="Submit">
-                </fieldset>
-                </form>
+                    </form>
             </div>
             </div>
         </section>

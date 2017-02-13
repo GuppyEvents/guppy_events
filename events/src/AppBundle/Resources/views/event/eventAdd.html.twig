@@ -20,7 +20,7 @@
                         <br>
                     </div>
 
-                    <fieldset class="col-sm-12 col-md-12">
+                    <div class="col-sm-12 col-md-12">
                         <fieldset>
                             <label for="name">Düzenleyen:</label>
                             <select id="community_id" name="community_id" type="text">
@@ -80,11 +80,11 @@
                             <div id="event_location" style="height: 400px;"></div>
                         </fieldset>
 
-                    </div>
+                        <fieldset class="col-sm-12">
+                            <input type="submit" class="btn btn-solid" value="Submit">
+                        </fieldset>
 
-                    <fieldset class="col-sm-12">
-                        <input type="submit" class="btn btn-solid" value="Submit">
-                    </fieldset>
+                    </div>
                 </form>
             </div>
         </div>
@@ -150,11 +150,11 @@
 
 
 
-$('#add_event_form').submit(function() {
-    var imageData = $('.image-editor').cropit('export');
-    $('#event_image_base64').val(imageData);
-    return true; // return false to cancel form action
-});
+        $('#add_event_form').submit(function() {
+            var imageData = $('.image-editor').cropit('export');
+            $('#event_image_base64').val(imageData);
+            return true; // return false to cancel form action
+        });
 
         function initMap() {
 
@@ -164,9 +164,13 @@ $('#add_event_form').submit(function() {
                 },
             });
 
-            $("#event_date").datetimepicker({
-                defaultDate: "{{ selectedDate }} 13:00"
-            });
+            {% if selectedDate is defined and selectedDate is not null %}
+                $("#event_date").datetimepicker({
+                    defaultDate: "{{ selectedDate }} 13:00"
+                });
+            {% else %}
+                $("#event_date").datetimepicker();
+            {% endif %}
 
             var input = document.getElementById('search_event_location');
             autocomplete = new google.maps.places.Autocomplete(input);
