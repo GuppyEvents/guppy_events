@@ -5550,6 +5550,10 @@ section.section.ge-events-list-section{
   font-weight: normal;
   margin-left: 15px;
   color: #444;
+  background: rgba(0, 0, 0, .05);
+  border-left: 3px solid #fe4918;
+  padding: 8px 0 8px 8px;
+  display:none;
 }
 .ge-events-box{
   margin-bottom: 30px;

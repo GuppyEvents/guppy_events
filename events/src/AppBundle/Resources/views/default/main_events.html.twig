@@ -98,7 +98,7 @@
     <!-- GÜNÜN ETKİNLİKLERİ -->
     <section id="gunun-etkinlikleri" class="section ge-events-list-section">
         <div id="daily-events-container" class="container">
-            <h4 id="daily-events-title" class="ge-events-list-title">{{ todayDate|date('d.m.Y') }} Etkinlikleri</h4>
+            <h4 id="daily-events-title" class="ge-events-list-title"></h4>
         </div>
     </section>
 
@@ -208,11 +208,14 @@
                 // -- 2.2 -- sonuc düzenlenir
                 if(data.resultText == 'SUCCESS'){
 
-                    // -- 2.2.1 --
-                    $("#daily-events-title").html(day + " Etkinlikleri");
-                    $("#daily-events-container div").remove();
-                    // -- 2.2.2 --
-                    if(data.content){
+                    console.log( data.content);
+                    if( data.content.eventList.length > 0) {
+                    
+                        // -- 2.2.1 --
+                        $("#daily-events-title").html(day + " Etkinlikleri");
+                        $("#daily-events-title").show();
+                        $("#daily-events-container div").remove();
+                        // -- 2.2.2 --
 
                         data.content.eventList.forEach(function(eventMain) {
                             appendEvent(eventMain);
@@ -222,6 +225,12 @@
                         $('html,body').animate({
                             scrollTop: ($('#gunun-etkinlikleri').offset().top)
                         },500);
+                    }
+                    else {
+
+                        //Remove etmek yerine hidden yapmak elementin alanını koruduğu için sayfanın yukarı aşağı hareket etmesini engelliyor.
+                        $("#daily-events-container div").css("visibility", "hidden");
+                        $("#daily-events-title").hide();
                     }
 
                 }else if(data.resultText == 'SUCCESS_EMPTY'){
@@ -341,6 +350,21 @@
             ajaxSocialSaveEvent(event.target);
         });
 
+        $(document).keydown(function(e) {
+            switch(e.which) {
+                case 37: // left
+
+                window.location.href='{{ path('home_events',{'d':prevMonthDateParam}) }}';
+                break;
+
+                case 39: // right
+                window.location.href='{{ path('home_events',{'d':nextMonthDateParam}) }}'
+                break;
+
+                default: return;
+            }
+            e.preventDefault();
+        });
 
     </script>
 {% endblock %}
