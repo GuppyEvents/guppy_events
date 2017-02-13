@@ -79,6 +79,54 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
         return false;
     }
 
+    /**
+     *
+     * İlgili kullanıcının verilen topluluk için admin role sahip olup olmadığı sonucunu döner. Topluluğun onaylanmış
+     * ya da yayından kaldırılmış olup olmadığına bakılmaz.
+     *
+     * @param User $user The user
+     * @param Community $community The community
+     * @return true | false
+     */
+    public function isUserCommunityMember($user, $community)
+    {
+        if(isset($user) && isset($community)){
+            $communityUser = $this->getEntityManager()->getRepository('AppBundle:CommunityUser')->findOneBy(array('community'=>$community , 'user'=>$user));
+
+            $acceptState = $this->getEntityManager()->getRepository('AppBundle:CommunityUserRoleState')->findAcceptState();
+            $communityUserRoles = $this->getEntityManager()->getRepository('AppBundle:CommunityUserRoles')->findBy(array('communityUser'=>$communityUser, 'communityRole'=>200, 'state'=>$acceptState));
+
+            if($communityUserRoles){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     *
+     * İlgili kullanıcının verilen topluluk için admin role sahip olup olmadığı sonucunu döner. Topluluğun onaylanmış
+     * ya da yayından kaldırılmış olup olmadığına bakılmaz.
+     *
+     * @param User $user The user
+     * @param Community $community The community
+     * @return true | false
+     */
+    public function isUserCommunityApplier($user, $community)
+    {
+        if(isset($user) && isset($community)){
+            $communityUser = $this->getEntityManager()->getRepository('AppBundle:CommunityUser')->findOneBy(array('community'=>$community , 'user'=>$user));
+
+            $pendingState = $this->getEntityManager()->getRepository('AppBundle:CommunityUserRoleState')->findPendingState();
+            $communityUserRoles = $this->getEntityManager()->getRepository('AppBundle:CommunityUserRoles')->findBy(array('communityUser'=>$communityUser, 'state'=>$pendingState));
+
+            if($communityUserRoles){
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     /**
      *
