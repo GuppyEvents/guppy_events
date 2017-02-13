@@ -48,41 +48,41 @@ class UserController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         // 1) POST OPERATION
-        if($request->getMethod() == 'POST'){
+        if ($request->getMethod() == 'POST') {
 
-            try{
+            try {
                 // --1.1-- Get post parameter
                 $user_name = $request->get('uname');
                 $user_surname = $request->get('usurname');
                 $user_sex = intval($request->get('usex'));
                 $user_uphone = $request->get('uphone');
                 $user_image = $request->get('profile_image_base64');
-                $fileName ="";
-                if($this->container->get('kernel')->getEnvironment()=='dev'){
+                $fileName = "";
+                if ($this->container->get('kernel')->getEnvironment() == 'dev') {
                     $fileName .= "dev/";
                 }
-                $extension = substr($user_image,0,strpos($user_image,";"));
+                $extension = substr($user_image, 0, strpos($user_image, ";"));
                 $fileName .= Utils::getGUID();
-                if(strpos($extension, "data:image") !== false){
-                    if(strpos($extension, "jpeg") !== false){
+                if (strpos($extension, "data:image") !== false) {
+                    if (strpos($extension, "jpeg") !== false) {
                         $fileName .= ".jpg";
-                    }else if(strpos($extension, "png") != false){
+                    } else if (strpos($extension, "png") != false) {
                         $fileName .= ".png";
-                    }else{
+                    } else {
                         $data['error_msg'] = 'Desteklenmeyen görüntü biçimi.';
                         return $this->render('AppBundle:user:profile_settings_account.html.twig', $data);
                     }
-                }else{
+                } else {
                     $data['error_msg'] = 'Desteklenmeyen dosya biçimi.';
                     return $this->render('AppBundle:user:profile_settings_account.html.twig', $data);
                 }
 
-                $user_image = Utils::uploadBase64ToServer($user_image,$fileName);
+                $user_image = Utils::uploadBase64ToServer($user_image, $fileName);
 
                 $user_birthdate = \DateTime::createFromFormat('m/d/Y', $request->get('ubirthdate'));
                 // --1.2-- check that user exist
                 $user = $this->getUser();
-                if($user){
+                if ($user) {
                     $user->setName($user_name);
                     $user->setSurname($user_surname);
                     $user->setPhone($user_uphone);
@@ -90,7 +90,7 @@ class UserController extends Controller
 
                     $user->setSex($user_sex);
 
-                    if($user_birthdate)
+                    if ($user_birthdate)
                         $user->setBirthDate($user_birthdate);
 
                     $em->persist($user);
@@ -98,16 +98,17 @@ class UserController extends Controller
 
                     $data['success_msg'] = 'Kullanıcı bilgileri güncellendi';
 
-                }else {
+                } else {
                     $data['error_msg'] = 'Lütfen öncelikle giriş yapınız';
                 }
 
 
-            } catch (Exception $e){}
+            } catch (Exception $e) {
+            }
         }
 
-        
-        if(!$this->getUser()->getEmailValidated()){
+
+        if (!$this->getUser()->getEmailValidated()) {
             $data['warning_msg'] = 'Mail adresinizi onaylayınız';
         }
 
