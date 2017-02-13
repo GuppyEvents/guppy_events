@@ -100,9 +100,17 @@
                                                             <h4 class="ge-events-community-title"><a href="{{ community.homepagelink }}">{{ community.name }}</a></h4>
                                                             <small class="text-alt company"> {{ community.universityName }}</small>
                                                         </div>
-                                                        <div class="ge-community-add-btn">
-                                                            <button class="btn btn-outline-clr"><span>Topluluğa Katıl</span></button>
-                                                        </div>
+                                                        {% if community.isUserCommunityAdmin is defined and community.isUserCommunityAdmin==true %}
+                                                            <div>Yöneticisiniz</div>
+                                                        {% elseif community.isUserCommunityMember is defined and community.isUserCommunityMember==true %}
+                                                            <div>Üyesiniz</div>
+                                                        {% elseif community.isUserCommunityApplier is defined and community.isUserCommunityApplier==true %}
+                                                            <div>Üye başvurusu durumundasınız</div>
+                                                        {% else %}
+                                                            <div class="ge-community-add-btn join_community_panel" data-community-id="{{ community.id }}">
+                                                                <button id="join_community" class="btn btn-outline-clr"><span>Topluluğa Katıl</span></button>
+                                                            </div>
+                                                        {% endif %}
                                                     </div>
 
                                                 </div>
@@ -294,6 +302,20 @@
 
 
         function appendCommunity(community){
+
+            userRoleOnCommunity = '';
+            if(community['isUserCommunityAdmin']) {
+                userRoleOnCommunity = '<div>Yöneticisiniz</div>';
+            }else if(community['isUserCommunityMember']){
+                userRoleOnCommunity = '<div>Üyesiniz</div>';
+            }else if(community['isUserCommunityApplier']){
+                userRoleOnCommunity = '<div>Üye başvurusu durumundasınız</div>';
+            }else{
+                userRoleOnCommunity =   '<div class="ge-community-add-btn join_community_panel" data-community-id="' + community['id']+ '">'+
+                                            '<button id="join_community" class="btn btn-outline-clr"><span>Topluluğa Katıl</span></button>' +
+                                        '</div>';
+            }
+
             $('#search_result_community_list').append(
                     '<div class="col-sm-12">'+
                         '<div class="ge-horizontal-item-box">'+
@@ -309,9 +331,7 @@
                                         '<h4 class="ge-events-community-title"><a href="'+community['homepagelink']+'">' + community['name'] +'</a></h4>' +
                                         '<small class="text-alt company">'+community['universityName']+'</small>' +
                                     '</div>'+
-                                    '<div class="ge-community-add-btn">' +
-                                        '<button class="btn btn-outline-clr"><span>Topluluğa Katıl</span></button>'+
-                                    '</div>'+
+                                    userRoleOnCommunity +
                                 '</div>' +
                             '</div>' +
 
@@ -488,6 +508,26 @@
         }
 
 
+        function ajaxRequestApplyToJoinCommunity(eventTarget){
+            $.post("{{ path('service_apply_role') }}", {
+                roleId: 200,
+                communityId: $(eventTarget).attr('data-community-id')
+            }).always(function () {
+            }).done(function (data) {
+                if (data.resultCode == 'result.Guppy.001') {
+                    $(eventTarget).html("Üye başvurusu durumundasınız");
+                    toastr.success("Başvurunuz kaydedildi.");
+                }else if (data.resultCode == 'result.Guppy.101') {
+                    toastr.error(data.content);
+                }else if (data.resultCode == 'result.Guppy.601') {
+                    toastr.error("Bu pozisyona daha önce başvurmuş olduğunuz için işleminiz gerçekleştirilemedi.");
+                }else{
+                    toastr.error("Beklenmeyen bir hata oluştu.");
+                }
+            });
+        }
+
+
     /*******************************************************************************************************************
      *                                          EVENTS
      ******************************************************************************************************************/
@@ -512,7 +552,6 @@
 
         // paylaş butonu tıklanıldığında
         $(document).on('click', '.shareLink',function(event){
-            console.log()
             $('#shareModalInput').val($(event.target).parentsUntil('.event-main-box').last().parent().attr('data-link'));
             $('#shareModalTitleInput').val($(event.target).parentsUntil('.event-main-box').last().parent().attr('data-title'));
             $('#shareModal').modal('show');
@@ -541,6 +580,12 @@
                 default:
                     break;
             }
+        });
+
+        // topluluğa katılma butonu
+        $(document).on('click','#join_community',function(event){
+            $eventTarget = $(event.target).parentsUntil('.join_community_panel').length>0 ? $(event.target).parentsUntil('.join_community_panel').last().parent() : $(event.target).parent();
+            ajaxRequestApplyToJoinCommunity($eventTarget);
         });
 
     </script>

@@ -365,7 +365,7 @@ body.ge-search-page .tab-content{
     border-bottom: 1px solid #e0e1e5;
     height: 46px;
     background: #FFF;
-    z-index: 1000;
+    z-index: 999;
     overflow: hidden;
 }
 .search-menu-list{

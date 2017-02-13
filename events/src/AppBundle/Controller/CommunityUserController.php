@@ -29,7 +29,6 @@ class CommunityUserController extends Controller
 
     /**
      * @Route("/s/add", name="service_community_user_add")
-     * @Security("has_role('ROLE_USER')")
      */
     public function communityUserAddAction(Request $request)
     {
@@ -41,6 +40,14 @@ class CommunityUserController extends Controller
         $data = array();
 
         try {
+
+
+            if(!$this->getUser()){
+                // login olmama hatası döner
+                $response->setContent(json_encode(Result::$FAILURE_AUTH->setContent('Giriş yapmanız gerekmektedir')));
+                return $response;
+            }
+
             // --1.1-- Get post parameter
             $communityId = $request->get('cid');
 
@@ -94,6 +101,12 @@ class CommunityUserController extends Controller
         // -- 2 -- Try to Get More Community Result
         try{
 
+            if(!$this->getUser()){
+                // login olmama hatası döner
+                $response->setContent(json_encode(Result::$FAILURE_AUTH->setContent('Giriş yapmanız gerekmektedir')));
+                return $response;
+            }
+            
             // -- 2.1 -- Get parameter list
             $roleId= $request->get('roleId');
             $communityId = $request->get('communityId');

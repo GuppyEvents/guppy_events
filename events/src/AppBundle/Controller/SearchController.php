@@ -68,6 +68,12 @@ class SearchController extends Controller
             $community['homepagelink'] = $this->get('router')->generate('user_community_events_homepage' , array(
                 'communityId' => $community['id']
             ),true);
+
+            if($this->getUser()){
+                $community['isUserCommunityAdmin'] = $this->getDoctrine()->getRepository('AppBundle:User')->isUserCommunityAdmin($this->getUser(),$community['id']);
+                $community['isUserCommunityMember'] =  $this->getDoctrine()->getRepository('AppBundle:User')->isUserCommunityMember($this->getUser(),$community['id']);
+                $community['isUserCommunityApplier'] =  $this->getDoctrine()->getRepository('AppBundle:User')->isUserCommunityApplier($this->getUser(),$community['id']);
+            }
         }
 
         return $communityList;
