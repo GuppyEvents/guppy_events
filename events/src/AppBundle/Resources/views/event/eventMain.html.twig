@@ -115,18 +115,6 @@
                             <div class="col-sm-12 align-left"></div>
                             <div class="col-sm-1 align-left"></div>
                             <div class="col-sm-11 align-left">
-                                <section>
-                                    <span>
-                                        <a href="" class="js-d-track-link badge badge--tag l-mar-top-2" data-event-action="BreadcrumbAddress" data-event-category="listing" data-event-label="/things-to-do/turkey--ankara/" data-automation="BreadcrumbAddress" data-xd-wired="track-link">
-                                            <span>{{ event.communityUser.community.name }}</span>
-                                        </a>
-                                    </span>
-                                    <span>
-                                        <a href="" class="js-d-track-link badge badge--tag l-mar-top-2" data-event-action="BreadcrumbFormat" data-event-category="listing" data-event-label="/d/turkey--ankara/seminars/" data-automation="BreadcrumbFormat" data-xd-wired="track-link">
-                                            <span>etkinlik</span>
-                                        </a>
-                                    </span>
-                                </section>
                             </div>
 
                             <div class="col-sm-1 align-left"></div>
@@ -156,6 +144,21 @@
                                 <input id="event_location_lat" name="event_location_lat" value="{{ event.gpsLocationLat }}" style="display: none;"/>
                                 <input id="event_location_lng" name="event_location_lng" value="{{ event.gpsLocationLng }}" style="display: none;"/>
                                 <div id="event_location" style="height: 400px;"></div>
+                            </div>
+
+                            <div class="col-sm-11 align-left">
+                                <section>
+                                    <span>
+                                        <a  class="js-d-track-link badge badge--tag l-mar-top-2" data-event-action="BreadcrumbAddress" data-event-category="listing" data-event-label="/things-to-do/turkey--ankara/" data-automation="BreadcrumbAddress" data-xd-wired="track-link">
+                                            <span>{{ event.communityUser.community.name }}</span>
+                                        </a>
+                                    </span>
+                                    <span>
+                                        <a class="js-d-track-link badge badge--tag l-mar-top-2" data-event-action="BreadcrumbFormat" data-event-category="listing" data-event-label="/d/turkey--ankara/seminars/" data-automation="BreadcrumbFormat" data-xd-wired="track-link">
+                                            <span>etkinlik</span>
+                                        </a>
+                                    </span>
+                                </section>
                             </div>
 
                             <div class="col-sm-12 align-left" style="height: 100px;"></div>

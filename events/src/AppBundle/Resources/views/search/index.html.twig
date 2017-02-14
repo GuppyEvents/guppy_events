@@ -518,7 +518,7 @@
                     $(eventTarget).html("Üye başvurusu durumundasınız");
                     toastr.success("Başvurunuz kaydedildi.");
                 }else if (data.resultCode == 'result.Guppy.101') {
-                    toastr.error(data.content);
+                    toastr.warning(data.content);
                 }else if (data.resultCode == 'result.Guppy.601') {
                     toastr.error("Bu pozisyona daha önce başvurmuş olduğunuz için işleminiz gerçekleştirilemedi.");
                 }else{
