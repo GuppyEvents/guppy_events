@@ -12,6 +12,17 @@ use Doctrine\ORM\EntityRepository;
 class CommunityRepository extends EntityRepository
 {
 
+    /**
+     *
+     * @param string $keyValue The community name key value
+     * @return Community|null
+     */
+    public function getSeruventCommunity()
+    {
+        $seruvent = $this->getEntityManager()->getRepository('AppBundle:Community')->find(9999);
+        return $seruvent;
+    }
+
 
     /**
      *
