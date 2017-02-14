@@ -99,12 +99,12 @@
 
                                 {% if isProfileOwner is defined and isProfileOwner==true %}
                                     <div style="padding-top: 40px;">
-                                        <form id="add_new_mail_submit" action="{{ path('user_profile_mail') }}" method="post">
+                                        <form id="add_new_mail_submit" onsubmit="return validateEmail()" action="{{ path('user_profile_mail') }}" method="post">
 
                                             <!-- mail address -->
                                             <div class="form-group">
                                                 <h6>Mail adresi ekle</h6>
-                                                <input type="text" class="form-control" name="mail_address" placeholder="Yeni mail adresinizi girebilirsiniz">
+                                                <input type="text" class="form-control" name="mail_address" id="mail_address" placeholder="Yeni mail adresinizi girebilirsiniz">
                                             </div>
 
                                             <button type="submit" class="btn btn-rounded btn-sm">Ekle!</button>
@@ -137,6 +137,16 @@
 /***********************************************************************************************************************
  *                                          UTIL FUNCTIONS
  **********************************************************************************************************************/
+        function validateEmail() {
+
+            if( !GuppyUtil.validateEmail( $("#mail_address").val())) {
+
+                toastr.error('Mail adresi geçerli değil');
+                return false;
+            }
+
+            return true;
+        }
 
 
 /***********************************************************************************************************************
