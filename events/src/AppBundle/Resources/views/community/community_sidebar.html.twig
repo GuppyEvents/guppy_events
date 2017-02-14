@@ -11,11 +11,17 @@
                 <h3>{{ community.name }}</h3>
             </div>
             <ul class="ge-community-sidebar-menu ge-menu-group">
-                <li class="{% if app.request.get('_route') == 'user_community_events_homepage'%}active{% endif %}"><a href="{{ path('user_community_events_homepage', {'communityId': community.id}) }}" class="ge-menu-group-item">Etkinlikler</a></li>
-                <li class="{% if app.request.get('_route') == 'user_community_homepage'%}active{% endif %}"><a href="{{ path('user_community_homepage', {'communityId': community.id}) }}" class="ge-menu-group-item">Genel Bilgi</a></li>
-                <li class="{% if app.request.get('_route') == 'user_community_users_homepage'%}active{% endif %}"><a href="{{ path('user_community_users_homepage', {'communityId': community.id}) }}" class="ge-menu-group-item">Üyeler</a></li>
-                {% if isUserCommunityAdmin is defined and isUserCommunityAdmin %}
-                    <li class="{% if app.request.get('_route') == 'user_community_membership_applications_homepage'%}active{% endif %}"><a href="{{ path('user_community_membership_applications_homepage', {'communityId': community.id}) }}" class="ge-menu-group-item">Başvurular</a></li>
+                {% if seruvent is defined and seruvent==true %}
+                    <li class="{% if app.request.get('_route') == 'seruvent_events'%}active{% endif %}"><a href="{{ path('user_community_events_homepage', {'communityId': community.id}) }}" class="ge-menu-group-item">Etkinlikler</a></li>
+                    <li class="{% if app.request.get('_route') == 'seruvent_about'%}active{% endif %}"><a href="{{ path('seruvent_about') }}" class="ge-menu-group-item">Genel Bilgi</a></li>
+                    <li class="{% if app.request.get('_route') == 'seruvent_community_users'%}active{% endif %}"><a href="{{ path('user_community_users_homepage', {'communityId': community.id}) }}" class="ge-menu-group-item">Üyeler</a></li>
+                {% else %}
+                    <li class="{% if app.request.get('_route') == 'user_community_events_homepage'%}active{% endif %}"><a href="{{ path('user_community_events_homepage', {'communityId': community.id}) }}" class="ge-menu-group-item">Etkinlikler</a></li>
+                    <li class="{% if app.request.get('_route') == 'user_community_homepage'%}active{% endif %}"><a href="{{ path('user_community_homepage', {'communityId': community.id}) }}" class="ge-menu-group-item">Genel Bilgi</a></li>
+                    <li class="{% if app.request.get('_route') == 'user_community_users_homepage'%}active{% endif %}"><a href="{{ path('user_community_users_homepage', {'communityId': community.id}) }}" class="ge-menu-group-item">Üyeler</a></li>
+                    {% if isUserCommunityAdmin is defined and isUserCommunityAdmin %}
+                        <li class="{% if app.request.get('_route') == 'user_community_membership_applications_homepage'%}active{% endif %}"><a href="{{ path('user_community_membership_applications_homepage', {'communityId': community.id}) }}" class="ge-menu-group-item">Başvurular</a></li>
+                    {% endif %}
                 {% endif %}
             </ul>
 
