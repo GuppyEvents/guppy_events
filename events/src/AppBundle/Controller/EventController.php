@@ -48,8 +48,7 @@ class EventController extends Controller
                     $data['userIsAdmin'] = $communityAdminRole and count($communityAdminRole)>0 ? true : false;
                 }
             }else{
-                $data['pageError'] = "Üzgünüz şuan içeriğe ulaşılamıyor";
-                $data['pageErrorBody'] = "Etkinlik Topluluğu Yayında Değil";
+                $_SESSION['error_message'] = 'Etkinlik Topluluğu Yayında Değil';//redirect edilen sayfada mesaj gosterilmesi için sessiona mesaj atanır
             }
 
         }else{
@@ -57,9 +56,17 @@ class EventController extends Controller
             $data['pageErrorBody'] = "Etkinlik Bulunamadı ya da yayında kaldırıldı";
         }
 
+
+        if($this->getUser()){
+            $eventUser = $this->getDoctrine()->getRepository('AppBundle:EventUserRating')->findOneBy(array('user'=>$this->getUser(),'event'=>$event));
+            if($eventUser){
+                $data['eventUser'] = $eventUser;
+            }
+        }
+
         $data['event'] = $event;
         $data['tickets'] = $tickets;
-
+        $data = array_merge($data,Utils::getSessionToastMessages());
         return $this->render('AppBundle:event:eventMain.html.twig' , $data);
     }
 

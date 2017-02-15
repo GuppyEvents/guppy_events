@@ -80,7 +80,12 @@
                     </div>
 
                     <div class="event-share-register align-right" style="padding-top: 5px; padding-bottom: 5px; border-bottom: 1px solid; border-top: 1px solid; border-bottom-color: #AAA; border-top-color: #AAA;">
-                        <a href="#" class="btn" ><span>Kaydol</span></a>
+                        {% if eventUser is defined and eventUser.isSaved %}
+                            <a onclick="ajaxSocialSaveEvent(this)" tag="{{ event.id }}" saved="true" class="btn" ><span>KATILIYORSUN</span></a>
+                        {% else %}
+                            <a onclick="ajaxSocialSaveEvent(this)" tag="{{ event.id }}" saved="false" class="btn" ><span>KATIL</span></a>
+                        {% endif %}
+
                         {% if userIsAdmin is defined %}
                             {% if userIsAdmin==true %}
                                 <a href="{{ path("event_edit_page", {'eventId': event.id }) }}" style="background-color: #fe4918" class="btn" ><span>Düzenle</span></a>
@@ -197,6 +202,48 @@
     /***********************************************************************************************************************
      *                                          UTIL FUNCTIONS
      **********************************************************************************************************************/
+
+    function ajaxSocialSaveEvent(eventTarget){
+
+        // -- 1 --
+
+        // -- 2 --
+        // ajax call
+        $.post("{{ path('social_event_rating') }}" ,{
+            eid : $(eventTarget).attr("tag"),
+            is_saved : $(eventTarget).attr("saved")
+        }).always(function(){
+
+        }).done(function(data){
+
+            // -- 2.1 -- CONSOLE
+            if(Guppy.responseDebugMode)
+                console.log(data);
+
+            // -- 2.2 -- sonuc düzenlenir
+            if(data.resultText == 'SUCCESS'){
+                if(data.content['saved']){
+                    $(eventTarget).html("<span>Katılıyorsun</span>")
+                    toastr.success('Etkinliğe katılıyorsun');
+                    $(eventTarget).attr("saved", true);
+                }else{
+                    $(eventTarget).html("<span>Katıl</span>")
+                    toastr.warning('Etkinliğe katılmıyorsun');
+                    $(eventTarget).attr("saved", false);
+                }
+
+            }else if(data.resultText == 'SUCCESS_EMPTY'){
+                toastr.error('Beklenmeyen hata ile karşılaşıldı');
+            }else if(data.resultText == 'FAILURE_AUTH'){
+                toastr.warning('Etkinliği kaydetmek için giriş yapınız');
+            }else if(data.resultText == 'FAILURE_PERMISSION'){
+                toastr.error('Bu işlem için izniniz bulunmamaktadır');
+            }else{
+                toastr.error('Beklenmeyen hata ile karşılaşıldı');
+            }
+        });
+    }
+
 
             function initMap() {
                 var event_gps_location = {lat: parseFloat($('#event_location_lat').val()), lng: parseFloat($('#event_location_lng').val()) };

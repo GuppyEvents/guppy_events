@@ -208,10 +208,18 @@
          **************************************************************************************************************/
             // Global değişkenler Guppy objesine yerleştirilmelidir (orn. Guppy.responseDebugMode)
             // var debugMode = true;
+            var error_msg, success_msg, warning_msg;
+            {% if error_msg is defined %}
+                error_msg = {{ error_msg|json_encode|raw }};
+            {% endif %}
 
-            var error_msg = '{% if error_msg is defined %}{{ error_msg|json_encode|raw }}{% endif %}';
-            var success_msg = '{% if success_msg is defined %}{{ success_msg|json_encode|raw }}{% endif %}';
-            var warning_msg = '{% if warning_msg is defined %}{{ warning_msg|json_encode|raw }}{% endif %}';
+            {% if success_msg is defined %}
+                success_msg = {{ success_msg|json_encode|raw }};
+            {% endif %}
+
+            {% if warning_msg is defined %}
+                warning_msg = {{ warning_msg|json_encode|raw }};
+            {% endif %}
 
         </script>
 
