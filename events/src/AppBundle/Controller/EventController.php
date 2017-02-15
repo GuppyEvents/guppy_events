@@ -251,7 +251,7 @@ class EventController extends Controller
                         return $this->redirectToRoute('event_add_page');
                     }
 
-                    $request_date = \DateTime::createFromFormat('m/d/Y H:i A', $request->get('event_date'));
+                    $request_date = \DateTime::createFromFormat('d/m/Y H:i', $request->get('event_date'));
                     $request_permission = $request->get('event_permission') ? $request->get('event_permission') : 'PUBLIC';
                     $pendingState = $this->getDoctrine()->getRepository('AppBundle:State')->findPendingState();
 

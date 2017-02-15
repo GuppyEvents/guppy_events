@@ -25,11 +25,11 @@
         <!-- font links -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,500,300,300italic,400italic,500italic&subset=latin,latin-ext">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans+Caption:400,700">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
         {% stylesheets
                 'theme/assets/css/lib/font-lineicons.css'
                 'theme/assets/css/lib/toastr.min.css'
-                'theme/assets/css/lib/bootstrap.min.css'
                 'theme/assets/css/style_media.css'
                 'theme/assets/css/style.css'
                 'theme/assets/css/guppy-ui.css'
@@ -39,6 +39,10 @@
 
         <!-- jquery ui -->
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+        <!-- datepicker -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" >
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.css" >
 
         {% block stylesheets %}{% endblock %}
 
@@ -163,10 +167,10 @@
             </div>
         </section>
 
+        <script src="{{ asset('plugins/jQuery/jQuery-2.2.0.min.js') }}"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
         {% javascripts
-                'plugins/jQuery/jQuery-2.2.0.min.js'
-                'theme/assets/js/bootstrap.min.js'
                 'theme/assets/js/jquery.validate.min.js'
                 'theme/assets/js/toastr.min.js'
                 'theme/assets/js/jquery.waypoints.min.js'
@@ -186,8 +190,15 @@
         <!-- jquery ui -->
         <!-- datepicker used -->
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
         <!-- ckeditor used -->
         <script src="https://cdn.ckeditor.com/4.6.1/standard/ckeditor.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+
+        <!-- datetime picker -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
 
 
 
