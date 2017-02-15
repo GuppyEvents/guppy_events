@@ -225,9 +225,11 @@
                 if(data.content['saved']){
                     $(eventTarget).html("<span>Katılıyorsun</span>")
                     toastr.success('Etkinliğe katılıyorsun');
+                    $(eventTarget).attr("saved", true);
                 }else{
                     $(eventTarget).html("<span>Katıl</span>")
                     toastr.success('Etkinliğe katılmıyorsun');
+                    $(eventTarget).attr("saved", false);
                 }
 
             }else if(data.resultText == 'SUCCESS_EMPTY'){
