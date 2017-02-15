@@ -228,7 +228,7 @@
                     $(eventTarget).attr("saved", true);
                 }else{
                     $(eventTarget).html("<span>Katıl</span>")
-                    toastr.success('Etkinliğe katılmıyorsun');
+                    toastr.warning('Etkinliğe katılmıyorsun');
                     $(eventTarget).attr("saved", false);
                 }
 
