@@ -57,6 +57,14 @@ class EventController extends Controller
             $data['pageErrorBody'] = "Etkinlik Bulunamadı ya da yayında kaldırıldı";
         }
 
+
+        if($this->getUser()){
+            $eventUser = $this->getDoctrine()->getRepository('AppBundle:EventUserRating')->findOneBy(array('user'=>$this->getUser(),'event'=>$event));
+            if($eventUser){
+                $data['eventUser'] = $eventUser;
+            }
+        }
+
         $data['event'] = $event;
         $data['tickets'] = $tickets;
 
