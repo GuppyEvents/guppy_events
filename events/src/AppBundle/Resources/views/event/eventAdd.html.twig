@@ -74,11 +74,17 @@
                         </fieldset>
                         <fieldset>
                             <label for="name">Bilet Fiyatı:</label>
-                            <input id="event_price" name="event_price" type="number" min="0" oninput='checkValidation(this , "Uygun bilet fiyatını giriniz")' onchange='checkValidation(this , "Uygun bilet fiyatını giriniz")' oninvalid='checkValidation(this , "Uygun bilet fiyatını giriniz")' value="0" required>
+                            <input id="event_price" name="event_price" type="number" min="0"
+                                   oninput='checkValidation(this , "Uygun bilet fiyatını giriniz")'
+                                   onchange='checkValidation(this , "Uygun bilet fiyatını giriniz")'
+                                   oninvalid='checkValidation(this , "Uygun bilet fiyatını giriniz")' value="0" required>
                         </fieldset>
                         <fieldset>
                             <label for="name">Maksimum katılımcı sayısı:</label>
-                            <input type="number" min="0" class="form-control" name="event_participant_count" oninput='checkValidation(this , "Maksimum katılımcı sayısını giriniz")' onchange='checkValidation(this , "Maksimum katılımcı sayısını giriniz")' oninvalid='checkValidation(this , "Maksimum katılımcı sayısını giriniz")' value="100000">
+                            <input type="number" min="0" class="form-control" name="event_participant_count"
+                                   oninput='checkValidation(this , "Maksimum katılımcı sayısını giriniz")'
+                                   onchange='checkValidation(this , "Maksimum katılımcı sayısını giriniz")'
+                                   oninvalid='checkValidation(this , "Maksimum katılımcı sayısını giriniz")' value="100000">
                         </fieldset>
                         <fieldset>
                             <label>Kapak Fotoğrafı</label>
@@ -102,7 +108,7 @@
                         </fieldset>
 
                         <fieldset>
-                            <input id="submit_event" type="submit" class="btn btn-solid" value="Submit">
+                            <input id="submit_event" type="submit" class="btn btn-solid" value="Kaydet">
                         </fieldset>
 
                     </div>
@@ -272,7 +278,7 @@
             monthNamesShort: [ "Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara" ],
             minDate: new Date()
         });
-//        $("#seruvent_date").datepicker("setDate", new Date(2000,10,23));
+
         $('#seruvent_time').timepicker({
             'timeFormat': 'H:i',
             'forceRoundTime': true

@@ -1,7 +1,16 @@
 {% extends 'AppBundle::main_base.html.twig' %}
 
 {% block title %}Seruvent - Etkinlik Düzenle{% endblock %}
+{% block metaDescription %}Etkinlik düzenleme{% endblock %}
+{% block metaKeyword %}etkinlik düzenle{% endblock %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    {% stylesheets
+        'theme/assets/css/jquery.timepicker.css' filter='cssrewrite' %}
+    <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
 
 {% block content %}
 
@@ -22,7 +31,7 @@
         <section class="guppy-section align-center">
             <div class="container">
                 <div class="align-left col-sm-12">
-                    <form id="add_event_form" action="{{ path("event_edit_post") }}" method="POST" class="form form-mail-us" novalidate="novalidate" _lpchecked="1">
+                    <form id="add_event_form" action="{{ path("event_edit_post") }}" method="POST" class="form form-mail-us">
                         <div class="col-sm-12">
                             <h5 class="highlight">Etkinlik Düzenle</h5>
                             <br>
@@ -44,11 +53,29 @@
                             </fieldset>
                             <fieldset>
                                 <label for="name">Adı:</label>
-                                <input type="text" class="form-control" rows="3" name="event_title" id="event_title" value="{{ event.title }}">
+                                <input type="text" class="form-control" rows="3" name="event_title" id="event_title" value="{{ event.title }}" pattern=".{1,}" oninput='checkValidation(this , "Etkinlik ismi boş bırakılamaz")' oninvalid='checkValidation(this , "Etkinlik ismi boş bırakılamaz")' required>
                                 <input type="text" style="display:none" name="event_id" value="{{ event.id }}">
                             </fieldset>
 
                             <fieldset>
+                                <label for="seruvent_date">Tarihi:</label><p></p>
+                                <input id="seruvent_date" name="seruvent_date" type="text" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])/(0[1-9]|1[012])/[0-9]{4}"
+                                        {% if event.startDate is defined and event.startDate is not null %} value="{{ event.startDate.format('d/m/Y') }}" {% endif %}
+                                       oninput='checkValidation(this , "Tarih formatı dd/mm/yyyy olmalıdır")'
+                                       onchange='checkValidation(this , "Tarih formatı dd/mm/yyyy olmalıdır")'
+                                       oninvalid='checkValidation(this , "Tarih formatı dd/mm/yyyy olmalıdır")' required />
+                            </fieldset>
+
+                            <fieldset>
+                                <label for="seruvent_time">Saati:</label><p></p>
+                                <input id="seruvent_time" name="seruvent_time" type="text" maxlength="5" pattern="([0-1][0-9]|2[0-3]):([0-5][0-9])"
+                                        {% if event.startDate is defined and event.startDate is not null %} value="{{ event.startDate.format('H:i') }}" {% endif %}
+                                       oninput='checkValidation(this , "Saat formatı ss:dd olmalıdır")'
+                                       onchange='checkValidation(this , "Saat formatı ss:dd olmalıdır")'
+                                       oninvalid='checkValidation(this , "Saat formatı ss:dd olmalıdır")' required/>
+                            </fieldset>
+
+                            <fieldset style="display: none;">
                                 <label for="date">Tarihi:</label><p></p>
                                 <input id="event_date" name="event_date" type="text">
                             </fieldset>
@@ -66,12 +93,18 @@
                             </fieldset>
                             <fieldset>
                                 <label for="name">Bilet Fiyatı:</label>
-                                <input id="event_price" name="event_price" type="text" value="{{ tickets|length > 0 ? tickets[0].price : 0 }}">
+                                <input id="event_price" name="event_price" type="number" min="0" value="{{ tickets|length > 0 ? tickets[0].price : 0 }}"
+                                       oninput='checkValidation(this , "Uygun bilet fiyatını giriniz")'
+                                       onchange='checkValidation(this , "Uygun bilet fiyatını giriniz")'
+                                       oninvalid='checkValidation(this , "Uygun bilet fiyatını giriniz")' required>
                                 <input id="ticket_id" style="display: none;" name="ticket_id" type="text" value="{{ tickets|length > 0 ? tickets[0].id : 0 }}">
                             </fieldset>
                             <fieldset>
                                 <label for="name">Katılımcı Sayısı Limiti:</label>
-                                <input type="text" class="form-control" name="event_participant_count" value="{{ event.maxParticipantNum }}">
+                                <input type="text" class="form-control" name="event_participant_count" type="number" min="0" value="{{ event.maxParticipantNum }}"
+                                       oninput='checkValidation(this , "Maksimum katılımcı sayısını giriniz")'
+                                       onchange='checkValidation(this , "Maksimum katılımcı sayısını giriniz")'
+                                       oninvalid='checkValidation(this , "Maksimum katılımcı sayısını giriniz")'>
                             </fieldset>
                             <fieldset>
                                 <label>Kapak Fotoğrafı</label>
@@ -96,7 +129,7 @@
                             </fieldset>
 
                             <fieldset class="col-sm-12">
-                                <input type="submit" class="btn btn-solid" value="Submit">
+                                <input id="submit_event" type="submit" class="btn btn-solid" value="Kaydet">
                             </fieldset>
                         </div>
 
@@ -111,7 +144,10 @@
 
 {% block javascriptcontent %}
     {% if pageError is not defined %}
-        {% javascripts 'theme/assets/cropit/jquery.cropit.js'%}
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        {% javascripts
+            'theme/assets/cropit/jquery.cropit.js'
+            'theme/assets/js/jquery.timepicker.js'%}
         <script type="text/javascript" src="{{ asset_url }}"></script>
         {% endjavascripts %}
         <style>
@@ -163,10 +199,14 @@
                 map.setCenter(place.geometry.location);
                 map.setZoom(16);
                 $('#search_event_location').val(place.name);
+            }
 
-
-
-
+            function checkValidation(input , message) {
+                if(input.value==""){
+                    input.setCustomValidity(message);
+                }else{
+                    input.setCustomValidity("");
+                }
             }
 
             $('#add_event_form').submit(function() {
@@ -221,6 +261,13 @@
                     $("#event_location_lng").val(event.latLng.lng());
                     marker.setPosition(event.latLng);
                 });
+
+                // harita autocomplete enter basma durumu
+                google.maps.event.addDomListener(input, 'keydown', function(e) {
+                    if (e.keyCode == 13) {
+                        e.preventDefault();
+                    }
+                });
             }
 
             function fileToBase64Converter() {
@@ -250,66 +297,64 @@
      *                                          DOCUMENT ON READY
      **********************************************************************************************************************/
 
-                if ( CKEDITOR.env.ie && CKEDITOR.env.version < 9 )
-                    CKEDITOR.tools.enableHtml5Elements( document );
 
-                CKEDITOR.config.height = 150;
-                CKEDITOR.config.width = 'auto';
+    $(function() {
 
-                CKEDITOR.editorConfig = function( config ) {
-                    config.toolbarGroups = [
-                        { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
-                        { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
-                        { name: 'links', groups: [ 'links' ] },
-                        { name: 'insert', groups: [ 'insert' ] },
-                        { name: 'forms', groups: [ 'forms' ] },
-                        { name: 'tools', groups: [ 'tools' ] },
-                        { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
-                        { name: 'others', groups: [ 'others' ] },
-                        '/',
-                        { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-                        { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
-                        { name: 'styles', groups: [ 'styles' ] },
-                        { name: 'colors', groups: [ 'colors' ] },
-                        { name: 'about', groups: [ 'about' ] }
-                    ];
-                };
+            // BEFORE SUBMIT
+            $(document).on('click','#submit_event',function (event) {
+                $('#event_date').val($('#seruvent_date').val() + " " +  $('#seruvent_time').val());
+            });
 
-                CKEDITOR.replace( 'event_description' );
+            $( "#seruvent_date" ).datepicker( {
+                dateFormat: "dd/mm/yy",
+                firstDay: 1,
+                dayNames: [ "Pazar" ,"Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi" ],
+                dayNamesMin: [ "Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt" ],
+                monthNames: [ "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık" ],
+                monthNamesShort: [ "Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara" ],
+                minDate: new Date()
+            });
 
-                var initSample = ( function() {
-                    var wysiwygareaAvailable = isWysiwygareaAvailable(),
-                            isBBCodeBuiltIn = !!CKEDITOR.plugins.get( 'bbcode' );
+            $('#seruvent_time').timepicker({
+                'timeFormat': 'H:i',
+                'forceRoundTime': true
+            });
 
-                    return function() {
-                        var editorElement = CKEDITOR.document.getById( 'editor' );
+            $( "#community-background-image-edit" ).trigger( "click" );
+            $('.close-btn').trigger( "click" );
 
-                        if ( isBBCodeBuiltIn ) {
-                            editorElement.setHtml('Etkinlik Açıklama Editor\n\n');
-                        }
+            $(document).on('click','#submit_crop',function(){
+                var imageData = $('.image-editor').cropit('export');
+                $('#test').val(imageData);
+            });
 
-                        // Depending on the wysiwygare plugin availability initialize classic or inline editor.
-                        if ( wysiwygareaAvailable ) {
-                            CKEDITOR.replace( 'editor' );
-                        } else {
-                            editorElement.setAttribute( 'contenteditable', 'true' );
-                            CKEDITOR.inline( 'editor' );
-                        }
-                    };
+            if ( CKEDITOR.env.ie && CKEDITOR.env.version < 9 )
+                CKEDITOR.tools.enableHtml5Elements( document );
 
-                    function isWysiwygareaAvailable() {
-                        // If in development mode, then the wysiwygarea must be available.
-                        // Split REV into two strings so builder does not replace it :D.
-                        if ( CKEDITOR.revision == ( '%RE' + 'V%' ) ) {
-                            return true;
-                        }
-                        return !!CKEDITOR.plugins.get( 'wysiwygarea' );
-                    }
-                } )();
+            CKEDITOR.config.height = 150;
+            CKEDITOR.config.width = 'auto';
 
-                initSample();
-
-        </script>
+            CKEDITOR.editorConfig = function( config ) {
+                config.toolbarGroups = [
+                    { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
+                    { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+                    { name: 'links', groups: [ 'links' ] },
+                    { name: 'insert', groups: [ 'insert' ] },
+                    { name: 'forms', groups: [ 'forms' ] },
+                    { name: 'tools', groups: [ 'tools' ] },
+                    { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
+                    { name: 'others', groups: [ 'others' ] },
+                    '/',
+                    { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+                    { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+                    { name: 'styles', groups: [ 'styles' ] },
+                    { name: 'colors', groups: [ 'colors' ] },
+                    { name: 'about', groups: [ 'about' ] }
+                ];
+            };
+            CKEDITOR.replace( 'event_description' );
+        });
+    </script>
 
         <script async defer
                 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDLqDBN5nlLAbTBnSrkI0gwft2v6SWFjh8&callback=initMap&libraries=places">

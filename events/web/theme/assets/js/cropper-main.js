@@ -65,35 +65,35 @@ window.onload = function () {
     $('button[data-method="scale"]').prop('disabled', true);
   }
 
-
-  document.body.onkeydown = function (event) {
-    var e = event || window.event;
-
-    if (!cropper || this.scrollTop > 300) {
-      return;
-    }
-
-    switch (e.keyCode) {
-      case 37:
-        e.preventDefault();
-        cropper.move(-1, 0);
-        break;
-
-      case 38:
-        e.preventDefault();
-        cropper.move(0, -1);
-        break;
-
-      case 39:
-        e.preventDefault();
-        cropper.move(1, 0);
-        break;
-
-      case 40:
-        e.preventDefault();
-        cropper.move(0, 1);
-        break;
-    }
-  };
+    // crop edilen resmin sağa sola hareket etmesini sağlar
+  // document.body.onkeydown = function (event) {
+  //   var e = event || window.event;
+  //
+  //   if (!cropper || this.scrollTop > 300) {
+  //     return;
+  //   }
+  //
+  //   switch (e.keyCode) {
+  //     case 37:
+  //       e.preventDefault();
+  //       cropper.move(-1, 0);
+  //       break;
+  //
+  //     case 38:
+  //       e.preventDefault();
+  //       cropper.move(0, -1);
+  //       break;
+  //
+  //     case 39:
+  //       e.preventDefault();
+  //       cropper.move(1, 0);
+  //       break;
+  //
+  //     case 40:
+  //       e.preventDefault();
+  //       cropper.move(0, 1);
+  //       break;
+  //   }
+  // };
 
 };
