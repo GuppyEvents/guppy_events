@@ -33,7 +33,7 @@
         <section class="guppy-section align-center">
             <div class="container">
                 <div class="align-left col-sm-12">
-                    <form id="add_event_form" action="{{ path("event_edit_post") }}" method="POST" class="form form-mail-us">
+                    <form id="add_event_form" action="{{ path("event_edit_post") }}" method="POST" class="form form-mail-us ge-content-box">
                         <div class="col-sm-12">
                             <h5 class="highlight">Etkinlik Düzenle</h5>
                             <br>
@@ -54,7 +54,7 @@
                                 </select>
                             </fieldset>
                             <fieldset>
-                                <label for="name">Adı:</label>
+                                <label for="name">Etkinlik Başlığı:</label>
                                 <input type="text" class="form-control" rows="3" name="event_title" id="event_title" value="{{ event.title }}" pattern=".{1,}" oninput='checkValidation(this , "Etkinlik ismi boş bırakılamaz")' oninvalid='checkValidation(this , "Etkinlik ismi boş bırakılamaz")' required>
                                 <input type="text" style="display:none" name="event_id" value="{{ event.id }}">
                             </fieldset>

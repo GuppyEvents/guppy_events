@@ -229,7 +229,10 @@
                     else {
 
                         //Remove etmek yerine hidden yapmak elementin alanını koruduğu için sayfanın yukarı aşağı hareket etmesini engelliyor.
-                        $("#daily-events-container div").css("visibility", "hidden");
+                        //$("#daily-events-container div").css("visibility", "hidden");
+
+                        //Etkinliğin çok olması durumunda büyük bir alan boş görüldüğünden remove kullanıldı
+                        $("#daily-events-container div").remove();
                         $("#daily-events-title").hide();
                     }
 

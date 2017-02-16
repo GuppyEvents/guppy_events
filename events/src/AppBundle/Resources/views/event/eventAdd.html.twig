@@ -23,7 +23,7 @@
     <section class="guppy-section align-center">
         <div class="container">
             <div class="align-left col-sm-12">
-                <form id="add_event_form" action="{{ path("event_add_post") }}" method="POST" class="form form-mail-us">
+                <form id="add_event_form" action="{{ path("event_add_post") }}" method="POST" class="form form-mail-us ge-content-box">
                     <div class="col-sm-12">
                         <h5 class="highlight">Etkinlik Ekle</h5>
                         <br>
@@ -40,7 +40,7 @@
                         </fieldset>
 
                         <fieldset>
-                            <label for="name">Adı:</label>
+                            <label for="name">Etkinlik Başlığı:</label>
                             <input type="text" class="form-control" name="event_title" pattern=".{1,}" oninput='checkValidation(this , "Etkinlik ismi boş bırakılamaz")' oninvalid='checkValidation(this , "Etkinlik ismi boş bırakılamaz")' required/>
                         </fieldset>
 
@@ -62,7 +62,7 @@
                             <input id="event_date" name="event_date" type="text">
                         </fieldset>
                         <fieldset>
-                            <label for="name">Açıklaması:</label>
+                            <label for="name">Etkinlik Açıklaması</label>
                             <textarea id="event_description" name="event_description"><h6>ETKİNLİK HAKKINDA</h6></textarea>
                         </fieldset>
                         <fieldset>
