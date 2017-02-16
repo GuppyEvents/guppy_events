@@ -125,7 +125,12 @@
         <!-- ------------ CONTENT ------------ -->
         <div class="guppy-container">
             {% if app.session.get('user_can_add_event') == true %}
-                <div>asd</div>
+                <div class="add-content-button">
+                    <a href="{{ path('event_add_page') }}" class="dropdown-toggle" role="button" aria-haspopup="true" aria-expanded="false"><span>Etkinlik Ekle</span><i style="color: white;z-index:99999;" class="fa fa-plus fa-24px"></i></a>
+                    <ul class="dropdown-menu add-content-menu">
+
+                    </ul>
+                </div>
             {% endif %}
 
             <!-- This search form called after press enter key -->

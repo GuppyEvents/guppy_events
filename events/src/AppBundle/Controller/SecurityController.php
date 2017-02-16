@@ -139,6 +139,9 @@ class SecurityController extends Controller
             $this->get('security.token_storage')->setToken($token);
             $this->get('session')->set('_security_main', serialize($token));
 
+            $isCommunityAdmin = $this->getDoctrine()->getManager()->getRepository('AppBundle:User')->hasUserCommunityAdmin($this->getUser());
+            Utils::setUserCanAddEvent($this->get('session'), $isCommunityAdmin);
+
             if($this->getUser() && $this->getUser()->getId() && $this->getUser()->getRole()=='ROLE_ADMIN'){
                 return $this->redirectToRoute('admin_homepage');
             }else if($this->getUser()){

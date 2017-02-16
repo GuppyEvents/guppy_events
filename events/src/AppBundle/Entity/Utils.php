@@ -147,9 +147,7 @@ class Utils
             'text'    => $content));
     }
 
-    public static function setUserCanAddEvent($env, $canAdd){
-        $_SESSION['user_can_add_event'] = $canAdd;
-        $session = $env->get('session');
+    public static function setUserCanAddEvent($session, $canAdd){
         $session->set('user_can_add_event', $canAdd);
     }
 
