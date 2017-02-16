@@ -775,7 +775,7 @@ GuppyTheme = {
                 // count down 10 days from today
                 futureDate.setDate( futureDate.getDate() + 10 );
                 // or set specific date in the future
-                futureDate = new Date(2017, 1, 16);
+                futureDate = new Date(2017, 1, 20);
 
                 $countdown.countdown({
                     until: futureDate,
