@@ -7,6 +7,8 @@
 {% block stylesheets %}
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     {% stylesheets
+        'theme/assets/css/cropper.css'
+        'theme/assets/css/cropper-main.css'
         'theme/assets/css/jquery.timepicker.css' filter='cssrewrite' %}
     <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -87,18 +89,71 @@
                                    oninvalid='checkValidation(this , "Maksimum katılımcı sayısını giriniz")' value="100000">
                         </fieldset>
                         <fieldset>
-                            <label>Kapak Fotoğrafı</label>
+                            <label>Etkinlik Sayfasında gözükecek hali</label>
                             <textarea type="text" style="display: none;" class="form-control" id="event_image_base64" name="event_image_base64"></textarea>
 
-                            <div class="image-editor">
-                                <input type="file" class="cropit-image-input">
-                                <div class="cropit-preview"></div>
-                                <div class="image-size-label">
-                                    Kapak fotoğrafını ayarla
+                            <input id="temp_img_loader" type="file">
+
+                            <div class="ge-community-cover-area">
+                                <div class="ge-community-cover-img">
+                                    <div class="img-preview preview-lg"></div>
+
+                                    <div class="img-container" style="display: none;">
+                                        <img id="img_viewer" src="" class="img-responsive" alt="" />
+                                    </div>
                                 </div>
-                                <input type="range" class="cropit-image-zoom-input">
                             </div>
+
+                            {#<span id="community-background-image-edit" class="community-content-header-edit" data-modal-link="community-background-image"><i class="fa fa-cog" aria-hidden="true"></i></span>#}
+                            {#<div class="modal-window" data-modal="community-background-image">#}
+                                {#<div class="modal-box medium animated" data-animation="zoomIn" data-duration="100">#}
+                                    {#<span class="close-btn icon icon-office-52"></span>#}
+
+                                    {#<div class="row">#}
+                                        {#<div id="img-container-modal" class="col-md-12">#}
+                                            {#<!-- <h3 class="page-header">Demo:</h3> -->#}
+                                            {#<div class="img-container">#}
+                                                {#{% image 'theme/assets/img/guppy_bilkent_banner_01.jpg' %}#}
+                                                    {#<img id="img_viewer" src="{{ asset_url }}" class="img-responsive" alt="" />#}
+                                                {#{% endimage %}#}
+                                            {#</div>#}
+
+                                            {#<!-- <h3 class="page-header">Data:</h3> -->#}
+                                            {#<div class="docs-data">#}
+                                                {#<div class="input-group input-group-sm">#}
+                                                    {#<input type="text" class="form-control" id="dataX" style="display:none;" placeholder="x">#}
+                                                {#</div>#}
+                                                {#<div class="input-group input-group-sm">#}
+                                                    {#<input type="text" class="form-control" id="dataY" style="display:none;" placeholder="y">#}
+                                                {#</div>#}
+                                                {#<div class="input-group input-group-sm">#}
+                                                    {#<input type="text" class="form-control" id="dataWidth" style="display:none;" placeholder="width">#}
+                                                {#</div>#}
+                                                {#<div class="input-group input-group-sm">#}
+                                                    {#<input type="text" class="form-control" id="dataHeight" style="display:none;" placeholder="height">#}
+                                                {#</div>#}
+                                            {#</div>#}
+
+                                        {#</div>#}
+                                    {#</div>#}
+
+                                {#</div>#}
+                            {#</div> <!-- modal end -->#}
+
                         </fieldset>
+                        {#<fieldset>#}
+                            {#<label>Kapak Fotoğrafı</label>#}
+                            {#<textarea type="text" style="display: none;" class="form-control" id="event_image_base64" name="event_image_base64"></textarea>#}
+
+                            {#<div class="image-editor">#}
+                                {#<input type="file" class="cropit-image-input">#}
+                                {#<div class="cropit-preview"></div>#}
+                                {#<div class="image-size-label">#}
+                                    {#Kapak fotoğrafını ayarla#}
+                                {#</div>#}
+                                {#<input type="range" class="cropit-image-zoom-input">#}
+                            {#</div>#}
+                        {#</fieldset>#}
                         <fieldset>
                             <label for="name">Konumu:</label>
                             <input id="search_event_location" name="search_event_location" type="text" size="150">
@@ -123,6 +178,7 @@
 {% block javascriptcontent %}
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     {% javascripts
+            'theme/assets/js/cropper.js'
             'theme/assets/cropit/jquery.cropit.js'
             'theme/assets/js/jquery.timepicker.js'%}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -162,6 +218,7 @@
  **********************************************************************************************************************/
         var autocomplete;
         var map;
+        var cropper;
 
 
 /***********************************************************************************************************************
@@ -187,13 +244,6 @@
             }
         }
 
-
-
-        $('#add_event_form').submit(function() {
-            var imageData = $('.image-editor').cropit('export');
-            $('#event_image_base64').val(imageData);
-            return true; // return false to cancel form action
-        });
 
         function initMap() {
 
@@ -239,6 +289,53 @@
                 FR.onload = function(e) {
                     $('#img_viewer').attr('src', e.target.result);
                     $('#event_image_base64').val(e.target.result);
+
+                    var Cropper = window.Cropper;
+                    var URL = window.URL || window.webkitURL;
+                    var container = document.querySelector('.img-container');
+                    var image = container.getElementsByTagName('img').item(0);
+                    var actions = document.getElementById('actions');
+                    var dataX = document.getElementById('dataX');
+                    var dataY = document.getElementById('dataY');
+                    var dataHeight = document.getElementById('dataHeight');
+                    var dataWidth = document.getElementById('dataWidth');
+                    var dataRotate = document.getElementById('dataRotate');
+                    var dataScaleX = document.getElementById('dataScaleX');
+                    var dataScaleY = document.getElementById('dataScaleY');
+                    var options = {
+                        aspectRatio: 760 / 360,
+                        autoCropArea: 1.0,
+                        preview: '.img-preview',
+                        viewMode: 2,
+                        responsive: false,
+                        ready: function (e) {
+                            console.log(e.type);
+                        },
+                        cropstart: function (e) {
+                            console.log(e.type, e.detail.action);
+                        },
+                        cropmove: function (e) {
+                            console.log(e.type, e.detail.action);
+                        },
+                        cropend: function (e) {
+                            console.log(e.type, e.detail.action);
+                        },
+                        crop: function (e) {
+                            var data = e.detail;
+
+                            console.log(e.type);
+                            dataX.value = Math.round(data.x);
+                            dataY.value = Math.round(data.y);
+                            dataHeight.value = Math.round(data.height);
+                            dataWidth.value = Math.round(data.width);
+                            console.log('__ ' + Math.round(data.x) + '__ ' + Math.round(data.y) + '__ ' + Math.round(data.height) )
+                        },
+                        zoom: function (e) {
+                            console.log(e.type, e.detail.ratio);
+                        }
+                    };
+                    cropper.destroy();
+                    cropper = new Cropper(image, options);
                 };
                 FR.readAsDataURL( this.files[0] );
             }
@@ -262,57 +359,130 @@
 
         $(function() {
 
+            // we should get modal size before document ready
+            $( "#community-background-image-edit" ).trigger( "click" );
+            $('.close-btn').trigger( "click" );
+
             // BEFORE SUBMIT
             $(document).on('click','#submit_event',function (event) {
                 $('#event_date').val($('#seruvent_date').val() + " " +  $('#seruvent_time').val());
             });
 
+            $( "#seruvent_date" ).datepicker( {
+                dateFormat: "dd/mm/yy",
+                firstDay: 1,
+                dayNames: [ "Pazar" ,"Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi" ],
+                dayNamesMin: [ "Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt" ],
+                monthNames: [ "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık" ],
+                monthNamesShort: [ "Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara" ],
+                minDate: new Date()
+            });
+
+            $('#seruvent_time').timepicker({
+                'timeFormat': 'H:i',
+                'forceRoundTime': true
+            });
+
+
+            document.getElementById("temp_img_loader").addEventListener("change", fileToBase64Converter, false);
+
+            // -------------------------
+            // -- BEFORE SUBMIT --
+            // -------------------------
+            $(document).on('click' , '#submit_event' , function(e){
+                $('#event_image_base64').val($('.img-preview > img').attr('src'));
+                alert("aaa");
+                e.preventDefault();
+            });
+//            $('#add_event_form').submit(function() {
+//                var imageData = $('.image-editor').cropit('export');
+//                $('#event_image_base64').val(imageData);
+//                return true; // return false to cancel form action
+//            });
+
+            // -------------------------
+            // -- CROPPER AREA --
+            // -------------------------
+            var Cropper = window.Cropper;
+            var URL = window.URL || window.webkitURL;
+            var container = document.querySelector('.img-container');
+            var image = container.getElementsByTagName('img').item(0);
+            var actions = document.getElementById('actions');
+            var dataX = document.getElementById('dataX');
+            var dataY = document.getElementById('dataY');
+            var dataHeight = document.getElementById('dataHeight');
+            var dataWidth = document.getElementById('dataWidth');
+            var dataRotate = document.getElementById('dataRotate');
+            var dataScaleX = document.getElementById('dataScaleX');
+            var dataScaleY = document.getElementById('dataScaleY');
+            var options = {
+                aspectRatio: 760 / 360,
+                autoCropArea: 1.0,
+                preview: '.img-preview',
+                viewMode: 2,
+                responsive: false,
+                ready: function (e) {
+                    console.log(e.type);
+                },
+                cropstart: function (e) {
+                    console.log(e.type, e.detail.action);
+                },
+                cropmove: function (e) {
+                    console.log(e.type, e.detail.action);
+                },
+                cropend: function (e) {
+                    console.log(e.type, e.detail.action);
+                },
+                crop: function (e) {
+                    var data = e.detail;
+
+                    console.log(e.type);
+                    dataX.value = Math.round(data.x);
+                    dataY.value = Math.round(data.y);
+                    dataHeight.value = Math.round(data.height);
+                    dataWidth.value = Math.round(data.width);
+                    console.log('__ ' + Math.round(data.x) + '__ ' + Math.round(data.y) + '__ ' + Math.round(data.height) )
+                },
+                zoom: function (e) {
+                    console.log(e.type, e.detail.ratio);
+                }
+            };
+            cropper = new Cropper(image, options);
+            var originalImageURL = image.src;
+
+            // -------------------------
+            // -- CKEDITOR --
+            // -------------------------
+            if ( CKEDITOR.env.ie && CKEDITOR.env.version < 9 )
+                CKEDITOR.tools.enableHtml5Elements( document );
+
+            CKEDITOR.config.height = 150;
+            CKEDITOR.config.width = 'auto';
+
+            CKEDITOR.editorConfig = function( config ) {
+                config.toolbarGroups = [
+                    { name: 'clipboard', groups: [ 'undo', 'clipboard' ] },
+                    { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+                    { name: 'links', groups: [ 'links' ] },
+                    { name: 'insert', groups: [ 'insert' ] },
+                    { name: 'forms', groups: [ 'forms' ] },
+                    { name: 'tools', groups: [ 'tools' ] },
+                    { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
+                    { name: 'others', groups: [ 'others' ] },
+                    '/',
+                    { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+                    { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+                    { name: 'styles', groups: [ 'styles' ] },
+                    { name: 'colors', groups: [ 'colors' ] },
+                    { name: 'about', groups: [ 'about' ] }
+                ];
+
+                config.removeButtons = 'Underline,Subscript,Superscript,Redo,Undo,Format,Styles';
+            };
+
+            CKEDITOR.replace( 'event_description' );
+
         });
-
-        $( "#seruvent_date" ).datepicker( {
-            dateFormat: "dd/mm/yy",
-            firstDay: 1,
-            dayNames: [ "Pazar" ,"Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi" ],
-            dayNamesMin: [ "Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt" ],
-            monthNames: [ "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık" ],
-            monthNamesShort: [ "Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara" ],
-            minDate: new Date()
-        });
-
-        $('#seruvent_time').timepicker({
-            'timeFormat': 'H:i',
-            'forceRoundTime': true
-        });
-
-
-        if ( CKEDITOR.env.ie && CKEDITOR.env.version < 9 )
-            CKEDITOR.tools.enableHtml5Elements( document );
-
-        CKEDITOR.config.height = 150;
-        CKEDITOR.config.width = 'auto';
-
-        CKEDITOR.editorConfig = function( config ) {
-            config.toolbarGroups = [
-                { name: 'clipboard', groups: [ 'undo', 'clipboard' ] },
-                { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
-                { name: 'links', groups: [ 'links' ] },
-                { name: 'insert', groups: [ 'insert' ] },
-                { name: 'forms', groups: [ 'forms' ] },
-                { name: 'tools', groups: [ 'tools' ] },
-                { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
-                { name: 'others', groups: [ 'others' ] },
-                '/',
-                { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-                { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
-                { name: 'styles', groups: [ 'styles' ] },
-                { name: 'colors', groups: [ 'colors' ] },
-                { name: 'about', groups: [ 'about' ] }
-            ];
-
-            config.removeButtons = 'Underline,Subscript,Superscript,Redo,Undo,Format,Styles';
-        };
-
-        CKEDITOR.replace( 'event_description' );
 
     </script>
 
