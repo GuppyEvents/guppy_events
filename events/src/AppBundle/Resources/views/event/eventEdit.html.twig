@@ -88,9 +88,9 @@
                             <fieldset>
                                 <label>Görünürlüğü:</label>
                                 <select id="event_permission" class="form-control" name="event_permission">
-                                    <option selected="{{ event.permission == "PUBLIC" ? "true":"false" }}" value="PUBLIC">Herkese Açık</option>
-                                    <option selected="{{ event.permission == "UNIVERSITY" ? "true":"false" }}" value="UNIVERSITY">Üniversite Öğrencileri</option>
-                                    <option selected="{{ event.permission == "COMMUNITY" ? "true":"false" }}" value="COMMUNITY">Topluluk Üyeleri</option>
+                                    <option {% if event.permission == "PUBLIC" %}selected{% endif %} value="PUBLIC">Herkese Açık</option>
+                                    <option {% if event.permission == "UNIVERSITY" %}selected{% endif %} value="UNIVERSITY">Üniversite Öğrencileri</option>
+                                    <option {% if event.permission == "COMMUNITY" %}selected{% endif %} value="COMMUNITY">Topluluk Üyeleri</option>
                                 </select>
                             </fieldset>
                             <fieldset>
