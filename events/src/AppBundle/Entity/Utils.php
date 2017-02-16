@@ -147,6 +147,18 @@ class Utils
             'text'    => $content));
     }
 
+    public static function setUserCanAddEvent($env, $canAdd){
+        $_SESSION['user_can_add_event'] = $canAdd;
+        $session = $env->get('session');
+        $session->set('user_can_add_event', $canAdd);
+    }
+
+    public static function getUserCanAddEvent($env){
+        $session = $env->get('session');
+        return $session->get('user_can_add_event');
+        //return $_SESSION['user_can_add_event'];
+    }
+
     public static function getSessionToastMessages(){
         $messages = array();
         if(isset($_SESSION['success_message'])){

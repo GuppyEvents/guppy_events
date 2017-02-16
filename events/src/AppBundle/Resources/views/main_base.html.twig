@@ -124,6 +124,9 @@
 
         <!-- ------------ CONTENT ------------ -->
         <div class="guppy-container">
+            {% if app.session.get('user_can_add_event') == true %}
+                <div>asd</div>
+            {% endif %}
 
             <!-- This search form called after press enter key -->
             <form action="{{ path('search_all') }}" method="post" style="display: none;">
