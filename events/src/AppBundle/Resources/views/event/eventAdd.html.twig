@@ -88,72 +88,24 @@
                                    onchange='checkValidation(this , "Maksimum katılımcı sayısını giriniz")'
                                    oninvalid='checkValidation(this , "Maksimum katılımcı sayısını giriniz")' value="100000">
                         </fieldset>
+
                         <fieldset>
-                            <label>Etkinlik Sayfasında gözükecek hali</label>
+                            <label>Kapak Fotoğrafı</label>
                             <textarea type="text" style="display: none;" class="form-control" id="event_image_base64" name="event_image_base64"></textarea>
 
                             <input id="temp_img_loader" type="file">
 
                             <div class="ge-community-cover-area">
                                 <div class="ge-community-cover-img">
-                                    <div class="img-preview preview-lg"></div>
+                                    <div class="img-preview" style="height: 360px!important; width: 760px!important;"></div>
 
                                     <div class="img-container" style="display: none;">
                                         <img id="img_viewer" src="" class="img-responsive" alt="" />
                                     </div>
                                 </div>
                             </div>
-
-                            {#<span id="community-background-image-edit" class="community-content-header-edit" data-modal-link="community-background-image"><i class="fa fa-cog" aria-hidden="true"></i></span>#}
-                            {#<div class="modal-window" data-modal="community-background-image">#}
-                                {#<div class="modal-box medium animated" data-animation="zoomIn" data-duration="100">#}
-                                    {#<span class="close-btn icon icon-office-52"></span>#}
-
-                                    {#<div class="row">#}
-                                        {#<div id="img-container-modal" class="col-md-12">#}
-                                            {#<!-- <h3 class="page-header">Demo:</h3> -->#}
-                                            {#<div class="img-container">#}
-                                                {#{% image 'theme/assets/img/guppy_bilkent_banner_01.jpg' %}#}
-                                                    {#<img id="img_viewer" src="{{ asset_url }}" class="img-responsive" alt="" />#}
-                                                {#{% endimage %}#}
-                                            {#</div>#}
-
-                                            {#<!-- <h3 class="page-header">Data:</h3> -->#}
-                                            {#<div class="docs-data">#}
-                                                {#<div class="input-group input-group-sm">#}
-                                                    {#<input type="text" class="form-control" id="dataX" style="display:none;" placeholder="x">#}
-                                                {#</div>#}
-                                                {#<div class="input-group input-group-sm">#}
-                                                    {#<input type="text" class="form-control" id="dataY" style="display:none;" placeholder="y">#}
-                                                {#</div>#}
-                                                {#<div class="input-group input-group-sm">#}
-                                                    {#<input type="text" class="form-control" id="dataWidth" style="display:none;" placeholder="width">#}
-                                                {#</div>#}
-                                                {#<div class="input-group input-group-sm">#}
-                                                    {#<input type="text" class="form-control" id="dataHeight" style="display:none;" placeholder="height">#}
-                                                {#</div>#}
-                                            {#</div>#}
-
-                                        {#</div>#}
-                                    {#</div>#}
-
-                                {#</div>#}
-                            {#</div> <!-- modal end -->#}
-
                         </fieldset>
-                        {#<fieldset>#}
-                            {#<label>Kapak Fotoğrafı</label>#}
-                            {#<textarea type="text" style="display: none;" class="form-control" id="event_image_base64" name="event_image_base64"></textarea>#}
 
-                            {#<div class="image-editor">#}
-                                {#<input type="file" class="cropit-image-input">#}
-                                {#<div class="cropit-preview"></div>#}
-                                {#<div class="image-size-label">#}
-                                    {#Kapak fotoğrafını ayarla#}
-                                {#</div>#}
-                                {#<input type="range" class="cropit-image-zoom-input">#}
-                            {#</div>#}
-                        {#</fieldset>#}
                         <fieldset>
                             <label for="name">Konumu:</label>
                             <input id="search_event_location" name="search_event_location" type="text" size="150">
@@ -179,40 +131,12 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     {% javascripts
             'theme/assets/js/cropper.js'
-            'theme/assets/cropit/jquery.cropit.js'
             'theme/assets/js/jquery.timepicker.js'%}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
-    <style>
-        .cropit-preview {
-            background-color: #f8f8f8;
-            background-size: cover;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            margin-top: 7px;
-            width: 600px;
-            height: 400px;
-        }
 
-        .cropit-preview-image-container {
-            cursor: move;
-        }
-
-        .image-size-label {
-            margin-top: 10px;
-        }
-
-        input, .export {
-            display: block;
-        }
-
-        button {
-            margin-top: 10px;
-        }
-    </style>
 
     <script>
-
 /***********************************************************************************************************************
  *                                          LOCAL VARIABLE
  **********************************************************************************************************************/
@@ -246,12 +170,6 @@
 
 
         function initMap() {
-
-            $('.image-editor').cropit({
-                imageState: {
-                    src: ''
-                },
-            });
 
             var input = document.getElementById('search_event_location');
             autocomplete = new google.maps.places.Autocomplete(input);
@@ -359,10 +277,6 @@
 
         $(function() {
 
-            // we should get modal size before document ready
-            $( "#community-background-image-edit" ).trigger( "click" );
-            $('.close-btn').trigger( "click" );
-
             // BEFORE SUBMIT
             $(document).on('click','#submit_event',function (event) {
                 $('#event_date').val($('#seruvent_date').val() + " " +  $('#seruvent_time').val());
@@ -385,20 +299,6 @@
 
 
             document.getElementById("temp_img_loader").addEventListener("change", fileToBase64Converter, false);
-
-            // -------------------------
-            // -- BEFORE SUBMIT --
-            // -------------------------
-            $(document).on('click' , '#submit_event' , function(e){
-                $('#event_image_base64').val($('.img-preview > img').attr('src'));
-                alert("aaa");
-                e.preventDefault();
-            });
-//            $('#add_event_form').submit(function() {
-//                var imageData = $('.image-editor').cropit('export');
-//                $('#event_image_base64').val(imageData);
-//                return true; // return false to cancel form action
-//            });
 
             // -------------------------
             // -- CROPPER AREA --
@@ -449,6 +349,8 @@
             };
             cropper = new Cropper(image, options);
             var originalImageURL = image.src;
+
+
 
             // -------------------------
             // -- CKEDITOR --

@@ -2,6 +2,14 @@
 
 {% block title %}Seruvent - Etkinlik Anasayfa{% endblock %}
 
+{% block stylesheets %}
+
+    {% stylesheets
+            'theme/assets/css/cropper.css'
+            'theme/assets/css/cropper-main.css' filter='cssrewrite' %}
+        <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
 
 {% block content %}
 
@@ -42,13 +50,18 @@
 
                         <!-- Event Image Panel -->
                         <div class="col-md-8 event-content-header-image">
-                            {% if event.imageBase64 %}
-                                <img src="{{ event.imageBase64 }}" class="img-responsive" alt="{{ event.title }}" />
-                            {% else %}
-                                {% image 'theme/assets/img/event_header.jpeg' %}
-                                    <img src="{{ asset_url }}" class="img-responsive" alt="" />
-                                {% endimage %}
-                            {% endif %}
+
+                            <div class="img-preview" style="height: 360px!important; width: 760px!important;"></div>
+
+                            <div class="img-container" style="display: none;">
+                                {% if event.imageBase64 %}
+                                    <img id="img_viewer" src="{{ event.imageBase64 }}" class="img-responsive" alt="{{ event.title }}" />
+                                {% else %}
+                                    {% image 'theme/assets/img/event_header.jpeg' %}
+                                        <img id="img_viewer" src="{{ asset_url }}" class="img-responsive" alt=""/>
+                                    {% endimage %}
+                                {% endif %}
+                            </div>
                         </div>
 
                         <!-- Event Detail Panel -->
@@ -191,12 +204,18 @@
 
 
 {% block javascriptcontent %}
+
+    {% javascripts
+            'theme/assets/js/cropper.js' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
     <script>
 
     /***********************************************************************************************************************
      *                                          LOCAL VARIABLE
      **********************************************************************************************************************/
-
+        var cropper;
 
 
     /***********************************************************************************************************************
@@ -275,6 +294,57 @@
     /***********************************************************************************************************************
      *                                          DOCUMENT ON READY
      **********************************************************************************************************************/
+
+            // -------------------------
+            // -- CROPPER AREA --
+            // -------------------------
+            var Cropper = window.Cropper;
+            var URL = window.URL || window.webkitURL;
+            var container = document.querySelector('.img-container');
+            var image = container.getElementsByTagName('img').item(0);
+            var actions = document.getElementById('actions');
+            var dataX = document.getElementById('dataX');
+            var dataY = document.getElementById('dataY');
+            var dataHeight = document.getElementById('dataHeight');
+            var dataWidth = document.getElementById('dataWidth');
+            var dataRotate = document.getElementById('dataRotate');
+            var dataScaleX = document.getElementById('dataScaleX');
+            var dataScaleY = document.getElementById('dataScaleY');
+            var options = {
+                aspectRatio: 760 / 360,
+                checkCrossOrigin: false,
+                autoCropArea: 1.0,
+                preview: '.img-preview',
+                viewMode: 2,
+                responsive: false,
+                ready: function (e) {
+                    console.log(e.type);
+                },
+                cropstart: function (e) {
+                    console.log(e.type, e.detail.action);
+                },
+                cropmove: function (e) {
+                    console.log(e.type, e.detail.action);
+                },
+                cropend: function (e) {
+                    console.log(e.type, e.detail.action);
+                },
+                crop: function (e) {
+                    var data = e.detail;
+
+                    console.log(e.type);
+                    dataX.value = Math.round(data.x);
+                    dataY.value = Math.round(data.y);
+                    dataHeight.value = Math.round(data.height);
+                    dataWidth.value = Math.round(data.width);
+                    console.log('__ ' + Math.round(data.x) + '__ ' + Math.round(data.y) + '__ ' + Math.round(data.height) )
+                },
+                zoom: function (e) {
+                    console.log(e.type, e.detail.ratio);
+                }
+            };
+            cropper = new Cropper(image, options);
+            var originalImageURL = image.src;
 
     </script>
 

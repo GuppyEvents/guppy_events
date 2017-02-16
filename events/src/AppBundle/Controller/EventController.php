@@ -165,7 +165,7 @@ class EventController extends Controller
                         return $this->redirectToRoute('event_add_page');
                     }
 
-                    $request_date = \DateTime::createFromFormat('m/d/Y H:i A', $request->get('event_date'));
+                    $request_date = \DateTime::createFromFormat('d/m/Y H:i', $request->get('event_date'));
                     $request_permission = $request->get('event_permission') ? $request->get('event_permission') : 'PUBLIC';
 
                     $event = $em->getRepository('AppBundle:Event')->find($request->get('event_id'));
@@ -174,28 +174,31 @@ class EventController extends Controller
                     $event->setPermission($request_permission);
                     $event->setStartDate( $request_date );
                     $event->setMaxParticipantNum( $request->get('event_participant_count') );
+                    // yeni resim eklenip eklenmediği kontrol edilir
                     $event_image = $request->get('event_image_base64');
-                    $fileName = "";
-                    if ($this->container->get('kernel')->getEnvironment() == 'dev') {
-                        $fileName .= "dev/";
-                    }
-                    $extension = substr($event_image, 0, strpos($event_image, ";"));
-                    $fileName .= Utils::getGUID();
-                    if (strpos($extension, "data:image") !== false) {
-                        if (strpos($extension, "jpeg") !== false) {
-                            $fileName .= ".jpg";
-                        } else if (strpos($extension, "png") != false) {
-                            $fileName .= ".png";
+                    if(strlen($event_image)>0){
+                        $fileName = "";
+                        if ($this->container->get('kernel')->getEnvironment() == 'dev') {
+                            $fileName .= "dev/";
+                        }
+                        $extension = substr($event_image, 0, strpos($event_image, ";"));
+                        $fileName .= Utils::getGUID();
+                        if (strpos($extension, "data:image") !== false) {
+                            if (strpos($extension, "jpeg") !== false) {
+                                $fileName .= ".jpg";
+                            } else if (strpos($extension, "png") != false) {
+                                $fileName .= ".png";
+                            } else {
+                                $data['error_msg'] = 'Desteklenmeyen görüntü biçimi.';
+                                return $this->render('AppBundle:user:profile_settings_account.html.twig', $data);
+                            }
                         } else {
-                            $data['error_msg'] = 'Desteklenmeyen görüntü biçimi.';
+                            $data['error_msg'] = 'Desteklenmeyen dosya biçimi.';
                             return $this->render('AppBundle:user:profile_settings_account.html.twig', $data);
                         }
-                    } else {
-                        $data['error_msg'] = 'Desteklenmeyen dosya biçimi.';
-                        return $this->render('AppBundle:user:profile_settings_account.html.twig', $data);
+                        $event_image = Utils::uploadBase64ToServer($event_image, $fileName);
+                        $event->setImageBase64($event_image);
                     }
-                    $event_image = Utils::uploadBase64ToServer($event_image, $fileName);
-                    $event->setImageBase64($event_image);
                     $event->setGpsLocationLat($request->get('event_location_lat'));
                     $event->setGpsLocationLng($request->get('event_location_lng'));
                     $event->setCommunityUser( $communityUser );

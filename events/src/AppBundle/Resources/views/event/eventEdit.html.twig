@@ -7,6 +7,8 @@
 {% block stylesheets %}
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     {% stylesheets
+        'theme/assets/css/cropper.css'
+        'theme/assets/css/cropper-main.css'
         'theme/assets/css/jquery.timepicker.css' filter='cssrewrite' %}
     <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -106,20 +108,24 @@
                                        onchange='checkValidation(this , "Maksimum katılımcı sayısını giriniz")'
                                        oninvalid='checkValidation(this , "Maksimum katılımcı sayısını giriniz")'>
                             </fieldset>
+
                             <fieldset>
                                 <label>Kapak Fotoğrafı</label>
-                                <input type="text" style="display: none;" class="form-control" id="event_image_base64" name="event_image_base64" value="{{ event.imageBase64 }}">
+                                <textarea type="text" style="display: none;" class="form-control" id="event_image_base64" name="event_image_base64"></textarea>
 
-                                <div class="image-editor">
-                                    <input type="file" class="cropit-image-input">
-                                    <div class="cropit-preview">
+                                <input id="temp_img_loader" type="file">
+
+                                <div class="ge-community-cover-area">
+                                    <div class="ge-community-cover-img">
+                                        <div class="img-preview" style="height: 360px!important; width: 760px!important;"></div>
+
+                                        <div class="img-container" style="display: none;">
+                                            <img id="img_viewer" src="{{ event.imageBase64 }}" class="img-responsive" alt="" />
+                                        </div>
                                     </div>
-                                    <div class="image-size-label">
-                                        Kapak fotoğrafını ayarla
-                                    </div>
-                                    <input type="range" class="cropit-image-zoom-input">
                                 </div>
                             </fieldset>
+
                             <fieldset>
                                 <label for="name">Konumu:</label>
                                 <input id="search_event_location" name="search_event_location" type="text" size="150">
@@ -146,44 +152,19 @@
     {% if pageError is not defined %}
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         {% javascripts
-            'theme/assets/cropit/jquery.cropit.js'
+            'theme/assets/js/cropper.js'
             'theme/assets/js/jquery.timepicker.js'%}
         <script type="text/javascript" src="{{ asset_url }}"></script>
         {% endjavascripts %}
-        <style>
-            .cropit-preview {
-                background-color: #f8f8f8;
-                background-size: cover;
-                border: 1px solid #ccc;
-                border-radius: 3px;
-                margin-top: 7px;
-                width: 600px;
-                height: 400px;
-            }
 
-            .cropit-preview-image-container {
-                cursor: move;
-            }
-
-            .image-size-label {
-                margin-top: 10px;
-            }
-
-            input, .export {
-                display: block;
-            }
-
-            button {
-                margin-top: 10px;
-            }
-        </style>
-        <script>
+    <script>
 
     /***********************************************************************************************************************
      *                                          LOCAL VARIABLE
      **********************************************************************************************************************/
             var autocomplete;
             var map;
+            var cropper;
 
 
     /***********************************************************************************************************************
@@ -209,36 +190,8 @@
                 }
             }
 
-            $('#add_event_form').submit(function() {
-                var imageData = $('.image-editor').cropit('export');
-                $('#event_image_base64').val(imageData);
-                return true; // return false to cancel form action
-            });
 
             function initMap() {
-
-                if({{ event.imageBase64 is not null }}) {
-                    $('.image-editor').cropit({
-                        imageState: {
-                            src: '{{ event.imageBase64 }}'
-                        },
-                    });
-                }else{
-                    $('.image-editor').cropit({
-                        imageState: {
-                            src: ''
-                        },
-                    });
-                }
-                $('.image-editor').cropit('maxZoom', 2);
-                $('.image-editor').cropit('minZoom', 'fit');
-
-                $("#event_date").datetimepicker();
-
-                if({{ event.startDate is not null }}) {
-                    $("#event_date").data("DateTimePicker").date("{{ event.startDate.format('m/d/Y H:i') }}");
-                }
-
 
                 var input = document.getElementById('search_event_location');
                 autocomplete = new google.maps.places.Autocomplete(input);
@@ -276,6 +229,54 @@
                     FR.onload = function(e) {
                         $('#img_viewer').attr('src', e.target.result);
                         $('#event_image_base64').val(e.target.result);
+
+                        var Cropper = window.Cropper;
+                        var URL = window.URL || window.webkitURL;
+                        var container = document.querySelector('.img-container');
+                        var image = container.getElementsByTagName('img').item(0);
+                        var actions = document.getElementById('actions');
+                        var dataX = document.getElementById('dataX');
+                        var dataY = document.getElementById('dataY');
+                        var dataHeight = document.getElementById('dataHeight');
+                        var dataWidth = document.getElementById('dataWidth');
+                        var dataRotate = document.getElementById('dataRotate');
+                        var dataScaleX = document.getElementById('dataScaleX');
+                        var dataScaleY = document.getElementById('dataScaleY');
+                        var options = {
+                            aspectRatio: 760 / 360,
+                            autoCropArea: 1.0,
+                            preview: '.img-preview',
+                            viewMode: 2,
+                            responsive: false,
+                            checkCrossOrigin: false,
+                            ready: function (e) {
+                                console.log(e.type);
+                            },
+                            cropstart: function (e) {
+                                console.log(e.type, e.detail.action);
+                            },
+                            cropmove: function (e) {
+                                console.log(e.type, e.detail.action);
+                            },
+                            cropend: function (e) {
+                                console.log(e.type, e.detail.action);
+                            },
+                            crop: function (e) {
+                                var data = e.detail;
+
+                                console.log(e.type);
+                                dataX.value = Math.round(data.x);
+                                dataY.value = Math.round(data.y);
+                                dataHeight.value = Math.round(data.height);
+                                dataWidth.value = Math.round(data.width);
+                                console.log('__ ' + Math.round(data.x) + '__ ' + Math.round(data.y) + '__ ' + Math.round(data.height) )
+                            },
+                            zoom: function (e) {
+                                console.log(e.type, e.detail.ratio);
+                            }
+                        };
+                        cropper.destroy();
+                        cropper = new Cropper(image, options);
                     };
                     FR.readAsDataURL( this.files[0] );
                 }
@@ -320,14 +321,63 @@
                 'forceRoundTime': true
             });
 
-            $( "#community-background-image-edit" ).trigger( "click" );
-            $('.close-btn').trigger( "click" );
+            document.getElementById("temp_img_loader").addEventListener("change", fileToBase64Converter, false);
 
-            $(document).on('click','#submit_crop',function(){
-                var imageData = $('.image-editor').cropit('export');
-                $('#test').val(imageData);
-            });
+            // -------------------------
+            // -- CROPPER AREA --
+            // -------------------------
+            var Cropper = window.Cropper;
+            var URL = window.URL || window.webkitURL;
+            var container = document.querySelector('.img-container');
+            var image = container.getElementsByTagName('img').item(0);
+            var actions = document.getElementById('actions');
+            var dataX = document.getElementById('dataX');
+            var dataY = document.getElementById('dataY');
+            var dataHeight = document.getElementById('dataHeight');
+            var dataWidth = document.getElementById('dataWidth');
+            var dataRotate = document.getElementById('dataRotate');
+            var dataScaleX = document.getElementById('dataScaleX');
+            var dataScaleY = document.getElementById('dataScaleY');
+            var options = {
+                aspectRatio: 760 / 360,
+                checkCrossOrigin: false,
+                autoCropArea: 1.0,
+                preview: '.img-preview',
+                viewMode: 2,
+                responsive: false,
+                ready: function (e) {
+                    console.log(e.type);
+                },
+                cropstart: function (e) {
+                    console.log(e.type, e.detail.action);
+                },
+                cropmove: function (e) {
+                    console.log(e.type, e.detail.action);
+                },
+                cropend: function (e) {
+                    console.log(e.type, e.detail.action);
+                },
+                crop: function (e) {
+                    var data = e.detail;
 
+                    console.log(e.type);
+                    dataX.value = Math.round(data.x);
+                    dataY.value = Math.round(data.y);
+                    dataHeight.value = Math.round(data.height);
+                    dataWidth.value = Math.round(data.width);
+                    console.log('__ ' + Math.round(data.x) + '__ ' + Math.round(data.y) + '__ ' + Math.round(data.height) )
+                },
+                zoom: function (e) {
+                    console.log(e.type, e.detail.ratio);
+                }
+            };
+            cropper = new Cropper(image, options);
+            var originalImageURL = image.src;
+
+
+            // -------------------------
+            // -- CKEDITOR --
+            // -------------------------
             if ( CKEDITOR.env.ie && CKEDITOR.env.version < 9 )
                 CKEDITOR.tools.enableHtml5Elements( document );
 
@@ -359,9 +409,6 @@
         <script async defer
                 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDLqDBN5nlLAbTBnSrkI0gwft2v6SWFjh8&callback=initMap&libraries=places">
         </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.css" >
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
     {% endif %}
 
 {% endblock %}
