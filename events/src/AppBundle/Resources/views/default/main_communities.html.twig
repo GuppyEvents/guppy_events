@@ -4,6 +4,15 @@
 {% block metaDescription %}Üniversite toplulukları ve kulüplerinin listesi{% endblock %}
 {% block metaKeyword %}Seruvent bilkent üniversitesi öğrenci toplulukları kulüpleri {% endblock %}
 
+{% block stylesheets %}
+    <style >
+        .society .speaker-socials > li {
+            padding: 0 5px;
+        }
+    </style>
+
+{% endblock %}
+
 {% block content %}
 
     <div class="preloader-mask">
@@ -11,7 +20,7 @@
     </div>
 
     <section id="clubs" class="guppy-section align-center">
-        <div class="container">
+        <div class="container ge-content-box">
 
             <div class="container-header">
                 {#<div class="container-header-button">#}
@@ -25,29 +34,38 @@
 
             <div id="container-body">
             {% for community in communities %}
-                <div class="col-sm-2 guppy-main-page-community-box">
-                    <div class="society guppy-main-page-community-box-content">
-                        <div class="photo-wrapper rounded">
-                            {% image 'upload/default-gallery1.jpg' %}
-                                {% if community.imageBase64 %}
-                                    <img src="{{ community.imageBase64 }}" alt="Community" class="img-responsive" />
-                                {% else %}
-                                    <img src="{{ asset_url }}" alt="Community" class="img-responsive" />
-                                {% endif %}
-                            {% endimage %}
+                {#<div class="col-md-2" style="padding-left: 5px; padding-right: 5px; overflow: hidden; float: left;">#}
+                <div class="col-sm-2 ge-communities-box" style="overflow: hidden;" id="ge-event-box">
+                    <a href="{{ path("user_community_events_homepage" , {'communityId': community.id}) }}" title="{{ community.name }}" class="ge-events-box-link">
+                        <div class="col-sm-12 guppy-main-page-community-box">
+                            <div class="society guppy-main-page-community-box-content" style="margin-bottom: 20px;">
+                                <div class="photo-wrapper rounded">
+                                    {% image 'upload/default-gallery1.jpg' %}
+                                        {% if community.imageBase64 %}
+                                            <img src="{{ community.imageBase64 }}" alt="Community" class="img-responsive" />
+                                        {% else %}
+                                            <img src="{{ asset_url }}" alt="Community" class="img-responsive" />
+                                        {% endif %}
+                                    {% endimage %}
+                                </div>
+                                <h3 class="name">
+                                    {{ community.name }}
+                                </h3>
+                                <p class="text-alt"><small>{{ community.university.name }}</small></p>
+                                <ul class="speaker-socials">
+                                    <li><a href="{% if community.link_facebook %}{{ community.link_facebook }}{% endif %}" target="_blank"><span class="fa fa-facebook" aria-hidden="true"></span></a></li>
+                                    <li><a href="{% if community.link_twitter %}{{ community.link_twitter }}{% else %}#{% endif %}" {% if community.link_twitter %}target="_blank"{% else %} style="pointer-events: none; color: black;" {% endif %}><span class="fa fa-twitter" {% if community.link_twitter %}{% else %}style="color: #e9e9e9" {% endif %}></span></a></li>
+                                    <li><a href="{% if community.link_instagram %}{{ community.link_instagram }}{% else %}#{% endif %}" {% if community.link_instagram %}target="_blank"{% else %} style="pointer-events: none;" {% endif %}><span class="fa fa-instagram" {% if community.link_instagram %}{% else %}style="color: #e9e9e9" {% endif %}></span></a></li>
+                                </ul>
+                            </div>
                         </div>
-                        <h3 class="name"><a href="{{ path("user_community_events_homepage" , {'communityId': community.id}) }}">{{ community.name }}</a></h3>
-                        <p class="text-alt"><small>{{ community.university.name }}</small></p>
-                        <ul class="speaker-socials">
-                            <li><a href="{% if community.link_facebook %}{{ community.link_facebook }}{% endif %}" target="_blank"><span class="fa fa-facebook" aria-hidden="true"></span></a></li>
-                            <li><a href="{% if community.link_twitter %}{{ community.link_twitter }}{% endif %}" target="_blank"><span class="fa fa-twitter"></span></a></li>
-                            <li><a href="{% if community.link_instagram %}{{ community.link_instagram }}{% endif %}" target="_blank"><span class="fa fa-instagram"></span></a></li>
-                        </ul>
-                    </div>
+                    </a>
                 </div>
+                {#</div>#}
             {% endfor %}
-            </div>
 
+
+        </div>
         </div>
     </section>
 
@@ -90,7 +108,7 @@
                     // -- 2.2.2 --
                     if(data.content){
                         data.content.communityList.forEach(function(community) {
-                            if(community['isApproved']) {
+
 
                                 communityElem = '<div class="col-sm-2 guppy-main-page-community-box">' +
                                         '<div class="society guppy-main-page-community-box-content">' +
@@ -108,8 +126,45 @@
                                         '</div>' +
                                         '</div>';
 
-                                $('#container-body').append(communityElem);
+                            communityElem = '<div class="col-sm-2 ge-communities-box" style="overflow: hidden;" id="ge-event-box"> ' +
+                                    '<a href="' + community['homepagelink'] + '" title="' + community['name'] + '" class="ge-events-box-link">' +
+                                    '<div class="col-sm-12 guppy-main-page-community-box">' +
+                                    '<div class="society guppy-main-page-community-box-content" style="margin-bottom: 20px;">' +
+                                    '<div class="photo-wrapper rounded">' +
+                                    '<img src="' + community['image'] +'" alt="Community" class="img-responsive" />' +
+                                    '</div>' +
+                                    '<h3 class="name">' +
+                                    community['name'] +
+                                    '</h3>' +
+                                    '<p class="text-alt"><small>' + community['universityName'] + '</small></p>' +
+                                    '<ul class="speaker-socials">';
+                            var fb="",tw="",ins="";
+                            if(community['link_facebook']){
+                                fb = '<li><a href="' + community['link_facebook'] + '" target="_blank"><span class="fa fa-facebook" aria-hidden="true"></span></a></li>';
+                            }else{
+                                fb = '<li><a style="pointer-events: none;" href="#"><span style="color: #e9e9e9;" class="fa fa-facebook" aria-hidden="true"></span></a></li>';
                             }
+                            if(community['link_twitter']){
+                                tw = '<li><a href="' + community['link_twitter'] + '" target="_blank"><span class="fa fa-twitter" aria-hidden="true"></span></a></li>';
+                            }else{
+                                tw = '<li><a style="pointer-events: none;" href="#"><span style="color: #e9e9e9;" class="fa fa-twitter" aria-hidden="true"></span></a></li>';
+                            }
+                            if(community['link_instagram']){
+                                ins = '<li><a href="' + community['link_instagram'] + '" target="_blank"><span class="fa fa-instagram" aria-hidden="true"></span></a></li>';
+                            }else{
+                                ins = '<li><a style="pointer-events: none;" href="#"><span style="color: #e9e9e9;" class="fa fa-instagram" aria-hidden="true"></span></a></li>';
+                            }
+                            communityElem += fb + tw + ins;
+                                    {#'<li><a href="{% if community.link_facebook %}{{ community.link_facebook }}{% endif %}" target="_blank"><span class="fa fa-facebook" aria-hidden="true"></span></a></li>#}
+                            {#<li><a href="{% if community.link_twitter %}{{ community.link_twitter }}{% else %}#{% endif %}" {% if community.link_twitter %}target="_blank"{% else %} style="pointer-events: none; color: black;" {% endif %}><span class="fa fa-twitter" {% if community.link_twitter %}{% else %}style="color: #e9e9e9" {% endif %}></span></a></li>#}
+                            {#<li><a href="{% if community.link_instagram %}{{ community.link_instagram }}{% else %}#{% endif %}" {% if community.link_instagram %}target="_blank"{% else %} style="pointer-events: none;" {% endif %}><span class="fa fa-instagram" {% if community.link_instagram %}{% else %}style="color: #e9e9e9" {% endif %}></span></a></li>#}
+                            communityElem += '</ul>'+
+                            '</div>'+
+                            '</div>'+
+                            '</a>' +
+                            '</div>';
+
+                                $('#container-body').append(communityElem);
                         });
                     }
 

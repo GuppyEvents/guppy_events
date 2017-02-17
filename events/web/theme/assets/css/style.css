@@ -5555,6 +5555,32 @@ section.section.ge-events-list-section{
   padding: 8px 0 8px 8px;
   display:none;
 }
+
+.ge-communities-box{
+  padding-right: 5px;
+  padding-left: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-transition: .2s cubic-bezier(0,.2,.4,1);
+  -moz-transition: .2s cubic-bezier(0,.2,.4,1);
+  transition: .2s cubic-bezier(0,.2,.4,1);
+  background-color: #fff;
+  -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1)
+-moz-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1)
+box-shadow: 0 1px 1px 0 rgba(0,0,0,.1)
+}
+
+.ge-communities-box:hover{
+  -webkit-box-shadow: 0 1px 8px 0 rgba(0,0,0,.05);
+  -moz-box-shadow: 0 1px 8px 0 rgba(0,0,0,.05);
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,.05);
+  text-decoration: none;
+  transform: scale(1.01);
+}
+
 .ge-events-box{
   margin-bottom: 30px;
   border: 1px solid #e8ebef;
@@ -5902,7 +5928,7 @@ section.section.ge-events-list-section{
 .society .speaker-socials > li a:hover .fa,
 .society .speaker-socials > li a:focus .fa,
 .society .speaker-socials > li a:active .fa {
-  color: #ffffff;
+  color: #fe4918;
 }
 .society .speaker-socials > li .fa {
   -webkit-transition: color 0.2s ease, background 0.2s ease, border 0.2s ease;
