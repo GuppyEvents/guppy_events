@@ -63,8 +63,6 @@
                 </div>
                 {#</div>#}
             {% endfor %}
-
-
         </div>
         </div>
     </section>
@@ -89,6 +87,12 @@
 
         // searchFrom değeri "community" ya da "event" olabilir. Paging nereden devam edeceği belirlenir
         function ajaxGetMoreCommunities(page){
+            if(!$("#loadingDiv").length) {
+                var loadingDiv = '<div id="loadingDiv" class="col-sm-12"> <img style="height: 40px;" src="{{ asset('theme/assets/img/loading.gif') }}"/> </div>';
+                $('#container-body').append(loadingDiv);
+            }else{
+                return;
+            }
 
             // -- 2 --
             $.post("{{ path('service_community_list') }}" , {
@@ -99,7 +103,7 @@
                 // -- 2.1 -- CONSOLE
                 if(Guppy.responseDebugMode)
                     console.log(data);
-
+                $("#loadingDiv").remove();
                 // -- 2.2 -- sonuc düzenlenir
                 if(data.resultText == 'SUCCESS'){
 

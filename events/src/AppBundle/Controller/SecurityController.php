@@ -199,6 +199,7 @@ class SecurityController extends Controller
 
             $_SESSION['success_message'] = "Kaydınız başarıyla tamamlanmıştır.";//redirect edilen sayfada mesaj gosterilmesi için sessiona mesaj atanır
 
+
             return $this->redirectToRoute('home_events');
         } catch (Exception $e) {
             $_SESSION['error_message'] = "Kaydınız oluşturulamadı.";//redirect edilen sayfada mesaj gosterilmesi için sessiona mesaj atanır
