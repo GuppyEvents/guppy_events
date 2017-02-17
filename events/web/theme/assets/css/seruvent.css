@@ -665,3 +665,14 @@ body.ge-search-page .tab-content{
     bottom: 0;
     right: 0;
 }
+.guppy-main-page-community-box{
+    border: 1px solid #e8ebef;
+    padding-right: 5px;
+    padding-left: 5px;
+    padding-top: 20px;
+}
+
+.guppy-main-page-community-box-content > a > div > img{
+    height: 158px;
+    width: 158px;
+}
