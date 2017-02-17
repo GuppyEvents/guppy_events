@@ -676,3 +676,11 @@ body.ge-search-page .tab-content{
     height: 158px;
     width: 158px;
 }
+.operation-item-link{
+    display: block;
+    width: 32px;
+    height: 32px;
+    -webkit-box-shadow: 0 0 3px #eee;
+    -moz-box-shadow: 0 0 3px #eee;
+    box-shadow: 0 0 3px #eee;
+}

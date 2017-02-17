@@ -91,9 +91,9 @@
                                             <td>
                                                 {#<form id="mail_setting" action="{{ path('user_profile_mail') }}" method="post">#}
                                                 <div class="icon-bar">
-                                                    <a id="op_application_confirm" href="#"><i class="fa fa-user-plus"></i></a>
-                                                    <a href="{{ path('user_profile_with_id' , {'userId':communityUserRole.communityUser.user.id}) }}"><i class="fa fa-user-secret"></i></a>
-                                                    <a id="op_application_reject" href="#"><i class="fa fa-user-times"></i></a>
+                                                    <a id="op_application_confirm" class="operation-item-link" title="Topluluğa Al" rel="tooltip" href="#"><i class="fa fa-user-plus"></i></a>
+                                                    <a href="{{ path('user_profile_with_id' , {'userId':communityUserRole.communityUser.user.id}) }}" class="operation-item-link" title="Profili Görüntüle" rel="tooltip"><i class="fa fa-user-secret"></i></a>
+                                                    <a id="op_application_reject" href="#" class="operation-item-link" title="Reddet" rel="tooltip"><i class="fa fa-user-times"></i></a>
                                                 </div>
 
                                                 <!-- TODO: Form yapısı kaldırılabilir  -->
