@@ -665,3 +665,12 @@ body.ge-search-page .tab-content{
     bottom: 0;
     right: 0;
 }
+
+.operation-item-link{
+    display: block;
+    width: 32px;
+    height: 32px;
+    -webkit-box-shadow: 0 0 3px #eee;
+    -moz-box-shadow: 0 0 3px #eee;
+    box-shadow: 0 0 3px #eee;
+}
