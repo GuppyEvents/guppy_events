@@ -40,11 +40,13 @@
                                         {% endimage %}
                                     {% endif %}
 
-                                    <div>
-                                        <input id="temp_img_loader" type='file' style="display: none;"/>
-                                        <a id="temp_img_loader_trigger">
-                                            <i class="fa fa-upload" aria-hidden="true"> Resim Yükle</i></a>
-                                    </div>
+                                    {% if app.request.get('_route') == 'user_profile_account' %}
+                                        <div>
+                                            <input id="temp_img_loader" type='file' style="display: none;"/>
+                                            <a id="temp_img_loader_trigger">
+                                                <i class="fa fa-upload" aria-hidden="true"> Resim Yükle</i></a>
+                                        </div>
+                                    {% endif %}
 
                                 </div>
                             </div>
