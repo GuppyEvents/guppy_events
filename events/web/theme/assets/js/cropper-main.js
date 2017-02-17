@@ -17,6 +17,7 @@ window.onload = function () {
   var dataScaleY = document.getElementById('dataScaleY');
   var options = {
         aspectRatio: 920 / 275,
+        checkCrossOrigin: false,
         autoCropArea: 1.0,
         preview: '.img-preview',
         viewMode: 2,

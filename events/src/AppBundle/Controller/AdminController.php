@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Entity\Result;
+use AppBundle\Entity\Utils;
+use AppBundle\Entity\Event;
 
 /**
  * @Route("/admin", name="admin")
@@ -63,6 +65,144 @@ class AdminController extends Controller
         $data['communityUserRoles'] = $communityUserRoles;
 
         return $this->render('AppBundle:admin:communityuser_list.html.twig', $data);
+    }
+
+
+    /**
+     * @Route("/events/base64-to-storage", name="admin_events_images_base64_to_storage")
+     */
+    public function eventsImagesBase64ToStorageAction(Request $request)
+    {
+        $data = array();
+        $em = $this->getDoctrine()->getManager();
+
+        $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findAll();
+        foreach ($eventList as $event){
+            $persist = true;
+            $event_image = $event->getImageBase64();
+            if(strlen($event_image)>0 && substr( $event_image, 0, 30 ) !== "https://storage.googleapis.com"){
+                $fileName = "";
+                if ($this->container->get('kernel')->getEnvironment() == 'dev') {
+                    $fileName .= "dev/";
+                }
+                $extension = substr($event_image, 0, strpos($event_image, ";"));
+                $fileName .= Utils::getGUID();
+                if (strpos($extension, "data:image") !== false) {
+                    if (strpos($extension, "jpeg") !== false) {
+                        $fileName .= ".jpg";
+                    } else if (strpos($extension, "png") != false) {
+                        $fileName .= ".png";
+                    } else {
+                        $data['error_msg'] = 'Desteklenmeyen görüntü biçimi.';
+                        $persist = false;
+                    }
+                } else {
+                    $data['error_msg'] = 'Desteklenmeyen dosya biçimi.';
+                    $persist = false;
+                }
+
+                if($persist){
+                    $event_image = Utils::uploadBase64ToServer($event_image, $fileName);
+                    $event->setImageBase64($event_image);
+                    $em->persist($event);
+                    $em->flush();
+                }
+            }
+        }
+
+        return $this->redirectToRoute('admin_homepage');
+    }
+
+
+    /**
+     * @Route("/community/base64-to-storage", name="admin_community_images_base64_to_storage")
+     */
+    public function communityImagesBase64ToStorageAction(Request $request)
+    {
+        $data = array();
+        $em = $this->getDoctrine()->getManager();
+
+        $communityList = $this->getDoctrine()->getRepository('AppBundle:Community')->findAll();
+        foreach ($communityList as $community){
+            $persist = true;
+            $community_image = $community->getImageBase64();
+            if(strlen($community_image)>0 && substr( $community_image, 0, 30 ) !== "https://storage.googleapis.com"){
+                $fileName = "";
+                if ($this->container->get('kernel')->getEnvironment() == 'dev') {
+                    $fileName .= "dev/";
+                }
+                $extension = substr($community_image, 0, strpos($community_image, ";"));
+                $fileName .= Utils::getGUID();
+                if (strpos($extension, "data:image") !== false) {
+                    if (strpos($extension, "jpeg") !== false) {
+                        $fileName .= ".jpg";
+                    } else if (strpos($extension, "png") != false) {
+                        $fileName .= ".png";
+                    } else {
+                        $data['error_msg'] = 'Desteklenmeyen görüntü biçimi.';
+                        $persist = false;
+                    }
+                } else {
+                    $data['error_msg'] = 'Desteklenmeyen dosya biçimi.';
+                    $persist = false;
+                }
+
+                if($persist){
+                    $community_image = Utils::uploadBase64ToServer($community_image, $fileName);
+                    $community->setImageBase64($community_image);
+                    $em->persist($community);
+                    $em->flush();
+                }
+            }
+        }
+
+        return $this->redirectToRoute('admin_homepage');
+    }
+
+
+    /**
+     * @Route("/community/background-base64-to-storage", name="admin_community_background_images_base64_to_storage")
+     */
+    public function communityBackgroundImagesBase64ToStorageAction(Request $request)
+    {
+        $data = array();
+        $em = $this->getDoctrine()->getManager();
+
+        $communityList = $this->getDoctrine()->getRepository('AppBundle:Community')->findAll();
+        foreach ($communityList as $community){
+            $persist = true;
+            $community_image = $community->getImageBackgroundBase64();
+            if(strlen($community_image)>0 && substr( $community_image, 0, 30 ) !== "https://storage.googleapis.com"){
+                $fileName = "";
+                if ($this->container->get('kernel')->getEnvironment() == 'dev') {
+                    $fileName .= "dev/";
+                }
+                $extension = substr($community_image, 0, strpos($community_image, ";"));
+                $fileName .= Utils::getGUID();
+                if (strpos($extension, "data:image") !== false) {
+                    if (strpos($extension, "jpeg") !== false) {
+                        $fileName .= ".jpg";
+                    } else if (strpos($extension, "png") != false) {
+                        $fileName .= ".png";
+                    } else {
+                        $data['error_msg'] = 'Desteklenmeyen görüntü biçimi.';
+                        $persist = false;
+                    }
+                } else {
+                    $data['error_msg'] = 'Desteklenmeyen dosya biçimi.';
+                    $persist = false;
+                }
+
+                if($persist){
+                    $community_image = Utils::uploadBase64ToServer($community_image, $fileName);
+                    $community->setImageBackgroundBase64($community_image);
+                    $em->persist($community);
+                    $em->flush();
+                }
+            }
+        }
+
+        return $this->redirectToRoute('admin_homepage');
     }
 
 
