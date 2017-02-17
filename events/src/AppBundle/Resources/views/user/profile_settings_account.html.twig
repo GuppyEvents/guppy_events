@@ -133,51 +133,6 @@
 
                             </div>
 
-                            <div class="col-sm-4 align-left">
-                                <h6>&nbsp;</h6>
-
-                                {% if isProfileOwner is defined and isProfileOwner==true %}
-                                    <div>
-                                        <span class="masonry-item">
-                                            <a href="#" class="gallery-thumb-link" data-modal-link="user-profile-picture">
-                                                {% if user.imageBase64 %}
-                                                    <img id="img_viewer" src="{{ user.imageBase64 }}" alt="{{ user.name }}" class="img-responsive" />
-                                                {% else %}
-                                                    {% image 'theme/assets/img/guppy_avatar_001.png' %}
-                                                        <img id="img_viewer" src="{{ asset_url }}" class="img-responsive" alt="{{ user.name }}" />
-                                                    {% endimage %}
-                                                {% endif %}
-                                            </a>
-
-                                            <div class="modal-window" data-modal="user-profile-picture">
-                                                <div class="modal-box small animated" data-animation="zoomIn" data-duration="700">
-                                                    <span class="close-btn icon icon-office-52"></span>
-
-                                                    <h5 class="heading-alt">Profil Resminiz</h5>
-
-                                                    {% if false and user.imageBase64 %}
-                                                        <img src="{{ user.imageBase64 }}" alt="{{ user.name }}" class="img-responsive" />
-                                                    {% else %}
-                                                        {% image 'theme/assets/img/guppy_avatar_001.png' %}
-                                                            <img src="{{ asset_url }}" class="full-width-img" alt="{{ user.name }}" />
-                                                        {% endimage %}
-                                                    {% endif %}
-
-                                                </div>
-                                            </div>
-
-                                        </span>
-                                        <div>
-                                            <input id="temp_img_loader" type='file' style="display: none;"/>
-                                            <a id="temp_img_loader_trigger">
-                                                <i class="fa fa-upload" aria-hidden="true"> Resim Yükle</i></a>
-                                        </div>
-
-                                    </div>
-                                {% endif %}
-
-                            </div> <!-- profil-content-body right end -->
-
                         </div>
 
                     </div><!-- profil-content-body end -->
@@ -245,7 +200,7 @@
         // -- File to base64
         $(document).on('change' , '#temp_img_loader' , function (event) {
 
-            fileToBase64Converter(event.target ,'#img_viewer', '#profile_image_base64');
+            fileToBase64Converter(event.target ,'.user-profile-picture-img', '#profile_image_base64');
 
         });
 

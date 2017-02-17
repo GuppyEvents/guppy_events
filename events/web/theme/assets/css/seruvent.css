@@ -648,4 +648,20 @@ body.ge-search-page .tab-content{
     }
 }
 
+.user-profile-picture-box{
+    position: relative;
+    width: 100%;		/* desired width */
+}
+.user-profile-picture-box:before{
+    content: "";
+    display: block;
+    padding-top: 100%; 	/* initial ratio of 1:1*/
+}
 
+.user-profile-picture-content{
+    position:  absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}

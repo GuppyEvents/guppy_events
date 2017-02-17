@@ -4,14 +4,56 @@
         <div class="ge-community-left-sidebar col-md-2 col-sm-3">
             <div class="ge-community-logo-area">
                 <div class="ge-community-logo">
-                    {% if user.imageBase64 %}
-                        <img src="{{ user.imageBase64 }}" alt="{{ user.name }}" class="img-responsive" />
-                    {% else %}
-                        {% image 'theme/assets/img/guppy_avatar_001.png' %}
-                        <img src="{{ asset_url }}" class="img-responsive" alt="{{ user.name }}" />
-                        {% endimage %}
-                    {% endif %}
+                    {#{% if user.imageBase64 %}#}
+                        {#<img src="{{ user.imageBase64 }}" alt="{{ user.name }}" class="img-responsive" />#}
+                    {#{% else %}#}
+                        {#{% image 'theme/assets/img/guppy_avatar_001.png' %}#}
+                        {#<img src="{{ asset_url }}" class="img-responsive" alt="{{ user.name }}" />#}
+                        {#{% endimage %}#}
+                    {#{% endif %}#}
+                        <span class="masonry-item">
+                            <div class="user-profile-picture-box">
+                                <div class='user-profile-picture-content'>
+                                    <a href="#" class="gallery-thumb-link" data-modal-link="user-profile-picture-modal">
+                                        {% if user.imageBase64 %}
+                                            <img id="img_viewer" src="{{ user.imageBase64 }}" alt="{{ user.name }}" class="img-responsive user-profile-picture-img" />
+                                        {% else %}
+                                            {% image 'theme/assets/img/guppy_avatar_001.png' %}
+                                                <img id="img_viewer" src="{{ asset_url }}" class="img-responsive user-profile-picture-img" alt="{{ user.name }}" />
+                                            {% endimage %}
+                                        {% endif %}
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="modal-window" data-modal="user-profile-picture-modal">
+                                <div class="modal-box small animated align-center" data-animation="zoomIn" data-duration="700">
+                                    <span class="close-btn icon icon-office-52"></span>
+
+                                    <h6 class="heading-alt">Profil Resmi</h6>
+
+                                    {% if user.imageBase64 %}
+                                        <img src="{{ user.imageBase64 }}" alt="{{ user.name }}" class="full-width-img user-profile-picture-img" />
+                                    {% else %}
+                                        {% image 'theme/assets/img/guppy_avatar_001.png' %}
+                                        <img src="{{ asset_url }}" class="full-width-img user-profile-picture-img" alt="{{ user.name }}" />
+                                        {% endimage %}
+                                    {% endif %}
+
+                                    <div>
+                                        <input id="temp_img_loader" type='file' style="display: none;"/>
+                                        <a id="temp_img_loader_trigger">
+                                            <i class="fa fa-upload" aria-hidden="true"> Resim Yükle</i></a>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </span>
                 </div>
+
+
+
             </div>
             <div class="ge-community-name">
                 <hr/>
