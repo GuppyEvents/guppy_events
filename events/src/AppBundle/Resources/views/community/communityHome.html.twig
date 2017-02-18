@@ -14,6 +14,21 @@
 
 {% endblock %}
 
+{% block metaFacebook %}
+
+    <meta property="og:url"           content="{{ path('user_community_homepage', {'communityId':community.id})}}" />
+    <meta property="og:type"          content="website" />
+    <meta property="og:title"         content="{{ community.name }}" />
+    <meta property="og:description"   content="{{ community.name }} yakın zamandaki etkinliklerini" />
+    {% if community.imageBackgroundBase64 %}
+        <meta property="og:image" content="{{ community.imageBackgroundBase64 }}"/>
+    {% else %}
+        {% image 'theme/assets/img/guppy_bilkent_banner_01.jpg' %}
+        <meta property="of:image" content="{{ asset_url }}"/>
+        {% endimage %}
+    {% endif %}
+{% endblock %}
+
 {% block content %}
 
     <!-- --------------------------------------------- -->
@@ -76,6 +91,7 @@
 
     {% javascripts
             'theme/assets/js/cropper.js'
+            'theme/assets/js/social.js'
             'theme/assets/js/cropper-main.js' %}
         <script src="{{ asset_url }}"></script>
     {% endjavascripts %}

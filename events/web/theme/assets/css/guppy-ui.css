@@ -523,3 +523,25 @@ h6{
     right: 20px;
     border: 1px solid #fe4918;
 }
+
+/* This gets Google to fall into place */
+.social {
+    font-size: 1px;
+    padding-top: 4px;
+}
+
+/* This gets Facebook to fall into place */
+.social iframe {
+    vertical-align: bottom;
+}
+
+/* Set an optional width for your button wrappers */
+.social span {
+    display: inline-block;
+    width: 70px;
+}
+
+/* Adjust the widths individually if you like */
+.social .google {
+    width: 75px;
+}
