@@ -174,6 +174,65 @@ class CommunityController extends Controller
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
+     * @Route("/s/event-list-by-community", name="service_event_list_by_community")
+     */
+    public function getMoreEvent(Request $request){
+
+        // -- 1 -- Initialization
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+        $data = array();
+
+        // -- 2 -- Try to Get More Event Result
+        try{
+
+            // -- 2.1 -- Get parameter list
+            $id = intval( $request->get('id'));
+            $page = intval($request->get('page'));
+            $pageSize = $request->get('pageSize') ? intval($request->get('pageSize')) : 12;
+
+            $eventList = $this->getDoctrine()->getRepository('AppBundle:Event')->findPublishEventsByCommunityId($id,$page,$pageSize);
+
+            $data['eventList'] = array();
+            foreach ($eventList as $event) {
+
+                $eventObj = array();
+                $eventObj['id'] = $event->getId();
+
+                $eventObj['title'] = $event->getTitle();
+                $eventObj['imageBase64'] = $event->getImageBase64();
+                
+                $eventObj['startDate'] = $event->getStartDate();
+
+                foreach ($eventList as $event){
+                    $ticket = $this->getDoctrine()->getRepository('AppBundle:Ticket')->findLowestPriceTicketByEventId($event->getId());
+                    if($this->getUser()) {
+                        $eventUser = $this->getDoctrine()->getRepository('AppBundle:EventUserRating')->findOneBy(array('user'=>$this->getUser()->getId() , 'event'=>$event->getId()));
+                        $eventObj['is_saved'] = $eventUser ? $eventUser->getIsSaved() : false;
+                    }
+                    $eventObj['ticket_price'] = $ticket && $ticket->getPrice()>0 ? $ticket->getPrice() . ' TL' : null;
+                }
+                
+                array_push($data['eventList'], $eventObj);
+            }
+
+            // -- 2.2 -- Return Result
+            $response->setContent(json_encode(Result::$SUCCESS->setContent( $data )));
+            return $response;
+
+        }catch (\Exception $ex){
+            // content == "Unexpected Error"
+            $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent($ex)));
+            return $response;
+        }
+
+        // -- 3 -- Set & Return value
+        $response->setContent(json_encode(Result::$SUCCESS_EMPTY));
+        return $response;
+
+    }
+
+    /**
      * @Route("/applications/confirm", name="user_community_membership_applications_confirm")
      * @Security("has_role('ROLE_USER')")
      */

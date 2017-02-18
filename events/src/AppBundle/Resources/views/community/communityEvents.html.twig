@@ -28,11 +28,11 @@
 
 
                 {#<!-- -------------- CONTENT -------------- -->#}
-                <div class="ge-community-right-content col-md-10 col-sm-9">
+                <div id="ge-community-right-content" class="ge-community-right-content col-md-10 col-sm-9">
 
                     {% include('AppBundle:community:community_background.html.twig') %}
 
-                    <div class="ge-content-box" style="overflow: hidden;">
+                    <div id="ge-content-box" class="ge-content-box" style="overflow: hidden;">
 
                         {% for event in eventList %}
 
@@ -91,6 +91,7 @@
 
     {% javascripts
             'theme/assets/js/cropper.js'
+            'theme/assets/js/moment.js'
             'theme/assets/js/cropper-main.js' %}
         <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -104,6 +105,7 @@
  *                                          LOCAL VARIABLE
  **********************************************************************************************************************/
 
+var eventPage=1;    // ilk sayfa 24 topluluk getirdiğinde 12lik topluluk 3.sayfadan başlayacak
 
 /***********************************************************************************************************************
  *                                          UTIL FUNCTIONS
@@ -155,6 +157,102 @@
  *                                          AJAX OPERATIONS
  **********************************************************************************************************************/
 
+        // searchFrom değeri "community" ya da "event" olabilir. Paging nereden devam edeceği belirlenir
+        function ajaxGetMoreCommunities(page){
+
+            if(!$("#loadingDiv").length)
+            {
+                var loadingDiv = '<div id="loadingDiv" class="col-sm-12"> <img style="height: 40px;" src="{{ asset('theme/assets/img/loading.gif') }}"/> </div>';
+                $('#ge-community-right-content').append(loadingDiv);
+            }
+            else {
+
+                return;
+            }
+
+            $("#loadingDiv").attr("style","visibility: show");
+
+            // -- 2 --
+            $.post("{{ path('service_event_list_by_community') }}" , {
+
+                id : {{ community.id }},
+                page : page
+            }).always(function(){
+            }).done(function(data){
+
+                // -- 2.1 -- CONSOLE
+                if(Guppy.responseDebugMode)
+                    console.log(data);
+
+                $("#loadingDiv").remove();
+                // -- 2.2 -- sonuc düzenlenir
+                if(data.resultText == 'SUCCESS'){
+
+                    // -- 2.2.1 --
+
+                    // -- 2.2.2 --
+                    if(data.content){
+                        data.content.eventList.forEach(function(event) {
+
+                            var price = event["ticket_price"];
+
+                            if( price == null) {
+
+                                price = "Ücretsiz";
+                            }
+
+                            var saved_tag = event["is_saved"] ? "-o" : "";
+
+                            var link = "{{ path('user_event_mainpage', {'eventId':1})}}";
+                            link = link.substr(0, link.length - 1);
+                            link += event["id"];
+
+                            var currentDate = new Date();
+                            var eventDate = event["startDate"].date;
+                            eventDate = eventDate.substr( 0, eventDate.length - 7);
+                            eventDate = new Date( eventDate);
+                            var past = currentDate.getTime() > eventDate.getTime() ? " past" : "";
+
+                            eventDate = moment( eventDate).format('DD/MM/YYYY HH:MM A');
+
+                            eventElement = '<div class="col-sm-4">' +
+                                '<div class="community-event-card' + past + '" c-event-id="' + event["id"] + '">' +
+                                    '<a href="' + link + '" class="community-event-card-main">' +
+                                        '<div class="community-event-card-main-header">' +
+                                            '<div class="community-event-card-main-header-image">' +
+                                                '<img src="' + event["imageBase64"] + '" alt="Event Name">' +
+                                            '</div>' +
+                                                '<span class="community-event-card-ticket">' + price + '</span>' +
+                                        '</div>' +
+                                        '<div class="community-event-card-main-body">' +
+                                            '<div class="community-event-card-date"> ' + eventDate + ' </div>' +
+                                            '<div class="community-event-card-title">' + event["title"] +'</div>' +
+                                            '<div class="community-event-card-venue">Ankara, Bilkent</div>' +
+                                        '</div>' +
+                                    '</a>' +
+                                    '<div class="community-event-card-footer">' +
+                                        '<div class="community-event-card-footer-tags"></div>' +
+                                        '<div class="community-event-card-footer-actions">' +
+                                            '<a><span class="fa fa-share community-event-share"></span></a>' +
+                                                '<a><span class="fa fa-bookmark' + saved_tag + ' community-event-save"></span></a>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>';
+
+                            $('#ge-content-box').append(eventElement);
+                        });
+                    }
+
+                }else if(data.resultText == 'SUCCESS_EMPTY'){
+                    alert('Warning -- ' + ' could not found any borough');
+                }else if(data.resultText == 'FAILURE_PERMISSION'){
+                    alert('Warning -- ' + ' you are not authorization for this operation');
+                }else{
+                    alert('Warning -- ' + ' error occured while getting borough list');
+                }
+            });
+        }
 
 /***********************************************************************************************************************
  *                                          EVENTS
@@ -170,6 +268,16 @@
 
         $(document).on('click', '.community-event-save' , function (event) {
             ajaxSocialSaveEvent(event.target);
+        });
+
+        // ekranda aşağıya gidildikçe bir sonraki sayfaların gelmesi işlemidir
+        $(window).scroll(function(){
+
+            if($(document).height()==$(window).scrollTop()+$(window).height()){
+
+                ++eventPage;
+                ajaxGetMoreCommunities(eventPage)
+            }
         });
 
 /***********************************************************************************************************************

@@ -18,7 +18,7 @@ class EventRepository extends EntityRepository
      * @param string $username The username
      * @return Event|null
      */
-    public function findPublishEventsByCommunityId($communityId)
+    public function findPublishEventsByCommunityId($communityId, $page=1 ,$pageSize=12)
     {
         $statePublish = $this->getEntityManager()->getRepository('AppBundle:State')->findPublishState();
         return $this->createQueryBuilder('event')
@@ -30,6 +30,8 @@ class EventRepository extends EntityRepository
             ->orderBy('event.startDate', 'DESC')
             ->setParameter('communityId', intval($communityId))
             ->setParameter('statePublish', $statePublish)
+            ->setFirstResult($pageSize * ($page - 1))
+            ->setMaxResults( $pageSize )
             ->getQuery()
             ->getResult();
     }
