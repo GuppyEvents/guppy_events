@@ -61,8 +61,8 @@ class SearchController extends Controller
     }
 
 
-    public function getSearchCommunities($searchKey,$page=1){
-        $communityList = $this->getDoctrine()->getRepository('AppBundle:Community')->searchCommunityListWithEventCount($searchKey,$page);
+    public function getSearchCommunities($searchKey,$page=1, $orderBy=0){
+        $communityList = $this->getDoctrine()->getRepository('AppBundle:Community')->searchCommunityListWithEventCount($searchKey,$page, $orderBy);
         foreach ($communityList as &$community) {
             $community['memberCount'] = $this->getDoctrine()->getRepository('AppBundle:Community')->findUserCountByCommunity($community['id']);
             $community['homepagelink'] = $this->get('router')->generate('user_community_events_homepage' , array(
@@ -99,7 +99,11 @@ class SearchController extends Controller
         // $data['communityList'] = $this->getDoctrine()->getRepository('AppBundle:Community')->findCommunityListByName($searchKey);
 
         $data['universityCommunityCount'] = $this->getDoctrine()->getRepository('AppBundle:University')->findUniversityCommunityCount(5);
-        $data['communityList'] = $this->getSearchCommunities($searchKey);
+        if($request->get('order') == 1){
+            $data['communityList'] = $this->getSearchCommunities($searchKey, 1, $request->get('order'));
+        }else{
+            $data['communityList'] = $this->getSearchCommunities($searchKey);
+        }
         $data['search_key'] = $searchKey;
         $data['eventList'] = $this->getSearchEvents($searchKey);
 
@@ -135,7 +139,11 @@ class SearchController extends Controller
                     case 'community':
                         $page = intval($request->get('page'));
                         $key = $request->get('key');
-                        $data['communityList'] = $this->getSearchCommunities($key,$page);
+                        $orderBy=0;
+                        if($request->get('order')){
+                            $orderBy = $request->get('order');
+                        }
+                        $data['communityList'] = $this->getSearchCommunities($key,$page, $orderBy);
                         break;
 
                     case 'event':

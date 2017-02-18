@@ -297,9 +297,21 @@
     /*******************************************************************************************************************
      *                                          LOCAL VARIABLE
      ******************************************************************************************************************/
-        var search_key = '{% if search_key is defined %}{{ search_key }}{% endif %}';
+        {#var search_key = '{% if search_key is defined %}{{ search_key }}{% endif %}';#}
+        var search_key = getParameterByName('search_key');
+        var order_by = getParameterByName('order');
         var communityPage=1, eventPage=1
 
+        function getParameterByName(name) {
+
+            var url = window.location.href;
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                    results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
 
         function appendCommunity(community){
 
@@ -416,13 +428,14 @@
      ******************************************************************************************************************/
 
         // searchFrom değeri "community" ya da "event" olabilir. Paging nereden devam edeceği belirlenir
-        function ajaxGetMoreSearchResult(searchFrom , searchKey ,page){
+        function ajaxGetMoreSearchResult(searchFrom , searchKey ,page, orderBy){
 
             // -- 2 --
             $.post("{{ path('search_more') }}" , {
                 more : searchFrom,
                 page : page,
-                key : searchKey
+                key : searchKey,
+                order: orderBy
             }).always(function(){
             }).done(function(data){
 
@@ -537,10 +550,10 @@
             if($(document).height()==$(window).scrollTop()+$(window).height()){
                 if($('#search_result_communities').hasClass('active')){
                     ++communityPage;
-                    ajaxGetMoreSearchResult('community',search_key,communityPage)
+                    ajaxGetMoreSearchResult('community',search_key,communityPage, order_by);
                 }else if($('#search_result_events').hasClass('active')){
                     ++eventPage;
-                    ajaxGetMoreSearchResult('event',search_key,eventPage)
+                    ajaxGetMoreSearchResult('event',search_key,eventPage, order_by);
                 }
             }
         });

@@ -134,7 +134,7 @@
             {% endif %}
 
             <!-- This search form called after press enter key -->
-            <form action="{{ path('search_all') }}" method="post" style="display: none;">
+            <form action="{{ path('search_all') }}" method="get" style="display: none;">
                 <div class="form-group">
                     <label>Search Key</label>
                     <input id="guppy-search-hidden" type="text" class="form-control" name="search_key">

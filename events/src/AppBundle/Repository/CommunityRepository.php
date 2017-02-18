@@ -27,28 +27,34 @@ class CommunityRepository extends EntityRepository
     /**
      *
      * @param string $keyValue The community name key value
+     * @param string $orderBy 0 for name, 1 for date
      * @return Community|null
      */
-    public function searchCommunityListWithEventCount($keyValue , $page=1 ,$pageSize=10)
+    public function searchCommunityListWithEventCount($keyValue , $page=1, $orderBy=0, $pageSize=10)
     {
-
         // topluluğun etklinlik sayısı && kayıtlı üye sayısı dönülecek
         $em = $this->getEntityManager();
-        $query = $em->createQuery(
-            'SELECT community.name, community.id, community.imageBase64, university.name as universityName, COUNT(community.id) as eventCount
+
+        $sql = 'SELECT community.registerDate, community.name, community.id, community.imageBase64, university.name as universityName, COUNT(community.id) as eventCount
                 FROM AppBundle:Community community
                 JOIN AppBundle:University university WITH university=community.university
                 JOIN AppBundle:CommunityUser communityUser WITH communityUser.community=community.id
                 JOIN AppBundle:Event event WITH event.communityUser=communityUser.id
                 WHERE university.id = :universityId and community.isApproved = true and community.name LIKE :nameKeyValue
                 GROUP By community.id
-                ORDER BY community.name ASC
-                '
+                ';
+
+        if($orderBy == 0){
+            $sql .= 'ORDER BY community.name ASC';
+        } else if($orderBy == 1){
+            $sql .= 'ORDER BY community.registerDate DESC';
+        }
+        $query = $em->createQuery(
+            $sql
         )->setParameters(array(
             'universityId' => 5,
             'nameKeyValue' => '%'.$keyValue.'%'
         ));
-
         $query->setFirstResult($pageSize * ($page - 1));
         $query->setMaxResults( $pageSize );
         return $query->getResult();
