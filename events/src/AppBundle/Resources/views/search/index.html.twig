@@ -48,7 +48,7 @@
                                                 <label><input type="radio" name="filter-type" id="sort-by-member-count" value="sort-by-member-count" disabled="true"> Üye Sayısına Göre </label>
                                             </div>
                                             <div class="radio">
-                                                <label><input type="radio" name="filter-type" id="sort-by-event-count" value="sort-by-event-count" disabled="true"> Etkinlik Sayısına Göre</label>
+                                                <label><input type="radio" name="filter-type" id="sort-by-event-count" value="sort-by-event-count" onchange="searchAgain(2);"> Etkinlik Sayısına Göre</label>
                                             </div>
                                             <div class="radio">
                                                 <label><input type="radio" name="filter-type" id="sort-by-newest" value="sort-by-newest" onchange="searchAgain(1);"> Yeniler </label>
@@ -609,7 +609,9 @@
         $(document).ready(function (){
            if(getParameterByName('order') == 1){
                $('#sort-by-newest').prop('checked', true);
-           }
+           }else if(getParameterByName('order') == 2){
+                $('#sort-by-event-count').prop('checked', true);
+            }
         });
 
     </script>
