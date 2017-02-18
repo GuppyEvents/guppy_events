@@ -42,7 +42,7 @@
                                     <div class="ge-filter-form-area">
                                         <form action="">
                                             <div class="radio">
-                                                <label><input type="radio" name="filter-type" id="tumu" value="tümü" checked> İsme Göre </label>
+                                                <label><input type="radio" name="filter-type" id="tumu" value="tümü" checked onchange="searchAgain(0);"> İsme Göre </label>
                                             </div>
                                             <div class="radio">
                                                 <label><input type="radio" name="filter-type" id="sort-by-member-count" value="sort-by-member-count" disabled="true"> Üye Sayısına Göre </label>
@@ -51,7 +51,7 @@
                                                 <label><input type="radio" name="filter-type" id="sort-by-event-count" value="sort-by-event-count" disabled="true"> Etkinlik Sayısına Göre</label>
                                             </div>
                                             <div class="radio">
-                                                <label><input type="radio" name="filter-type" id="sort-by-newest" value="sort-by-newest" disabled="true"> Yeniler </label>
+                                                <label><input type="radio" name="filter-type" id="sort-by-newest" value="sort-by-newest" onchange="searchAgain(1);"> Yeniler </label>
                                             </div>
                                         </form>
                                     </div>
@@ -545,6 +545,11 @@
      *                                          EVENTS
      ******************************************************************************************************************/
 
+    function searchAgain(orderBy){
+        var search_key = getParameterByName('search_key');
+        window.location="?search_key=" + search_key + "&order=" + orderBy ;
+    }
+
         // ekranda aşağıya gidildikçe bir sonraki sayfaların gelmesi işlemidir
         $(window).scroll(function(){
             if($(document).height()==$(window).scrollTop()+$(window).height()){
@@ -599,6 +604,11 @@
         $(document).on('click','#join_community',function(event){
             $eventTarget = $(event.target).parentsUntil('.join_community_panel').length>0 ? $(event.target).parentsUntil('.join_community_panel').last().parent() : $(event.target).parent();
             ajaxRequestApplyToJoinCommunity($eventTarget);
+        });
+        $(document).ready(function (){
+           if(getParameterByName('order') == 1){
+               $('#sort-by-newest').prop('checked', true);
+           }
         });
 
     </script>
