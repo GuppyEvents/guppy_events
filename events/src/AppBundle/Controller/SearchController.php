@@ -99,10 +99,10 @@ class SearchController extends Controller
         // $data['communityList'] = $this->getDoctrine()->getRepository('AppBundle:Community')->findCommunityListByName($searchKey);
 
         $data['universityCommunityCount'] = $this->getDoctrine()->getRepository('AppBundle:University')->findUniversityCommunityCount(5);
-        if($request->get('order') == 1){
-            $data['communityList'] = $this->getSearchCommunities($searchKey, 1, $request->get('order'));
-        }else{
+        if(!$request->get('order')){
             $data['communityList'] = $this->getSearchCommunities($searchKey);
+        }else{
+            $data['communityList'] = $this->getSearchCommunities($searchKey, 1, $request->get('order'));
         }
         $data['search_key'] = $searchKey;
         $data['eventList'] = $this->getSearchEvents($searchKey);

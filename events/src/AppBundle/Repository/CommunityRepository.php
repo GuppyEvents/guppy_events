@@ -48,6 +48,8 @@ class CommunityRepository extends EntityRepository
             $sql .= 'ORDER BY community.name ASC';
         } else if($orderBy == 1){
             $sql .= 'ORDER BY community.registerDate DESC';
+        }else if($orderBy == 2){
+            $sql .= 'ORDER BY eventCount DESC';
         }
         $query = $em->createQuery(
             $sql
