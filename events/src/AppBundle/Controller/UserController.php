@@ -58,27 +58,30 @@ class UserController extends Controller
                 $user_sex = intval($request->get('usex'));
                 $user_uphone = $request->get('uphone');
                 $user_image = $request->get('profile_image_base64');
-                $fileName = "";
-                if ($this->container->get('kernel')->getEnvironment() == 'dev') {
-                    $fileName .= "dev/";
-                }
-                $extension = substr($user_image, 0, strpos($user_image, ";"));
-                $fileName .= Utils::getGUID();
-                if (strpos($extension, "data:image") !== false) {
-                    if (strpos($extension, "jpeg") !== false) {
-                        $fileName .= ".jpg";
-                    } else if (strpos($extension, "png") != false) {
-                        $fileName .= ".png";
+
+                if(strlen($user_image)>0){
+                    $fileName = "";
+                    if ($this->container->get('kernel')->getEnvironment() == 'dev') {
+                        $fileName .= "dev/";
+                    }
+                    $extension = substr($user_image, 0, strpos($user_image, ";"));
+                    $fileName .= Utils::getGUID();
+                    if (strpos($extension, "data:image") !== false) {
+                        if (strpos($extension, "jpeg") !== false) {
+                            $fileName .= ".jpg";
+                        } else if (strpos($extension, "png") != false) {
+                            $fileName .= ".png";
+                        } else {
+                            $data['error_msg'] = 'Desteklenmeyen görüntü biçimi.';
+                            return $this->render('AppBundle:user:profile_settings_account.html.twig', $data);
+                        }
                     } else {
-                        $data['error_msg'] = 'Desteklenmeyen görüntü biçimi.';
+                        $data['error_msg'] = 'Desteklenmeyen dosya biçimi.';
                         return $this->render('AppBundle:user:profile_settings_account.html.twig', $data);
                     }
-                } else {
-                    $data['error_msg'] = 'Desteklenmeyen dosya biçimi.';
-                    return $this->render('AppBundle:user:profile_settings_account.html.twig', $data);
-                }
 
-                $user_image = Utils::uploadBase64ToServer($user_image, $fileName);
+                    $user_image = Utils::uploadBase64ToServer($user_image, $fileName);
+                }
 
                 $user_birthdate = \DateTime::createFromFormat('m/d/Y', $request->get('ubirthdate'));
                 // --1.2-- check that user exist
@@ -87,7 +90,9 @@ class UserController extends Controller
                     $user->setName($user_name);
                     $user->setSurname($user_surname);
                     $user->setPhone($user_uphone);
-                    $user->setImageBase64($user_image);
+                    if(strlen($user_image)>0){
+                        $user->setImageBase64($user_image);
+                    }
 
                     $user->setSex($user_sex);
 
