@@ -44,9 +44,9 @@
                                             <div class="radio">
                                                 <label><input type="radio" name="filter-type" id="tumu" value="tümü" checked onchange="searchAgain(0);"> İsme Göre </label>
                                             </div>
-                                            <div class="radio">
-                                                <label><input type="radio" name="filter-type" id="sort-by-member-count" value="sort-by-member-count" disabled="true"> Üye Sayısına Göre </label>
-                                            </div>
+                                            {#<div class="radio">#}
+                                                {#<label><input type="radio" name="filter-type" id="sort-by-member-count" value="sort-by-member-count" disabled="true"> Üye Sayısına Göre </label>#}
+                                            {#</div>#}
                                             <div class="radio">
                                                 <label><input type="radio" name="filter-type" id="sort-by-event-count" value="sort-by-event-count" onchange="searchAgain(2);"> Etkinlik Sayısına Göre</label>
                                             </div>
