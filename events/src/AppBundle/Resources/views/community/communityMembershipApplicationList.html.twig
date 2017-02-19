@@ -90,6 +90,7 @@
                                     <tr>
                                         <th>Adı Soyadı</th>
                                         <th>Başvuru tarihi</th>
+                                        <th>Rol</th>
                                         <th>İşlem Linkleri</th>
                                     </tr>
                                     </thead>
@@ -103,6 +104,7 @@
                                                 {% endif %}
                                                 {{ communityUserRole.communityUser.user.name }} {{ communityUserRole.communityUser.user.surname }}</td>
                                             <td>{{ communityUserRole.communityUser.registerDate|date('d/m/Y') }}</td>
+                                            <td>{{ communityUserRole.communityRole.name }}</td>
                                             <td>
                                                 {#<form id="mail_setting" action="{{ path('user_profile_mail') }}" method="post">#}
                                                 <div class="icon-bar">
