@@ -47,50 +47,55 @@
 
                     {% include('AppBundle:community:community_background.html.twig') %}
 
-                    <div id="ge-content-box" class="ge-content-box" style="overflow: hidden;">
+                    <div class="ge-content-box">
+                        <div id="ge-content-box"  style="overflow: hidden;">
 
-                        {% for event in eventList %}
+                            {% for event in eventList %}
 
-                            <!-- event-card start-->
-                            <div class="col-sm-4">
-                                <div class="community-event-card {% if date(event.startDate) < date() %}past{% endif %}" c-event-id="{{ event.id }}">
-                                    <a href="{{ path('user_event_mainpage' , {'eventId': event.id}) }}" class="community-event-card-main">
-                                        <div class="community-event-card-main-header">
-                                            <div class="community-event-card-main-header-image">
-                                                <img src="{{ event.imageBase64 }}" alt="Event Name">
+                                <!-- event-card start-->
+                                <div class="col-sm-4">
+                                    <div class="community-event-card {% if date(event.startDate) < date() %}past{% endif %}" c-event-id="{{ event.id }}">
+                                        <a href="{{ path('user_event_mainpage' , {'eventId': event.id}) }}" class="community-event-card-main">
+                                            <div class="community-event-card-main-header">
+                                                <div class="community-event-card-main-header-image">
+                                                    <img src="{{ event.imageBase64 }}" alt="Event Name">
+                                                </div>
+
+                                                {% if event.ticket_price is defined and event.ticket_price %}
+                                                    <span class="community-event-card-ticket">{{ event.ticket_price }}</span>
+                                                {% else %}
+                                                    <span class="community-event-card-ticket">Ücretsiz</span>
+                                                {% endif %}
+                                                <!--<span class="community-event-card-hourglass"><i class="fa fa-clock-o" aria-hidden="true"></i></span>-->
                                             </div>
+                                            <div class="community-event-card-main-body">
+                                                <div class="community-event-card-date"> {{ event.startDate.format('d/m/Y H:i A') }} </div>
+                                                <div class="community-event-card-title">{{ event.title }}</div>
+                                                <div class="community-event-card-venue">Ankara, Bilkent</div>
+                                            </div>
+                                        </a>
 
-                                            {% if event.ticket_price is defined and event.ticket_price %}
-                                                <span class="community-event-card-ticket">{{ event.ticket_price }}</span>
-                                            {% else %}
-                                                <span class="community-event-card-ticket">Ücretsiz</span>
-                                            {% endif %}
-                                            <!--<span class="community-event-card-hourglass"><i class="fa fa-clock-o" aria-hidden="true"></i></span>-->
-                                        </div>
-                                        <div class="community-event-card-main-body">
-                                            <div class="community-event-card-date"> {{ event.startDate.format('d/m/Y H:i A') }} </div>
-                                            <div class="community-event-card-title">{{ event.title }}</div>
-                                            <div class="community-event-card-venue">Ankara, Bilkent</div>
-                                        </div>
-                                    </a>
-
-                                    <div class="community-event-card-footer">
-                                        <div class="community-event-card-footer-tags"></div>
-                                        <div class="community-event-card-footer-actions">
-                                            <a><span class="fa fa-share community-event-share"></span></a>
-                                            {% if event.is_saved is defined and event.is_saved %}
-                                                <a><span class="fa fa-bookmark community-event-save"></span></a>
-                                            {% else %}
-                                                <a><span class="fa fa-bookmark-o community-event-save"></span></a>
-                                            {% endif %}
+                                        <div class="community-event-card-footer">
+                                            <div class="community-event-card-footer-tags"></div>
+                                            <div class="community-event-card-footer-actions">
+                                                <a><span class="fa fa-share community-event-share"></span></a>
+                                                {% if event.is_saved is defined and event.is_saved %}
+                                                    <a><span class="fa fa-bookmark community-event-save"></span></a>
+                                                {% else %}
+                                                    <a><span class="fa fa-bookmark-o community-event-save"></span></a>
+                                                {% endif %}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div><!-- event-card end-->
+                                </div><!-- event-card end-->
 
-                        {% endfor %}
+                            {% endfor %}
 
+                        </div>
+
+                        <div id="loadingDiv" style="visibility: hidden" class="col-sm-12"> <img style="height: 40px;" src="{{ asset('theme/assets/img/loading.gif') }}"/> </div>
                     </div>
+
                 </div>
             </div>
 
@@ -176,17 +181,7 @@ var eventPage=1;    // ilk sayfa 24 topluluk getirdiğinde 12lik topluluk 3.sayf
         // searchFrom değeri "community" ya da "event" olabilir. Paging nereden devam edeceği belirlenir
         function ajaxGetMoreCommunities(page){
 
-            if(!$("#loadingDiv").length)
-            {
-                var loadingDiv = '<div id="loadingDiv" class="col-sm-12"> <img style="height: 40px;" src="{{ asset('theme/assets/img/loading.gif') }}"/> </div>';
-                $('#ge-community-right-content').append(loadingDiv);
-            }
-            else {
-
-                return;
-            }
-
-            $("#loadingDiv").attr("style","visibility: show");
+            $("#loadingDiv").attr("style","visibility: visible");
 
             // -- 2 --
             $.post("{{ path('service_event_list_by_community') }}" , {
@@ -200,7 +195,7 @@ var eventPage=1;    // ilk sayfa 24 topluluk getirdiğinde 12lik topluluk 3.sayf
                 if(Guppy.responseDebugMode)
                     console.log(data);
 
-                $("#loadingDiv").remove();
+                $("#loadingDiv").attr("style","visibility: hidden");
                 // -- 2.2 -- sonuc düzenlenir
                 if(data.resultText == 'SUCCESS'){
 
