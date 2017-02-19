@@ -63,7 +63,7 @@
         {% if apply %}
             <div class="alert alert-warning alert-dismissible" role="alert">
                 <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                Kulüp {% if applyAsAdmin %}yöneticisi olma{% endif %} başvurunuz yöneticiler tarafından araştırılmaktadır. Onaylanması durumunda kulüp üyesi olacaksınız.
+                Kulüp {% if applyAsAdmin %}yöneticisi olma{% endif %} başvurunuz yöneticiler tarafından araştırılmaktadır. Onaylanması durumunda kulüp {% if applyAsAdmin %}yöneticisi{% else %}üyesi{% endif %} olacaksınız.
             </div>
         {% endif %}
 

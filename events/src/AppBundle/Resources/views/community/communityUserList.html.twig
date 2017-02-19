@@ -56,7 +56,7 @@
                             <form id="roleForm">
                                 <fieldset>
                                     {% for role in userRoles %}
-                                        <input type="radio" name="role" value="{{ role.id }}"> {{ role.name }}<br>
+                                        <input type="radio" name="role" value="{{ role.id }}"> {% if role.name == 'admin' %}Yönetici {% elseif role.name == 'member' %}Üye{% endif %}<br>
                                     {% endfor %}
                                 </fieldset>
                             </form>
@@ -237,7 +237,6 @@ $(window).on("load", function(){
             {% for key,val in registerDates %}
                 data2.push([{{ key }},{{ val }}]);
             {% endfor %}
-            console.log(data2);
 
                 // Create the chart
             $('#container').highcharts('StockChart', {
