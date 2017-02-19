@@ -99,8 +99,8 @@
                             <a onclick="ajaxSocialSaveEvent(this)" tag="{{ event.id }}" saved="false" class="btn" ><span>KATIL</span></a>
                         {% endif %}
 
-                        {% if userIsAdmin is defined %}
-                            {% if userIsAdmin==true %}
+                        {% if canEditEvent is defined %}
+                            {% if canEditEvent == true %}
                                 <a href="{{ path("event_edit_page", {'eventId': event.id }) }}" style="background-color: #fe4918" class="btn" ><span>Düzenle</span></a>
                             {% endif %}
                         {% endif %}

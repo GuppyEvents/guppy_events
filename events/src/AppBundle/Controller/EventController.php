@@ -46,6 +46,13 @@ class EventController extends Controller
                 if($this->getUser()){
                     $communityAdminRole = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoles')->findCommunityAdminRoles($this->getUser());
                     $data['userIsAdmin'] = $communityAdminRole and count($communityAdminRole)>0 ? true : false;
+                    $data['canEditEvent'] = false;
+                    foreach($communityAdminRole as $car){
+                        if($car->getCommunityUser()->getCommunity()->getId() == $community->getId()){
+                            $data['canEditEvent'] = true;
+                            break;
+                        }
+                    }
                 }
             }else{
                 $_SESSION['error_message'] = 'Etkinlik Topluluğu Yayında Değil';//redirect edilen sayfada mesaj gosterilmesi için sessiona mesaj atanır
