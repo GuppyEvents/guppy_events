@@ -49,6 +49,9 @@ class DefaultController extends Controller
      */
     public function comingSoonAction(Request $request)
     {
+        // --x-- çok yakında sayfası redirect edilmekte (artık kullanılmadığı için)
+        return $this->redirectToRoute('home_events');
+
         // --1-- build the form
         $data = array();
         $user = new User();
