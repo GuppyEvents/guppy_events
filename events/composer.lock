@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1e4513691ea5ef80814d1233465f8bbd",
-    "content-hash": "2c87f5c29665517d2502f8b234b4094a",
+    "hash": "64903cb02775ca1b9c7190770e2fda5b",
+    "content-hash": "214aca5df2c463fe62c5334c38f8161d",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -336,16 +336,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "v2.5.11",
+            "version": "v2.5.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "1b1effbddbdc0f40d1c8f849f44bcddac4f52a48"
+                "reference": "7b9e911f9d8b30d43b96853dab26898c710d8f44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/1b1effbddbdc0f40d1c8f849f44bcddac4f52a48",
-                "reference": "1b1effbddbdc0f40d1c8f849f44bcddac4f52a48",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/7b9e911f9d8b30d43b96853dab26898c710d8f44",
+                "reference": "7b9e911f9d8b30d43b96853dab26898c710d8f44",
                 "shasum": ""
             },
             "require": {
@@ -403,7 +403,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2017-02-04 21:20:13"
+            "time": "2017-02-08 12:53:47"
         },
         {
             "name": "doctrine/doctrine-bundle",
@@ -1069,16 +1069,16 @@
         },
         {
             "name": "google/cloud",
-            "version": "v0.20.1",
+            "version": "v0.20.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/GoogleCloudPlatform/google-cloud-php.git",
-                "reference": "e7613334527412ebd03d61a9174d61e101d40aa3"
+                "reference": "7175deb3c4b07d790a52214ba209986404857d51"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GoogleCloudPlatform/google-cloud-php/zipball/e7613334527412ebd03d61a9174d61e101d40aa3",
-                "reference": "e7613334527412ebd03d61a9174d61e101d40aa3",
+                "url": "https://api.github.com/repos/GoogleCloudPlatform/google-cloud-php/zipball/7175deb3c4b07d790a52214ba209986404857d51",
+                "reference": "7175deb3c4b07d790a52214ba209986404857d51",
                 "shasum": ""
             },
             "require": {
@@ -1092,8 +1092,8 @@
             },
             "require-dev": {
                 "erusev/parsedown": "^1.6",
-                "google/gax": "^0.5",
-                "google/proto-client-php": "^0.6",
+                "google/gax": "^0.6",
+                "google/proto-client-php": "^0.7",
                 "james-heinrich/getid3": "^1.9",
                 "league/json-guard": "^0.3",
                 "phpdocumentor/reflection": "^3.0",
@@ -1149,9 +1149,66 @@
                 "stackdriver logging",
                 "storage",
                 "translate",
+                "translation",
                 "vision"
             ],
-            "time": "2016-12-28 21:31:30"
+            "time": "2017-02-10 15:09:33"
+        },
+        {
+            "name": "graylog2/gelf-php",
+            "version": "1.5.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bzikarsky/gelf-php.git",
+                "reference": "0cb872928246bada1b6a5f504a7c3589f1c1174d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bzikarsky/gelf-php/zipball/0cb872928246bada1b6a5f504a7c3589f1c1174d",
+                "reference": "0cb872928246bada1b6a5f504a7c3589f1c1174d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9",
+                "psr/log": "~1.0"
+            },
+            "provide": {
+                "psr/log-implementation": "~1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.3",
+                "squizlabs/php_codesniffer": "~2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.4.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Gelf\\": "src/Gelf"
+                },
+                "files": [
+                    "src/check_technical_requirements.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Benjamin Zikarsky",
+                    "email": "benjamin@zikarsky.de"
+                },
+                {
+                    "name": "gelf-php contributors",
+                    "homepage": "https://github.com/bzikarsky/gelf-php/contributors"
+                }
+            ],
+            "description": "A php implementation to send log-messages to a GELF compatible backend like Graylog2.",
+            "time": "2016-11-21 13:31:39"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -1716,16 +1773,16 @@
         },
         {
             "name": "php-http/curl-client",
-            "version": "v1.6.2",
+            "version": "v1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-http/curl-client.git",
-                "reference": "3f9ff1ffbe2496ed793734a9ab92b784a05d277a"
+                "reference": "0972ad0d7d37032a52077a5cbe27cf370f2007d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-http/curl-client/zipball/3f9ff1ffbe2496ed793734a9ab92b784a05d277a",
-                "reference": "3f9ff1ffbe2496ed793734a9ab92b784a05d277a",
+                "url": "https://api.github.com/repos/php-http/curl-client/zipball/0972ad0d7d37032a52077a5cbe27cf370f2007d8",
+                "reference": "0972ad0d7d37032a52077a5cbe27cf370f2007d8",
                 "shasum": ""
             },
             "require": {
@@ -1768,20 +1825,20 @@
                 "curl",
                 "http"
             ],
-            "time": "2017-01-02 15:39:30"
+            "time": "2017-02-09 15:18:33"
         },
         {
             "name": "php-http/discovery",
-            "version": "v1.1.1",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-http/discovery.git",
-                "reference": "47fc36bd73ab615b55c31f4134e6bae70f1c04c1"
+                "reference": "cc5669d9cb51170ad0278a3b984cd3c7894d6ff9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-http/discovery/zipball/47fc36bd73ab615b55c31f4134e6bae70f1c04c1",
-                "reference": "47fc36bd73ab615b55c31f4134e6bae70f1c04c1",
+                "url": "https://api.github.com/repos/php-http/discovery/zipball/cc5669d9cb51170ad0278a3b984cd3c7894d6ff9",
+                "reference": "cc5669d9cb51170ad0278a3b984cd3c7894d6ff9",
                 "shasum": ""
             },
             "require": {
@@ -1801,7 +1858,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.2-dev"
+                    "dev-master": "1.3-dev"
                 }
             },
             "autoload": {
@@ -1830,7 +1887,7 @@
                 "message",
                 "psr7"
             ],
-            "time": "2016-11-27 12:21:25"
+            "time": "2017-02-12 08:49:24"
         },
         {
             "name": "php-http/httplug",
@@ -1890,16 +1947,16 @@
         },
         {
             "name": "php-http/message",
-            "version": "v1.4.1",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-http/message.git",
-                "reference": "bfd895a4e753bdde99bed64d75b999e0c9fa6147"
+                "reference": "13df8c48f40ca7925303aa336f19be4b80984f01"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-http/message/zipball/bfd895a4e753bdde99bed64d75b999e0c9fa6147",
-                "reference": "bfd895a4e753bdde99bed64d75b999e0c9fa6147",
+                "url": "https://api.github.com/repos/php-http/message/zipball/13df8c48f40ca7925303aa336f19be4b80984f01",
+                "reference": "13df8c48f40ca7925303aa336f19be4b80984f01",
                 "shasum": ""
             },
             "require": {
@@ -1927,7 +1984,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.5-dev"
+                    "dev-master": "1.6-dev"
                 }
             },
             "autoload": {
@@ -1955,7 +2012,7 @@
                 "message",
                 "psr-7"
             ],
-            "time": "2016-12-16 21:09:21"
+            "time": "2017-02-14 08:58:37"
         },
         {
             "name": "php-http/message-factory",
@@ -2009,16 +2066,16 @@
         },
         {
             "name": "php-http/multipart-stream-builder",
-            "version": "0.1.4",
+            "version": "0.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-http/multipart-stream-builder.git",
-                "reference": "5e02c79d98517da758a8ac1045be332a27d3809f"
+                "reference": "74d5ac517778ae87a065c6f4076316c35b58a777"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-http/multipart-stream-builder/zipball/5e02c79d98517da758a8ac1045be332a27d3809f",
-                "reference": "5e02c79d98517da758a8ac1045be332a27d3809f",
+                "url": "https://api.github.com/repos/php-http/multipart-stream-builder/zipball/74d5ac517778ae87a065c6f4076316c35b58a777",
+                "reference": "74d5ac517778ae87a065c6f4076316c35b58a777",
                 "shasum": ""
             },
             "require": {
@@ -2028,7 +2085,7 @@
                 "psr/http-message": "^1.0"
             },
             "require-dev": {
-                "php-http/message": "^1.0",
+                "php-http/message": "^1.5",
                 "phpunit/phpunit": "^4.8 || ^5.4",
                 "zendframework/zend-diactoros": "^1.3.5"
             },
@@ -2062,7 +2119,7 @@
                 "multipart stream",
                 "stream"
             ],
-            "time": "2016-12-30 23:19:15"
+            "time": "2017-02-16 08:52:59"
         },
         {
             "name": "php-http/promise",
@@ -2447,16 +2504,16 @@
         },
         {
             "name": "sensio/framework-extra-bundle",
-            "version": "v3.0.21",
+            "version": "v3.0.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioFrameworkExtraBundle.git",
-                "reference": "ed86f6fb1753e76b39ff8b87f527045ca6b97169"
+                "reference": "1c66c2e3b8f17f06178142386aff5a9f8057a104"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/ed86f6fb1753e76b39ff8b87f527045ca6b97169",
-                "reference": "ed86f6fb1753e76b39ff8b87f527045ca6b97169",
+                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/1c66c2e3b8f17f06178142386aff5a9f8057a104",
+                "reference": "1c66c2e3b8f17f06178142386aff5a9f8057a104",
                 "shasum": ""
             },
             "require": {
@@ -2465,6 +2522,8 @@
                 "symfony/framework-bundle": "~2.3|~3.0"
             },
             "require-dev": {
+                "doctrine/doctrine-bundle": "~1.5",
+                "doctrine/orm": "~2.4,>=2.4.5",
                 "symfony/asset": "~2.7|~3.0",
                 "symfony/browser-kit": "~2.3|~3.0",
                 "symfony/dom-crawler": "~2.3|~3.0",
@@ -2477,7 +2536,7 @@
                 "symfony/translation": "~2.3|~3.0",
                 "symfony/twig-bundle": "~2.3|~3.0",
                 "symfony/yaml": "~2.3|~3.0",
-                "twig/twig": "~1.11|~2.0",
+                "twig/twig": "~1.12|~2.0",
                 "zendframework/zend-diactoros": "^1.3"
             },
             "suggest": {
@@ -2511,20 +2570,20 @@
                 "annotations",
                 "controllers"
             ],
-            "time": "2017-02-02 15:31:23"
+            "time": "2017-02-15 06:52:30"
         },
         {
             "name": "sensiolabs/security-checker",
-            "version": "v4.0.0",
+            "version": "v4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/security-checker.git",
-                "reference": "116027b57b568ed61b7b1c80eeb4f6ee9e8c599c"
+                "reference": "f2ce0035fc512287978510ca1740cd111d60f89f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/116027b57b568ed61b7b1c80eeb4f6ee9e8c599c",
-                "reference": "116027b57b568ed61b7b1c80eeb4f6ee9e8c599c",
+                "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/f2ce0035fc512287978510ca1740cd111d60f89f",
+                "reference": "f2ce0035fc512287978510ca1740cd111d60f89f",
                 "shasum": ""
             },
             "require": {
@@ -2555,20 +2614,20 @@
                 }
             ],
             "description": "A security checker for your composer.lock",
-            "time": "2016-09-23 18:09:57"
+            "time": "2017-02-18 17:53:25"
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v5.4.5",
+            "version": "v5.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "cd142238a339459b10da3d8234220963f392540c"
+                "reference": "81fdccfaf8bdc5d5d7a1ef6bb3a61bbb1a6c4a3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/cd142238a339459b10da3d8234220963f392540c",
-                "reference": "cd142238a339459b10da3d8234220963f392540c",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/81fdccfaf8bdc5d5d7a1ef6bb3a61bbb1a6c4a3e",
+                "reference": "81fdccfaf8bdc5d5d7a1ef6bb3a61bbb1a6c4a3e",
                 "shasum": ""
             },
             "require": {
@@ -2609,7 +2668,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2016-12-29 10:02:40"
+            "time": "2017-02-13 07:52:53"
         },
         {
             "name": "symfony/assetic-bundle",

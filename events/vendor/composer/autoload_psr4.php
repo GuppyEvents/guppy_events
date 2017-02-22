@@ -44,6 +44,7 @@ return array(
     'GuzzleHttp\\' => array($vendorDir . '/guzzlehttp/guzzle/src'),
     'Google\\Cloud\\' => array($vendorDir . '/google/cloud/src'),
     'Google\\Auth\\' => array($vendorDir . '/google/auth/src'),
+    'Gelf\\' => array($vendorDir . '/graylog2/gelf-php/src/Gelf'),
     'Firebase\\JWT\\' => array($vendorDir . '/firebase/php-jwt/src'),
     'Facebook\\' => array($vendorDir . '/facebook/graph-sdk/src/Facebook'),
     'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator'),

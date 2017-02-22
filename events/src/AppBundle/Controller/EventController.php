@@ -221,6 +221,8 @@ class EventController extends Controller
                     return $this->redirectToRoute('home_events');
                 }
             } catch (Exception $e){
+                $logger = $this->get('monolog.logger.graylog');
+                $logger->addError($e->getMessage());
                 return $this->redirectToRoute('event_add_page');
             }
 
@@ -312,6 +314,8 @@ class EventController extends Controller
                     return $this->redirectToRoute('home_events');
                 }
             } catch (Exception $e){
+                $logger = $this->get('monolog.logger.graylog');
+                $logger->addError($e->getMessage());
                 return $this->redirectToRoute('event_add_page');
             }
 

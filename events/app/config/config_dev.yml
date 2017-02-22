@@ -11,16 +11,18 @@ web_profiler:
     toolbar: true
     intercept_redirects: false
 
-monolog:
-    handlers:
-        main:
-            type: stream
-            path: "%kernel.logs_dir%/%kernel.environment%.log"
-            level: debug
-            channels: [!event]
-        console:
-            type:   console
-            channels: [!event, !doctrine]
+#monolog:
+#    handlers:
+#        main:
+#            type: stream
+#            path: "%kernel.logs_dir%/%kernel.environment%.log"
+#            level: debug
+#            channels: [!event]
+#        console:
+#            type:   console
+#            channels: [!event, !doctrine]
+
+        # --------------------------------------------------------------------------
         # uncomment to get logging in your browser
         # you may have to allow bigger header sizes in your Web server configuration
         #firephp:
@@ -32,3 +34,41 @@ monolog:
 
 #swiftmailer:
 #    delivery_address: me@example.com
+
+monolog:
+    handlers:
+        main:
+            type:   gelf
+            #path:   "%kernel.logs_dir%/%kernel.environment%.log"
+            level:  error
+            publisher:
+                hostname: graylog.seruvent.com
+                port: 12202
+            channels: [!graylog]
+        doctrine:
+            action_level: info
+            type: gelf
+            publisher:
+                hostname: graylog.seruvent.com
+                port: 12202
+            channels: doctrine
+            level: info
+        nested:
+            type:  gelf
+            level:  error
+            #path:  "%kernel.logs_dir%/%kernel.environment%.log"
+            publisher:
+                hostname: graylog.seruvent.com
+                port: 12202
+            channels: [!graylog]
+        console:
+            type:  console
+        graylog:
+            type:         gelf
+            facility:     seruvent
+            host:         seruvent.com
+            publisher:
+                hostname: graylog.seruvent.com
+                port: 12202
+            level:        debug
+            channels:     [graylog]

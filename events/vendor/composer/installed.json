@@ -1607,62 +1607,6 @@
         ]
     },
     {
-        "name": "swiftmailer/swiftmailer",
-        "version": "v5.4.5",
-        "version_normalized": "5.4.5.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/swiftmailer/swiftmailer.git",
-            "reference": "cd142238a339459b10da3d8234220963f392540c"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/cd142238a339459b10da3d8234220963f392540c",
-            "reference": "cd142238a339459b10da3d8234220963f392540c",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3"
-        },
-        "require-dev": {
-            "mockery/mockery": "~0.9.1",
-            "symfony/phpunit-bridge": "~3.2"
-        },
-        "time": "2016-12-29 10:02:40",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "5.4-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "files": [
-                "lib/swift_required.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Chris Corbyn"
-            },
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            }
-        ],
-        "description": "Swiftmailer, free feature-rich PHP mailer",
-        "homepage": "http://swiftmailer.org",
-        "keywords": [
-            "email",
-            "mail",
-            "mailer"
-        ]
-    },
-    {
         "name": "symfony/swiftmailer-bundle",
         "version": "v2.4.2",
         "version_normalized": "2.4.2.0",
@@ -1864,52 +1808,6 @@
             "log",
             "logging"
         ]
-    },
-    {
-        "name": "sensiolabs/security-checker",
-        "version": "v4.0.0",
-        "version_normalized": "4.0.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/sensiolabs/security-checker.git",
-            "reference": "116027b57b568ed61b7b1c80eeb4f6ee9e8c599c"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/116027b57b568ed61b7b1c80eeb4f6ee9e8c599c",
-            "reference": "116027b57b568ed61b7b1c80eeb4f6ee9e8c599c",
-            "shasum": ""
-        },
-        "require": {
-            "symfony/console": "~2.7|~3.0"
-        },
-        "time": "2016-09-23 18:09:57",
-        "bin": [
-            "security-checker"
-        ],
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "4.0-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "SensioLabs\\Security": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien.potencier@gmail.com"
-            }
-        ],
-        "description": "A security checker for your composer.lock"
     },
     {
         "name": "sensio/distribution-bundle",
@@ -2541,94 +2439,6 @@
         ]
     },
     {
-        "name": "google/cloud",
-        "version": "v0.20.1",
-        "version_normalized": "0.20.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/GoogleCloudPlatform/google-cloud-php.git",
-            "reference": "e7613334527412ebd03d61a9174d61e101d40aa3"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/GoogleCloudPlatform/google-cloud-php/zipball/e7613334527412ebd03d61a9174d61e101d40aa3",
-            "reference": "e7613334527412ebd03d61a9174d61e101d40aa3",
-            "shasum": ""
-        },
-        "require": {
-            "google/auth": "^0.11",
-            "guzzlehttp/guzzle": "^5.3|^6.0",
-            "guzzlehttp/psr7": "^1.2",
-            "monolog/monolog": "~1",
-            "php": ">=5.5",
-            "psr/http-message": "1.0.*",
-            "rize/uri-template": "~0.3"
-        },
-        "require-dev": {
-            "erusev/parsedown": "^1.6",
-            "google/gax": "^0.5",
-            "google/proto-client-php": "^0.6",
-            "james-heinrich/getid3": "^1.9",
-            "league/json-guard": "^0.3",
-            "phpdocumentor/reflection": "^3.0",
-            "phpunit/phpunit": "4.8.*",
-            "squizlabs/php_codesniffer": "2.*",
-            "symfony/console": "^3.0",
-            "vierbergenlars/php-semver": "^3.0"
-        },
-        "suggest": {
-            "google/gax": "Required to support gRPC",
-            "google/proto-client-php": "Required to support gRPC",
-            "james-heinrich/getid3": "Allows the Google Cloud Speech client to determine sample rate and encoding of audio inputs"
-        },
-        "time": "2016-12-28 21:31:30",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Google\\Cloud\\": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "Apache-2.0"
-        ],
-        "authors": [
-            {
-                "name": "John Pedrie",
-                "email": "john@pedrie.com"
-            },
-            {
-                "name": "Dave Supplee",
-                "email": "dwsupplee@gmail.com"
-            }
-        ],
-        "description": "Google Cloud Client Library",
-        "homepage": "http://github.com/GoogleCloudPlatform/google-cloud-php",
-        "keywords": [
-            "big query",
-            "bigquery",
-            "cloud",
-            "datastore",
-            "gcs",
-            "google",
-            "google api",
-            "google api client",
-            "google apis",
-            "google apis client",
-            "google cloud",
-            "google cloud platform",
-            "natural language",
-            "pub sub",
-            "pubsub",
-            "speech",
-            "stackdriver logging",
-            "storage",
-            "translate",
-            "vision"
-        ]
-    },
-    {
         "name": "phpseclib/phpseclib",
         "version": "2.0.4",
         "version_normalized": "2.0.4.0",
@@ -2820,140 +2630,6 @@
         ]
     },
     {
-        "name": "sensio/framework-extra-bundle",
-        "version": "v3.0.21",
-        "version_normalized": "3.0.21.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/sensiolabs/SensioFrameworkExtraBundle.git",
-            "reference": "ed86f6fb1753e76b39ff8b87f527045ca6b97169"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/ed86f6fb1753e76b39ff8b87f527045ca6b97169",
-            "reference": "ed86f6fb1753e76b39ff8b87f527045ca6b97169",
-            "shasum": ""
-        },
-        "require": {
-            "doctrine/common": "~2.2",
-            "symfony/dependency-injection": "~2.3|~3.0",
-            "symfony/framework-bundle": "~2.3|~3.0"
-        },
-        "require-dev": {
-            "symfony/asset": "~2.7|~3.0",
-            "symfony/browser-kit": "~2.3|~3.0",
-            "symfony/dom-crawler": "~2.3|~3.0",
-            "symfony/expression-language": "~2.4|~3.0",
-            "symfony/finder": "~2.3|~3.0",
-            "symfony/phpunit-bridge": "~3.2",
-            "symfony/psr-http-message-bridge": "^0.3",
-            "symfony/security-bundle": "~2.4|~3.0",
-            "symfony/templating": "~2.3|~3.0",
-            "symfony/translation": "~2.3|~3.0",
-            "symfony/twig-bundle": "~2.3|~3.0",
-            "symfony/yaml": "~2.3|~3.0",
-            "twig/twig": "~1.11|~2.0",
-            "zendframework/zend-diactoros": "^1.3"
-        },
-        "suggest": {
-            "symfony/expression-language": "",
-            "symfony/psr-http-message-bridge": "To use the PSR-7 converters",
-            "symfony/security-bundle": ""
-        },
-        "time": "2017-02-02 15:31:23",
-        "type": "symfony-bundle",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "3.0.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Sensio\\Bundle\\FrameworkExtraBundle\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            }
-        ],
-        "description": "This bundle provides a way to configure your controllers with annotations",
-        "keywords": [
-            "annotations",
-            "controllers"
-        ]
-    },
-    {
-        "name": "php-http/discovery",
-        "version": "v1.1.1",
-        "version_normalized": "1.1.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/php-http/discovery.git",
-            "reference": "47fc36bd73ab615b55c31f4134e6bae70f1c04c1"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/php-http/discovery/zipball/47fc36bd73ab615b55c31f4134e6bae70f1c04c1",
-            "reference": "47fc36bd73ab615b55c31f4134e6bae70f1c04c1",
-            "shasum": ""
-        },
-        "require": {
-            "php": "^5.5 || ^7.0"
-        },
-        "require-dev": {
-            "henrikbjorn/phpspec-code-coverage": "^2.0.2",
-            "php-http/httplug": "^1.0",
-            "php-http/message-factory": "^1.0",
-            "phpspec/phpspec": "^2.4",
-            "puli/composer-plugin": "1.0.0-beta10"
-        },
-        "suggest": {
-            "php-http/message": "Allow to use Guzzle, Diactoros or Slim Framework factories",
-            "puli/composer-plugin": "Sets up Puli which is recommended for Discovery to work. Check http://docs.php-http.org/en/latest/discovery.html for more details."
-        },
-        "time": "2016-11-27 12:21:25",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.2-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Http\\Discovery\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Márk Sági-Kazár",
-                "email": "mark.sagikazar@gmail.com"
-            }
-        ],
-        "description": "Finds installed HTTPlug implementations and PSR-7 message factories",
-        "homepage": "http://php-http.org",
-        "keywords": [
-            "adapter",
-            "client",
-            "discovery",
-            "factory",
-            "http",
-            "message",
-            "psr7"
-        ]
-    },
-    {
         "name": "clue/stream-filter",
         "version": "v1.3.0",
         "version_normalized": "1.3.0.0",
@@ -3054,136 +2730,6 @@
             "message",
             "stream",
             "uri"
-        ]
-    },
-    {
-        "name": "php-http/message",
-        "version": "v1.4.1",
-        "version_normalized": "1.4.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/php-http/message.git",
-            "reference": "bfd895a4e753bdde99bed64d75b999e0c9fa6147"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/php-http/message/zipball/bfd895a4e753bdde99bed64d75b999e0c9fa6147",
-            "reference": "bfd895a4e753bdde99bed64d75b999e0c9fa6147",
-            "shasum": ""
-        },
-        "require": {
-            "clue/stream-filter": "^1.3",
-            "php": ">=5.4",
-            "php-http/message-factory": "^1.0.2",
-            "psr/http-message": "^1.0"
-        },
-        "require-dev": {
-            "akeneo/phpspec-skip-example-extension": "^1.0",
-            "coduo/phpspec-data-provider-extension": "^1.0",
-            "ext-zlib": "*",
-            "guzzlehttp/psr7": "^1.0",
-            "henrikbjorn/phpspec-code-coverage": "^1.0",
-            "phpspec/phpspec": "^2.4",
-            "slim/slim": "^3.0",
-            "zendframework/zend-diactoros": "^1.0"
-        },
-        "suggest": {
-            "ext-zlib": "Used with compressor/decompressor streams",
-            "guzzlehttp/psr7": "Used with Guzzle PSR-7 Factories",
-            "slim/slim": "Used with Slim Framework PSR-7 implementation",
-            "zendframework/zend-diactoros": "Used with Diactoros Factories"
-        },
-        "time": "2016-12-16 21:09:21",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.5-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Http\\Message\\": "src/"
-            },
-            "files": [
-                "src/filters.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Márk Sági-Kazár",
-                "email": "mark.sagikazar@gmail.com"
-            }
-        ],
-        "description": "HTTP Message related tools",
-        "homepage": "http://php-http.org",
-        "keywords": [
-            "http",
-            "message",
-            "psr-7"
-        ]
-    },
-    {
-        "name": "php-http/multipart-stream-builder",
-        "version": "0.1.4",
-        "version_normalized": "0.1.4.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/php-http/multipart-stream-builder.git",
-            "reference": "5e02c79d98517da758a8ac1045be332a27d3809f"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/php-http/multipart-stream-builder/zipball/5e02c79d98517da758a8ac1045be332a27d3809f",
-            "reference": "5e02c79d98517da758a8ac1045be332a27d3809f",
-            "shasum": ""
-        },
-        "require": {
-            "php": "^5.5 || ^7.0",
-            "php-http/discovery": "^1.0",
-            "php-http/message-factory": "^1.0.2",
-            "psr/http-message": "^1.0"
-        },
-        "require-dev": {
-            "php-http/message": "^1.0",
-            "phpunit/phpunit": "^4.8 || ^5.4",
-            "zendframework/zend-diactoros": "^1.3.5"
-        },
-        "time": "2016-12-30 23:19:15",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "0.2-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Http\\Message\\MultipartStream\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Tobias Nyholm",
-                "email": "tobias.nyholm@gmail.com"
-            }
-        ],
-        "description": "A builder class that help you create a multipart stream",
-        "homepage": "http://php-http.org",
-        "keywords": [
-            "factory",
-            "http",
-            "message",
-            "multipart stream",
-            "stream"
         ]
     },
     {
@@ -3341,64 +2887,6 @@
             }
         ],
         "description": "The Mailgun SDK provides methods for all API functions."
-    },
-    {
-        "name": "php-http/curl-client",
-        "version": "v1.6.2",
-        "version_normalized": "1.6.2.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/php-http/curl-client.git",
-            "reference": "3f9ff1ffbe2496ed793734a9ab92b784a05d277a"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/php-http/curl-client/zipball/3f9ff1ffbe2496ed793734a9ab92b784a05d277a",
-            "reference": "3f9ff1ffbe2496ed793734a9ab92b784a05d277a",
-            "shasum": ""
-        },
-        "require": {
-            "ext-curl": "*",
-            "php": "^5.5 || ^7.0",
-            "php-http/discovery": "^1.0",
-            "php-http/httplug": "^1.0",
-            "php-http/message": "^1.2",
-            "php-http/message-factory": "^1.0.2"
-        },
-        "provide": {
-            "php-http/async-client-implementation": "1.0",
-            "php-http/client-implementation": "1.0"
-        },
-        "require-dev": {
-            "guzzlehttp/psr7": "^1.0",
-            "php-http/client-integration-tests": "^0.5.1",
-            "phpunit/phpunit": "^4.8.27",
-            "zendframework/zend-diactoros": "^1.0"
-        },
-        "time": "2017-01-02 15:39:30",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Http\\Client\\Curl\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Михаил Красильников",
-                "email": "m.krasilnikov@yandex.ru"
-            }
-        ],
-        "description": "cURL client for PHP-HTTP",
-        "homepage": "http://php-http.org",
-        "keywords": [
-            "curl",
-            "http"
-        ]
     },
     {
         "name": "symfony/symfony",
@@ -3596,79 +3084,6 @@
         "homepage": "https://symfony.com"
     },
     {
-        "name": "doctrine/dbal",
-        "version": "v2.5.11",
-        "version_normalized": "2.5.11.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/doctrine/dbal.git",
-            "reference": "1b1effbddbdc0f40d1c8f849f44bcddac4f52a48"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/doctrine/dbal/zipball/1b1effbddbdc0f40d1c8f849f44bcddac4f52a48",
-            "reference": "1b1effbddbdc0f40d1c8f849f44bcddac4f52a48",
-            "shasum": ""
-        },
-        "require": {
-            "doctrine/common": ">=2.4,<2.8-dev",
-            "php": ">=5.3.2"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "4.*",
-            "symfony/console": "2.*||^3.0"
-        },
-        "suggest": {
-            "symfony/console": "For helpful console commands such as SQL execution and import of files."
-        },
-        "time": "2017-02-04 21:20:13",
-        "bin": [
-            "bin/doctrine-dbal"
-        ],
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.5.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Doctrine\\DBAL\\": "lib/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Roman Borschel",
-                "email": "roman@code-factory.org"
-            },
-            {
-                "name": "Benjamin Eberlei",
-                "email": "kontakt@beberlei.de"
-            },
-            {
-                "name": "Guilherme Blanco",
-                "email": "guilhermeblanco@gmail.com"
-            },
-            {
-                "name": "Jonathan Wage",
-                "email": "jonwage@gmail.com"
-            }
-        ],
-        "description": "Database Abstraction Layer",
-        "homepage": "http://www.doctrine-project.org",
-        "keywords": [
-            "database",
-            "dbal",
-            "persistence",
-            "queryobject"
-        ]
-    },
-    {
         "name": "facebook/graph-sdk",
         "version": "5.4.4",
         "version_normalized": "5.4.4.0",
@@ -3727,5 +3142,651 @@
             "facebook",
             "sdk"
         ]
+    },
+    {
+        "name": "sensio/framework-extra-bundle",
+        "version": "v3.0.22",
+        "version_normalized": "3.0.22.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/sensiolabs/SensioFrameworkExtraBundle.git",
+            "reference": "1c66c2e3b8f17f06178142386aff5a9f8057a104"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/1c66c2e3b8f17f06178142386aff5a9f8057a104",
+            "reference": "1c66c2e3b8f17f06178142386aff5a9f8057a104",
+            "shasum": ""
+        },
+        "require": {
+            "doctrine/common": "~2.2",
+            "symfony/dependency-injection": "~2.3|~3.0",
+            "symfony/framework-bundle": "~2.3|~3.0"
+        },
+        "require-dev": {
+            "doctrine/doctrine-bundle": "~1.5",
+            "doctrine/orm": "~2.4,>=2.4.5",
+            "symfony/asset": "~2.7|~3.0",
+            "symfony/browser-kit": "~2.3|~3.0",
+            "symfony/dom-crawler": "~2.3|~3.0",
+            "symfony/expression-language": "~2.4|~3.0",
+            "symfony/finder": "~2.3|~3.0",
+            "symfony/phpunit-bridge": "~3.2",
+            "symfony/psr-http-message-bridge": "^0.3",
+            "symfony/security-bundle": "~2.4|~3.0",
+            "symfony/templating": "~2.3|~3.0",
+            "symfony/translation": "~2.3|~3.0",
+            "symfony/twig-bundle": "~2.3|~3.0",
+            "symfony/yaml": "~2.3|~3.0",
+            "twig/twig": "~1.12|~2.0",
+            "zendframework/zend-diactoros": "^1.3"
+        },
+        "suggest": {
+            "symfony/expression-language": "",
+            "symfony/psr-http-message-bridge": "To use the PSR-7 converters",
+            "symfony/security-bundle": ""
+        },
+        "time": "2017-02-15 06:52:30",
+        "type": "symfony-bundle",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.0.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Sensio\\Bundle\\FrameworkExtraBundle\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            }
+        ],
+        "description": "This bundle provides a way to configure your controllers with annotations",
+        "keywords": [
+            "annotations",
+            "controllers"
+        ]
+    },
+    {
+        "name": "google/cloud",
+        "version": "v0.20.2",
+        "version_normalized": "0.20.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/GoogleCloudPlatform/google-cloud-php.git",
+            "reference": "7175deb3c4b07d790a52214ba209986404857d51"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/GoogleCloudPlatform/google-cloud-php/zipball/7175deb3c4b07d790a52214ba209986404857d51",
+            "reference": "7175deb3c4b07d790a52214ba209986404857d51",
+            "shasum": ""
+        },
+        "require": {
+            "google/auth": "^0.11",
+            "guzzlehttp/guzzle": "^5.3|^6.0",
+            "guzzlehttp/psr7": "^1.2",
+            "monolog/monolog": "~1",
+            "php": ">=5.5",
+            "psr/http-message": "1.0.*",
+            "rize/uri-template": "~0.3"
+        },
+        "require-dev": {
+            "erusev/parsedown": "^1.6",
+            "google/gax": "^0.6",
+            "google/proto-client-php": "^0.7",
+            "james-heinrich/getid3": "^1.9",
+            "league/json-guard": "^0.3",
+            "phpdocumentor/reflection": "^3.0",
+            "phpunit/phpunit": "4.8.*",
+            "squizlabs/php_codesniffer": "2.*",
+            "symfony/console": "^3.0",
+            "vierbergenlars/php-semver": "^3.0"
+        },
+        "suggest": {
+            "google/gax": "Required to support gRPC",
+            "google/proto-client-php": "Required to support gRPC",
+            "james-heinrich/getid3": "Allows the Google Cloud Speech client to determine sample rate and encoding of audio inputs"
+        },
+        "time": "2017-02-10 15:09:33",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Google\\Cloud\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Apache-2.0"
+        ],
+        "authors": [
+            {
+                "name": "John Pedrie",
+                "email": "john@pedrie.com"
+            },
+            {
+                "name": "Dave Supplee",
+                "email": "dwsupplee@gmail.com"
+            }
+        ],
+        "description": "Google Cloud Client Library",
+        "homepage": "http://github.com/GoogleCloudPlatform/google-cloud-php",
+        "keywords": [
+            "big query",
+            "bigquery",
+            "cloud",
+            "datastore",
+            "gcs",
+            "google",
+            "google api",
+            "google api client",
+            "google apis",
+            "google apis client",
+            "google cloud",
+            "google cloud platform",
+            "natural language",
+            "pub sub",
+            "pubsub",
+            "speech",
+            "stackdriver logging",
+            "storage",
+            "translate",
+            "translation",
+            "vision"
+        ]
+    },
+    {
+        "name": "php-http/discovery",
+        "version": "1.2.0",
+        "version_normalized": "1.2.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/php-http/discovery.git",
+            "reference": "cc5669d9cb51170ad0278a3b984cd3c7894d6ff9"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/php-http/discovery/zipball/cc5669d9cb51170ad0278a3b984cd3c7894d6ff9",
+            "reference": "cc5669d9cb51170ad0278a3b984cd3c7894d6ff9",
+            "shasum": ""
+        },
+        "require": {
+            "php": "^5.5 || ^7.0"
+        },
+        "require-dev": {
+            "henrikbjorn/phpspec-code-coverage": "^2.0.2",
+            "php-http/httplug": "^1.0",
+            "php-http/message-factory": "^1.0",
+            "phpspec/phpspec": "^2.4",
+            "puli/composer-plugin": "1.0.0-beta10"
+        },
+        "suggest": {
+            "php-http/message": "Allow to use Guzzle, Diactoros or Slim Framework factories",
+            "puli/composer-plugin": "Sets up Puli which is recommended for Discovery to work. Check http://docs.php-http.org/en/latest/discovery.html for more details."
+        },
+        "time": "2017-02-12 08:49:24",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.3-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Http\\Discovery\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Márk Sági-Kazár",
+                "email": "mark.sagikazar@gmail.com"
+            }
+        ],
+        "description": "Finds installed HTTPlug implementations and PSR-7 message factories",
+        "homepage": "http://php-http.org",
+        "keywords": [
+            "adapter",
+            "client",
+            "discovery",
+            "factory",
+            "http",
+            "message",
+            "psr7"
+        ]
+    },
+    {
+        "name": "php-http/message",
+        "version": "1.5.0",
+        "version_normalized": "1.5.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/php-http/message.git",
+            "reference": "13df8c48f40ca7925303aa336f19be4b80984f01"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/php-http/message/zipball/13df8c48f40ca7925303aa336f19be4b80984f01",
+            "reference": "13df8c48f40ca7925303aa336f19be4b80984f01",
+            "shasum": ""
+        },
+        "require": {
+            "clue/stream-filter": "^1.3",
+            "php": ">=5.4",
+            "php-http/message-factory": "^1.0.2",
+            "psr/http-message": "^1.0"
+        },
+        "require-dev": {
+            "akeneo/phpspec-skip-example-extension": "^1.0",
+            "coduo/phpspec-data-provider-extension": "^1.0",
+            "ext-zlib": "*",
+            "guzzlehttp/psr7": "^1.0",
+            "henrikbjorn/phpspec-code-coverage": "^1.0",
+            "phpspec/phpspec": "^2.4",
+            "slim/slim": "^3.0",
+            "zendframework/zend-diactoros": "^1.0"
+        },
+        "suggest": {
+            "ext-zlib": "Used with compressor/decompressor streams",
+            "guzzlehttp/psr7": "Used with Guzzle PSR-7 Factories",
+            "slim/slim": "Used with Slim Framework PSR-7 implementation",
+            "zendframework/zend-diactoros": "Used with Diactoros Factories"
+        },
+        "time": "2017-02-14 08:58:37",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.6-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Http\\Message\\": "src/"
+            },
+            "files": [
+                "src/filters.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Márk Sági-Kazár",
+                "email": "mark.sagikazar@gmail.com"
+            }
+        ],
+        "description": "HTTP Message related tools",
+        "homepage": "http://php-http.org",
+        "keywords": [
+            "http",
+            "message",
+            "psr-7"
+        ]
+    },
+    {
+        "name": "php-http/curl-client",
+        "version": "v1.7.0",
+        "version_normalized": "1.7.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/php-http/curl-client.git",
+            "reference": "0972ad0d7d37032a52077a5cbe27cf370f2007d8"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/php-http/curl-client/zipball/0972ad0d7d37032a52077a5cbe27cf370f2007d8",
+            "reference": "0972ad0d7d37032a52077a5cbe27cf370f2007d8",
+            "shasum": ""
+        },
+        "require": {
+            "ext-curl": "*",
+            "php": "^5.5 || ^7.0",
+            "php-http/discovery": "^1.0",
+            "php-http/httplug": "^1.0",
+            "php-http/message": "^1.2",
+            "php-http/message-factory": "^1.0.2"
+        },
+        "provide": {
+            "php-http/async-client-implementation": "1.0",
+            "php-http/client-implementation": "1.0"
+        },
+        "require-dev": {
+            "guzzlehttp/psr7": "^1.0",
+            "php-http/client-integration-tests": "^0.5.1",
+            "phpunit/phpunit": "^4.8.27",
+            "zendframework/zend-diactoros": "^1.0"
+        },
+        "time": "2017-02-09 15:18:33",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Http\\Client\\Curl\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Михаил Красильников",
+                "email": "m.krasilnikov@yandex.ru"
+            }
+        ],
+        "description": "cURL client for PHP-HTTP",
+        "homepage": "http://php-http.org",
+        "keywords": [
+            "curl",
+            "http"
+        ]
+    },
+    {
+        "name": "doctrine/dbal",
+        "version": "v2.5.12",
+        "version_normalized": "2.5.12.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/doctrine/dbal.git",
+            "reference": "7b9e911f9d8b30d43b96853dab26898c710d8f44"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/doctrine/dbal/zipball/7b9e911f9d8b30d43b96853dab26898c710d8f44",
+            "reference": "7b9e911f9d8b30d43b96853dab26898c710d8f44",
+            "shasum": ""
+        },
+        "require": {
+            "doctrine/common": ">=2.4,<2.8-dev",
+            "php": ">=5.3.2"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "4.*",
+            "symfony/console": "2.*||^3.0"
+        },
+        "suggest": {
+            "symfony/console": "For helpful console commands such as SQL execution and import of files."
+        },
+        "time": "2017-02-08 12:53:47",
+        "bin": [
+            "bin/doctrine-dbal"
+        ],
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.5.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Doctrine\\DBAL\\": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Roman Borschel",
+                "email": "roman@code-factory.org"
+            },
+            {
+                "name": "Benjamin Eberlei",
+                "email": "kontakt@beberlei.de"
+            },
+            {
+                "name": "Guilherme Blanco",
+                "email": "guilhermeblanco@gmail.com"
+            },
+            {
+                "name": "Jonathan Wage",
+                "email": "jonwage@gmail.com"
+            }
+        ],
+        "description": "Database Abstraction Layer",
+        "homepage": "http://www.doctrine-project.org",
+        "keywords": [
+            "database",
+            "dbal",
+            "persistence",
+            "queryobject"
+        ]
+    },
+    {
+        "name": "swiftmailer/swiftmailer",
+        "version": "v5.4.6",
+        "version_normalized": "5.4.6.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/swiftmailer/swiftmailer.git",
+            "reference": "81fdccfaf8bdc5d5d7a1ef6bb3a61bbb1a6c4a3e"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/81fdccfaf8bdc5d5d7a1ef6bb3a61bbb1a6c4a3e",
+            "reference": "81fdccfaf8bdc5d5d7a1ef6bb3a61bbb1a6c4a3e",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "require-dev": {
+            "mockery/mockery": "~0.9.1",
+            "symfony/phpunit-bridge": "~3.2"
+        },
+        "time": "2017-02-13 07:52:53",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "5.4-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "lib/swift_required.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Chris Corbyn"
+            },
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            }
+        ],
+        "description": "Swiftmailer, free feature-rich PHP mailer",
+        "homepage": "http://swiftmailer.org",
+        "keywords": [
+            "email",
+            "mail",
+            "mailer"
+        ]
+    },
+    {
+        "name": "sensiolabs/security-checker",
+        "version": "v4.0.1",
+        "version_normalized": "4.0.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/sensiolabs/security-checker.git",
+            "reference": "f2ce0035fc512287978510ca1740cd111d60f89f"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/f2ce0035fc512287978510ca1740cd111d60f89f",
+            "reference": "f2ce0035fc512287978510ca1740cd111d60f89f",
+            "shasum": ""
+        },
+        "require": {
+            "symfony/console": "~2.7|~3.0"
+        },
+        "time": "2017-02-18 17:53:25",
+        "bin": [
+            "security-checker"
+        ],
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "4.0-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "SensioLabs\\Security": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien.potencier@gmail.com"
+            }
+        ],
+        "description": "A security checker for your composer.lock"
+    },
+    {
+        "name": "php-http/multipart-stream-builder",
+        "version": "0.1.6",
+        "version_normalized": "0.1.6.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/php-http/multipart-stream-builder.git",
+            "reference": "74d5ac517778ae87a065c6f4076316c35b58a777"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/php-http/multipart-stream-builder/zipball/74d5ac517778ae87a065c6f4076316c35b58a777",
+            "reference": "74d5ac517778ae87a065c6f4076316c35b58a777",
+            "shasum": ""
+        },
+        "require": {
+            "php": "^5.5 || ^7.0",
+            "php-http/discovery": "^1.0",
+            "php-http/message-factory": "^1.0.2",
+            "psr/http-message": "^1.0"
+        },
+        "require-dev": {
+            "php-http/message": "^1.5",
+            "phpunit/phpunit": "^4.8 || ^5.4",
+            "zendframework/zend-diactoros": "^1.3.5"
+        },
+        "time": "2017-02-16 08:52:59",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "0.2-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Http\\Message\\MultipartStream\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Tobias Nyholm",
+                "email": "tobias.nyholm@gmail.com"
+            }
+        ],
+        "description": "A builder class that help you create a multipart stream",
+        "homepage": "http://php-http.org",
+        "keywords": [
+            "factory",
+            "http",
+            "message",
+            "multipart stream",
+            "stream"
+        ]
+    },
+    {
+        "name": "graylog2/gelf-php",
+        "version": "1.5.3",
+        "version_normalized": "1.5.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/bzikarsky/gelf-php.git",
+            "reference": "0cb872928246bada1b6a5f504a7c3589f1c1174d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/bzikarsky/gelf-php/zipball/0cb872928246bada1b6a5f504a7c3589f1c1174d",
+            "reference": "0cb872928246bada1b6a5f504a7c3589f1c1174d",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.9",
+            "psr/log": "~1.0"
+        },
+        "provide": {
+            "psr/log-implementation": "~1.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "~4.3",
+            "squizlabs/php_codesniffer": "~2.0"
+        },
+        "time": "2016-11-21 13:31:39",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.4.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Gelf\\": "src/Gelf"
+            },
+            "files": [
+                "src/check_technical_requirements.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Benjamin Zikarsky",
+                "email": "benjamin@zikarsky.de"
+            },
+            {
+                "name": "gelf-php contributors",
+                "homepage": "https://github.com/bzikarsky/gelf-php/contributors"
+            }
+        ],
+        "description": "A php implementation to send log-messages to a GELF compatible backend like Graylog2."
     }
 ]

@@ -95,7 +95,14 @@ class MultipartStreamBuilder
                 $this->getHeaders($data['headers'])."\r\n";
 
             // Convert the stream to string
-            $streams .= (string) $data['contents'];
+            /* @var $contentStream StreamInterface */
+            $contentStream = $data['contents'];
+            if ($contentStream->isSeekable()) {
+                $streams .= $contentStream->__toString();
+            } else {
+                $streams .= $contentStream->getContents();
+            }
+
             $streams .= "\r\n";
         }
 
@@ -185,7 +192,7 @@ class MultipartStreamBuilder
     public function getBoundary()
     {
         if ($this->boundary === null) {
-            $this->boundary = uniqid();
+            $this->boundary = uniqid('', true);
         }
 
         return $this->boundary;
