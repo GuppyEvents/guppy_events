@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="tr">
+<head>
+
+	<meta charset="utf-8">
+	<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<meta name="author" content="Kemal Sami KARACA">
+	<title>Seruvent Kayıt</title>
+
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+
+    {% stylesheets
+            'theme/assets/css/lib/animate.css'
+            'theme/assets/css/custom-animations.css' filter='cssrewrite' %}
+        <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+    {% endstylesheets %}
+
+    <!-- font links -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,500,300,300italic,400italic,500italic&subset=latin,latin-ext">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans+Caption:400,700">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    {% stylesheets
+            'theme/assets/css/lib/font-lineicons.css'
+            'theme/assets/css/lib/toastr.min.css'
+            'theme/assets/css/style_media.css'
+            'theme/assets/css/style.css'
+            'theme/assets/css/guppy-ui.css'
+            'theme/assets/css/seruvent.css' filter='cssrewrite' %}
+        <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+    {% endstylesheets %}
+
+    <!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+	<div class="preloader-mask">
+		<div class="preloader"></div>
+	</div>
+
+	<section class="section bg-cover bg1 window-height ge-cs-bg">
+
+		<div class="container light-text align-center" style="margin-top: 4%;">
+			<a href="{{ path('home_communities') }}"><img src="{{ asset('theme/assets/img/seruvent_logo.png') }}" alt="Seruvent" width="180" height="60" class="retina-show"></a>
+		</div>
+		<div class="container">
+
+			{{ form_start(form, {'action': path('user_registration'), 'method': 'POST', 'attr':{'class': 'form registration-form align-center' }}) }}
+				<h6><span class="highlight">Kullanıcı Kayıt</span></h6>
+
+				<fieldset class="col-sm-12">
+					{{ form_widget(form.name, {'attr': {'class': 'form-control register-name' , 'placeholder':'İsim' , 'oninput':'checkValidation(this , "İsim boş bırakılamaz")', 'oninvalid':'checkValidation(this , "İsim boş bırakılamaz")'}}) }}
+					<span class="glyphicon glyphicon-user form-control-feedback" style="margin-right: 4%; margin-top: 1%;"></span>
+				</fieldset>
+
+				<fieldset class="col-sm-12">
+					{{ form_widget(form.surname, {'attr': {'class': 'form-control' , 'placeholder':'Soyadı', 'oninput':'checkValidation(this , "Soyadı boş bırakılamaz")', 'oninvalid':'checkValidation(this , "Soyadı boş bırakılamaz")' }}) }}
+					<span class="glyphicon glyphicon-user form-control-feedback" style="margin-right: 4%; margin-top: 1%;"></span>
+				</fieldset>
+
+				<fieldset class="col-sm-12">
+					{{ form_widget(form.username, {'attr': {'class': 'form-control', 'placeholder':'Kullanıcı Adı', 'oninput':'checkValidation(this , "Kullanıcı adını boş bırakmayınız")', 'oninvalid':'checkValidation(this , "Kullanıcı adını boş bırakmayınız")'}}) }}
+					<span class="glyphicon glyphicon-user form-control-feedback" style="margin-right: 4%; margin-top: 1%;"></span>
+				</fieldset>
+
+				<fieldset class="col-sm-12">
+					{{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder':'Mail Adresiniz' , 'oninput':'checkValidation(this , "Geçerli mail adresi giriniz")', 'oninvalid':'checkValidation(this , "Geçerli mail adresi giriniz")' }}) }}
+					<span class="glyphicon glyphicon-envelope form-control-feedback" style="margin-right: 4%; margin-top: 1%;"></span>
+				</fieldset>
+
+				<fieldset class="col-sm-12">
+					{{ form_widget(form.password.first, {'attr': {'class': 'form-control', 'placeholder':'Şifre' , 'oninput':'checkValidation(this , "Şifre boş bırakılamaz")', 'oninvalid':'checkValidation(this , "Şifre boş bırakılamaz")' }}) }}
+					<span class="glyphicon glyphicon-lock form-control-feedback" style="margin-right: 4%; margin-top: 1%;"></span>
+				</fieldset>
+
+				<fieldset class="col-sm-12">
+					{{ form_widget(form.password.second, {'attr': {'class': 'form-control', 'placeholder':'Şifre Tekrar' ,'oninput':'checkValidation(this , "Şifre tekrarı boş bırakılamaz")','onchange':'checkPasswordValidation(this , "Şifreleriniz uyuşmamaktadır")' }}) }}
+					<span class="glyphicon glyphicon-lock form-control-feedback" style="margin-right: 4%; margin-top: 1%;"></span>
+				</fieldset>
+
+				<fieldset class="col-sm-12" style="display: none;">
+					{{ form_widget(form.fbId, {'attr': {'class': 'form-control', 'placeholder':'Token' }}) }}
+				</fieldset>
+
+				<fieldset class="col-sm-12">
+					{{ form_widget(form.termsAccepted , {'attr': {'onchange':'this.setCustomValidity(validity.valueMissing ? "Şartları kabul ettiğinizi kabul ediniz" : "");' }}) }}<label for="privacy"> <a href="{{ path('home_terms') }}" target="_blank">Şartları</a> kabul ediyorum </label>
+				</fieldset>
+
+				<fieldset class="col-sm-12">
+					<div class="align-center">
+						<button id='register_submit' type="submit" class="btn btn-sm btn-flat">Kayıt Ol</button>
+					</div>
+				</fieldset>
+
+				<fieldset class="col-sm-12">
+					<div class="social-auth-links text-center" style="margin-top: 2%;">
+						<p>- YA DA -</p>
+						<a onclick="loginFacebook(this)" class="btn btn-sm btn-social btn-facebook btn-flat">Facebook ile Kaydol</a>
+						{#<a onclick="logoutFacebook()" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Google+ ile Kaydol</a>#}
+					</div>
+				</fieldset>
+
+				<a href="{{ path('login') }}" class="text-center align-left">Seruvent hesabı ile giriş yap</a>
+			{{ form_end(form) }}
+
+		</div>
+	</section>
+
+
+	<script src="{{ asset('plugins/jQuery/jQuery-2.2.0.min.js') }}"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+	{% javascripts
+			'theme/assets/js/jquery.validate.min.js'
+			'theme/assets/js/toastr.min.js'
+			'theme/assets/js/jquery.waypoints.min.js'
+			'theme/assets/js/jquery.appear.js'
+			'theme/assets/js/jquery.plugin.js'
+			'theme/assets/js/masonry.pkgd.min.js'
+			'theme/assets/js/modal-box.js'
+			'theme/assets/js/guppy-theme.js'
+			'theme/assets/js/guppy.js'
+			'theme/assets/js/custom.js'
+			'theme/assets/js/guppy-util.js' %}
+		<script src="{{ asset_url }}"></script>
+	{% endjavascripts %}
+
+
+	<script>
+
+		var error_msg = '{% if error_msg is defined %}{{ error_msg|json_encode|raw }}{% endif %}';
+		var success_msg = '{% if success_msg is defined %}{{ success_msg|json_encode|raw }}{% endif %}';
+		var facebook_asked = false;
+
+		function checkPasswordValidation(input , message){
+			if(input.value=="" || input.value!=document.getElementById('user_password_first').value){
+				input.setCustomValidity(message);
+			}else{
+				input.setCustomValidity("");
+			}
+		}
+
+		function checkValidation(input , message) {
+			if(input.value==""){
+				input.setCustomValidity(message);
+			}else{
+				input.setCustomValidity("");
+			}
+		}
+
+		$(function () {
+
+			// -- Operation Result Message
+			if(success_msg){
+				toastr.success(success_msg);
+			}else if(error_msg){
+				toastr.error(error_msg);
+			}
+
+		});
+
+
+		window.fbAsyncInit = function() {
+			FB.init({
+				appId      : '1807236222874605',
+				cookie     : true,
+				xfbml      : true,
+				version    : 'v2.8'
+			});
+			FB.AppEvents.logPageView();
+
+			FB.getLoginStatus(function(response) {
+				console.log(response);
+
+			});
+		};
+
+		function checkLoginState() {
+			FB.getLoginStatus(function(response) {
+				statusChangeCallback(response);
+			});
+		}
+
+		function statusChangeCallback(response){
+			if (response.status === 'connected') {
+				if(response.authResponse.grantedScopes){//izin sorulduysa
+					if(response.authResponse.grantedScopes.indexOf("email") !=-1 ) {
+						registerUser(response);
+					}else{
+						facebook_asked = true;
+						registerUser(response);
+						toastr.error("Sitemizi kullanabilmeniz için email adresinizi bizimle paylaşmanız gerekmektedir.")
+//                        if(facebook_asked == false) {
+//                            FB.login(function (response) {
+//                                statusChangeCallback(response);
+//                            }, {
+//                                scope: 'email, public_profile',
+//                                return_scopes: true,
+//                                auth_type: "rerequest"
+//                            });
+//                            facebook_asked = true;
+//                        }
+					}
+				}else{
+					toastr.error("Zaten kayıtlısınız lütfen giriş yapınız.");
+
+					setTimeout(function(){ window.location="login"; }, 500);
+				}
+			} else if (response.status === 'not_authorized') {
+				// The person is logged into Facebook, but not your app.
+				if(facebook_asked) {
+					FB.login(function (response) {
+						statusChangeCallback(response);
+					}, {
+						scope: 'email, public_profile',
+						return_scopes: true,
+						auth_type: "rerequest"
+					});
+				}else{
+					FB.login(function (response) {
+						statusChangeCallback(response);
+					}, {
+						scope: 'email, public_profile',
+						return_scopes: true
+					});
+				}
+			} else {
+				// The person is not logged into Facebook, so we're not sure if
+				// they are logged into this app or not.
+				if(facebook_asked) {
+					FB.login(function (response) {
+						statusChangeCallback(response);
+					}, {
+						scope: 'email, public_profile',
+						return_scopes: true,
+						auth_type: "rerequest"
+					});
+				}else{
+					FB.login(function (response) {
+						statusChangeCallback(response);
+					}, {
+						scope: 'email, public_profile',
+						return_scopes: true
+					});
+				}
+			}
+		}
+
+		(function(d, s, id){
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) {return;}
+			js = d.createElement(s); js.id = id;
+			js.src = "//connect.facebook.net/en_US/sdk.js";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+
+		function loginFacebook(e){
+			checkLoginState();
+		}
+		function registerUser(response1) {
+			FB.api('/me?fields=id,name,email,permissions', function(response) {
+				$("form").attr("action", "/registerFacebook");
+				var name=" ", surname=" ";
+				if(response.name.lastIndexOf(" ")!=-1){
+					name = response.name.substring(0, response.name.lastIndexOf(" "));
+					surname = response.name.substring(response.name.lastIndexOf(" ")+1);
+				}else{
+					name = response.name;
+					surname = response.name;
+				}
+				$("form input[name='user[password][first]']").hide();
+				$("form input[name='user[password][second]']").hide();
+				$("form input[name='user[name]']").val(name);
+				$("form input[name='user[surname]']").val(surname);
+				$("form input[name='user[username]']").val(response.email);
+				$("form input[name='user[email]']").val(response.email);
+				$("form input[name='user[password][first]']").val("_________________");
+				$("form input[name='user[password][second]']").val("_________________");
+				$("form input[name='user[termsAccepted]']").attr("checked", true);
+				$("form input[name='user[fbId]']").val(response1.authResponse.accessToken);
+				$(".icheckbox_square-blue").addClass('checked')
+				if(response.email) {
+					$("form").submit();
+				}else{
+					$("#register_submit").html('<i class="fa fa-facebook"></i>' + '&nbsp;Tamamla');
+					$("#register_submit").addClass("btn-facebook");
+				}
+			});
+
+		}
+
+		function logoutFacebook(){
+			FB.logout(function(response) {
+				console.log(response);
+			});
+		}
+
+
+	</script>
+
+</body>
+</html>

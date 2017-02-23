@@ -64,7 +64,7 @@
                         <span class="glyphicon glyphicon-user form-control-feedback"></span>
                     </div>
                     <div class="form-group has-feedback">
-                        {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder':'Bilkent Mail Adresiniz' , 'oninput':'checkValidation(this , "@ug.bilkent.edu.tr içermeli")', 'oninvalid':'checkValidation(this , "@ug.bilkent.edu.tr içermeli")' }}) }}
+                        {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder':'Mail Adresiniz' , 'oninput':'checkValidation(this , "Geçerli mail adresi giriniz")', 'oninvalid':'checkValidation(this , "Geçerli mail adresi giriniz")' }}) }}
                         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                     </div>
                     <div class="form-group has-feedback">
@@ -103,7 +103,7 @@
                     {#<a onclick="logoutFacebook()" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Google+ ile Kaydol</a>#}
                 </div>
 
-                <a href="{{ path('login') }}" class="text-center">Seruvent hesabı ile giriş yap</a>
+                <a href="{{ path('login') }}" class="text-center pull-left">Seruvent hesabı ile giriş yap</a>
 
             </div>
             <!-- /.form-box -->

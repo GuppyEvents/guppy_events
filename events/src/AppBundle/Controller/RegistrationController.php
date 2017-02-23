@@ -84,6 +84,7 @@ class RegistrationController extends Controller
             $user->setPassword($password);
             $imageLink = Utils::uploadBytesToServer(file_get_contents($fbUser->getPicture()->getUrl()), Utils::getGUID() . ".jpg");
             $user->setImageBase64($imageLink);
+            $user->setEmailValidated(true);
 
             // 4) save the User!
             $em = $this->getDoctrine()->getManager();
@@ -91,7 +92,8 @@ class RegistrationController extends Controller
             $em->flush();
             $confirmLink = "http://seruvent.com/activation/" . base64_encode(Utils::getGUID() . "**" . $user->getId() . "##" . rand(10, 100));
 
-            Utils::mailSendSingle($user->getEmail(), "Seruvent Kayıt Aktivasyonu", "Merhaba " . $user->getName() . ",\n\rKaydını onaylamak için aşağıdaki linke tıklaman yeterli.\n\r" . $confirmLink);
+            // Facebook ile kayıt olmuş kişilerin mail adresleri validate edilmiş sayılmaktadır
+            // Utils::mailSendSingle($user->getEmail(), "Seruvent Kayıt Aktivasyonu", "Merhaba " . $user->getName() . ",\n\rKaydını onaylamak için aşağıdaki linke tıklaman yeterli.\n\r" . $confirmLink);
 
             $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
             $this->get('security.token_storage')->setToken($token);
