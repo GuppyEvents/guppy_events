@@ -162,6 +162,10 @@
  ********************************************************************-******************************************/
         function fileToBase64Converter(eventTargetElement, targetImgElementId, targetImgBase64ElementId) {
             if (eventTargetElement.files && eventTargetElement.files[0]) {
+                if(eventTargetElement.files[0].size>3000000){
+                    toastr.error("Dosya boyutu 3 MB'tan büyük olamaz.")
+                    return;
+                }
                 var FR= new FileReader();
                 FR.onload = function(e) {
                     $(targetImgElementId).attr('src', e.target.result);

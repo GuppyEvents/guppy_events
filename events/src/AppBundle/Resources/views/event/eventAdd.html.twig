@@ -203,6 +203,10 @@
 
         function fileToBase64Converter() {
             if (this.files && this.files[0]) {
+                if(this.files[0].size>3000000){
+                    toastr.error("Dosya boyutu 3 MB'tan büyük olamaz.")
+                    return;
+                }
                 var FR= new FileReader();
                 FR.onload = function(e) {
                     $('#img_viewer').attr('src', e.target.result);
