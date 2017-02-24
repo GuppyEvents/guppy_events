@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\CommunityUserRoles;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -52,6 +53,27 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
 
         }
         return false;
+    }
+
+    /**
+     *
+     * İlgili kullanıcının verilen topluluk için admin role id değerini döner
+     *
+     * @param User $user The user
+     * @param Community $community The community
+     * @return CommunityUserRoles|null
+     */
+    public function getUserCommunityUserAdminRole($user, $community)
+    {
+        if(isset($user) && isset($community)){
+            $communityUser = $this->getEntityManager()->getRepository('AppBundle:CommunityUser')->findOneBy(array('community'=>$community , 'user'=>$user));
+
+            $acceptState = $this->getEntityManager()->getRepository('AppBundle:CommunityUserRoleState')->findAcceptState();
+            $communityUserRoles = $this->getEntityManager()->getRepository('AppBundle:CommunityUserRoles')->findOneBy(array('communityUser'=>$communityUser, 'communityRole'=>100, 'state'=>$acceptState));
+
+            return $communityUserRoles;
+        }
+        return null;
     }
 
 
