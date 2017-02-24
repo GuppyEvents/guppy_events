@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\CommunityRole;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -11,4 +12,29 @@ use Doctrine\ORM\EntityRepository;
  */
 class CommunityRoleRepository extends EntityRepository
 {
+
+    /**
+     *
+     * @return CommunityRole|null
+     */
+    public function findAdminRole()
+    {
+        return $this->createQueryBuilder('role')
+            ->where('role.id=100')
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
+     *
+     * @return CommunityRole|null
+     */
+    public function findMemberRole()
+    {
+        return $this->createQueryBuilder('role')
+            ->where('role.id=200')
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
 }

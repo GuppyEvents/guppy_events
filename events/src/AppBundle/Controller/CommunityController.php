@@ -53,6 +53,7 @@ class CommunityController extends Controller
 
         // İlgili kullanıcının topluluğun yöneticisi olup olunmadığına bakılır
         $data['isUserCommunityAdmin'] = $this->getUser() ? $this->getDoctrine()->getRepository('AppBundle:User')->isUserCommunityAdmin($this->getUser(),$community) : false;
+        $data['userCommunityUserAdminRole'] = $this->getUser() ? $this->getDoctrine()->getRepository('AppBundle:User')->getUserCommunityUserAdminRole($this->getUser(),$community) : null;
 
         $data['community'] = $community;
         $data['communityUser'] = $communityUser;
@@ -360,67 +361,96 @@ class CommunityController extends Controller
         return $response;
     }
 
-    
-    
+
     /**
-     * @Route("/add-event-from-fb", name="community_add_event_from_facebook")
+     * @Route("/edit/about", name="user_community_edit")
+     * @Security("has_role('ROLE_USER')")
      */
-    public function addEventFromFacebook(Request $request){
-
-        /**
-         * -- -- READ ME -- --
-         * Bu fonksiyon, etkinliklerin facebook üzerinden alınması için yazılmaya başlanmış olup yarıda bırakılmıştır.
-         */
-
+    public function communityUpdateAction(Request $request)
+    {
         // -- 1 -- Initialization
-        $data = array();
         $response = new Response();
         $response->headers->set('Content-Type', 'application/json');
+        $logger = $this->get('monolog.logger.graylog');
+        $data = array();
+        $errorData = array();
 
-        // -- 2 -- Try to Add New Mail Server
+        // -- 2 --
         try{
 
-            // -- 2.1 -- Get Community id
-            $communityId = $request->get('cid');
+            // -- 2.1 -- Get parameters
+            $communityUserRolesId = $request->get('curi');
+            $description = $request->get('cDesc');
+            $communityUserRole = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoles')->find($communityUserRolesId);
 
-            $community = $this->getDoctrine()->getRepository('AppBundle:Community')->find($communityId);
+            // -- 2.2 -- Checkers
+            if (!$communityUserRole) {
+                $errorData['user'] = $this->getUser()->getId();
+                $errorData['communtiy_user_role_id'] = $communityUserRolesId;
+                $errorData['description'] = 'User community role not found';
+                $logger->addWarning(json_encode(Result::$FAILURE_EXCEPTION->setContent($errorData)));
 
-            $facebook_pattern = '/^((http(s)?:\/\/)?(w{3}\.)?)?(facebook.com\/){1}.*/';
-            $twitter_pattern = '/^((http(s)?:\/\/)?(w{3}\.)?)?(twitter.com\/){1}.*/';
-            $instagram_pattern = '/^((http(s)?:\/\/)?(w{3}\.)?)?(instagram.com\/){1}.*/';
-
-            $communityLinkList = $this->getDoctrine()->getRepository('AppBundle:CommunityLink')->findBy(array('community'=>$community->getId()));
-            foreach ($communityLinkList as &$communityLink) {
-                if(preg_match($facebook_pattern,$communityLink->getLink())){
-                    $data['facebook'] = $communityLink->getLink();
-                }else if(preg_match($twitter_pattern,$communityLink->getLink())){
-                    $data['twitter'] = $communityLink->getLink();
-                }else if(preg_match($instagram_pattern,$communityLink->getLink())){
-                    $data['instagram'] = $communityLink->getLink();
-                }
+                $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent('Kullanıcı rolü bulunamadı')));
+                return $response;
             }
 
+            $community = $communityUserRole->getCommunityUser()->getCommunity();    // rolün topluluğu
+            if (!$community) {
+                $errorData['user'] = $this->getUser()->getId();
+                $errorData['communtiy_user_role_id'] = $communityUserRolesId;
+                $errorData['description'] = 'Community not found';
+                $logger->addWarning(json_encode(Result::$FAILURE_EXCEPTION->setContent($errorData)));
 
-//            $this->getDoctrine()->getManager()->persist();
-//            $this->getDoctrine()->getManager()->flush();
+                $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent('Rolünüze ait bir topluluk bulunamadı')));
+                return $response;
+            }
 
-            $data['id'] = $community->getId();
-            $data['name'] = $community->getName();
-            $data['facebookEvents'] = $data['facebook'].'events';
+            // Kullanıcının ilgili topluluk için yetkisi olunup olunmadığına bakılır
+            if ($communityUserRole->getCommunityUser()->getUser()->getId() != $this->getUser()->getId()) {
+                $errorData['user'] = $this->getUser()->getId();
+                $errorData['communtiy_user_role_id'] = $communityUserRolesId;
+                $errorData['description'] = __LINE__;
+                $logger->addWarning(json_encode(Result::$FAILURE_PERMISSION->setContent($errorData)));
 
+                $response->setContent(json_encode(Result::$FAILURE_PERMISSION->setContent('Yetkiniz bulunmamaktadır')));
+                return $response;
+            }
 
-//            $ch = curl_init();
-//            curl_setopt($ch, CURLOPT_URL, $data['facebookEvents']);
-//            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-//            $response = curl_exec($ch);
-//            $data['facebookEventsRespond'] = $response;
+            $acceptState = $this->getDoctrine()->getRepository('AppBundle:CommunityUserRoleState')->findAcceptState();
+            if($communityUserRole->getState()->getId() != $acceptState->getId()){
+                $errorData['user'] = $this->getUser()->getId();
+                $errorData['communtiy_user_role_id'] = $communityUserRolesId;
+                $errorData['description'] = 'User role has not accept state';
+                $errorData['line'] = __LINE__;
+                $logger->addWarning(json_encode(Result::$FAILURE_PERMISSION->setContent($errorData)));
+
+                $response->setContent(json_encode(Result::$FAILURE_PERMISSION->setContent('Rolünüz onaylanmadığından yetkiniz bulunmamaktadır')));
+                return $response;
+            }
+            
+            $adminRole = $this->getDoctrine()->getRepository('AppBundle:CommunityRole')->findAdminRole();
+            if($communityUserRole->getCommunityRole()->getId() != $adminRole->getId()){
+                $errorData['user'] = $this->getUser()->getId();
+                $errorData['communtiy_user_role_id'] = $communityUserRolesId;
+                $errorData['description'] = 'User has not admin role';
+                $errorData['line'] = __LINE__;
+                $logger->addWarning(json_encode(Result::$FAILURE_PERMISSION->setContent($errorData)));
+                $response->setContent(json_encode(Result::$FAILURE_PERMISSION->setContent('Yönetici yetkiniz bulunmamaktadır')));
+                return $response;
+            }
+
+            $community->setDescription($description);
+            $this->getDoctrine()->getManager()->persist($community);
+            $this->getDoctrine()->getManager()->flush();
 
             // -- 2.2 -- Return Result
-            $response->setContent(json_encode(Result::$SUCCESS->setContent( $data )));
+            $data['success_msg'] = 'Topluluk bilgisi düzenlendi';
+            $response->setContent(json_encode(Result::$SUCCESS->setContent($data)));
             return $response;
 
         }catch (\Exception $ex){
             // content == "Unexpected Error"
+            $logger->addWarning(json_encode(Result::$FAILURE_EXCEPTION->setContent($ex->getMessage())));
             $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent($ex)));
             return $response;
         }
@@ -428,7 +458,6 @@ class CommunityController extends Controller
         // -- 3 -- Set & Return value
         $response->setContent(json_encode(Result::$SUCCESS_EMPTY));
         return $response;
-
     }
 
 

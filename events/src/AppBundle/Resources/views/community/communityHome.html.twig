@@ -12,6 +12,60 @@
         <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
     {% endstylesheets %}
 
+    <style>
+
+        .ge-commmunity-about{
+            position: relative;
+            height: 42px;
+            overflow: hidden;
+            line-height: 42px;
+        }
+
+        .ge-commmunity-about-btn{
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 42px;
+            width: auto;
+            overflow: hidden;
+        }
+        .ge-commmunity-about-btn li{
+            float: left;
+        }
+        .ge-commmunity-about-btn a{
+            display: block;
+            width: 42px;
+            height: 42px;
+            text-align: center;
+            /*border-left:1px solid #e8ebef;*/
+            color: #666;
+        }
+        .ge-commmunity-about-btn a:hover{
+            color: #fe4918;
+            text-decoration: none;
+        }
+        .ge-commmunity-about-btn a i{
+            color: #666;
+        }
+        .ge-commmunity-about-btn a:hover i{
+            color: #fe4918;
+            text-decoration: none;
+        }
+        .ge-commmunity-about-btn i.fa{
+            font-size: 16px;
+        }
+        .ge-commmunity-about-btn i.fa:first-child{
+            margin: 0
+        }
+
+        .ge-commmunity-about-editor{
+            display: none;
+            margin-bottom: 5%;
+        }
+
+    </style>
+
 {% endblock %}
 
 {% block metaFacebook %}
@@ -34,7 +88,7 @@
     <!-- --------------------------------------------- -->
     <!-- ------------------ CONTENT ------------------ -->
     <!-- --------------------------------------------- -->
-    <section id="community-home" class="guppy-section guppy-section-community">
+    <section id="community-home" class="guppy-section guppy-section-community" {% if userCommunityUserAdminRole is defined and userCommunityUserAdminRole is not null %}data-communityuseradminrole-id="{{ userCommunityUserAdminRole.id }}{% endif %}">
         <div class="container">
             <div class="ge-community-page-content">
 
@@ -50,8 +104,36 @@
 
                     <div class="ge-content-box">
                         <div class="ge-community-content-row">
-                            <h5>Hakkında</h5>
-                            {{ community.description }}
+                            <div class="ge-commmunity-about">
+                                <div class="ge-event-box-footer-tags">
+                                    <h5>Hakkında</h5>
+                                </div>
+
+                                {% if isUserCommunityAdmin is defined and isUserCommunityAdmin %}
+                                    <div class="ge-commmunity-about-btn">
+                                        <ul>
+                                            <li><a title="Düzenle" rel="tooltip"><i class="fa fa-pencil-square-o"></i></a></li>
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div id="commmunity_about_origin" class="ge-commmunity-about-origin">
+                                {{ community.description|raw }}
+                            </div>
+
+                            <div class="ge-commmunity-about-editor">
+                                <textarea id="community_about_desc" name="community_about_desc"></textarea>
+                                <div class="pull-right" style="padding-top: 10px;">
+                                    <button id="text_editor_save" class="ge-community-action-btn" type="submit" data-community-id="{{ community.id }}"><i class="fa fa-floppy-o"></i>Kaydet</button>
+                                    <button id="text_editor_cancel" class="ge-community-action-btn" type="submit" data-community-id="{{ community.id }}"><i class="fa fa-times"></i>İptal</button>
+                                </div>
+
+                                {#<div id="loadingDiv" style="visibility: visible; position: relative; width:inherit; top: 0; left: 0; right: 0; bottom: 0;" class="col-sm-12"> <img style="height: 40px;" src="{{ asset('theme/assets/img/loading.gif') }}"/> </div>#}
+                            </div>
+
+
+
                         </div>
 
                         {% if community.link_facebook or community.link_twitter or community.link_instagram %}
@@ -100,12 +182,133 @@
     {% include('AppBundle:community:community_background.javascript.twig') %}
 
     <script>
+
+        function switchShowHide(elemOne, elemTwo){
+            if($(elemOne).is(":visible")){
+                $(elemOne).hide();
+                $(elemTwo).show();
+            }else{
+                $(elemOne).show();
+                $(elemTwo).hide();
+            }
+        }
+
+        /*
+         * Topluluk yöneticisinin topluluğun hakkında alanını düzenlemesini sağlar
+         */
+        function ajaxCommunityAboutUpdate(newDesc){
+
+            // -- 1 --
+
+            // -- 2 --
+            $.post("{{ path('user_community_edit') }}" ,{
+                curi : $('#community-home').attr('data-communityuseradminrole-id'),
+                cDesc : newDesc
+            }).always(function(){
+
+                // editor kapatılır
+                switchShowHide('.ge-commmunity-about-editor','.ge-commmunity-about-origin');
+
+            }).done(function(data){
+
+                // -- 2.1 -- CONSOLE
+                if(Guppy.responseDebugMode)
+                    console.log(data);
+
+                // -- 2.2 -- sonuc düzenlenir
+                if(data.resultText == 'SUCCESS'){
+
+                    if(data.content['success_msg']){
+                        $('#commmunity_about_origin').html(newDesc);
+                        toastr.success(data.content['success_msg']);
+
+                    }else{
+                        toastr.success('Topluluk düzenlemede beklenmeyen hata');
+                    }
+
+                }else if(data.resultText == 'SUCCESS_EMPTY'){
+                    toastr.error('Topluluk düzenlemede beklenmeyen hata');
+                }else if(data.resultText == 'FAILURE_AUTH'){
+                    toastr.warning('Topluluğu düzenlemek için giriş yapınız');
+                }else if(data.resultText == 'FAILURE_PERMISSION'){
+                    toastr.error('Bu işlem için izniniz bulunmamaktadır');
+                }else{
+                    toastr.error('Beklenmeyen hata ile karşılaşıldı');
+                }
+            });
+        }
+
         /***************************************************************************************************************
          *                                    BEFORE DOCUMENT ON READY
          **************************************************************************************************************/
         // we should get modal size before document ready
         $( "#community-background-image-edit" ).trigger( "click" );
         $('.close-btn').trigger( "click" );
+
+        // topluluk başlığına hover durumu
+        $( ".ge-commmunity-about" ).hover(function() {
+            $( this ).find('.ge-commmunity-about-btn').show();
+        },function() {
+            $( this ).find('.ge-commmunity-about-btn').hide();
+        });
+
+
+        // düzenleme işlemi
+        $(document).on('click' , '.ge-commmunity-about-btn' , function (event) {
+
+            if ( CKEDITOR.env.ie && CKEDITOR.env.version < 9 )
+                CKEDITOR.tools.enableHtml5Elements( document );
+
+            CKEDITOR.config.height = 150;
+            CKEDITOR.config.width = 'auto';
+
+            if (CKEDITOR.instances['community_about_desc']) {
+                CKEDITOR.instances['community_about_desc'].destroy();
+            }
+
+            CKEDITOR.replace( 'community_about_desc' , {
+                toolbarGroups: [
+                    { name: 'clipboard', groups: [ 'undo', 'clipboard' ] },
+                    { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+                    { name: 'links', groups: [ 'links' ] },
+                    { name: 'insert', groups: [ 'insert' ] },
+                    { name: 'forms', groups: [ 'forms' ] },
+                    { name: 'tools', groups: [ 'tools' ] },
+                    { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
+                    { name: 'others', groups: [ 'others' ] },
+                    '/',
+                    { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+                    { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+                    { name: 'styles', groups: [ 'styles' ] },
+                    { name: 'colors', groups: [ 'colors' ] },
+                    { name: 'about', groups: [ 'about' ] }
+                ],
+                removeButtons: 'Underline,Subscript,Superscript,Redo,Undo,Format,Styles'
+            });
+            CKEDITOR.instances['community_about_desc'].setData($('#commmunity_about_origin').html());
+
+            // -1- editor alanı açılır
+            switchShowHide('.ge-commmunity-about-editor','.ge-commmunity-about-origin');
+        });
+
+
+        // düzenleme iptal olma durumu
+        $(document).on('click','#text_editor_cancel',function(){
+            switchShowHide('.ge-commmunity-about-editor','.ge-commmunity-about-origin');
+            $('#community_about_desc').empty();
+        });
+
+
+        // düzenleme kaydetme durumu
+        $(document).on('click','#text_editor_save',function(){
+            // öncelikle kaydet&cancel butonları disable olur
+            // ckeditor önunde loading bar gelir
+
+            // ajax isteği yapılır
+            newDesc = CKEDITOR.instances['community_about_desc'].getData();
+            ajaxCommunityAboutUpdate(newDesc);
+
+        });
 
     </script>
 
