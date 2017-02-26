@@ -35,11 +35,11 @@ class CommunityRepository extends EntityRepository
         // topluluğun etklinlik sayısı && kayıtlı üye sayısı dönülecek
         $em = $this->getEntityManager();
 
-        $sql = 'SELECT community.registerDate, community.name, community.id, community.imageBase64, university.name as universityName, COUNT(community.id) as eventCount
+        $sql = 'SELECT community.registerDate, community.name, community.id, community.imageBase64, university.name as universityName, COUNT(event.title) as eventCount
                 FROM AppBundle:Community community
                 JOIN AppBundle:University university WITH university=community.university
-                JOIN AppBundle:CommunityUser communityUser WITH communityUser.community=community.id
-                JOIN AppBundle:Event event WITH event.communityUser=communityUser.id
+                LEFT OUTER JOIN AppBundle:CommunityUser communityUser WITH communityUser.community=community.id
+                LEFT OUTER JOIN AppBundle:Event event WITH event.communityUser=communityUser.id
                 WHERE university.id = :universityId and community.isApproved = true and community.name LIKE :nameKeyValue
                 GROUP By community.id
                 ';
