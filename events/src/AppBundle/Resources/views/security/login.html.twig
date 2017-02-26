@@ -6,7 +6,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
-        <title>Admin Login Page</title>
+        <title>Kullanıcı Girişi</title>
 
         {% stylesheets
                 'bootstrap/css/bootstrap.min.css'
@@ -43,7 +43,7 @@
 
                 <form action="{{ path('login') }}" method="post">
                     <div class="form-group has-feedback">
-                        <input type="text" id="username" name="_username" class="form-control" placeholder="Kullanıcı adı" value="{{ last_username }}" />
+                        <input type="text" id="username" name="_username" class="form-control" placeholder="Mail adresi veya kullanıcı adı" value="{{ last_username }}" />
                         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                     </div>
                     <div class="form-group has-feedback">
