@@ -113,11 +113,6 @@ class UserController extends Controller
             }
         }
 
-
-        if (!$this->getUser()->getEmailValidated()) {
-            $data['warning_msg'] = 'Mail adresinizi onaylayınız';
-        }
-
         return $this->render('AppBundle:user:profile_settings_account.html.twig', $data);
     }
 

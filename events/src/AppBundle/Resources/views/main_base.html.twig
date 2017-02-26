@@ -284,6 +284,12 @@
                 toastr.warning(warning_msg);
             }
 
+            {% if app.user and not app.user.emailValidated%}
+
+                toastr.warning( "Mail adresiniz onaylanmamış durumdadır. Topluluklara katılmak ve Seruvent'in diğer özelliklerinden yararlanmak için mail adresine gönderilen aktivasyon linkine tıklamanız gerekmektedir. Mail adresini değiştirmek veya aktivasyon linkini tekrar göndermek için profil sayfasını ziyaret ediniz.");
+
+            {% endif %}
+
         </script>
 
     </body>
