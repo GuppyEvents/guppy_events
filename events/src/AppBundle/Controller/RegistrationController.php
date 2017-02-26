@@ -12,6 +12,8 @@ use AppBundle\Form\UserType;
 use AppBundle\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Facebook\Facebook;
+use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Entity\Result;
 
 class RegistrationController extends Controller
 {
@@ -143,6 +145,43 @@ class RegistrationController extends Controller
         $_SESSION['success_message'] = "Üyeliğiniz başarıyla aktif edilmiştir.";//redirect edilen sayfada mesaj gosterilmesi için sessiona mesaj atanır
 
         return $this->redirectToRoute('login');
+    }
+
+        // -----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    //                                          APPLICATION/JSON SERVICES
+    // -----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    /**
+     * @Route("/s/send_activation_mail", name="send_activation_mail")
+     */
+    public function sendActivationMail(Request $request){
+
+
+        // -- 1 -- Initialization
+        $data = array();
+        $em = $this->getDoctrine()->getManager();
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+
+
+        // -- 2 -- Send activation mail
+        try{
+
+            $user = $this->getUser();
+            $confirmLink = "http://seruvent.com/activation/" . base64_encode(Utils::getGUID() . "**" . $user->getId() . "##" . rand(10, 100));
+
+            Utils::mailSendSingle($user->getEmail(), "Seruvent Kayıt Aktivasyonu", "Merhaba " . $user->getName() . ",\n\rKaydını onaylamak için aşağıdaki linke tıklaman yeterli.\n\r" . $confirmLink);
+
+        }catch (\Exception $ex){
+            $response->setContent(json_encode(Result::$FAILURE_EXCEPTION->setContent($ex)));
+            return $response;
+        }
+
+        // -- 3 -- Set & Return value
+        $response->setContent(json_encode(Result::$SUCCESS_EMPTY));
+        return $response;
+
     }
     
 }

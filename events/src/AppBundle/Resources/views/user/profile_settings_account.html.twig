@@ -28,8 +28,18 @@
                             <div class="col-sm-8 align-left">
                                 <h6>Hesap İşlemleri</h6>
 
+                                {% if user.emailValidated == false %}
+                                
+                                <p>Mail adresiniz onaylanmamış durumdadır. Topluluklara katılmak ve Seruvent'in diğer özelliklerinden yararlanmak için mail adresine gönderilen aktivasyon linkine tıklamanız gerekmektedir. Aktivasyon linkine tekrar göndermek ister misiniz?</p>
+                                <div class="fieldset-input-panel">
+                                    <input id="send_again" class="btn btn-rounded btn-sm" value="Gönder">
+                                </div><br>
+                                
+                                {% endif %}
+
                                 <div>
                                     <form action="{{ path('user_profile_account') }}" method="post">
+                                        <!-- Eğer mail adresi onaylanmamış ise -->
 
                                         <div class="col-sm-6 col-md-5 align-left">
                                             <fieldset>
@@ -179,10 +189,27 @@
  *                                          AJAX OPERATIONS
  **********************************************************************************************************************/
 
+        function sendActivation() {
+
+            $.ajax("{{ path('send_activation_mail') }}").always(function(){
+            }).done(function(data){
+
+                if(data.resultText == 'SUCCESS_EMPTY'){
+                    toastr.info('Aktivasyon linki adresinize gönderildi. Lütfen kontrol ediniz.');
+                }else{
+                    toastr.error('Beklenmeyen hata ile karşılaşıldı');
+                }
+            });
+        }
 
 /***********************************************************************************************************************
  *                                          EVENTS
  **********************************************************************************************************************/
+
+        $(document).on('click', '#send_again', function( event) {
+
+            sendActivation()
+        });
 
         $(document).on('click' , 'fieldset .fa-pencil-square-o' , function (event){
             $inputElement = $(event.target).parentsUntil('fieldset').last().parent().find('.fieldset-input-panel>input');
