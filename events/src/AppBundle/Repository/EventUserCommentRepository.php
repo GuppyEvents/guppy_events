@@ -11,4 +11,22 @@ use Doctrine\ORM\EntityRepository;
  */
 class EventUserCommentRepository extends EntityRepository
 {
+    /**
+     *
+     * @param string $eventId
+     * @return EventUserComment|null
+     */
+    public function findEventComments($eventId, $page=1 ,$pageSize=20)
+    {
+        return $this->createQueryBuilder('event_user_comment')
+            ->where('event_user_comment.event = :eventId')
+            ->andWhere('event_user_comment.isApproved= :stateApproved')
+            ->orderBy('event_user_comment.registerDate', 'DESC')
+            ->setParameter('eventId', intval($eventId))
+            ->setParameter('stateApproved', 1)
+            ->setFirstResult($pageSize * ($page - 1))
+            ->setMaxResults( $pageSize )
+            ->getQuery()
+            ->getResult();
+    }
 }

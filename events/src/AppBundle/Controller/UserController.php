@@ -421,9 +421,9 @@ class UserController extends Controller
     public function userChatAction(Request $request)
     {
 
-        if($this->getUser() && $request->get("comment") && strlen($request->get("comment"))>1){
-            $data['comment_author'] = $this->getUser()->getId();
-            $data['comment_author_image'] = $this->getUser()->getImageBase64();
+        if($this->getUser() && $request->get("comment") && strlen($request->get("comment"))>0){
+            $data['commentUser'] = $this->getUser()->getId();
+            $data['userImage'] = $this->getUser()->getImageBase64();
             $data['date'] = date('d-m-Y H:i:s');
             $data['comment'] = $request->get("comment");
 

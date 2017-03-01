@@ -311,6 +311,56 @@
      *                                          AJAX OPERATIONS
      **********************************************************************************************************************/
 
+    function sendComment(){
+        //scroll to bottom of chat
+        $("#comment_scroll_content").scrollTop($("#comment_scroll_content")[0].scrollHeight);
+
+        //disable chat writing area and send button
+        $('#comment_text').attr("disabled", true);
+        $('#send_comment_btn').attr("disabled", true);
+        $.post("{{ path('event_add_comment') }}" , {
+            comment : $('#comment_text').val(),
+            eventId : {{ event.id }}
+        }).always(function(){
+        }).done(function(data){
+            //clear and enable chat writing area and send button
+            $('#comment_text').val("");
+            $('#comment_text').attr("disabled", false);
+            $('#send_comment_btn').attr("disabled", false);
+            $('#comment_text').focus();
+        }).fail(function(xhr, status, error){
+            toastr.error("Mesajınız gönderilirken bir hata oluştu.");
+            //enable chat writing area and send button
+            $('#comment_text').attr("disabled", false);
+            $('#send_comment_btn').attr("disabled", false);
+            $('#comment_text').focus();
+        });
+    }
+
+    function getAndDisplayChatMessages(page, limit){
+        limit = typeof limit !== 'undefined' ? limit : 20;
+
+        $.post("{{ path('event_get_comments') }}" , {
+            eventId: {{ event.id }},
+            page: page,
+            limit: limit
+        }).always(function(){
+        }).done(function(data){
+            if(data.resultCode=='result.Guppy.001'){
+                data.content.commentList.reverse();
+
+                data.content.commentList.forEach(function(mes){
+                    displayComment(mes);
+                });
+                //scroll to bottom of chat
+                $("#comment_scroll_content").scrollTop($("#comment_scroll_content")[0].scrollHeight);
+            }
+
+        }).fail(function(xhr, status, error){
+            toastr.error("Mesaj geçmişi yüklenemedi.");
+        });
+
+    }
 
     /***********************************************************************************************************************
      *                                          EVENTS
@@ -327,45 +377,9 @@
 
 
 
-    function sendComment(){
-        $("#comment_scroll_content").scrollTop($("#comment_scroll_content")[0].scrollHeight);
-
-        var data = {
-            "comment": $('#comment_text').val()
-        };
-/*
-        $.post({
-            type: 'POST',
-            url: '{{ path('user_chat') }}',
-            data: data,
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            success: postSuccess,
-            error: postError
-        });
-        */
-        $('#comment_text').attr("disabled", true);
-        $('#send_comment_btn').attr("disabled", true);
-        $.post("{{ path('user_chat') }}" , {
-            comment : $('#comment_text').val()
-        }).always(function(){
-        }).done(function(data){
-            $('#comment_text').val("");
-            $('#comment_text').attr("disabled", false);
-            $('#send_comment_btn').attr("disabled", false);
-            $('#comment_text').focus();
-        });
-
-    }
-
-    function postSuccess(data, textStatus, jqXHR) {
-        console.log(data);
-    }
-
-    function postError(jqXHR, textStatus, errorThrown) {
-        console.log('error');
-    }
+    /***********************************************************************************************************************
+     *                                          FUNCTIONS
+     **********************************************************************************************************************/
 
     function displayComment(data) {
         var commentHtml = createComment(data);
@@ -373,7 +387,7 @@
 
         var elem = '<div class="panel schedule-item">' +
                 '<div class="lecture-icon-wrapper">' +
-                '<img src="' + data.comment_author_image + '" alt="" class="img-responsive">' +
+                '<img src="' + data.userImage+ '" alt="" class="img-responsive">' +
                 '</div>' +
                 '<a data-toggle="collapse" data-parent="#day1_auditorium1_timeline" class="schedule-item-toggle collapsed">' +
                 '<strong class="time highlight"><span class="icon icon-office-24"></span>'+ parseDisplayDate(data.date) +'</strong>' +
@@ -414,6 +428,7 @@
 
         return display;
     }
+
 
     /***********************************************************************************************************************
      *                                          DOCUMENT ON READY
@@ -473,8 +488,16 @@
 
             //PUSHER SOCKET INITIALIZATION
             var pusher = new Pusher('b3db03e9b30846af735c', {cluster: 'eu',encrypted: true});
-            var channel = pusher.subscribe('comments-1');
+            var channel = pusher.subscribe('comments-' + '{{ event.id }}');
             channel.bind('new_comment', displayComment);
+
+            pusher.connection.bind('state_change', function(states) {
+                //first clear messages and then reload
+                $("comments_area").html("");
+                if(states.current == 'connected'){
+                    getAndDisplayChatMessages(1);
+                }
+            });
 
     </script>
 
