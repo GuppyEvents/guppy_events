@@ -80,7 +80,7 @@
     /*******************************************************************************************************************
      *                                          LOCAL VARIABLE
      ******************************************************************************************************************/
-        var communityPage=2;    // ilk sayfa 24 topluluk getirdiğinde 12lik topluluk 3.sayfadan başlayacak
+        var communityPage=3;    // ilk sayfa 24 topluluk getirdiğinde 12lik topluluk 3.sayfadan başlayacak
 
 
     /*******************************************************************************************************************
@@ -95,6 +95,7 @@
             {#}else{#}
                 {#return;#}
             {#}#}
+
         $("#loadingDiv").attr("style","visibility: show");
 
             // -- 2 --
@@ -173,6 +174,9 @@
 
                                 $('#container-body').append(communityElem);
                         });
+
+                        communityPage++;
+                        $(window).bind( 'scroll', bindScroll)
                     }
 
                 }else if(data.resultText == 'SUCCESS_EMPTY'){
@@ -192,12 +196,17 @@
      ******************************************************************************************************************/
 
         // ekranda aşağıya gidildikçe bir sonraki sayfaların gelmesi işlemidir
-        $(window).scroll(function(){
-            if($(document).height()==$(window).scrollTop()+$(window).height()){
-                ++communityPage;
-                ajaxGetMoreCommunities(communityPage)
-            }
-        });
+        function bindScroll() {
+
+            $(window).scroll(function(){
+                if($(document).height() < $(window).scrollTop()+$(window).height() + 100){
+                    $(window).unbind( 'scroll');
+                    ajaxGetMoreCommunities(communityPage)
+                }
+            });
+        }
+
+        $(window).scroll(bindScroll);
 
     </script>
 {% endblock %}
