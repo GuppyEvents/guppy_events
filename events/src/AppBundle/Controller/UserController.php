@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\AppBundle;
+use AppBundle\Entity\Result;
 use AppBundle\Entity\UniversityUser;
 use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -13,7 +14,9 @@ use AppBundle\Form\ChangePasswordType;
 use Google\Cloud\Storage\StorageClient;
 use Google\Cloud\Storage\Acl;
 use AppBundle\Entity\Utils;
+use Pusher;
 use Symfony\Component\Validator\Constraints\Email as EmailConstraint;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @Route("/user", name="user")
@@ -410,5 +413,42 @@ class UserController extends Controller
 
         $data['urlContinueWithId'] = true;
         return $this->render('AppBundle:user:profile_settings_communities.html.twig', $data);
+    }
+
+    /**
+     * @Route("/chat", name="user_chat")
+     */
+    public function userChatAction(Request $request)
+    {
+
+        if($this->getUser() && $request->get("comment") && strlen($request->get("comment"))>1){
+            $data['comment_author'] = $this->getUser()->getId();
+            $data['comment_author_image'] = $this->getUser()->getImageBase64();
+            $data['date'] = date('d-m-Y H:i:s');
+            $data['comment'] = $request->get("comment");
+
+            $options = array(
+                'cluster' => 'eu',
+                'encrypted' => true
+            );
+            $pusher = new Pusher(
+                'b3db03e9b30846af735c',
+                'df141006bbee56790e2a',
+                '307736',
+                $options
+            );
+
+            $pusher->trigger('comments-1', 'new_comment', $data);
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode(Result::$SUCCESS->setContent($data)));
+            return $response;
+        }else{
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode(Result::$FAILURE_PARAM_MISMATCH));
+            return $response;
+        }
+
     }
 }

@@ -171,7 +171,33 @@
                                 <div id="event_location" style="height: 400px;"></div>
                             </div>
 
-                            <div class="col-sm-11 align-left">
+                            <div class="col-sm-12 align-left">
+                                <div class="schedule">
+                                    <div class="nav-wrapper"><span class="nav-current"><h5 class="highlight">Yorumlar</h5></span><ul class="nav nav-schedule">
+                                            <li class="active"><a href="#day1" data-toggle="tab"><h5 class="highlight">Yorumlar</h5></a></li>
+                                        </ul></div>
+                                    <div>
+                                        <div id="comment_scroll_content" style="max-height: 600px;overflow: auto;">
+                                            <div class="tab-content-schedule" style="">
+                                                <div>
+                                                    <div class="panel-group" id="comments_area" style="">
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <textarea id="comment_text" onkeypress="commentTextChanged()" name="comment_text" style="margin-top: 10px;" placeholder="Mesajınızı yazınız"></textarea>
+                                    <a id="send_comment_btn" onclick="sendComment();" target="_blank" class="btn btn-outline-clr btn-md" style="float:right;">GÖNDER</a>
+
+
+                                </div>
+
                                 <section>
                                     <span>
                                         <a  class="js-d-track-link badge badge--tag l-mar-top-2" data-event-action="BreadcrumbAddress" data-event-category="listing" data-event-label="/things-to-do/turkey--ankara/" data-automation="BreadcrumbAddress" data-xd-wired="track-link">
@@ -205,7 +231,8 @@
 {% block javascriptcontent %}
 
     {% javascripts
-            'theme/assets/js/cropper.js' %}
+            'theme/assets/js/cropper.js'
+            'http://js.pusher.com/4.0/pusher.min.js'%}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
@@ -289,6 +316,104 @@
      *                                          EVENTS
      **********************************************************************************************************************/
 
+    function commentTextChanged(){
+        var key = window.event.keyCode;
+
+        // If the user has pressed enter
+        if (key === 13) {
+            sendComment();
+        }
+    }
+
+
+
+    function sendComment(){
+        $("#comment_scroll_content").scrollTop($("#comment_scroll_content")[0].scrollHeight);
+
+        var data = {
+            "comment": $('#comment_text').val()
+        };
+/*
+        $.post({
+            type: 'POST',
+            url: '{{ path('user_chat') }}',
+            data: data,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: postSuccess,
+            error: postError
+        });
+        */
+        $('#comment_text').attr("disabled", true);
+        $('#send_comment_btn').attr("disabled", true);
+        $.post("{{ path('user_chat') }}" , {
+            comment : $('#comment_text').val()
+        }).always(function(){
+        }).done(function(data){
+            $('#comment_text').val("");
+            $('#comment_text').attr("disabled", false);
+            $('#send_comment_btn').attr("disabled", false);
+            $('#comment_text').focus();
+        });
+
+    }
+
+    function postSuccess(data, textStatus, jqXHR) {
+        console.log(data);
+    }
+
+    function postError(jqXHR, textStatus, errorThrown) {
+        console.log('error');
+    }
+
+    function displayComment(data) {
+        var commentHtml = createComment(data);
+        console.log(commentHtml);
+
+        var elem = '<div class="panel schedule-item">' +
+                '<div class="lecture-icon-wrapper">' +
+                '<img src="' + data.comment_author_image + '" alt="" class="img-responsive">' +
+                '</div>' +
+                '<a data-toggle="collapse" data-parent="#day1_auditorium1_timeline" class="schedule-item-toggle collapsed">' +
+                '<strong class="time highlight"><span class="icon icon-office-24"></span>'+ parseDisplayDate(data.date) +'</strong>' +
+                '<p class="description">' + data.comment+ '</p>' +
+                '</a>' +
+                '</div>';
+        $("#comments_area").append(elem);
+        $("#comment_scroll_content").scrollTop($("#comment_scroll_content")[0].scrollHeight);
+    }
+
+    function createComment(data) {
+        var html = '' +
+                '<li><article id="' + data.id + '" class="hentry">' +
+                '<footer class="post-info">' +
+                '<abbr class="published" title="' + data.date + '">' +
+                parseDisplayDate(data.date) +
+                '</abbr>' +
+                '<address class="vcard author">' +
+                'By <a class="url fn" href="#">' + data.comment_author + '</a>' +
+                '</address>' +
+                '</footer>' +
+                '<div class="entry-content">' +
+                '<p>' + data.comment + '</p>' +
+                '</div>' +
+                '</article></li>';
+
+        return html;
+    }
+
+    function parseDisplayDate(date) {
+        date = (date instanceof Date? date : new Date( Date.parse(date) ) );
+        var display = date.getDate() + ' ' +
+                ['Ocak', 'Şubat', 'Mart',
+                    'Nisan', 'Mayıs', 'Haziran', 'Temmuz',
+                    'Ağustos', 'Eylül', 'Ekim',
+                    'Kasım', 'Aralık'][date.getMonth()] + ' ' +
+                date.getFullYear() + ' ' + date.getHours() +':' +date.getMinutes();
+
+        return display;
+    }
 
     /***********************************************************************************************************************
      *                                          DOCUMENT ON READY
@@ -344,6 +469,12 @@
             };
             cropper = new Cropper(image, options);
             var originalImageURL = image.src;
+
+
+            //PUSHER SOCKET INITIALIZATION
+            var pusher = new Pusher('b3db03e9b30846af735c', {cluster: 'eu',encrypted: true});
+            var channel = pusher.subscribe('comments-1');
+            channel.bind('new_comment', displayComment);
 
     </script>
 
