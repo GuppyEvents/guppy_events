@@ -25,6 +25,14 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/version", name="version")
+     */
+    public function versionAction(Request $request)
+    {
+        return $this->render('AppBundle:default:version.html.twig');
+    }
+
+    /**
      * @Route("/404", name="error_404")
      */
     public function pegeNotFoundAction(Request $request)
