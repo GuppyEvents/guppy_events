@@ -89,8 +89,9 @@
                                 <label>Görünürlüğü:</label>
                                 <select id="event_permission" class="form-control" name="event_permission">
                                     <option {% if event.permission == "PUBLIC" %}selected{% endif %} value="PUBLIC">Herkese Açık</option>
-                                    <option {% if event.permission == "UNIVERSITY" %}selected{% endif %} value="UNIVERSITY">Üniversite Öğrencileri</option>
-                                    <option {% if event.permission == "COMMUNITY" %}selected{% endif %} value="COMMUNITY">Topluluk Üyeleri</option>
+                                    {#<option {% if event.permission == "UNIVERSITY" %}selected{% endif %} value="UNIVERSITY">Üniversite Öğrencileri</option>#}
+                                    {#<option {% if event.permission == "COMMUNITY" %}selected{% endif %} value="COMMUNITY">Topluluk Üyeleri</option>#}
+                                    {#<option {% if event.permission == "DRAFT" %}selected{% endif %} value="DRAFT">Taslak Olarak Kaydet (Sadece topluluk yöneticileri görebilir)</option>#}
                                 </select>
                             </fieldset>
                             <fieldset>

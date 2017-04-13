@@ -92,7 +92,7 @@ class EventRepository extends EntityRepository
      * @param \DateTime $datetime The date
      * @return Event|null
      */
-    public function findPublishEventsByDate($firstDate , $lastDate , $maxResult=null)
+    public function findPublishEventsByDate($firstDate , $lastDate , $maxResult=null, $user=null)
     {
         $statePublish = $this->getEntityManager()->getRepository('AppBundle:State')->findPublishState();
         $query = $this->createQueryBuilder('event')
@@ -102,6 +102,12 @@ class EventRepository extends EntityRepository
             ->setParameter('targetDate', $firstDate)
             ->setParameter('targetNextDate', $lastDate)
             ->setParameter('statePublish', $statePublish);
+
+        // kullanıcı olmaması durumunda sadece public etkinlikler getirilmelidir
+        if(!isset($user)){
+            $query->andWhere('event.permission LIKE :permission')
+                ->setParameter('permission', 'PUBLIC');
+        }
 
         if($maxResult){
             $query->setMaxResults($maxResult);

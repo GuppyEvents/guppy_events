@@ -264,7 +264,7 @@ class EventController extends Controller
 
                     $request_date = \DateTime::createFromFormat('d/m/Y H:i', $request->get('event_date'));
                     $request_permission = $request->get('event_permission') ? $request->get('event_permission') : 'PUBLIC';
-                    $pendingState = $this->getDoctrine()->getRepository('AppBundle:State')->findPendingState();
+                    $publishState = $this->getDoctrine()->getRepository('AppBundle:State')->findPublishState();
 
                     $event = new Event();
                     $event->setTitle( $request->get('event_title') );
@@ -301,7 +301,7 @@ class EventController extends Controller
                     $event->setGpsLocationLat($request->get('event_location_lat'));
                     $event->setGpsLocationLng($request->get('event_location_lng'));
                     $event->setCommunityUser( $communityUser );
-                    $event->setState($pendingState);
+                    $event->setState($publishState);
 
                     $ticket = new Ticket();
                     $ticket->setPrice(intval($request->get('event_price')));
