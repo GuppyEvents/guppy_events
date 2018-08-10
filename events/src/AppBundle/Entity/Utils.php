@@ -15,18 +15,18 @@ class Utils
      *
      * Uploads the file to google cloud storage and
      * returns google cloud link
-     * putenv('GOOGLE_APPLICATION_CREDENTIALS=/var/www/events/key_27_ocak_14_05.json');
+     * putenv('GOOGLE_APPLICATION_CREDENTIALS=/var/www/events/google-api/guppy-seruvent-180809-baa920e18626.json');
      * should be called once to put envvironment variable to server machine
      *
      */
     public static function uploadBase64ToServer($imageBase64, $fileName){
-        putenv('GOOGLE_APPLICATION_CREDENTIALS=/var/www/events/key_27_ocak_14_05.json');
+        putenv('GOOGLE_APPLICATION_CREDENTIALS=/var/www/events/google-api/guppy-seruvent-180809-baa920e18626.json');
         $result=null;
         $client = new Google_Client();
         $client->useApplicationDefaultCredentials();
         $client->addScope(\Google_Service_Storage::DEVSTORAGE_FULL_CONTROL);
 
-        $bucket	= "seruvent_images";
+        $bucket	= "seruvent_storage";
 
 
         $data = explode(',', $imageBase64);
@@ -56,7 +56,7 @@ class Utils
             $gsso->setName( $fileName );
             $result = $storageService->objects->insert( $bucket, $gsso, $postbody );
             if($result != null){
-                return "https://storage.googleapis.com/seruvent_images/" . $fileName;
+                return "https://storage.googleapis.com/seruvent_storage/" . $fileName;
             }
         }
         catch (Exception $e)
@@ -70,18 +70,18 @@ class Utils
      *
      * Uploads the file to google cloud storage and
      * returns google cloud link
-     * putenv('GOOGLE_APPLICATION_CREDENTIALS=/var/www/events/key_27_ocak_14_05.json');
+     * putenv('GOOGLE_APPLICATION_CREDENTIALS=/var/www/events/google-api/guppy-seruvent-180809-baa920e18626.json');
      * should be called once to put envvironment variable to server machine
      *
      */
     public static function uploadBytesToServer($imageBytes, $fileName){
-        putenv('GOOGLE_APPLICATION_CREDENTIALS=/var/www/events/key_27_ocak_14_05.json');
+        putenv('GOOGLE_APPLICATION_CREDENTIALS=/var/www/events/google-api/guppy-seruvent-180809-baa920e18626.json');
         $result=null;
         $client = new Google_Client();
         $client->useApplicationDefaultCredentials();
         $client->addScope(\Google_Service_Storage::DEVSTORAGE_FULL_CONTROL);
 
-        $bucket	= "seruvent_images";
+        $bucket	= "seruvent_storage";
 
 
 
@@ -111,7 +111,7 @@ class Utils
             $gsso->setName( $fileName );
             $result = $storageService->objects->insert( $bucket, $gsso, $postbody );
             if($result != null){
-                return "https://storage.googleapis.com/seruvent_images/" . $fileName;
+                return "https://storage.googleapis.com/seruvent_storage/" . $fileName;
             }
         }
         catch (Exception $e)
